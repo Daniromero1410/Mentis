@@ -1,0 +1,114 @@
+# ===========================================
+# GITIGNORE GLOBAL - PROYECTO MENTIS
+# ===========================================
+
+# ===========================================
+# ARCHIVOS DE ENTORNO (CRITICO - NO SUBIR)
+# ===========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# ===========================================
+# PYTHON / BACKEND
+# ===========================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# ===========================================
+# NODE / FRONTEND
+# ===========================================
+node_modules/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next/
+out/
+
+# Vercel
+.vercel
+
+# ===========================================
+# IDEs Y EDITORES
+# ===========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ===========================================
+# ARCHIVOS GENERADOS
+# ===========================================
+# PDFs generados (pueden ser grandes)
+backend/pdfs/*.pdf
+
+# Uploads de usuarios (firmas, etc.)
+backend/uploads/firmas/*
+!backend/uploads/firmas/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# ===========================================
+# ARCHIVOS TEMPORALES
+# ===========================================
+*.tmp
+*.temp
+*.bak
+
+# ===========================================
+# SISTEMA OPERATIVO
+# ===========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===========================================
+# DOCKER (OPCIONAL - LOCAL)
+# ===========================================
+# Descomenta si no quieres versionar docker-compose local
+# docker-compose.yml
+# docker-compose.override.yml

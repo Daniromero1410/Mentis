@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: william_romero_db
+    environment:
+      POSTGRES_USER: william_admin
+      POSTGRES_PASSWORD: william_secure_2024
+      POSTGRES_DB: william_romero
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,14 @@
+[build]
+# Usa el Dockerfile para construir la imagen
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# Numero de replicas
+numReplicas = 1
+# Tiempo de espera para health check (segundos)
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+# Reiniciar si falla
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
