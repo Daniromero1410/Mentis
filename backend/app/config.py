@@ -1,27 +1,38 @@
-from pydantic_settings import BaseSettings
-from typing import Optional
+import os
 
-class Settings(BaseSettings):
-    # Base de datos
-    DATABASE_URL: str = "postgresql://william_admin:william_secure_2024@localhost:5432/william_romero"
+class Settings:
+    def __init__(self):
+        # Base de datos - Lee directamente de variable de entorno
+        self.DATABASE_URL = os.environ.get(
+            "DATABASE_URL",
+            "postgresql://william_admin:william_secure_2024@localhost:5432/william_romero"
+        )
 
-    # JWT
-    SECRET_KEY: str = "william-romero-secret-key-2024-muy-segura"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
+        # JWT
+        self.SECRET_KEY = os.environ.get(
+            "SECRET_KEY",
+            "william-romero-secret-key-2024-muy-segura"
+        )
+        self.ALGORITHM = "HS256"
 
-    # App
-    APP_NAME: str = "Mentis - Psicologia Ocupacional"
-    DEBUG: bool = False
+        # Manejar ACCESS_TOKEN_EXPIRE_MINUTES con valor vacio
+        token_expire = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", "480")
+        self.ACCESS_TOKEN_EXPIRE_MINUTES = int(token_expire) if token_expire else 480
 
-    # CORS - URLs permitidas (separadas por coma)
-    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001"
+        # App
+        self.APP_NAME = "Mentis - Psicologia Ocupacional"
+        self.DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+        # CORS - URLs permitidas (separadas por coma)
+        self.CORS_ORIGINS = os.environ.get(
+            "CORS_ORIGINS",
+            "http://localhost:3000,http://localhost:3001"
+        )
 
-    def get_cors_origins(self) -> list[str]:
+        # Log de conexion (sin mostrar credenciales)
+        print(f"[CONFIG] DATABASE_URL configurada: {'Railway' if 'railway' in self.DATABASE_URL else 'Local'}")
+
+    def get_cors_origins(self) -> list:
         """Retorna la lista de origenes CORS permitidos"""
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
