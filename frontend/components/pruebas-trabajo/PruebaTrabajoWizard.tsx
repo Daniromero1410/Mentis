@@ -707,7 +707,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
       if (finalizar) {
         let saveId = pruebaId;
         if (!saveId) {
-          const res = await api.post<any>('/pruebas-trabajo', payload);
+          const res = await api.post<any>('/pruebas-trabajo/', payload);
           saveId = res.id;
         } else {
           await api.put(`/pruebas-trabajo/${pruebaId}`, payload);
@@ -721,7 +721,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
           await api.put(`/pruebas-trabajo/${pruebaId}`, payload);
           toast.success('Guardado correctamente');
         } else {
-          const res: any = await api.post('/pruebas-trabajo', payload);
+          const res: any = await api.post('/pruebas-trabajo/', payload);
           setPruebaId(res.id);
           toast.success('Prueba creada exitosamente');
         }
