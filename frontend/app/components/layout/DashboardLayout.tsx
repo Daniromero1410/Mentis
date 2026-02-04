@@ -17,6 +17,22 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setSidebarCollapsed(true);
+      } else {
+        setSidebarCollapsed(false);
+      }
+    };
+
+    // Set initial state
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     setMounted(true);
   }, []);
 
@@ -46,10 +62,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
-      <Sidebar collapsed={sidebarCollapsed} />
-      <div className={`sidebar-transition ${sidebarCollapsed ? 'ml-20' : 'ml-64'}`}>
+      <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
+
+      {/* Overlay for mobile when sidebar is open */}
+      {!sidebarCollapsed && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setSidebarCollapsed(true)}
+        />
+      )}
+
+      <div className={`sidebar-transition ml-0 ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
         <Header onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
-        <main className="p-6">{children}</main>
+        <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

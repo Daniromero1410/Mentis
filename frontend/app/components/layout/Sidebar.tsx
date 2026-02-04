@@ -79,7 +79,7 @@ const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_traba
   return true;
 };
 
-export function Sidebar({ collapsed }: SidebarProps) {
+export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuth();
   const [expandedItems, setExpandedItems] = useState<string[]>(['Valoraciones']);
@@ -97,8 +97,9 @@ export function Sidebar({ collapsed }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-40 h-screen bg-white dark:bg-[#2a2a2a] border-r border-gray-200 dark:border-[#333333] sidebar-transition ${collapsed ? 'w-20' : 'w-64'
-        }`}
+      className={`fixed left-0 top-0 z-40 h-screen bg-white dark:bg-[#2a2a2a] border-r border-gray-200 dark:border-[#333333] transition-all duration-300
+        ${collapsed ? '-translate-x-full md:translate-x-0 md:w-20' : 'translate-x-0 w-64'}
+      `}
     >
       {/* Logo */}
       <div className="flex h-16 items-center border-b border-gray-200 dark:border-[#333333] px-4">
