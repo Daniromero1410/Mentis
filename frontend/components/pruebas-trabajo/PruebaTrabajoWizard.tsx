@@ -674,90 +674,112 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
         }
       });
 
-      // Calcular concordancia explícitamente antes de guardar
-      const concordanciasCalc: string[] = [];
-      const noConcordanciasCalc: string[] = [];
-      Object.entries(formData.resumen_factores).forEach(([key, values]) => {
-        if (values.nivel_trabajador && values.nivel_experto) {
-          const cat = Object.values(factoresRiesgo).find(c => c.titulo === factoresRiesgo[key]?.titulo);
-          const titulo = cat ? cat.titulo : key;
-          if (values.nivel_trabajador === values.nivel_experto) {
-            concordanciasCalc.push(titulo);
-          } else {
-            noConcordanciasCalc.push(titulo);
-          }
-        }
-      });
-      const txtConcordanciaFinal = concordanciasCalc.length > 0 ? concordanciasCalc.join(', ') : 'Ninguna';
-      const txtNoConcordanciaFinal = noConcordanciasCalc.length > 0 ? noConcordanciasCalc.join(', ') : 'Ninguna';
+    });
 
-      const payload = {
-        fecha_valoracion: formData.fecha_valoracion || null,
-        estado: finalizar ? 'completada' : 'borrador',
-        datos_empresa: {
-          empresa: formData.empresa, tipo_documento: formData.tipo_documento_empresa, nit: formData.nit,
-          persona_contacto: formData.persona_contacto, email_notificaciones: formData.email_notificaciones,
-          direccion: formData.direccion_empresa, arl: formData.arl, ciudad: formData.ciudad_empresa
-        },
+    // Calcular concordancia explícitamente antes de guardar
+    const concordanciasCalc: string[] = [];
+    const noConcordanciasCalc: string[] = [];
+
+    const nivelToValue: Record<string, string> = {
+      'SIN RIESGO': 'sin_riesgo',
+      'RIESGO BAJO': 'riesgo_bajo',
+      'RIESGO MEDIO': 'riesgo_medio',
+      'RIESGO ALTO': 'riesgo_alto',
+      'RIESGO MUY ALTO': 'riesgo_muy_alto',
+    };
+
+    Object.entries(factoresRiesgo).forEach(([key, config]) => {
+      // 1. Calcular nivel riesgo trabajador (igual que en el render)
+      const total = config.items.reduce((acc, item) =>
+        acc + (parseFloat(formData.factores_riesgo[item.nombre]?.total || '0') || 0), 0
+      );
+      const { nivel: nivelCalculado } = getNivelRiesgo(key, total);
+      const nivelTrabajadorValue = nivelToValue[nivelCalculado];
+
+      // 2. Obtener nivel experto del form state
+      const nivelExpertoValue = formData.resumen_factores[key]?.nivel_experto;
+
+      // 3. Comparar si ambos existen
+      if (nivelTrabajadorValue && nivelExpertoValue) {
+        const titulo = config.titulo;
+        if (nivelTrabajadorValue === nivelExpertoValue) {
+          concordanciasCalc.push(titulo);
+        } else {
+          noConcordanciasCalc.push(titulo);
+        }
+      }
+    });
+
+    const txtConcordanciaFinal = concordanciasCalc.length > 0 ? concordanciasCalc.join(', ') : 'Ninguna';
+    const txtNoConcordanciaFinal = noConcordanciasCalc.length > 0 ? noConcordanciasCalc.join(', ') : 'Ninguna';
+
+    const payload = {
+      fecha_valoracion: formData.fecha_valoracion || null,
+      estado: finalizar ? 'completada' : 'borrador',
+      datos_empresa: {
+        empresa: formData.empresa, tipo_documento: formData.tipo_documento_empresa, nit: formData.nit,
+        persona_contacto: formData.persona_contacto, email_notificaciones: formData.email_notificaciones,
+        direccion: formData.direccion_empresa, arl: formData.arl, ciudad: formData.ciudad_empresa
       },
-        trabajador: {
-          nombre: formData.nombre_trabajador, identificacion: formData.identificacion_trabajador,
-          fecha_nacimiento: formData.fecha_nacimiento || null, edad: formData.edad ? parseInt(formData.edad) : null,
-            genero: formData.genero, escolaridad: formData.escolaridad, eps: formData.eps,
-              puesto_trabajo_evaluado: formData.puesto_trabajo_evaluado,
-                cargo: formData.cargo, area: formData.area, nivel_educativo: formData.nivel_educativo,
-                  fecha_ingreso_empresa: formData.fecha_ingreso_empresa || null,
-                    fecha_ingreso_puesto_evaluado: formData.fecha_ingreso_puesto_evaluado || null,
-                      antiguedad_empresa: formData.antiguedad_empresa, antiguedad_puesto_evaluado: formData.antiguedad_puesto_evaluado,
-                        antiguedad_cargo: formData.antiguedad_cargo,
-                          diagnostico: formData.diagnostico, codigo_cie10: formData.codigo_cie10,
-                            fecha_siniestro: formData.fecha_siniestro || null
     },
+      trabajador: {
+        nombre: formData.nombre_trabajador, identificacion: formData.identificacion_trabajador,
+        fecha_nacimiento: formData.fecha_nacimiento || null, edad: formData.edad ? parseInt(formData.edad) : null,
+          genero: formData.genero, escolaridad: formData.escolaridad, eps: formData.eps,
+            puesto_trabajo_evaluado: formData.puesto_trabajo_evaluado,
+              cargo: formData.cargo, area: formData.area, nivel_educativo: formData.nivel_educativo,
+                fecha_ingreso_empresa: formData.fecha_ingreso_empresa || null,
+                  fecha_ingreso_puesto_evaluado: formData.fecha_ingreso_puesto_evaluado || null,
+                    antiguedad_empresa: formData.antiguedad_empresa, antiguedad_puesto_evaluado: formData.antiguedad_puesto_evaluado,
+                      antiguedad_cargo: formData.antiguedad_cargo,
+                        diagnostico: formData.diagnostico, codigo_cie10: formData.codigo_cie10,
+                          fecha_siniestro: formData.fecha_siniestro || null
+  },
     evaluador: {
       nombre: formData.nombre_evaluador, identificacion: formData.identificacion_evaluador,
-        formacion: formData.formacion_evaluador, tarjeta_profesional: formData.tarjeta_profesional,
-          licencia_sst: formData.licencia_sst, fecha_evaluacion: formData.fecha_valoracion || null
-    },
-    secciones: {
-      metodologia: formData.metodologia, participante_trabajador: formData.participante_trabajador,
-        participante_jefe: formData.participante_jefe, participante_cargo_jefe: formData.participante_cargo_jefe,
-          fuente_trabajador_fecha: formData.fuente_trabajador_fecha || null,
-            fuente_jefe_fecha: formData.fuente_jefe_fecha || null,
-              fuente_par_fecha: formData.fuente_par_fecha || null,
-                revision_documental: formData.revision_documental,
-                  descripcion_puesto: formData.descripcion_puesto, condicion_actual: formData.condicion_actual,
-                    nombre_puesto: formData.nombre_puesto_ocupacional, area_puesto: formData.area_puesto,
-                      antiguedad_cargo_ocupacional: formData.antiguedad_cargo_ocupacional,
-                        antiguedad_empresa_ocupacional: formData.antiguedad_empresa_ocupacional,
-                          nivel_educativo_requerido: formData.nivel_educativo_requerido,
-                            jornada_laboral: formData.jornada_laboral, horas_extras: formData.horas_extras,
-                              fuente_jefe_fecha: formData.fuente_jefe_fecha || null,
-                                fuente_par_fecha: formData.fuente_par_fecha || null,
-                                  revision_documental: formData.revision_documental,
-                                    descripcion_puesto: formData.descripcion_puesto, condicion_actual: formData.condicion_actual,
-                                      nombre_puesto: formData.nombre_puesto_ocupacional, area_puesto: formData.area_puesto,
-                                        antiguedad_cargo_ocupacional: formData.antiguedad_cargo_ocupacional,
-                                          antiguedad_empresa_ocupacional: formData.antiguedad_empresa_ocupacional,
-                                            nivel_educativo_requerido: formData.nivel_educativo_requerido,
-                                              jornada_laboral: formData.jornada_laboral, horas_extras: formData.horas_extras,
-                                                turnos: formData.turnos, descripcion_funciones: formData.descripcion_funciones
-    },
-    condiciones_riesgo: condicionesRiesgo,
-      resumen_factores: resumenFactoresPayload,
-        concepto_final: {
-      saveId = res.id;
-    } else {
-      await api.put(`/pruebas-trabajo/${pruebaId}`, payload);
-    }
-    const finalRes: any = await api.post(`/pruebas-trabajo/${saveId}/finalizar`, {});
-    setDownloadUrls({ pdf_url: finalRes.pdf_url });
-    setShowDownloadModal(true);
-    toast.success('Prueba finalizada exitosamente');
+      formacion: formData.formacion_evaluador, tarjeta_profesional: formData.tarjeta_profesional,
+      licencia_sst: formData.licencia_sst, fecha_evaluacion: formData.fecha_valoracion || null
+},
+secciones: {
+  metodologia: formData.metodologia, participante_trabajador: formData.participante_trabajador,
+    participante_jefe: formData.participante_jefe, participante_cargo_jefe: formData.participante_cargo_jefe,
+      fuente_trabajador_fecha: formData.fuente_trabajador_fecha || null,
+        fuente_jefe_fecha: formData.fuente_jefe_fecha || null,
+          fuente_par_fecha: formData.fuente_par_fecha || null,
+            revision_documental: formData.revision_documental,
+              descripcion_puesto: formData.descripcion_puesto, condicion_actual: formData.condicion_actual,
+                nombre_puesto: formData.nombre_puesto_ocupacional, area_puesto: formData.area_puesto,
+                  antiguedad_cargo_ocupacional: formData.antiguedad_cargo_ocupacional,
+                    antiguedad_empresa_ocupacional: formData.antiguedad_empresa_ocupacional,
+                      nivel_educativo_requerido: formData.nivel_educativo_requerido,
+                        jornada_laboral: formData.jornada_laboral, horas_extras: formData.horas_extras,
+                          fuente_jefe_fecha: formData.fuente_jefe_fecha || null,
+                            fuente_par_fecha: formData.fuente_par_fecha || null,
+                              revision_documental: formData.revision_documental,
+                                descripcion_puesto: formData.descripcion_puesto, condicion_actual: formData.condicion_actual,
+                                  nombre_puesto: formData.nombre_puesto_ocupacional, area_puesto: formData.area_puesto,
+                                    antiguedad_cargo_ocupacional: formData.antiguedad_cargo_ocupacional,
+                                      antiguedad_empresa_ocupacional: formData.antiguedad_empresa_ocupacional,
+                                        nivel_educativo_requerido: formData.nivel_educativo_requerido,
+                                          jornada_laboral: formData.jornada_laboral, horas_extras: formData.horas_extras,
+                                            turnos: formData.turnos, descripcion_funciones: formData.descripcion_funciones
+},
+condiciones_riesgo: condicionesRiesgo,
+  resumen_factores: resumenFactoresPayload,
+    concepto_final: {
+  saveId = res.id;
+} else {
+  await api.put(`/pruebas-trabajo/${pruebaId}`, payload);
+}
+const finalRes: any = await api.post(`/pruebas-trabajo/${saveId}/finalizar`, {});
+setDownloadUrls({ pdf_url: finalRes.pdf_url });
+setShowDownloadModal(true);
+toast.success('Prueba finalizada exitosamente');
   } else {
-    if (pruebaId) {
-      await api.put(`/pruebas-trabajo/${pruebaId}`, payload);
-      toast.success('Guardado correctamente');
-    } else {
+  if (pruebaId) {
+    await api.put(`/pruebas-trabajo/${pruebaId}`, payload);
+    toast.success('Guardado correctamente');
+  } else {
     const res: any = await api.post('/pruebas-trabajo/', payload);
     setPruebaId(res.id);
     toast.success('Prueba creada exitosamente');
