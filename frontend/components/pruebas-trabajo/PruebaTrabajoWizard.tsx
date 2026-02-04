@@ -322,8 +322,11 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
     genero: '',
     fecha_nacimiento: '',
     escolaridad: '',
+    nivel_educativo: '', // Nuevo campo
     eps: '',
     puesto_trabajo_evaluado: '',
+    cargo: '', // Nuevo campo
+    area: '', // Nuevo campo
     fecha_ingreso_puesto_evaluado: '',
     fecha_ingreso_empresa: '',
     antiguedad_empresa: '',
@@ -391,6 +394,37 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
     setFormData(prev => ({ ...prev, resumen_factores: resumenInit }));
   });
 
+  // Efecto para recalcular automáticamente concordancia
+  useEffect(() => {
+    const concordancias: string[] = [];
+    const noConcordancias: string[] = [];
+
+    Object.entries(formData.resumen_factores).forEach(([key, values]) => {
+      if (values.nivel_trabajador && values.nivel_experto) {
+        // Encontrar título legible
+        const categoria = Object.values(factoresRiesgo).find(c => c.titulo === factoresRiesgo[key]?.titulo);
+        const nombreTitulo = categoria ? categoria.titulo : key;
+
+        if (values.nivel_trabajador === values.nivel_experto) {
+          concordancias.push(nombreTitulo);
+        } else {
+          noConcordancias.push(nombreTitulo);
+        }
+      }
+    });
+
+    const txtConcordancia = concordancias.length > 0 ? concordancias.join(', ') : 'Ninguna';
+    const txtNoConcordancia = noConcordancias.length > 0 ? noConcordancias.join(', ') : 'Ninguna';
+
+    if (txtConcordancia !== formData.concordancia_items || txtNoConcordancia !== formData.no_concordancia_items) {
+      setFormData(prev => ({
+        ...prev,
+        concordancia_items: txtConcordancia,
+        no_concordancia_items: txtNoConcordancia
+      }));
+    }
+  }, [formData.resumen_factores]);
+
   const updateField = (field: string, value: any) => setFormData(prev => ({ ...prev, [field]: value }));
 
   const updateFactorRiesgo = (itemNombre: string, field: string, value: string) => {
@@ -414,32 +448,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
       const currentResumen = prev.resumen_factores;
       const updatedDimension = { ...(currentResumen[dimension] || {}), [field]: value };
       const nextResumen = { ...currentResumen, [dimension]: updatedDimension as any };
-
-      let nextConcordancia = prev.concordancia_items;
-      let nextNoConcordancia = prev.no_concordancia_items;
-
-      if (field === 'nivel_experto') {
-        const concordancias: string[] = [];
-        const noConcordancias: string[] = [];
-        Object.entries(factoresRiesgo).forEach(([key, cat]) => {
-          const dimData = key === dimension ? updatedDimension : nextResumen[key];
-          const nivelTrab = dimData?.nivel_trabajador;
-          const nivelExp = dimData?.nivel_experto;
-          if (nivelTrab && nivelExp) {
-            if (nivelTrab === nivelExp) concordancias.push(cat.titulo);
-            else noConcordancias.push(cat.titulo);
-          }
-        });
-        nextConcordancia = concordancias.length > 0 ? concordancias.join(', ') : 'Ninguna';
-        nextNoConcordancia = noConcordancias.length > 0 ? noConcordancias.join(', ') : 'Ninguna';
-      }
-
-      return {
-        ...prev,
-        resumen_factores: nextResumen,
-        concordancia_items: field === 'nivel_experto' ? nextConcordancia : prev.concordancia_items,
-        no_concordancia_items: field === 'nivel_experto' ? nextNoConcordancia : prev.no_concordancia_items,
-      };
+      return { ...prev, resumen_factores: nextResumen };
     });
   };
 
@@ -466,8 +475,11 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
             edad: data.trabajador?.edad ? data.trabajador.edad.toString() : '',
             genero: data.trabajador?.genero || '',
             escolaridad: data.trabajador?.escolaridad || '',
+            nivel_educativo: data.trabajador?.nivel_educativo || '', // Mapped
             eps: data.trabajador?.eps || '',
             puesto_trabajo_evaluado: data.trabajador?.puesto_trabajo_evaluado || '',
+            cargo: data.trabajador?.cargo || '', // Mapped
+            area: data.trabajador?.area || '', // Mapped
             fecha_ingreso_empresa: data.trabajador?.fecha_ingreso_empresa ? data.trabajador.fecha_ingreso_empresa.split('T')[0] : '',
             fecha_ingreso_puesto_evaluado: data.trabajador?.fecha_ingreso_puesto_evaluado ? data.trabajador.fecha_ingreso_puesto_evaluado.split('T')[0] : '',
             antiguedad_empresa: data.trabajador?.antiguedad_empresa || '',
@@ -669,6 +681,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
           fecha_nacimiento: formData.fecha_nacimiento || null, edad: formData.edad ? parseInt(formData.edad) : null,
           genero: formData.genero, escolaridad: formData.escolaridad, eps: formData.eps,
           puesto_trabajo_evaluado: formData.puesto_trabajo_evaluado,
+          cargo: formData.cargo, area: formData.area, nivel_educativo: formData.nivel_educativo,
           fecha_ingreso_empresa: formData.fecha_ingreso_empresa || null,
           fecha_ingreso_puesto_evaluado: formData.fecha_ingreso_puesto_evaluado || null,
           antiguedad_empresa: formData.antiguedad_empresa, antiguedad_puesto_evaluado: formData.antiguedad_puesto_evaluado,
@@ -678,7 +691,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
         evaluador: {
           nombre: formData.nombre_evaluador, identificacion: formData.identificacion_evaluador,
           formacion: formData.formacion_evaluador, tarjeta_profesional: formData.tarjeta_profesional,
-          licencia_sst: formData.licencia_sst
+          licencia_sst: formData.licencia_sst, fecha_evaluacion: formData.fecha_valoracion || null
         },
         secciones: {
           metodologia: formData.metodologia, participante_trabajador: formData.participante_trabajador,
@@ -928,12 +941,24 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                       <Input disabled={readOnly} value={formData.escolaridad} onChange={e => updateField('escolaridad', e.target.value)} className="bg-white dark:bg-gray-800" />
                     </div>
                     <div className="space-y-1.5">
+                      <Label className="text-sm font-medium">Nivel Educativo</Label>
+                      <Input disabled={readOnly} value={formData.nivel_educativo} onChange={e => updateField('nivel_educativo', e.target.value)} className="bg-white dark:bg-gray-800" />
+                    </div>
+                    <div className="space-y-1.5">
                       <Label className="text-sm font-medium">EPS</Label>
                       <Input disabled={readOnly} value={formData.eps} onChange={e => updateField('eps', e.target.value)} className="bg-white dark:bg-gray-800" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Puesto de Trabajo Evaluado</Label>
                       <Input disabled={readOnly} value={formData.puesto_trabajo_evaluado} onChange={e => updateField('puesto_trabajo_evaluado', e.target.value)} className="bg-white dark:bg-gray-800" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-sm font-medium">Cargo</Label>
+                      <Input disabled={readOnly} value={formData.cargo} onChange={e => updateField('cargo', e.target.value)} className="bg-white dark:bg-gray-800" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-sm font-medium">Área</Label>
+                      <Input disabled={readOnly} value={formData.area} onChange={e => updateField('area', e.target.value)} className="bg-white dark:bg-gray-800" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Fecha Ingreso a Puesto</Label>
