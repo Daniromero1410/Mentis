@@ -315,6 +315,8 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
     persona_contacto: '',
     email_notificaciones: '',
     direccion_empresa: '',
+    arl: '', // Nuevo campo
+    ciudad_empresa: '', // Nuevo campo
     // Trabajador
     nombre_trabajador: '',
     identificacion_trabajador: '',
@@ -469,6 +471,8 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
             persona_contacto: data.datos_empresa?.persona_contacto || '',
             email_notificaciones: data.datos_empresa?.email_notificaciones || '',
             direccion_empresa: data.datos_empresa?.direccion || '',
+            arl: data.datos_empresa?.arl || '', // Mapped
+            ciudad_empresa: data.datos_empresa?.ciudad || '', // Mapped
 
             nombre_trabajador: data.trabajador?.nombre || '',
             identificacion_trabajador: data.trabajador?.identificacion || '',
@@ -676,7 +680,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
         datos_empresa: {
           empresa: formData.empresa, tipo_documento: formData.tipo_documento_empresa, nit: formData.nit,
           persona_contacto: formData.persona_contacto, email_notificaciones: formData.email_notificaciones,
-          direccion: formData.direccion_empresa
+          direccion: formData.direccion_empresa, arl: formData.arl, ciudad: formData.ciudad_empresa
         },
         trabajador: {
           nombre: formData.nombre_trabajador, identificacion: formData.identificacion_trabajador,
@@ -906,6 +910,14 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Dirección</Label>
                       <Input disabled={readOnly} value={formData.direccion_empresa} onChange={e => updateField('direccion_empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-sm font-medium">ARL</Label>
+                      <Input disabled={readOnly} value={formData.arl} onChange={e => updateField('arl', e.target.value)} className="bg-white dark:bg-gray-800" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-sm font-medium">Ciudad</Label>
+                      <Input disabled={readOnly} value={formData.ciudad_empresa} onChange={e => updateField('ciudad_empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
                     </div>
                   </div>
                 </div>
