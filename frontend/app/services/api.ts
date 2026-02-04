@@ -39,16 +39,28 @@ class ApiService {
   }
 
   async post<T>(endpoint: string, data: any): Promise<T> {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ detail: 'Error de conexión' }));
-      throw new Error(error.detail || 'Error en la petición');
+    try {
+      console.log(`[API] POST Request to ${endpoint}`);
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        console.error(`[API] Error ${response.status} in POST ${endpoint}`);
+        const error = await response.json().catch(() => ({ detail: `Error HTTP ${response.status}` }));
+        throw new Error(error.detail || `Error en la petición: ${response.status}`);
+      }
+      return response.json();
+    } catch (error: any) {
+      console.error(`[API] Network/Fetch Error in POST ${endpoint}:`, error);
+      // Re-throw con mensaje más claro si esFailed to fetch
+      if (error.message === 'Failed to fetch') {
+        throw new Error('Error de conexión con el servidor. Verifique su internet o el estado del servicio.');
+      }
+      throw error;
     }
-    return response.json();
   }
 
   async postFormData<T>(endpoint: string, formData: FormData): Promise<T> {
