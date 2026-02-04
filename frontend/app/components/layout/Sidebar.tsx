@@ -98,12 +98,12 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-40 h-screen bg-white dark:bg-[#2a2a2a] border-r border-gray-200 dark:border-[#333333] transition-all duration-300
+      className={`fixed left-0 top-0 z-40 h-screen bg-white border-r border-gray-200 transition-all duration-300
         ${collapsed ? '-translate-x-full md:translate-x-0 md:w-20' : 'translate-x-0 w-64'}
       `}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center border-b border-gray-200 dark:border-[#333333] px-4">
+      <div className="flex h-16 items-center border-b border-gray-200 px-4">
         <Link href="/dashboard" className="flex items-center gap-3 w-full">
           <div className={`relative ${collapsed ? 'w-10 h-10' : 'w-52 h-14'} transition-all duration-300 flex items-center justify-center overflow-hidden`}>
             {collapsed ? (
@@ -136,7 +136,7 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
           menuItems.map((section, sectionIndex) => (
             <div key={section.title} className={sectionIndex > 0 ? 'mt-6' : ''}>
               {!collapsed && (
-                <h3 className="mb-2 px-3 text-[11px] font-semibold text-gray-400 dark:text-[#6b6b6b] uppercase tracking-wider">
+                <h3 className="mb-2 px-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
                   {section.title}
                 </h3>
               )}
@@ -164,11 +164,11 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
                           <button
                             onClick={() => toggleExpand(item.title)}
                             className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${active
-                              ? 'bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#333333]'
+                              ? 'bg-indigo-500/10 text-indigo-600 shadow-sm'
+                              : 'text-gray-600 hover:bg-gray-100'
                               } ${collapsed ? 'justify-center px-2' : ''}`}
                           >
-                            <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-indigo-600 dark:text-indigo-400' : ''}`} />
+                            <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
                             {!collapsed && (
                               <>
                                 <span className="flex-1 text-left">{item.title}</span>
@@ -177,7 +177,7 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
                             )}
                           </button>
                           {!collapsed && isExpanded && (
-                            <ul className="mt-1 ml-4 space-y-1 border-l-2 border-gray-200 dark:border-[#333333] pl-3">
+                            <ul className="mt-1 ml-4 space-y-1 border-l-2 border-gray-200 pl-3">
                               {item.children?.map((child) => {
                                 const ChildIcon = child.icon;
                                 const childActive = pathname === child.href;
@@ -186,8 +186,8 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
                                     <Link
                                       href={child.href}
                                       className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all duration-200 ${childActive
-                                        ? 'bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-medium shadow-sm'
-                                        : 'text-gray-500 dark:text-[#b0b0b0] hover:bg-gray-100 dark:hover:bg-[#333333] hover:text-gray-700 dark:hover:text-gray-200'
+                                        ? 'bg-indigo-500/10 text-indigo-600 font-medium shadow-sm'
+                                        : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
                                         }`}
                                     >
                                       <ChildIcon className="h-4 w-4" />
@@ -203,11 +203,11 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
                         <Link
                           href={item.href}
                           className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${active
-                            ? 'bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#333333]'
+                            ? 'bg-indigo-500/10 text-indigo-600 shadow-sm'
+                            : 'text-gray-600 hover:bg-gray-100'
                             } ${collapsed ? 'justify-center px-2' : ''}`}
                         >
-                          <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-indigo-600 dark:text-indigo-400' : ''}`} />
+                          <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
                           {!collapsed && <span>{item.title}</span>}
                         </Link>
                       )}

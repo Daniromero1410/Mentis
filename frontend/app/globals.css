@@ -29,36 +29,7 @@
   --accent-red: #ef4444;
 }
 
-.dark {
-  /* Dark mode colors - Professional theme */
-  --background: #1a1a1a;
-  --foreground: #ffffff;
-  --card: #2a2a2a;
-  --card-foreground: #ffffff;
-  --popover: #2a2a2a;
-  --popover-foreground: #ffffff;
-  --primary: #818cf8;
-  --primary-foreground: #ffffff;
-  --secondary: #333333;
-  --secondary-foreground: #ffffff;
-  --muted: #333333;
-  --muted-foreground: #b0b0b0;
-  --accent: #a78bfa;
-  --accent-foreground: #ffffff;
-  --destructive: #f87171;
-  --destructive-foreground: #ffffff;
-  --border: #333333;
-  --input: #2a2a2a;
-  --ring: #818cf8;
 
-  /* Custom colors */
-  --accent-indigo: #818cf8;
-  --accent-violet: #a78bfa;
-  --accent-red: #f87171;
-  --text-primary: #ffffff;
-  --text-secondary: #b0b0b0;
-  --text-muted: #6b6b6b;
-}
 
 * {
   border-color: var(--border);

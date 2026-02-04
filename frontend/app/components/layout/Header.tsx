@@ -82,7 +82,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white dark:bg-[#2a2a2a] border-b border-gray-200 dark:border-[#333333] transition-colors duration-300">
+    <header className="sticky top-0 z-30 h-16 bg-white border-b border-gray-200 transition-colors duration-300">
       <div className="flex h-full items-center justify-between px-4 lg:px-6">
         {/* Left Side */}
         <div className="flex items-center gap-4">
@@ -90,18 +90,18 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             variant="ghost"
             size="icon"
             onClick={onToggleSidebar}
-            className="hover:bg-gray-100 dark:hover:bg-[#333333] rounded-lg"
+            className="hover:bg-gray-100 rounded-lg"
           >
-            <Menu className="h-5 w-5 text-gray-600 dark:text-[#b0b0b0]" />
+            <Menu className="h-5 w-5 text-gray-600" />
           </Button>
 
           {/* Search */}
           <div className="hidden md:flex relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-[#6b6b6b]" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
               type="search"
               placeholder="Buscar valoraciones..."
-              className="w-72 pl-10 h-10 bg-gray-100 dark:bg-[#1a1a1a] border-0 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-[#6b6b6b]"
+              className="w-72 pl-10 h-10 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500"
             />
           </div>
         </div>
@@ -111,17 +111,17 @@ export function Header({ onToggleSidebar }: HeaderProps) {
           {/* Notifications */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative hover:bg-gray-100 dark:hover:bg-[#333333] rounded-lg">
-                <Bell className="h-5 w-5 text-gray-600 dark:text-[#b0b0b0]" />
+              <Button variant="ghost" size="icon" className="relative hover:bg-gray-100 rounded-lg">
+                <Bell className="h-5 w-5 text-gray-600" />
                 {pendingRequests.length > 0 && (
-                  <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm ring-1 ring-white dark:ring-[#2a2a2a]">
+                  <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm ring-1 ring-white">
                     {pendingRequests.length}
                   </span>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-0 bg-white dark:bg-[#1f1f1f] shadow-xl border border-gray-200 dark:border-[#333333]" align="end">
-              <div className="p-4 border-b border-gray-100 dark:border-[#333333]">
+            <PopoverContent className="w-80 p-0 bg-white shadow-xl border border-gray-200" align="end">
+              <div className="p-4 border-b border-gray-100">
                 <h4 className="font-semibold text-sm">Notificaciones</h4>
                 <p className="text-xs text-gray-500">Solicitudes de acceso pendientes</p>
               </div>
@@ -131,17 +131,17 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                     No hay notificaciones nuevas
                   </div>
                 ) : (
-                  <div className="divide-y divide-gray-100 dark:divide-[#333333]">
+                  <div className="divide-y divide-gray-100">
                     {pendingRequests.map((req) => (
-                      <div key={req.id} className="p-4 flex items-start gap-3 hover:bg-gray-50 dark:hover:bg-[#333333] transition-colors">
-                        <div className="bg-indigo-100 dark:bg-indigo-900/30 p-2 rounded-full">
-                          <UserCircle className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                      <div key={req.id} className="p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors">
+                        <div className="bg-indigo-100 p-2 rounded-full">
+                          <UserCircle className="h-4 w-4 text-indigo-600" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                          <p className="text-sm font-medium text-gray-900 truncate">
                             Restablecer Contraseña
                           </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                          <p className="text-xs text-gray-500 truncate">
                             {req.email}
                           </p>
                           <p className="text-[10px] text-gray-400 mt-1">
@@ -151,7 +151,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                         <Button
                           size="icon"
                           variant="ghost"
-                          className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20"
+                          className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
                           onClick={() => handleResolveRequest(req.id)}
                           disabled={loadingResolve === req.id}
                         >
@@ -170,31 +170,31 @@ export function Header({ onToggleSidebar }: HeaderProps) {
           </Popover>
 
           {/* Divider */}
-          <div className="hidden md:block w-px h-8 bg-gray-200 dark:bg-[#333333]"></div>
+          <div className="hidden md:block w-px h-8 bg-gray-200"></div>
 
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-3 h-10 px-3 hover:bg-gray-100 dark:hover:bg-[#333333] rounded-lg">
+              <Button variant="ghost" className="gap-3 h-10 px-3 hover:bg-gray-100 rounded-lg">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-sm font-semibold">
                     {user ? getInitials(user.nombre, user.apellido) : 'U'}
                   </AvatarFallback>
                 </Avatar>
-                <span className="hidden md:block text-sm font-medium text-gray-700 dark:text-white">
+                <span className="hidden md:block text-sm font-medium text-gray-700">
                   {user?.nombre}
                 </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#333333]">
-              <div className="px-3 py-3 border-b border-gray-100 dark:border-[#333333]">
-                <p className="font-semibold text-gray-900 dark:text-white">{user?.nombre} {user?.apellido}</p>
-                <p className="text-xs text-gray-500 dark:text-[#b0b0b0] mt-0.5">{user?.email}</p>
+            <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200">
+              <div className="px-3 py-3 border-b border-gray-100">
+                <p className="font-semibold text-gray-900">{user?.nombre} {user?.apellido}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{user?.email}</p>
               </div>
               <div className="py-1">
                 <DropdownMenuItem
                   onClick={() => setShowProfileModal(true)}
-                  className="gap-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#333333]"
+                  className="gap-2 cursor-pointer text-gray-700 hover:bg-gray-100"
                 >
                   <UserCircle className="h-4 w-4" />
                   Mi Perfil
@@ -203,17 +203,17 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/configuracion"
-                    className="gap-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#333333] w-full flex items-center"
+                    className="gap-2 cursor-pointer text-gray-700 hover:bg-gray-100 w-full flex items-center"
                   >
                     <Settings className="h-4 w-4" />
                     Configuración
                   </Link>
                 </DropdownMenuItem>
               </div>
-              <DropdownMenuSeparator className="bg-gray-100 dark:bg-[#333333]" />
+              <DropdownMenuSeparator className="bg-gray-100" />
               <DropdownMenuItem
                 onClick={() => setShowLogoutModal(true)}
-                className="gap-2 text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20"
+                className="gap-2 text-red-600 cursor-pointer hover:bg-red-50"
               >
                 <LogOut className="h-4 w-4" />
                 Cerrar Sesión
@@ -234,7 +234,6 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <Button
               variant="outline"
               onClick={() => setShowLogoutModal(false)}
-              className="dark:border-[#333333] dark:hover:bg-[#333333]"
             >
               Cancelar
             </Button>
@@ -248,7 +247,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         }
       >
         <div className="space-y-4">
-          <p className="text-gray-600 dark:text-[#b0b0b0]">
+          <p className="text-gray-600">
             ¿Estás seguro que deseas cerrar sesión?
           </p>
         </div>
@@ -274,20 +273,20 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         <div className="space-y-6">
           {/* Usuario */}
           <div className="space-y-2">
-            <h4 className="font-semibold text-gray-900 dark:text-white">Información del Usuario</h4>
-            <div className="p-4 rounded-lg bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-[#333333]">
+            <h4 className="font-semibold text-gray-900">Información del Usuario</h4>
+            <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
               <div className="space-y-2">
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-[#b0b0b0]">Nombre</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{user?.nombre} {user?.apellido}</p>
+                  <p className="text-sm text-gray-500">Nombre</p>
+                  <p className="font-medium text-gray-900">{user?.nombre} {user?.apellido}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-[#b0b0b0]">Email</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{user?.email}</p>
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="font-medium text-gray-900">{user?.email}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-[#b0b0b0]">Rol</p>
-                  <p className="font-medium text-gray-900 dark:text-white capitalize">{user?.rol}</p>
+                  <p className="text-sm text-gray-500">Rol</p>
+                  <p className="font-medium text-gray-900 capitalize">{user?.rol}</p>
                 </div>
               </div>
             </div>
