@@ -1835,7 +1835,8 @@ export default function NuevaValoracionPage() {
               <Button
                 onClick={() => {
                   if (downloadUrls) {
-                    window.open(`http://localhost:8000${downloadUrls.pdf_url}`, '_blank');
+                    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
+                    window.open(`${apiUrl}${downloadUrls.pdf_url}`, '_blank');
                     toast.success('Abriendo PDF en nueva pestaña');
                   }
                 }}

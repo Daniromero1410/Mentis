@@ -124,7 +124,7 @@ export default function PruebasTrabajoPage() {
 
   const handleDownloadPDF = async (prueba: PruebaTrabajo) => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
       const response = await fetch(
         `${apiUrl}/pruebas-trabajo/${prueba.id}/descargar-pdf`,
         {

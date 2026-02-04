@@ -1639,7 +1639,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                 <div className="flex flex-col sm:flex-row justify-center gap-3">
                   {downloadUrls?.pdf_url && (
                     <a
-                      href={downloadUrls.pdf_url.startsWith('http') ? downloadUrls.pdf_url : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${downloadUrls.pdf_url}`}
+                      href={downloadUrls.pdf_url.startsWith('http') ? downloadUrls.pdf_url : `${process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app'}${downloadUrls.pdf_url}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
