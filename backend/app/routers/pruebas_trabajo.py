@@ -73,7 +73,7 @@ def generar_concepto_prueba(
             
         # Obtener datos de DB
         trabajador = session.exec(select(TrabajadorPrueba).where(TrabajadorPrueba.prueba_id == request.prueba_id)).first()
-        nombre_trabajador = trabajador.nombre_completo if trabajador else "el trabajador"
+        nombre_trabajador = trabajador.nombre if trabajador else "el trabajador"
         
         condiciones_db = session.exec(select(CondicionRiesgoPrueba).where(CondicionRiesgoPrueba.prueba_id == request.prueba_id)).all()
         
