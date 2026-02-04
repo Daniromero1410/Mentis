@@ -331,6 +331,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
     fecha_ingreso_empresa: '',
     antiguedad_empresa: '',
     antiguedad_puesto_evaluado: '',
+    antiguedad_cargo: '', // Nuevo campo
     diagnostico: '',
     codigo_cie10: '',
     fecha_siniestro: '',
@@ -484,6 +485,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
             fecha_ingreso_puesto_evaluado: data.trabajador?.fecha_ingreso_puesto_evaluado ? data.trabajador.fecha_ingreso_puesto_evaluado.split('T')[0] : '',
             antiguedad_empresa: data.trabajador?.antiguedad_empresa || '',
             antiguedad_puesto_evaluado: data.trabajador?.antiguedad_puesto_evaluado || '',
+            antiguedad_cargo: data.trabajador?.antiguedad_cargo || '', // Mapped
             diagnostico: data.trabajador?.diagnostico || '',
             codigo_cie10: data.trabajador?.codigo_cie10 || '',
             fecha_siniestro: data.trabajador?.fecha_siniestro ? data.trabajador.fecha_siniestro.split('T')[0] : '',
@@ -685,6 +687,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
           fecha_ingreso_empresa: formData.fecha_ingreso_empresa || null,
           fecha_ingreso_puesto_evaluado: formData.fecha_ingreso_puesto_evaluado || null,
           antiguedad_empresa: formData.antiguedad_empresa, antiguedad_puesto_evaluado: formData.antiguedad_puesto_evaluado,
+          antiguedad_cargo: formData.antiguedad_cargo,
           diagnostico: formData.diagnostico, codigo_cie10: formData.codigo_cie10,
           fecha_siniestro: formData.fecha_siniestro || null
         },
@@ -975,6 +978,10 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Antigüedad en Puesto</Label>
                       <Input disabled={readOnly} value={formData.antiguedad_puesto_evaluado} onChange={e => updateField('antiguedad_puesto_evaluado', e.target.value)} className="bg-white dark:bg-gray-800" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-sm font-medium">Antigüedad en Cargo</Label>
+                      <Input disabled={readOnly} value={formData.antiguedad_cargo} onChange={e => updateField('antiguedad_cargo', e.target.value)} className="bg-white dark:bg-gray-800" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Diagnóstico</Label>
