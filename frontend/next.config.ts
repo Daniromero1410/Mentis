@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
 
   // Variables de entorno disponibles en el cliente
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app',
   },
 
   // Configuracion para Vercel - outputs standalone para optimizacion
