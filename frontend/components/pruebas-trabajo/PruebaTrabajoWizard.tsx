@@ -626,7 +626,8 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
       }
     } catch (error: any) {
       console.error('Error generando concepto:', error);
-      toast.error('Error al generar concepto');
+      const errorMsg = error.response?.data?.detail || 'Error al generar concepto';
+      toast.error(errorMsg);
     } finally {
       setGenerandoConcepto(false);
     }

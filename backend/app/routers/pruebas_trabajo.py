@@ -155,13 +155,30 @@ def generar_concepto_prueba(
             
             # Crear objeto compatible
             # IMPORTANTE: Asegurar que los tipos sean correctos para evitar Pydantic Validations Errors ocultos
+            
+            # Cast dimension to string value to create CategoriaRiesgo
+            dim_val = dim.value if hasattr(dim, 'value') else str(dim)
+            try:
+                cat_enum = CategoriaRiesgo(dim_val)
+            except ValueError:
+                # Fallback if dimension string doesn't match CategoriaRiesgo exactly
+                # Try to find by name or just use the raw string if SQLModel allows (it might fail if strict)
+                print(f"Advertencia: Dimensión '{dim_val}' no coincide con CategoriaRiesgo")
+                cat_enum = dim_val # Risky if validation is strict
+
+            # Cast calificacion to CalificacionRiesgo
+            try:
+                cal_enum = CalificacionRiesgo(calificacion_str)
+            except:
+                cal_enum = CalificacionRiesgo.BAJO
+
             eval_obj = EvaluacionRiesgo(
                 id=0, # Dummy
                 valoracion_id=0, # Dummy
-                categoria=dim, 
+                categoria=cat_enum, 
                 item_numero=item_n,
                 item_texto=str(item_t) if item_t else f"Item {item_n}",
-                calificacion=calificacion_str,
+                calificacion=cal_enum,
                 observaciones=str(obs) if obs else None
             )
             evaluaciones_adaptadas.append(eval_obj)
@@ -188,13 +205,15 @@ def generar_concepto_prueba(
         )
     except Exception as e:
         import traceback
-        # Log to file for debugging
+        # Log to file for debugging - Use absolute path or current dir explicitly
         try:
-            with open("last_ml_error.txt", "w") as f:
-                f.write(f"Error: {str(e)}\n\n")
+            log_path = os.path.join(os.getcwd(), "last_ml_error.txt")
+            with open(log_path, "w") as f:
+                f.write(f"Error en generar_concepto_prueba: {str(e)}\n\n")
+                f.write(f"Condiciones input types: {[type(c) for c in condiciones_input]}\n")
                 traceback.print_exc(file=f)
         except:
-            pass
+            print("Error escribiendo log de error ML")
             
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error interno en generador IA: {str(e)}")
