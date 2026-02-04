@@ -667,6 +667,36 @@ def generar_pdf_prueba_trabajo(
             story.append(t_conclusion)
             story.append(Spacer(1, 8))
 
+        # ===== ÍTEMS CON CONCORDANCIA =====
+        if concepto_final.concordancia_items:
+            story.append(crear_seccion_header("ÍTEMS CON CONCORDANCIA"))
+            concordancia_para = Paragraph(concepto_final.concordancia_items.replace('\n', '<br/>'), style_normal)
+            t_concordancia = Table([[concordancia_para]], colWidths=[PAGE_WIDTH])
+            t_concordancia.setStyle(TableStyle([
+                ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+                ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ('TOPPADDING', (0, 0), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ]))
+            story.append(t_concordancia)
+            story.append(Spacer(1, 8))
+
+        # ===== ÍTEMS SIN CONCORDANCIA =====
+        if concepto_final.no_concordancia_items:
+            story.append(crear_seccion_header("ÍTEMS SIN CONCORDANCIA"))
+            no_concordancia_para = Paragraph(concepto_final.no_concordancia_items.replace('\n', '<br/>'), style_normal)
+            t_no_concordancia = Table([[no_concordancia_para]], colWidths=[PAGE_WIDTH])
+            t_no_concordancia.setStyle(TableStyle([
+                ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+                ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ('TOPPADDING', (0, 0), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ]))
+            story.append(t_no_concordancia)
+            story.append(Spacer(1, 8))
+
         concepto_texto = concepto_final.conclusiones_finales or concepto_final.concepto_generado_ml or ""
         if concepto_texto:
             story.append(crear_seccion_header("CONCLUSIONES FINALES - PRUEBA DE TRABAJO DE ESFERA MENTAL"))
