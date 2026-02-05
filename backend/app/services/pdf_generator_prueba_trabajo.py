@@ -255,7 +255,6 @@ def generar_pdf_prueba_trabajo(
         [B("Cargo:"), P(trabajador.cargo if trabajador else ""), B("Área:"), P(trabajador.area if trabajador else "")],
         [B("Fecha ingreso empresa:"), P(fmt_fecha(trabajador.fecha_ingreso_empresa if trabajador else None)), B("Fecha ingreso puesto:"), P(fmt_fecha(trabajador.fecha_ingreso_puesto_evaluado if trabajador else None))],
         [B("Antigüedad empresa:"), P(trabajador.antiguedad_empresa if trabajador else ""), B("Antigüedad puesto:"), P(trabajador.antiguedad_puesto_evaluado if trabajador else "")],
-        [B("Antigüedad cargo:"), P(trabajador.antiguedad_cargo if trabajador else ""), "", ""],
         [B("Diagnóstico:"), P(trabajador.diagnostico if trabajador else ""), B("Código CIE-10:"), P(trabajador.codigo_cie10 if trabajador else "")],
         [B("Fecha del siniestro:"), P(fmt_fecha(trabajador.fecha_siniestro if trabajador else None)), "", ""],
     ]
@@ -274,8 +273,7 @@ def generar_pdf_prueba_trabajo(
         ('SPAN', (1, 0), (3, 0)),  # Nombre
         ('SPAN', (1, 4), (3, 4)),  # Nivel educativo
         ('SPAN', (1, 5), (3, 5)),  # Puesto de trabajo
-        ('SPAN', (1, 9), (3, 9)),  # Antigüedad cargo
-        ('SPAN', (1, 11), (3, 11)), # Fecha siniestro
+        ('SPAN', (1, 10), (3, 10)), # Fecha siniestro
     ]))
     story.append(t_trabajador)
     story.append(Spacer(1, 8))

@@ -1033,10 +1033,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                       <Label className="text-sm font-medium">Antigüedad en Puesto</Label>
                       <Input disabled={readOnly} value={formData.antiguedad_puesto_evaluado} onChange={e => updateField('antiguedad_puesto_evaluado', e.target.value)} className="bg-white dark:bg-gray-800" />
                     </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Antigüedad en Cargo</Label>
-                      <Input disabled={readOnly} value={formData.antiguedad_cargo} onChange={e => updateField('antiguedad_cargo', e.target.value)} className="bg-white dark:bg-gray-800" />
-                    </div>
+
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Diagnóstico</Label>
                       <Input disabled={readOnly} value={formData.diagnostico} onChange={e => updateField('diagnostico', e.target.value)} className="bg-white dark:bg-gray-800" />
@@ -1166,7 +1163,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div><Label>Nombre o Denominación del Puesto</Label><Input disabled={readOnly} value={formData.nombre_puesto_ocupacional} onChange={e => updateField('nombre_puesto_ocupacional', e.target.value)} /></div>
                   <div><Label>Área a la que pertenece el puesto</Label><Input disabled={readOnly} value={formData.area_puesto} onChange={e => updateField('area_puesto', e.target.value)} /></div>
-                  <div><Label>Antigüedad en el Cargo</Label><Input disabled={readOnly} value={formData.antiguedad_cargo_ocupacional} onChange={e => updateField('antiguedad_cargo_ocupacional', e.target.value)} /></div>
+
                   <div><Label>Antigüedad en la Empresa</Label><Input disabled={readOnly} value={formData.antiguedad_empresa_ocupacional} onChange={e => updateField('antiguedad_empresa_ocupacional', e.target.value)} /></div>
                   <div><Label>Nivel Educativo Requerido para el Cargo</Label><Input disabled={readOnly} value={formData.nivel_educativo_requerido} onChange={e => updateField('nivel_educativo_requerido', e.target.value)} /></div>
                   <div><Label>Jornada Laboral</Label><Input disabled={readOnly} value={formData.jornada_laboral} onChange={e => updateField('jornada_laboral', e.target.value)} /></div>
