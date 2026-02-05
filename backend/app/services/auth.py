@@ -42,7 +42,8 @@ def decode_token(token: str) -> Optional[dict]:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return payload
-    except JWTError:
+    except JWTError as e:
+        print(f"[AUTH ERROR] Error decodificando token: {e}")
         return None
 
 async def get_current_user(
@@ -60,17 +61,21 @@ async def get_current_user(
     payload = decode_token(token)
     
     if payload is None:
+        print("[AUTH ERROR] Payload es None (Token inválido o expirado)")
         raise credentials_exception
     
     user_id: int = payload.get("sub")
     if user_id is None:
+        print("[AUTH ERROR] No sub (user_id) en payload")
         raise credentials_exception
     
     user = session.get(Usuario, int(user_id))
     if user is None:
+        print(f"[AUTH ERROR] Usuario con ID {user_id} no encontrado en BD")
         raise credentials_exception
     
     if not user.activo:
+        print(f"[AUTH ERROR] Usuario {user_id} está inactivo")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Usuario desactivado"
