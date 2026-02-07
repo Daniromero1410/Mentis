@@ -460,14 +460,17 @@ def generar_pdf_valoracion(
     story.append(concepto_para)
     story.append(Spacer(1, 10))
     
-    story.append(Table([[B("ORIENTACION PSICOLOGICA PARA REINTEGRO LABORAL")]], colWidths=[7.4*inch], style=TableStyle([('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER), ('BACKGROUND', (0,0), (-1,0), COLOR_SECTION_BG)])))
-    story.append(Spacer(1, 5))
+    # ===== BLOQUE DE ORIENTACIÓN Y FIRMAS (Mantener juntos) =====
+    # Se agrupan para evitar que las firmas queden huérfanas en una página nueva
+    bloque_firmas = []
+    
+    bloque_firmas.append(Table([[B("ORIENTACION PSICOLOGICA PARA REINTEGRO LABORAL")]], colWidths=[7.4*inch], style=TableStyle([('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER), ('BACKGROUND', (0,0), (-1,0), COLOR_SECTION_BG)])))
+    bloque_firmas.append(Spacer(1, 5))
 
     recomendaciones = concepto.orientacion_reintegro or ''
     recom_para = Paragraph(recomendaciones.replace('\n', '<br/>'), style_normal)
-    # Se agrega directamente al story
-    story.append(recom_para)
-    story.append(Spacer(1, 10))
+    bloque_firmas.append(recom_para)
+    bloque_firmas.append(Spacer(1, 10))
 
     # Firmas (Estilo exacto screenshot: Header Azul, tabla 2 cols)
     # Headers
@@ -499,8 +502,10 @@ def generar_pdf_valoracion(
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
     
-    # Mantener firmas juntas pero no necesariamente con todo lo anterior
-    story.append(KeepTogether(t_firmas))
+    bloque_firmas.append(t_firmas)
+    
+    # Mantener orientación y firmas juntos
+    story.append(KeepTogether(bloque_firmas))
 
     # Generar
     doc.build(story)
