@@ -653,77 +653,41 @@ def generar_pdf_prueba_trabajo(
     if concepto_final:
         if concepto_final.conclusion_evaluacion:
             story.append(crear_seccion_header("CONCLUSIÓN DE LA EVALUACIÓN"))
+            story.append(Spacer(1, 5))
             conclusion_para = Paragraph(concepto_final.conclusion_evaluacion.replace('\n', '<br/>'), style_normal)
-            t_conclusion = Table([[conclusion_para]], colWidths=[PAGE_WIDTH])
-            t_conclusion.setStyle(TableStyle([
-                ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-                ('LEFTPADDING', (0, 0), (-1, -1), 6),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-                ('TOPPADDING', (0, 0), (-1, -1), 4),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-            ]))
-            story.append(t_conclusion)
+            story.append(conclusion_para) # Direct append
             story.append(Spacer(1, 8))
 
         # ===== ÍTEMS CON CONCORDANCIA =====
         if concepto_final.concordancia_items:
             story.append(crear_seccion_header("ÍTEMS CON CONCORDANCIA"))
+            story.append(Spacer(1, 5))
             concordancia_para = Paragraph(concepto_final.concordancia_items.replace('\n', '<br/>'), style_normal)
-            t_concordancia = Table([[concordancia_para]], colWidths=[PAGE_WIDTH])
-            t_concordancia.setStyle(TableStyle([
-                ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-                ('LEFTPADDING', (0, 0), (-1, -1), 6),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-                ('TOPPADDING', (0, 0), (-1, -1), 4),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-            ]))
-            story.append(t_concordancia)
+            story.append(concordancia_para) # Direct append
             story.append(Spacer(1, 8))
 
         # ===== ÍTEMS SIN CONCORDANCIA =====
         if concepto_final.no_concordancia_items:
             story.append(crear_seccion_header("ÍTEMS SIN CONCORDANCIA"))
+            story.append(Spacer(1, 5))
             no_concordancia_para = Paragraph(concepto_final.no_concordancia_items.replace('\n', '<br/>'), style_normal)
-            t_no_concordancia = Table([[no_concordancia_para]], colWidths=[PAGE_WIDTH])
-            t_no_concordancia.setStyle(TableStyle([
-                ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-                ('LEFTPADDING', (0, 0), (-1, -1), 6),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-                ('TOPPADDING', (0, 0), (-1, -1), 4),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-            ]))
-            story.append(t_no_concordancia)
+            story.append(no_concordancia_para) # Direct append
             story.append(Spacer(1, 8))
 
         concepto_texto = concepto_final.conclusiones_finales or concepto_final.concepto_generado_ml or ""
         if concepto_texto:
             story.append(crear_seccion_header("CONCLUSIONES FINALES - PRUEBA DE TRABAJO DE ESFERA MENTAL"))
+            story.append(Spacer(1, 5))
             concepto_para = Paragraph(concepto_texto.replace('\n', '<br/>'), style_normal)
-            t_concepto = Table([[concepto_para]], colWidths=[PAGE_WIDTH])
-            t_concepto.setStyle(TableStyle([
-                ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-                ('LEFTPADDING', (0, 0), (-1, -1), 6),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-                ('TOPPADDING', (0, 0), (-1, -1), 4),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-            ]))
-            story.append(t_concepto)
+            story.append(concepto_para) # Direct append
             story.append(Spacer(1, 8))
 
         if concepto_final.recomendaciones:
-            # Usar KeepTogether para que el título y contenido estén siempre juntos
-            recom_header = crear_seccion_header("RECOMENDACIONES")
+            # Eliminar KeepTogether para permitir que las recomendaciones fluyan entre páginas
+            story.append(crear_seccion_header("RECOMENDACIONES"))
+            story.append(Spacer(1, 5))
             recom_para = Paragraph(concepto_final.recomendaciones.replace('\n', '<br/>'), style_normal)
-            t_recom = Table([[recom_para]], colWidths=[PAGE_WIDTH])
-            t_recom.setStyle(TableStyle([
-                ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-                ('LEFTPADDING', (0, 0), (-1, -1), 6),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-                ('TOPPADDING', (0, 0), (-1, -1), 4),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-            ]))
-            # KeepTogether mantiene título y contenido juntos
-            story.append(KeepTogether([recom_header, Spacer(1, 2), t_recom]))
+            story.append(recom_para) # Direct append
 
     story.append(Spacer(1, 20))
 

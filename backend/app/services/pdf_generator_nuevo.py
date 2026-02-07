@@ -446,35 +446,28 @@ def generar_pdf_valoracion(
     story.append(t_fac)
     story.append(Spacer(1, 10))
 
-    # ===== RESULTADOS Y FIRMAS (Bloque indivisible) =====
-    elements_final = []
-    
-    elements_final.append(Table([[B("CONCEPTO PSICOLOGICO FINAL")]], colWidths=[7.4*inch], style=TableStyle([('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER), ('BACKGROUND', (0,0), (-1,0), COLOR_SECTION_BG)])))
-    
-    # Texto del concepto con mejor formato
+    # ===== RESULTADOS Y FIRMAS (Bloque indivisible eliminado para permitir salto de página) =====
+    # Nota: Se eliminó el envoltorio de Tabla para el texto del concepto, permitiendo que ReportLab
+    # divida el párrafo en múltiples páginas si es muy largo.
+
+    story.append(Table([[B("CONCEPTO PSICOLOGICO FINAL")]], colWidths=[7.4*inch], style=TableStyle([('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER), ('BACKGROUND', (0,0), (-1,0), COLOR_SECTION_BG)])))
+    story.append(Spacer(1, 5))
+
+    # Texto del concepto
     concepto_texto = concepto.concepto_editado or concepto.concepto_generado or ''
-    # Usar Paragraph con estilo que permita wrap
     concepto_para = Paragraph(concepto_texto.replace('\n', '<br/>'), style_normal)
-    t_concepto = Table([[concepto_para]], colWidths=[7.4*inch])
-    t_concepto.setStyle(TableStyle([
-        ('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-        ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('PADDING', (0,0), (-1,-1), 6),
-    ]))
-    elements_final.append(t_concepto)
+    # Se agrega directamente al story para permitir page break
+    story.append(concepto_para)
+    story.append(Spacer(1, 10))
     
-    elements_final.append(Table([[B("ORIENTACION PSICOLOGICA PARA REINTEGRO LABORAL")]], colWidths=[7.4*inch], style=TableStyle([('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER), ('BACKGROUND', (0,0), (-1,0), COLOR_SECTION_BG)])))
+    story.append(Table([[B("ORIENTACION PSICOLOGICA PARA REINTEGRO LABORAL")]], colWidths=[7.4*inch], style=TableStyle([('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER), ('BACKGROUND', (0,0), (-1,0), COLOR_SECTION_BG)])))
+    story.append(Spacer(1, 5))
+
     recomendaciones = concepto.orientacion_reintegro or ''
     recom_para = Paragraph(recomendaciones.replace('\n', '<br/>'), style_normal)
-    t_recom = Table([[recom_para]], colWidths=[7.4*inch])
-    t_recom.setStyle(TableStyle([
-        ('GRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-        ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('PADDING', (0,0), (-1,-1), 6),
-    ]))
-    elements_final.append(t_recom)
-    
-    elements_final.append(Spacer(1, 10))
+    # Se agrega directamente al story
+    story.append(recom_para)
+    story.append(Spacer(1, 10))
 
     # Firmas (Estilo exacto screenshot: Header Azul, tabla 2 cols)
     # Headers
@@ -505,10 +498,9 @@ def generar_pdf_valoracion(
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
     ]))
-    elements_final.append(t_firmas)
     
-    # Agregar todo envuelto en KeepTogether
-    story.append(KeepTogether(elements_final))
+    # Mantener firmas juntas pero no necesariamente con todo lo anterior
+    story.append(KeepTogether(t_firmas))
 
     # Generar
     doc.build(story)
