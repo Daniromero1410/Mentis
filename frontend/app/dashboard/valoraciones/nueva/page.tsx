@@ -765,7 +765,7 @@ export default function NuevaValoracionPage() {
       }
 
       // Verificar si tiene diagnóstico mental
-      const tieneDiagnostico = formData.diagnostico_esfera_mental && formData.diagnostico_esfera_mental.trim() !== '';
+      const tieneDiagnostico = Boolean(formData.diagnostico_esfera_mental && formData.diagnostico_esfera_mental.trim() !== '');
 
       // Llamar al endpoint de generar concepto enviando las evaluaciones directamente
       const response: any = await api.post('/conceptos/generar', {
