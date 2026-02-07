@@ -19,6 +19,7 @@ class ConceptoGeneradoResponse(BaseModel):
 class EvaluacionRiesgoInput(BaseModel):
     categoria: str
     item_numero: int
+    item_texto: str
     calificacion: str
     observaciones: Optional[str] = None
 
@@ -44,6 +45,7 @@ def generar_concepto_endpoint(
             eval_obj = EvaluacionRiesgo(
                 categoria=CategoriaRiesgo(eval_input.categoria),
                 item_numero=eval_input.item_numero,
+                item_texto=eval_input.item_texto,
                 calificacion=CalificacionRiesgo(eval_input.calificacion),
                 observaciones=eval_input.observaciones
             )
