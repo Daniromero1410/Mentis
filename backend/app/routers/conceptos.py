@@ -43,6 +43,7 @@ def generar_concepto_endpoint(
         evaluaciones = []
         for eval_input in request.evaluaciones:
             eval_obj = EvaluacionRiesgo(
+                valoracion_id=request.valoracion_id or 0, # ID temporal para validación
                 categoria=CategoriaRiesgo(eval_input.categoria),
                 item_numero=eval_input.item_numero,
                 item_texto=eval_input.item_texto,

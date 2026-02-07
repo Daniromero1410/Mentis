@@ -49,8 +49,23 @@ class ApiService {
 
       if (!response.ok) {
         console.error(`[API] Error ${response.status} in POST ${endpoint}`);
-        const error = await response.json().catch(() => ({ detail: `Error HTTP ${response.status}` }));
-        throw new Error(error.detail || `Error en la petición: ${response.status}`);
+        const errorData = await response.json().catch(() => ({ detail: `Error HTTP ${response.status}` }));
+
+        let errorMessage = `Error en la petición: ${response.status}`;
+        if (errorData.detail) {
+          if (typeof errorData.detail === 'string') {
+            errorMessage = errorData.detail;
+          } else if (Array.isArray(errorData.detail)) {
+            // FastAPI validation error format
+            errorMessage = errorData.detail
+              .map((err: any) => `${err.loc ? err.loc.join('.') : ''}: ${err.msg}`)
+              .join('\n');
+          } else if (typeof errorData.detail === 'object') {
+            errorMessage = JSON.stringify(errorData.detail);
+          }
+        }
+
+        throw new Error(errorMessage);
       }
       return response.json();
     } catch (error: any) {
