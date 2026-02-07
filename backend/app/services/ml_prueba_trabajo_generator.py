@@ -20,7 +20,10 @@ from app.services.ml_concepto_generator import (
     INTRODUCCIONES,
     DESCRIPCIONES_DETALLADAS,
     CONECTORES_IMPACTO,
-    CONSECUENCIAS
+    CONSECUENCIAS,
+    CONECTORES_TRANSICION,
+    FRASES_EVIDENCIA,
+    FRASES_PORCENTAJE
 )
 
 def generar_concepto_prueba_trabajo(
@@ -96,26 +99,33 @@ def generar_concepto_prueba_trabajo(
                 ) == 'alto'
             ]
 
-            # Construir párrafo
+            # Construir párrafo con CONECTORES VARIADOS
             if i == 0:
                 conector = "Específicamente, en relación a"
             else:
-                conector = "Adicionalmente, respecto a"
+                # Seleccionar conector rotativo
+                idx_conector = (nombre_hash + i) % len(CONECTORES_TRANSICION)
+                conector = CONECTORES_TRANSICION[idx_conector]
 
             parrafo = f"{conector} {nombre_categoria}, {variables_texto['articulo']} {variables_texto['trabajador']} {descripcion}."
 
-            # Agregar ejemplos específicos
+            # Agregar ejemplos específicos con FRASES VARIADAS
             if items_altos:
+                idx_frase = (nombre_hash + i) % len(FRASES_EVIDENCIA)
+                frase_intro = FRASES_EVIDENCIA[idx_frase]
+                
                 ejemplos = items_altos[:2]
                 if len(ejemplos) == 1:
-                    parrafo += f' Particularmente se identifica en nivel alto: "{ejemplos[0]}".'
+                    parrafo += f' {frase_intro} "{ejemplos[0]}".'
                 else:
-                    parrafo += f' Particularmente se identifican en nivel alto aspectos como: "{ejemplos[0]}" y "{ejemplos[1]}".'
+                    parrafo += f' {frase_intro} "{ejemplos[0]}" y "{ejemplos[1]}".'
 
-            # Porcentaje
+            # Porcentaje con FRASES VARIADAS
             pct_alto = info_cat['porcentajes']['alto']
             if pct_alto >= 50:
-                parrafo += f" Se evidencia este nivel en {pct_alto:.0f}% de los ítems evaluados en esta dimensión."
+                idx_pct = (nombre_hash + i) % len(FRASES_PORCENTAJE)
+                frase_pct = FRASES_PORCENTAJE[idx_pct].format(pct=pct_alto)
+                parrafo += f" {frase_pct}"
 
             parrafos_analisis.append(parrafo)
 
@@ -159,10 +169,9 @@ def generar_concepto_prueba_trabajo(
 
     # ===== SECCIÓN 4: TEXTO LEGAL PREVIO A RECOMENDACIONES =====
     texto_legal = (
-        "Una vez evaluado {sustantivo} del asunto, quien presenta un diagnóstico de la esfera mental, "
-        "nos permitimos manifestar las recomendaciones que a continuación se mencionan, las cuales se emiten "
-        "con el objetivo de prevenir agravamiento de su estado de salud y favorecer su rehabilitación, "
-        "lo anterior de conformidad con los artículos 2°, 4° y 8° de la Ley 776 de 2002."
+        "\n\nCon base en la evaluación integral presentad de {sustantivo}, quien cursa con un diagnóstico de la esfera mental, "
+        "se emiten las siguientes recomendaciones orientadas a la prevención de agravamiento sintomático y al fomento "
+        "de su rehabilitación integral, en concordancia con los artículos 2°, 4° y 8° de la Ley 776 de 2002."
     )
     texto_legal = texto_legal.format(**variables_texto)
 

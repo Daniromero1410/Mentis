@@ -31,33 +31,61 @@ PESOS_CATEGORIAS = {
 
 # ==================== BANCO DE VARIACIONES TEXTUALES ====================
 
+# ==================== BANCO DE VARIACIONES TEXTUALES ====================
+
 INTRODUCCIONES = {
     'critico': [
         "Del análisis exhaustivo y detallado de la valoración psicológica realizada a {nombre}, se identifica un perfil de riesgo psicosocial de nivel crítico que demanda intervención inmediata y seguimiento riguroso. {Articulo_cap} {trabajador} enfrenta múltiples factores de riesgo en niveles altos de manera simultánea, lo cual configura una situación de vulnerabilidad significativa para su salud mental y bienestar integral.",
-        "Una vez {evaluado} integralmente {sustantivo} del asunto a través de la presente valoración psicológica, se evidencia un escenario clínico complejo caracterizado por la confluencia de diversos factores de riesgo psicosocial en niveles críticos. Esta situación representa una amenaza seria e inminente para la estabilidad emocional, salud mental y capacidad funcional de {nombre}, requiriendo acciones correctivas urgentes.",
+        "Una vez evaluado integralmente {sustantivo} del asunto a través de la presente valoración psicológica, se evidencia un escenario clínico complejo caracterizado por la confluencia de diversos factores de riesgo psicosocial en niveles críticos. Esta situación representa una amenaza seria e inminente para la estabilidad emocional, salud mental y capacidad funcional de {nombre}, requiriendo acciones correctivas urgentes.",
         "Del estudio psicológico ocupacional realizado a {nombre}, emerge un perfil psicosocial que amerita atención prioritaria y urgente. {Articulo_cap} {trabajador} presenta exposición simultánea a múltiples estresores laborales de alta intensidad, configurando un cuadro de riesgo psicosocial severo que, de no intervenirse oportunamente, podría derivar en deterioro significativo de su salud mental.",
     ],
     'muy_alto': [
         "Del análisis de la valoración psicológica efectuada a {nombre}, se identifica que {articulo} {trabajador} presenta diversos factores de riesgo psicosocial en niveles elevados, configurando un perfil que requiere intervención prioritaria. La concurrencia de estos factores genera una situación de riesgo importante para su bienestar psicológico y desempeño laboral sostenible.",
-        "Una vez {evaluado} {sustantivo} del asunto, quien presenta un diagnóstico de la esfera mental, se evidencia mediante la presente valoración un perfil psicosocial caracterizado por la presencia de múltiples factores de riesgo en niveles altos. Esta situación amerita la implementación inmediata de medidas correctivas y preventivas para salvaguardar la salud mental de {nombre}.",
+        "Una vez evaluado {sustantivo} del asunto, quien presenta un diagnóstico de la esfera mental, se evidencia mediante la presente valoración un perfil psicosocial caracterizado por la presencia de múltiples factores de riesgo en niveles altos. Esta situación amerita la implementación inmediata de medidas correctivas y preventivas para salvaguardar la salud mental de {nombre}.",
         "Del análisis psicológico ocupacional realizado a {nombre}, se desprende que {articulo} {trabajador} enfrenta condiciones laborales que involucran varios factores de riesgo psicosocial significativos. El perfil identificado sugiere exposición a demandas laborales que exceden los recursos de afrontamiento disponibles, requiriendo ajustes sustanciales.",
     ],
     'alto': [
         "Del análisis de la valoración psicológica realizada a {nombre}, se observa que {articulo} {trabajador} presenta factores de riesgo psicosocial que ameritan atención e intervención oportuna. Si bien no se configura una situación crítica, la presencia de estos factores en niveles elevados requiere implementación de medidas preventivas y correctivas.",
-        "Una vez {evaluado} {sustantivo} del asunto mediante valoración psicológica ocupacional, se identifica un perfil psicosocial que incluye factores de riesgo que requieren manejo proactivo. {Articulo_cap} {trabajador} enfrenta demandas laborales significativas que, sin la debida intervención, podrían impactar su salud mental y bienestar.",
+        "Una vez evaluado {sustantivo} del asunto mediante valoración psicológica ocupacional, se identifica un perfil psicosocial que incluye factores de riesgo que requieren manejo proactivo. {Articulo_cap} {trabajador} enfrenta demandas laborales significativas que, sin la debida intervención, podrían impactar su salud mental y bienestar.",
         "Del estudio psicológico efectuado a {nombre}, se evidencia la presencia de factores de riesgo psicosocial que, aunque manejables con intervención adecuada, requieren atención para prevenir su agravamiento. {Articulo_cap} {trabajador} presenta exposición a condiciones que demandan implementación de ajustes razonables.",
     ],
     'medio': [
         "Del análisis de la valoración psicológica realizada a {nombre}, se identifica que {articulo} {trabajador} presenta un perfil psicosocial con factores de riesgo en niveles moderados que ameritan monitoreo y medidas preventivas. Las condiciones actuales, si bien no representan riesgo inmediato, requieren seguimiento para evitar su progresión.",
-        "Una vez {evaluado} {sustantivo} del asunto mediante valoración psicológica ocupacional, se observa que {articulo} {trabajador} enfrenta demandas laborales en rangos moderados. El perfil identificado sugiere que con implementación de medidas preventivas y fortalecimiento de recursos de afrontamiento, se puede mantener un equilibrio saludable.",
+        "Una vez evaluado {sustantivo} del asunto mediante valoración psicológica ocupacional, se observa que {articulo} {trabajador} enfrenta demandas laborales en rangos moderados. El perfil identificado sugiere que con implementación de medidas preventivas y fortalecimiento de recursos de afrontamiento, se puede mantener un equilibrio saludable.",
         "Del análisis psicológico ocupacional de {nombre}, se desprende un perfil psicosocial que incluye factores en niveles moderados. {Articulo_cap} {trabajador} presenta condiciones laborales que, con el debido acompañamiento y ajustes menores, pueden gestionarse adecuadamente sin comprometer su salud mental.",
     ],
     'bajo': [
         "Del análisis de la valoración psicológica realizada a {nombre}, se evidencia un perfil psicosocial favorable caracterizado por factores de riesgo en niveles bajos y manejables. {Articulo_cap} {trabajador} presenta condiciones laborales que favorecen su bienestar psicológico, aunque se recomienda mantener estas condiciones y realizar seguimiento preventivo.",
-        "Una vez {evaluado} {sustantivo} del asunto mediante valoración psicológica ocupacional, se identifica que {articulo} {trabajador} enfrenta demandas laborales en rangos bajos y controlados. El perfil actual es compatible con el mantenimiento del bienestar psicológico y desempeño sostenible, recomendándose preservar las condiciones actuales.",
+        "Una vez evaluado {sustantivo} del asunto mediante valoración psicológica ocupacional, se identifica que {articulo} {trabajador} enfrenta demandas laborales en rangos bajos y controlados. El perfil actual es compatible con el mantenimiento del bienestar psicológico y desempeño sostenible, recomendándose preservar las condiciones actuales.",
         "Del estudio psicológico efectuado a {nombre}, se desprende un perfil psicosocial positivo con factores de riesgo mínimos. {Articulo_cap} {trabajador} presenta condiciones laborales adecuadas que permiten un desempeño saludable, sugiriéndose mantener monitoreo preventivo para detectar cambios oportunamente.",
     ],
 }
+
+CONECTORES_TRANSICION = [
+    "Adicionalmente, respecto a",
+    "Por otro lado, en cuanto a",
+    "Asimismo, en lo referente a",
+    "En relación con",
+    "Pasando a analizar",
+    "Continuando con",
+    "Respecto a la dimensión de"
+]
+
+FRASES_EVIDENCIA = [
+    "Particularmente se identifican en nivel alto aspectos como:",
+    "Resulta relevante destacar la presencia de:",
+    "Se observan indicadores críticos tales como:",
+    "Cabe resaltar puntualmente:",
+    "Son evidentes factores como:",
+    "Se destacan los siguientes ítems:",
+]
+
+FRASES_PORCENTAJE = [
+    "Se evidencia este nivel en {pct:.0f}% de los ítems evaluados en esta dimensión.",
+    "Esto se refleja en el {pct:.0f}% de los aspectos valorados.",
+    "El {pct:.0f}% de los indicadores de esta categoría se encuentran afectados.",
+    "Esta situación impacta el {pct:.0f}% de los factores analizados en este grupo.",
+]
 
 DESCRIPCIONES_DETALLADAS = {
     'demandas_cuantitativas': {
@@ -318,6 +346,9 @@ def generar_concepto_ml(
     # ===== SECCIÓN 2: ANÁLISIS DETALLADO POR CATEGORÍA =====
     categorias_analizar = perfil['categorias_criticas'] + perfil['categorias_altas']
 
+    # Indices para recorrer conectores y frases de evidencia sin repetir inmediatamente
+    # Usamos modulo del hash + index para variar
+    
     for i, cat in enumerate(categorias_analizar):
         info_cat = perfil['scores_categorias'][cat]
         nivel = info_cat['nivel']
@@ -347,26 +378,33 @@ def generar_concepto_ml(
                 ) == 'alto'
             ]
 
-            # Construir párrafo
+            # Construir párrafo con CONECTORES VARIADOS
             if i == 0:
                 conector = "Específicamente, en relación a"
             else:
-                conector = "Adicionalmente, respecto a"
+                # Seleccionar conector rotativo
+                idx_conector = (nombre_hash + i) % len(CONECTORES_TRANSICION)
+                conector = CONECTORES_TRANSICION[idx_conector]
 
             parrafo = f"{conector} {nombre_categoria}, {variables_texto['articulo']} {variables_texto['trabajador']} {descripcion}."
 
-            # Agregar ejemplos específicos
+            # Agregar ejemplos específicos con FRASES VARIADAS
             if items_altos:
+                idx_frase = (nombre_hash + i) % len(FRASES_EVIDENCIA)
+                frase_intro = FRASES_EVIDENCIA[idx_frase]
+                
                 ejemplos = items_altos[:2]
                 if len(ejemplos) == 1:
-                    parrafo += f' Particularmente se identifica en nivel alto: "{ejemplos[0]}".'
+                    parrafo += f' {frase_intro} "{ejemplos[0]}".'
                 else:
-                    parrafo += f' Particularmente se identifican en nivel alto aspectos como: "{ejemplos[0]}" y "{ejemplos[1]}".'
+                    parrafo += f' {frase_intro} "{ejemplos[0]}" y "{ejemplos[1]}".'
 
-            # Porcentaje
+            # Porcentaje con FRASES VARIADAS
             pct_alto = info_cat['porcentajes']['alto']
             if pct_alto >= 50:
-                parrafo += f" Se evidencia este nivel en {pct_alto:.0f}% de los ítems evaluados en esta dimensión."
+                idx_pct = (nombre_hash + i) % len(FRASES_PORCENTAJE)
+                frase_pct = FRASES_PORCENTAJE[idx_pct].format(pct=pct_alto)
+                parrafo += f" {frase_pct}"
 
             parrafos.append(parrafo)
 
@@ -406,11 +444,11 @@ def generar_concepto_ml(
     parrafos.append(parrafo_impacto)
 
     # ===== SECCIÓN 4: TEXTO LEGAL PREVIO A RECOMENDACIONES =====
+    # Texto legal refinado
     texto_legal = (
-        "\n\nUna vez evaluado {sustantivo} del asunto, quien presenta un diagnóstico de la esfera mental, "
-        "nos permitimos manifestar las recomendaciones que a continuación se mencionan, las cuales se emiten "
-        "con el objetivo de prevenir agravamiento de su estado de salud y favorecer su rehabilitación, "
-        "lo anterior de conformidad con los artículos 2°, 4° y 8° de la Ley 776 de 2002."
+        "\n\nCon base en la evaluación integral presentad de {sustantivo}, quien cursa con un diagnóstico de la esfera mental, "
+        "se emiten las siguientes recomendaciones orientadas a la prevención de agravamiento sintomático y al fomento "
+        "de su rehabilitación integral, en concordancia con los artículos 2°, 4° y 8° de la Ley 776 de 2002."
     )
     parrafos.append(texto_legal.format(**variables_texto))
 
