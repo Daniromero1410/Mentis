@@ -775,11 +775,36 @@ export default function NuevaValoracionPage() {
         tiene_diagnostico_mental: tieneDiagnostico
       });
 
+      console.log('Respuesta generación concepto:', response);
+
+      let conceptoTexto = '';
+
+      // Manejo robusto de la respuesta
+      if (response && response.concepto) {
+        if (typeof response.concepto === 'string') {
+          conceptoTexto = response.concepto;
+        } else if (typeof response.concepto === 'object') {
+          // Si es un objeto, intentar extraer el texto si tiene propiedad 'concepto' o similar
+          if (response.concepto.concepto) {
+            conceptoTexto = response.concepto.concepto;
+          } else {
+            // Si no, convertir a string para ver qué es
+            console.warn('Concepto recibido como objeto:', response.concepto);
+            conceptoTexto = JSON.stringify(response.concepto, null, 2);
+          }
+        } else {
+          conceptoTexto = String(response.concepto);
+        }
+      } else if (typeof response === 'string') {
+        conceptoTexto = response;
+      }
+
       // Actualizar el campo con el concepto generado
-      updateField('concepto_psicologico_final', response.concepto);
+      updateField('concepto_psicologico_final', conceptoTexto);
 
       toast.success('Concepto generado exitosamente');
     } catch (error: any) {
+      console.error('Error generando concepto:', error);
       toast.error(error.message || 'Error al generar el concepto');
     } finally {
       setGenerandoConcepto(false);

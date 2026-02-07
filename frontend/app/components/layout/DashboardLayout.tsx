@@ -42,6 +42,38 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   }, [isLoading, isAuthenticated, router]);
 
+  // Inactivity Logout Logic
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const INACTIVITY_LIMIT = 2 * 60 * 60 * 1000; // 2 hours
+    let inactivityTimer: NodeJS.Timeout;
+
+    const logoutUser = () => {
+      console.log('Cerrando sesión por inactividad');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login?reason=inactivity';
+    };
+
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(logoutUser, INACTIVITY_LIMIT);
+    };
+
+    // Events to track activity
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(event => window.addEventListener(event, resetTimer));
+
+    // Initial start
+    resetTimer();
+
+    return () => {
+      clearTimeout(inactivityTimer);
+      events.forEach(event => window.removeEventListener(event, resetTimer));
+    };
+  }, [isAuthenticated]);
+
   if (!mounted || isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-[var(--background)]">
