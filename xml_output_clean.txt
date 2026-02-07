@@ -1,6 +1,0 @@
-
---- INSPECTING XML OF backend/app/services/plantilla_valoracion_clean.xlsx ---
-Found docProps/core.xml
-<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:creator>Sistema de Valoraciones</dc:creator><dc:title /><dc:description /><dc:subject /><dcterms:created xsi:type="dcterms:W3CDTF">2012-11-26T23:05:36Z</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">2026-02-07T18:11:41Z</dcterms:modified><cp:lastModifiedBy>Sistema</cp:lastModifiedBy><cp:category /><cp:keywords /></cp:coreProperties>
-Found docProps/app.xml
-<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Application>Microsoft Excel Compatible / Openpyxl 3.1.5</Application><AppVersion>3.1</AppVersion></Properties>
