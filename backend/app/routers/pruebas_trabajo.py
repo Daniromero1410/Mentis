@@ -183,11 +183,32 @@ def generar_concepto_prueba(
             )
             evaluaciones_adaptadas.append(eval_obj)
 
+        # Obtener Cargo y Empresa para la generación personalizada
+        cargo_trabajador = "trabajador"
+        empresa_nombre = "la empresa"
+        
+        # Intentar obtener de BD si tenemos prueba_id
+        if request.prueba_id:
+             # Ya consultamos trabajador y empresa arriba, pero aseguramos
+            if not 'trabajador' in locals() or not trabajador:
+                trabajador = session.exec(select(TrabajadorPrueba).where(TrabajadorPrueba.prueba_id == request.prueba_id)).first()
+            if not 'empresa' in locals() or isinstance(empresa, str): # Evitar conflicto de nombre si existe variable empresa string
+                 empresa_db = session.exec(select(DatosEmpresaPrueba).where(DatosEmpresaPrueba.prueba_id == request.prueba_id)).first()
+            else:
+                 empresa_db = empresa # Asumiendo que es el objeto DB
+            
+            if trabajador and trabajador.cargo:
+                cargo_trabajador = trabajador.cargo
+            if empresa_db and empresa_db.empresa:
+                empresa_nombre = empresa_db.empresa
+                
         # 5. Generar concepto con el nuevo servicio dedicado
         resultado = generar_concepto_prueba_trabajo(
             evaluaciones=evaluaciones_adaptadas,
             nombre_trabajador=nombre_trabajador,
-            tiene_diagnostico_mental=False 
+            tiene_diagnostico_mental=False,
+            cargo=cargo_trabajador,
+            empresa=empresa_nombre
         )
         
         # 6. Obtener resumen cuantitativo
