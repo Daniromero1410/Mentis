@@ -74,7 +74,11 @@ def _run_migrations():
         """,
         # Dar acceso al admin
         """
-        UPDATE usuarios SET acceso_formatos_to = TRUE WHERE email = 'danielromero.software@gmail.com' AND acceso_formatos_to = FALSE;
+        UPDATE usuarios SET acceso_formatos_to = TRUE WHERE email = 'danielromero.software@gmail.com' AND (acceso_formatos_to IS NULL OR acceso_formatos_to = FALSE);
+        """,
+        # Asegurar que no queden NULLs (causa errores de serialización)
+        """
+        UPDATE usuarios SET acceso_formatos_to = FALSE WHERE acceso_formatos_to IS NULL;
         """,
     ]
 
