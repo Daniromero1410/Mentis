@@ -46,42 +46,42 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
         <div className="space-y-6">
             <FormSection title="5. IDENTIFICACIÓN DE MATERIALES, EQUIPOS Y HERRAMIENTAS">
                 {/* Header Row */}
-                <div className="flex border-b border-gray-800 bg-[#FCE4D6] text-xs font-bold text-center">
-                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">NOMBRE</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">DESCRIPCIÓN</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">REQUERIMIENTOS PARA LA OPERACIÓN</div>
-                    <div className="w-1/4 p-1 flex items-center justify-center">OBSERVACIONES</div>
+                <div className="flex border-b border-gray-200 bg-slate-50 text-xs font-bold text-slate-700 text-center tracking-wide">
+                    <div className="w-1/4 p-3 border-r border-gray-200 flex items-center justify-center">NOMBRE</div>
+                    <div className="w-1/4 p-3 border-r border-gray-200 flex items-center justify-center">DESCRIPCIÓN</div>
+                    <div className="w-1/4 p-3 border-r border-gray-200 flex items-center justify-center">REQUERIMIENTOS OPERACIÓN</div>
+                    <div className="w-1/4 p-3 flex items-center justify-center">OBSERVACIONES</div>
                 </div>
 
                 {materiales.map((mat, idx) => (
-                    <FormRow key={idx} className="border-b border-gray-800 relative group">
-                        <div className="w-1/4 border-r border-gray-800">
+                    <FormRow key={idx} className="relative group hover:bg-slate-50/30 transition-colors">
+                        <div className="w-1/4 border-r border-gray-200 p-2">
                             <FormTextarea
-                                className="min-h-[40px]"
+                                className="min-h-[50px]"
                                 value={mat.nombre}
                                 onChange={(e) => updateMaterial(idx, 'nombre', e.target.value)}
                                 disabled={readOnly}
                             />
                         </div>
-                        <div className="w-1/4 border-r border-gray-800">
+                        <div className="w-1/4 border-r border-gray-200 p-2">
                             <FormTextarea
-                                className="min-h-[40px]"
+                                className="min-h-[50px]"
                                 value={mat.descripcion}
                                 onChange={(e) => updateMaterial(idx, 'descripcion', e.target.value)}
                                 disabled={readOnly}
                             />
                         </div>
-                        <div className="w-1/4 border-r border-gray-800">
+                        <div className="w-1/4 border-r border-gray-200 p-2">
                             <FormTextarea
-                                className="min-h-[40px]"
+                                className="min-h-[50px]"
                                 value={mat.requerimientos_operacion}
                                 onChange={(e) => updateMaterial(idx, 'requerimientos_operacion', e.target.value)}
                                 disabled={readOnly}
                             />
                         </div>
-                        <div className="w-1/4 relative">
+                        <div className="w-1/4 relative p-2">
                             <FormTextarea
-                                className="min-h-[40px]"
+                                className="min-h-[50px]"
                                 value={mat.observaciones}
                                 onChange={(e) => updateMaterial(idx, 'observaciones', e.target.value)}
                                 disabled={readOnly}
@@ -89,7 +89,7 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
                             {!readOnly && materiales.length > 1 && (
                                 <button
                                     onClick={() => removeMaterial(idx)}
-                                    className="absolute top-1 right-1 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    className="absolute top-1 right-1 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-0.5 shadow-sm border border-gray-100"
                                 >
                                     <Trash2 className="h-3 w-3" />
                                 </button>
@@ -99,10 +99,10 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
                 ))}
 
                 {!readOnly && (
-                    <div className="p-2 flex justify-center bg-gray-50">
+                    <div className="p-3 flex justify-center bg-gray-50 border-t border-gray-200">
                         <button
                             onClick={addMaterial}
-                            className="flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-800"
+                            className="flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-3 py-1.5 rounded-full transition-colors"
                         >
                             <Plus className="h-3 w-3" /> Agregar Fila
                         </button>
@@ -112,21 +112,21 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
 
             <FormSection title="6. IDENTIFICACIÓN DE PELIGROS">
                 {/* Header Row */}
-                <div className="flex border-b border-gray-800 bg-[#FCE4D6] text-xs font-bold text-center">
-                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">PELIGRO - CLASIFICACIÓN</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">DESCRIPCIÓN</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">TIPOS DE CONTROL EXISTENTE</div>
-                    <div className="w-1/4 p-1 flex items-center justify-center">RECOMENDACIONES DE CONTROL</div>
+                <div className="flex border-b border-gray-200 bg-slate-50 text-xs font-bold text-slate-700 text-center tracking-wide">
+                    <div className="w-1/4 p-3 border-r border-gray-200 flex items-center justify-center">PELIGRO - CLASIFICACIÓN</div>
+                    <div className="w-1/4 p-3 border-r border-gray-200 flex items-center justify-center">DESCRIPCIÓN</div>
+                    <div className="w-1/4 p-3 border-r border-gray-200 flex items-center justify-center">TIPOS DE CONTROL EXISTENTE</div>
+                    <div className="w-1/4 p-3 flex items-center justify-center">RECOMENDACIONES DE CONTROL</div>
                 </div>
 
                 {peligros.map((pel, idx) => {
                     const label = CATEGORIAS_PELIGRO.find(c => c.value === pel.categoria)?.label || pel.categoria;
                     return (
-                        <FormRow key={idx} className="border-b border-gray-800">
-                            <div className="w-1/4 border-r border-gray-800 p-2 text-xs font-bold flex items-center justify-center bg-white">
+                        <FormRow key={idx}>
+                            <div className="w-1/4 border-r border-gray-200 p-2 text-xs font-semibold text-slate-600 flex items-center justify-center bg-slate-50/50">
                                 {label}
                             </div>
-                            <div className="w-1/4 border-r border-gray-800">
+                            <div className="w-1/4 border-r border-gray-200 p-2">
                                 <FormTextarea
                                     className="min-h-[60px]"
                                     value={pel.descripcion}
@@ -134,7 +134,7 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
                                     disabled={readOnly}
                                 />
                             </div>
-                            <div className="w-1/4 border-r border-gray-800">
+                            <div className="w-1/4 border-r border-gray-200 p-2">
                                 <FormTextarea
                                     className="min-h-[60px]"
                                     value={pel.tipos_control_existente}
@@ -142,7 +142,7 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
                                     disabled={readOnly}
                                 />
                             </div>
-                            <div className="w-1/4">
+                            <div className="w-1/4 p-2">
                                 <FormTextarea
                                     className="min-h-[60px]"
                                     value={pel.recomendaciones_control}
@@ -154,17 +154,18 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
                     );
                 })}
 
-                <div className="bg-[#FCE4D6] border-y border-gray-800 px-2 py-1 text-xs font-bold uppercase">
-                    6.1 VERIFICACIÓN DE ACCIONES CORRECTIVAS
+                <div className="mt-4 border-t border-gray-200">
+                    <FormRow noBorderBottom>
+                        <FormField label="6.1 VERIFICACIÓN DE ACCIONES CORRECTIVAS" className="w-full" col noBorderRight>
+                            <FormTextarea
+                                className="min-h-[80px]"
+                                value={formData.verificacion_acciones_correctivas}
+                                onChange={(e) => updateField('verificacion_acciones_correctivas', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
+                    </FormRow>
                 </div>
-                <FormRow noBorderBottom>
-                    <FormTextarea
-                        className="min-h-[80px]"
-                        value={formData.verificacion_acciones_correctivas}
-                        onChange={(e) => updateField('verificacion_acciones_correctivas', e.target.value)}
-                        disabled={readOnly}
-                    />
-                </FormRow>
             </FormSection>
         </div>
     );

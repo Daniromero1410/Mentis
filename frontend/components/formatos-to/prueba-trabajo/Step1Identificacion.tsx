@@ -25,27 +25,31 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
     return (
         <div className="space-y-4">
             {/* Header Dates */}
-            <div className="flex justify-end mb-2">
-                <div className="border-2 border-gray-800 w-96">
+            <div className="flex justify-end mb-4">
+                <div className="border border-gray-200 rounded-md overflow-hidden shadow-sm">
                     <FormRow>
-                        <FormField label="FECHA DE VALORACIÓN:" className="bg-[#FCE4D6] w-48 font-bold justify-end" />
-                        <FormInput
-                            type="date"
-                            className="w-full text-center font-mono"
-                            value={formData.fecha_valoracion}
-                            onChange={(e) => updateField('fecha_valoracion', e.target.value)}
-                            disabled={readOnly}
-                        />
+                        <FormField label="FECHA DE VALORACIÓN:" className="bg-slate-50 w-48 justify-end" />
+                        <div className="w-48 px-2">
+                            <FormInput
+                                type="date"
+                                className="w-full text-center font-mono"
+                                value={formData.fecha_valoracion}
+                                onChange={(e) => updateField('fecha_valoracion', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </div>
                     </FormRow>
                     <FormRow noBorderBottom>
-                        <FormField label="ÚLTIMO DIA DE INCAPACIDAD:" className="bg-[#FCE4D6] w-48 font-bold justify-end" />
-                        <FormInput
-                            type="date"
-                            className="w-full text-center font-mono"
-                            value={formData.ultimo_dia_incapacidad}
-                            onChange={(e) => updateField('ultimo_dia_incapacidad', e.target.value)}
-                            disabled={readOnly}
-                        />
+                        <FormField label="ÚLTIMO DIA DE INCAPACIDAD:" className="bg-slate-50 w-48 justify-end" />
+                        <div className="w-48 px-2">
+                            <FormInput
+                                type="date"
+                                className="w-full text-center font-mono"
+                                value={formData.ultimo_dia_incapacidad}
+                                onChange={(e) => updateField('ultimo_dia_incapacidad', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </div>
                     </FormRow>
                 </div>
             </div>

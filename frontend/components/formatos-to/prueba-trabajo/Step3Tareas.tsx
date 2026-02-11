@@ -48,13 +48,13 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                 </div>
 
                 {tareas.map((tarea, idx) => (
-                    <div key={idx} className="border-b-4 border-gray-400 mb-6 last:border-b-0 last:mb-0">
-                        <div className="bg-gray-100 px-2 py-1 text-xs font-bold border-y border-gray-800 flex justify-between items-center">
-                            <span>TAREA {idx + 1}</span>
+                    <div key={idx} className="border border-gray-200 rounded-lg overflow-hidden mb-6 shadow-sm">
+                        <div className="bg-slate-50 px-4 py-2 border-b border-gray-200 flex justify-between items-center">
+                            <span className="font-bold text-slate-700 text-sm">TAREA {idx + 1}</span>
                             {!readOnly && tareas.length > 1 && (
                                 <button
                                     onClick={() => removeTarea(idx)}
-                                    className="text-red-500 hover:text-red-700"
+                                    className="text-red-500 hover:text-red-700 bg-white p-1 rounded-full border border-gray-200 shadow-sm transition-all"
                                 >
                                     <Trash2 className="h-3 w-3" />
                                 </button>
@@ -62,29 +62,29 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                         </div>
 
                         {/* Row 1: Actividad, Ciclo, Subactividad, Estandar */}
-                        <FormRow className="border-b border-gray-800">
-                            <FormField label="Actividad" className="w-1/4 font-bold border-r border-gray-800 col" >
+                        <FormRow>
+                            <FormField label="Actividad" className="w-1/4" col >
                                 <FormInput
                                     value={tarea.actividad}
                                     onChange={(e) => updateTarea(idx, 'actividad', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
-                            <FormField label="Ciclo" className="w-1/4 font-bold border-r border-gray-800 col" >
+                            <FormField label="Ciclo" className="w-1/4" col >
                                 <FormInput
                                     value={tarea.ciclo}
                                     onChange={(e) => updateTarea(idx, 'ciclo', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
-                            <FormField label="Subactividad" className="w-1/4 font-bold border-r border-gray-800 col" >
+                            <FormField label="Subactividad" className="w-1/4" col >
                                 <FormInput
                                     value={tarea.subactividad}
                                     onChange={(e) => updateTarea(idx, 'subactividad', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
-                            <FormField label="Estándar de productividad" className="w-1/4 font-bold col" noBorderRight >
+                            <FormField label="Estándar de productividad" className="w-1/4" col noBorderRight >
                                 <FormInput
                                     value={tarea.estandar_productividad}
                                     onChange={(e) => updateTarea(idx, 'estandar_productividad', e.target.value)}
@@ -94,52 +94,49 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                         </FormRow>
 
                         {/* Description Biomecanica */}
-                        <div className="bg-[#FCE4D6] border-b border-gray-800 px-2 py-1 text-xs font-bold uppercase">
-                            DESCRIPCIÓN Y REQUERIMIENTOS BIOMECÁNICOS DEL PUESTO DE TRABAJO
-                        </div>
-                        <FormRow className="border-b border-gray-800">
-                            <FormTextarea
-                                className="min-h-[60px]"
-                                value={tarea.descripcion_biomecanica}
-                                onChange={(e) => updateTarea(idx, 'descripcion_biomecanica', e.target.value)}
-                                disabled={readOnly}
-                            />
+                        <FormRow>
+                            <FormField label="DESCRIPCIÓN Y REQUERIMIENTOS BIOMECÁNICOS DEL PUESTO DE TRABAJO" className="w-full" col noBorderRight>
+                                <FormTextarea
+                                    className="min-h-[60px]"
+                                    value={tarea.descripcion_biomecanica}
+                                    onChange={(e) => updateTarea(idx, 'descripcion_biomecanica', e.target.value)}
+                                    disabled={readOnly}
+                                />
+                            </FormField>
                         </FormRow>
 
                         {/* Apreciaciones grid */}
-                        <div className="grid grid-cols-2 border-b border-gray-800">
-                            <div className="border-r border-gray-800">
-                                <div className="bg-[#FCE4D6] border-b border-gray-800 px-2 py-1 text-xs font-bold uppercase text-center">
-                                    APRECIACIÓN DEL TRABAJADOR
-                                </div>
-                                <FormTextarea
-                                    className="min-h-[60px]"
-                                    value={tarea.apreciacion_trabajador}
-                                    onChange={(e) => updateTarea(idx, 'apreciacion_trabajador', e.target.value)}
-                                    disabled={readOnly}
-                                />
+                        <div className="grid grid-cols-2 border-b border-gray-200">
+                            <div className="border-r border-gray-200">
+                                <FormField label="APRECIACIÓN DEL TRABAJADOR" className="w-full" col noBorderRight>
+                                    <FormTextarea
+                                        className="min-h-[80px]"
+                                        value={tarea.apreciacion_trabajador}
+                                        onChange={(e) => updateTarea(idx, 'apreciacion_trabajador', e.target.value)}
+                                        disabled={readOnly}
+                                    />
+                                </FormField>
                             </div>
                             <div>
-                                <div className="bg-[#FCE4D6] border-b border-gray-800 px-2 py-1 text-xs font-bold uppercase text-center">
-                                    APRECIACIÓN DEL PROFESIONAL
-                                </div>
-                                <FormTextarea
-                                    className="min-h-[60px]"
-                                    value={tarea.apreciacion_profesional}
-                                    onChange={(e) => updateTarea(idx, 'apreciacion_profesional', e.target.value)}
-                                    disabled={readOnly}
-                                />
+                                <FormField label="APRECIACIÓN DEL PROFESIONAL" className="w-full" col noBorderRight>
+                                    <FormTextarea
+                                        className="min-h-[80px]"
+                                        value={tarea.apreciacion_profesional}
+                                        onChange={(e) => updateTarea(idx, 'apreciacion_profesional', e.target.value)}
+                                        disabled={readOnly}
+                                    />
+                                </FormField>
                             </div>
                         </div>
 
                         {/* Conclusion */}
-                        <FormRow className="border-b border-gray-800 bg-[#FCE4D6]">
-                            <FormField label="CONCLUSIÓN" className="w-full font-bold justify-center" />
-                        </FormRow>
+                        <div className="bg-slate-50 p-2 border-b border-gray-200 text-center font-bold text-xs text-slate-700 uppercase">
+                            CONCLUSIÓN
+                        </div>
                         <FormRow>
-                            <div className="w-full p-2 grid grid-cols-2 gap-2 text-xs">
+                            <div className="w-full p-3 grid grid-cols-2 gap-4">
                                 {CONCLUSION_OPTIONS.map((opt) => (
-                                    <label key={opt.value} className="flex items-center gap-1 cursor-pointer">
+                                    <label key={opt.value} className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-slate-50 border border-transparent hover:border-gray-200 transition-all">
                                         <input
                                             type="radio"
                                             name={`conclusion-${idx}`}
@@ -147,21 +144,22 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                                             checked={tarea.conclusion === opt.value}
                                             onChange={(e) => updateTarea(idx, 'conclusion', e.target.value)}
                                             disabled={readOnly}
-                                            className="accent-gray-800 h-3 w-3"
+                                            className="accent-slate-700 h-4 w-4"
                                         />
-                                        {opt.label}
+                                        <span className="text-sm text-gray-700">{opt.label}</span>
                                     </label>
                                 ))}
                             </div>
                         </FormRow>
-                        <FormRow className="border-t border-gray-800">
-                            <FormField label="Descripción Conclusión" className="w-32 font-bold bg-[#FCE4D6] justify-center" />
-                            <FormTextarea
-                                className="min-h-[40px]"
-                                value={tarea.descripcion_conclusion}
-                                onChange={(e) => updateTarea(idx, 'descripcion_conclusion', e.target.value)}
-                                disabled={readOnly}
-                            />
+                        <FormRow noBorderBottom>
+                            <FormField label="Descripción Conclusión" className="w-full" col noBorderRight >
+                                <FormTextarea
+                                    className="min-h-[40px]"
+                                    value={tarea.descripcion_conclusion}
+                                    onChange={(e) => updateTarea(idx, 'descripcion_conclusion', e.target.value)}
+                                    disabled={readOnly}
+                                />
+                            </FormField>
                         </FormRow>
 
                     </div>
