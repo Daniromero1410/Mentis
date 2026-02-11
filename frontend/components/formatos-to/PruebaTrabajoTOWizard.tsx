@@ -9,6 +9,11 @@ import {
     Plus, Trash2, CheckCircle2, FileText, User, Briefcase,
     ClipboardList, Shield
 } from 'lucide-react';
+import { Step1Identificacion } from './prueba-trabajo/Step1Identificacion';
+import { Step2MetodologiaCondiciones } from './prueba-trabajo/Step2MetodologiaCondiciones';
+import { Step3Tareas } from './prueba-trabajo/Step3Tareas';
+import { Step4MaterialesPeligros } from './prueba-trabajo/Step4MaterialesPeligros';
+import { Step5ConceptoRegistro } from './prueba-trabajo/Step5ConceptoRegistro';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
 
@@ -275,47 +280,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         }
     };
 
-    // ── Input helper ──────────────────────────────────────────────────
-    const InputField = ({ label, field, type = 'text', span = 1 }: { label: string; field: string; type?: string; span?: number }) => (
-        <div className={span === 2 ? 'col-span-2' : ''}>
-            <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
-            <input
-                type={type}
-                value={(formData as any)[field] || ''}
-                onChange={e => updateField(field, e.target.value)}
-                disabled={readOnly}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 disabled:bg-gray-50"
-            />
-        </div>
-    );
 
-    const TextArea = ({ label, field, rows = 4, span = 2 }: { label: string; field: string; rows?: number; span?: number }) => (
-        <div className={span === 2 ? 'col-span-2' : ''}>
-            <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
-            <textarea
-                value={(formData as any)[field] || ''}
-                onChange={e => updateField(field, e.target.value)}
-                rows={rows}
-                disabled={readOnly}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 disabled:bg-gray-50"
-            />
-        </div>
-    );
-
-    const SelectField = ({ label, field, options }: { label: string; field: string; options: { value: string; label: string }[] }) => (
-        <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
-            <select
-                value={(formData as any)[field] || ''}
-                onChange={e => updateField(field, e.target.value)}
-                disabled={readOnly}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 disabled:bg-gray-50"
-            >
-                <option value="">Seleccionar...</option>
-                {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </select>
-        </div>
-    );
 
     if (loading) {
         return (
@@ -362,274 +327,51 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
                 {/* ── STEP 1: Identificación ───────────────────────────────── */}
                 {currentStep === 1 && (
-                    <div className="space-y-6">
-                        <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">1. Identificación</h2>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <InputField label="Fecha de Valoración" field="fecha_valoracion" type="date" />
-                            <InputField label="Último Día Incapacidad ARL" field="ultimo_dia_incapacidad" type="date" />
-                            <InputField label="Nombre del Trabajador" field="nombre_trabajador" />
-                            <InputField label="Número de Documento" field="numero_documento" />
-                            <InputField label="Identificación del Siniestro" field="id_siniestro" />
-                            <InputField label="Fecha de Nacimiento" field="fecha_nacimiento" type="date" />
-                            <InputField label="Edad" field="edad" type="number" />
-                            <SelectField label="Dominancia" field="dominancia" options={[
-                                { value: 'derecha', label: 'Derecha' },
-                                { value: 'izquierda', label: 'Izquierda' },
-                                { value: 'ambidiestra', label: 'Ambidiestra' },
-                            ]} />
-                            <InputField label="Estado Civil" field="estado_civil" />
-                            <SelectField label="Nivel Educativo" field="nivel_educativo" options={NIVEL_EDUCATIVO_OPTIONS} />
-                            <InputField label="Teléfonos Trabajador" field="telefonos_trabajador" />
-                            <InputField label="Dirección Residencia / Ciudad" field="direccion_residencia" />
-                        </div>
-
-                        <h3 className="text-md font-semibold text-gray-600 border-b pb-2 pt-4">Datos Clínicos</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <TextArea label="Diagnósticos Clínicos (ATEL)" field="diagnosticos_atel" rows={3} span={2} />
-                            <InputField label="Fechas Eventos ATEL" field="fechas_eventos_atel" />
-                            <InputField label="EPS / IPS" field="eps_ips" />
-                            <InputField label="AFP" field="afp" />
-                            <InputField label="Tiempo Incapacidad (días)" field="tiempo_incapacidad_dias" type="number" />
-                        </div>
-
-                        <h3 className="text-md font-semibold text-gray-600 border-b pb-2 pt-4">Datos Empresa</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <InputField label="Empresa" field="empresa" />
-                            <InputField label="NIT" field="nit_empresa" />
-                            <InputField label="Cargo Actual" field="cargo_actual" />
-                            <SelectField label="Cargo Único" field="cargo_unico" options={[
-                                { value: 'true', label: 'Sí' },
-                                { value: 'false', label: 'No' },
-                            ]} />
-                            <InputField label="Área / Sección / Proceso" field="area_seccion" />
-                            <InputField label="Fecha Ingreso Cargo" field="fecha_ingreso_cargo" type="date" />
-                            <InputField label="Antigüedad en el Cargo" field="antiguedad_cargo" />
-                            <InputField label="Fecha Ingreso Empresa" field="fecha_ingreso_empresa" type="date" />
-                            <InputField label="Antigüedad en la Empresa" field="antiguedad_empresa" />
-                            <InputField label="Forma de Vinculación Laboral" field="forma_vinculacion" />
-                            <SelectField label="Modalidad" field="modalidad" options={[
-                                { value: 'presencial', label: 'Presencial' },
-                                { value: 'teletrabajo', label: 'Teletrabajo' },
-                                { value: 'trabajo_en_casa', label: 'Trabajo en casa' },
-                            ]} />
-                            <InputField label="Tiempo de la Modalidad" field="tiempo_modalidad" />
-                            <InputField label="Contacto Empresa / Cargo" field="contacto_empresa" />
-                            <InputField label="Correos Electrónicos" field="correos_electronicos" />
-                            <InputField label="Teléfonos Empresa" field="telefonos_empresa" />
-                            <InputField label="Dirección Empresa / Ciudad" field="direccion_empresa" />
-                        </div>
-                    </div>
+                    <Step1Identificacion
+                        formData={formData}
+                        updateField={updateField}
+                        readOnly={readOnly}
+                    />
                 )}
 
                 {/* ── STEP 2: Metodología y Condiciones ────────────────────── */}
                 {currentStep === 2 && (
-                    <div className="space-y-6">
-                        <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">2. Metodología</h2>
-                        <TextArea label="Metodología utilizada" field="metodologia" rows={5} />
-
-                        <h2 className="text-lg font-semibold text-gray-700 border-b pb-2 pt-4">3. Condiciones de Trabajo</h2>
-                        <TextArea label="3.1 Descripción del Proceso Productivo" field="descripcion_proceso_productivo" rows={5} />
-                        <TextArea label="3.2 Apreciación del Trabajador frente a su Proceso Productivo" field="apreciacion_trabajador_proceso" rows={5} />
-                        <TextArea label="3.3 Estándares de Productividad Establecidos por la Empresa" field="estandares_productividad" rows={5} />
-
-                        <h3 className="text-md font-semibold text-gray-600 border-b pb-2 pt-4">3.4 Requerimientos del Desempeño Organizacional</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <InputField label="Jornada" field="jornada" />
-                            <InputField label="Ritmo" field="ritmo" />
-                            <InputField label="Descansos Programados" field="descansos_programados" />
-                            <InputField label="Turnos" field="turnos" />
-                            <InputField label="Tiempos Efectivos en Jornada" field="tiempos_efectivos" />
-                            <InputField label="Rotaciones" field="rotaciones" />
-                            <InputField label="Horas Extras" field="horas_extras" />
-                            <InputField label="Distribución Semanal" field="distribucion_semanal" />
-                        </div>
-                    </div>
+                    <Step2MetodologiaCondiciones
+                        formData={formData}
+                        updateField={updateField}
+                        readOnly={readOnly}
+                    />
                 )}
 
                 {/* ── STEP 3: Tareas ───────────────────────────────────────── */}
                 {currentStep === 3 && (
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-lg font-semibold text-gray-700">4. Requerimientos por Tarea</h2>
-                            {!readOnly && (
-                                <button onClick={() => setTareas(prev => [...prev, emptyTarea()])}
-                                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-sm hover:bg-indigo-100 transition-colors">
-                                    <Plus className="h-4 w-4" /> Agregar Tarea
-                                </button>
-                            )}
-                        </div>
-
-                        {tareas.map((tarea, idx) => (
-                            <div key={idx} className="border border-gray-200 rounded-xl p-4 space-y-4 bg-gray-50/50">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-sm font-bold text-indigo-600">Tarea {idx + 1}</h3>
-                                    {!readOnly && tareas.length > 1 && (
-                                        <button onClick={() => setTareas(prev => prev.filter((_, i) => i !== idx))}
-                                            className="p-1.5 rounded-lg hover:bg-red-50 text-red-400 hover:text-red-600">
-                                            <Trash2 className="h-4 w-4" />
-                                        </button>
-                                    )}
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Actividad</label>
-                                        <input value={tarea.actividad} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].actividad = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Ciclo</label>
-                                        <input value={tarea.ciclo} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].ciclo = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Subactividad</label>
-                                        <input value={tarea.subactividad} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].subactividad = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Estándar de Productividad</label>
-                                        <input value={tarea.estandar_productividad} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].estandar_productividad = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-medium text-gray-600 mb-1">Descripción y Requerimientos Biomecánicos</label>
-                                    <textarea value={tarea.descripcion_biomecanica} rows={3} disabled={readOnly}
-                                        onChange={e => { const n = [...tareas]; n[idx].descripcion_biomecanica = e.target.value; setTareas(n); }}
-                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Apreciación del Trabajador</label>
-                                        <textarea value={tarea.apreciacion_trabajador} rows={3} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].apreciacion_trabajador = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Apreciación del Profesional</label>
-                                        <textarea value={tarea.apreciacion_profesional} rows={3} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].apreciacion_profesional = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Conclusión</label>
-                                        <select value={tarea.conclusion} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].conclusion = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50">
-                                            <option value="">Seleccionar...</option>
-                                            {CONCLUSION_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Descripción de la Conclusión</label>
-                                        <textarea value={tarea.descripcion_conclusion} rows={2} disabled={readOnly}
-                                            onChange={e => { const n = [...tareas]; n[idx].descripcion_conclusion = e.target.value; setTareas(n); }}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <Step3Tareas
+                        tareas={tareas}
+                        setTareas={setTareas}
+                        readOnly={readOnly}
+                    />
                 )}
 
                 {/* ── STEP 4: Materiales y Peligros ────────────────────────── */}
                 {currentStep === 4 && (
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-lg font-semibold text-gray-700">5. Materiales, Equipos y Herramientas</h2>
-                            {!readOnly && (
-                                <button onClick={() => setMateriales(prev => [...prev, emptyMaterial()])}
-                                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-sm hover:bg-indigo-100 transition-colors">
-                                    <Plus className="h-4 w-4" /> Agregar
-                                </button>
-                            )}
-                        </div>
-
-                        {materiales.map((mat, idx) => (
-                            <div key={idx} className="border border-gray-200 rounded-xl p-4 bg-gray-50/50">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-xs font-bold text-gray-500">Item {idx + 1}</span>
-                                    {!readOnly && materiales.length > 1 && (
-                                        <button onClick={() => setMateriales(prev => prev.filter((_, i) => i !== idx))}
-                                            className="p-1 rounded hover:bg-red-50 text-red-400 hover:text-red-600">
-                                            <Trash2 className="h-3.5 w-3.5" />
-                                        </button>
-                                    )}
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    {['nombre', 'descripcion', 'requerimientos_operacion', 'observaciones'].map(f => (
-                                        <div key={f}>
-                                            <label className="block text-xs font-medium text-gray-600 mb-1 capitalize">
-                                                {f.replace(/_/g, ' ')}
-                                            </label>
-                                            <input value={(mat as any)[f]} disabled={readOnly}
-                                                onChange={e => { const n = [...materiales]; (n[idx] as any)[f] = e.target.value; setMateriales(n); }}
-                                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-
-                        <h2 className="text-lg font-semibold text-gray-700 border-b pb-2 pt-6">6. Identificación de Peligros</h2>
-                        <div className="space-y-3">
-                            {peligros.map((pel, idx) => (
-                                <div key={idx} className="border border-gray-200 rounded-xl p-4">
-                                    <h4 className="text-sm font-bold text-indigo-600 mb-3">
-                                        {CATEGORIAS_PELIGRO.find(c => c.value === pel.categoria)?.label || pel.categoria}
-                                    </h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        <div>
-                                            <label className="block text-xs font-medium text-gray-600 mb-1">Descripción</label>
-                                            <textarea value={pel.descripcion} rows={2} disabled={readOnly}
-                                                onChange={e => { const n = [...peligros]; n[idx].descripcion = e.target.value; setPeligros(n); }}
-                                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-medium text-gray-600 mb-1">Controles Existentes</label>
-                                            <textarea value={pel.tipos_control_existente} rows={2} disabled={readOnly}
-                                                onChange={e => { const n = [...peligros]; n[idx].tipos_control_existente = e.target.value; setPeligros(n); }}
-                                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-medium text-gray-600 mb-1">Recomendaciones</label>
-                                            <textarea value={pel.recomendaciones_control} rows={2} disabled={readOnly}
-                                                onChange={e => { const n = [...peligros]; n[idx].recomendaciones_control = e.target.value; setPeligros(n); }}
-                                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-50" />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <TextArea label="6.1 Verificación de Acciones Correctivas" field="verificacion_acciones_correctivas" rows={4} />
-                    </div>
+                    <Step4MaterialesPeligros
+                        materiales={materiales}
+                        setMateriales={setMateriales}
+                        peligros={peligros}
+                        setPeligros={setPeligros}
+                        formData={formData}
+                        updateField={updateField}
+                        readOnly={readOnly}
+                    />
                 )}
 
                 {/* ── STEP 5: Concepto y Registro ──────────────────────────── */}
                 {currentStep === 5 && (
-                    <div className="space-y-6">
-                        <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">7. Concepto para Prueba de Trabajo</h2>
-                        <TextArea label="Competencia, seguridad, confort, relaciones sociales, otros aspectos" field="concepto_prueba_trabajo" rows={6} />
-
-                        <h2 className="text-lg font-semibold text-gray-700 border-b pb-2 pt-4">8. Recomendaciones</h2>
-                        <TextArea label="Para el Trabajador" field="para_trabajador" rows={4} />
-                        <TextArea label="Para la Empresa" field="para_empresa" rows={4} />
-
-                        <h2 className="text-lg font-semibold text-gray-700 border-b pb-2 pt-4">9. Registro</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <InputField label="Nombre Elaboró" field="nombre_elaboro" />
-                            <InputField label="Nombre Revisor" field="nombre_revisor" />
-                            <InputField label="Nombre Proveedor" field="nombre_proveedor" />
-                        </div>
-                    </div>
+                    <Step5ConceptoRegistro
+                        formData={formData}
+                        updateField={updateField}
+                        readOnly={readOnly}
+                    />
                 )}
             </div>
 
