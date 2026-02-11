@@ -47,10 +47,10 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
             <FormSection title="5. IDENTIFICACIÓN DE MATERIALES, EQUIPOS Y HERRAMIENTAS">
                 {/* Header Row */}
                 <div className="flex border-b border-gray-800 bg-[#FCE4D6] text-xs font-bold text-center">
-                    <div className="w-1/4 p-1 border-r border-gray-800">NOMBRE</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800">DESCRIPCIÓN</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800">REQUERIMIENTOS PARA LA OPERACIÓN</div>
-                    <div className="w-1/4 p-1">OBSERVACIONES</div>
+                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">NOMBRE</div>
+                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">DESCRIPCIÓN</div>
+                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">REQUERIMIENTOS PARA LA OPERACIÓN</div>
+                    <div className="w-1/4 p-1 flex items-center justify-center">OBSERVACIONES</div>
                 </div>
 
                 {materiales.map((mat, idx) => (
@@ -113,17 +113,17 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
             <FormSection title="6. IDENTIFICACIÓN DE PELIGROS">
                 {/* Header Row */}
                 <div className="flex border-b border-gray-800 bg-[#FCE4D6] text-xs font-bold text-center">
-                    <div className="w-1/4 p-1 border-r border-gray-800">PELIGRO - CLASIFICACIÓN</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800">DESCRIPCIÓN</div>
-                    <div className="w-1/4 p-1 border-r border-gray-800">TIPOS DE CONTROL EXISTENTE</div>
-                    <div className="w-1/4 p-1">RECOMENDACIONES DE CONTROL</div>
+                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">PELIGRO - CLASIFICACIÓN</div>
+                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">DESCRIPCIÓN</div>
+                    <div className="w-1/4 p-1 border-r border-gray-800 flex items-center justify-center">TIPOS DE CONTROL EXISTENTE</div>
+                    <div className="w-1/4 p-1 flex items-center justify-center">RECOMENDACIONES DE CONTROL</div>
                 </div>
 
                 {peligros.map((pel, idx) => {
                     const label = CATEGORIAS_PELIGRO.find(c => c.value === pel.categoria)?.label || pel.categoria;
                     return (
                         <FormRow key={idx} className="border-b border-gray-800">
-                            <div className="w-1/4 border-r border-gray-800 p-2 text-xs font-bold flex items-center justify-center bg-gray-50">
+                            <div className="w-1/4 border-r border-gray-800 p-2 text-xs font-bold flex items-center justify-center bg-white">
                                 {label}
                             </div>
                             <div className="w-1/4 border-r border-gray-800">

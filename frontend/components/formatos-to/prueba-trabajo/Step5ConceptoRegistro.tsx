@@ -59,19 +59,19 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                             ELABORÓ
                         </div>
                         <FormRow className="border-b border-gray-800">
-                            <FormField label="NOMBRE" className="w-16 font-bold" />
+                            <FormField label="NOMBRE" className="w-16 font-bold bg-[#FCE4D6]" />
                             <FormInput
                                 value={formData.nombre_elaboro}
                                 onChange={(e) => updateField('nombre_elaboro', e.target.value)}
                                 disabled={readOnly}
                             />
                         </FormRow>
-                        <div className="h-24 border-b border-gray-800 flex items-end justify-center pb-2">
+                        <div className="h-24 border-b border-gray-800 flex items-end justify-center pb-2 bg-white">
                             <span className="text-xs text-gray-400">Firma</span>
                             {/* Placeholder for signature or image if needed later */}
                         </div>
                         <FormRow noBorderBottom>
-                            <FormField label="Licencia S.O" className="w-24 font-bold" />
+                            <FormField label="Licencia S.O" className="w-24 font-bold bg-[#FCE4D6]" />
                             {/* Assuming license is fixed or part of user profile, leaving input for now or could be readOnly */}
                             <div className="w-full"></div>
                         </FormRow>
@@ -83,18 +83,18 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                             REVISÓ
                         </div>
                         <FormRow className="border-b border-gray-800">
-                            <FormField label="NOMBRE" className="w-16 font-bold" />
+                            <FormField label="NOMBRE" className="w-16 font-bold bg-[#FCE4D6]" />
                             <FormInput
                                 value={formData.nombre_revisor}
                                 onChange={(e) => updateField('nombre_revisor', e.target.value)}
                                 disabled={readOnly}
                             />
                         </FormRow>
-                        <div className="h-24 border-b border-gray-800 flex items-end justify-center pb-2">
+                        <div className="h-24 border-b border-gray-800 flex items-end justify-center pb-2 bg-white">
                             <span className="text-xs text-gray-400">Firma</span>
                         </div>
                         <FormRow noBorderBottom>
-                            <FormField label="Licencia S.O" className="w-24 font-bold" />
+                            <FormField label="Licencia S.O" className="w-24 font-bold bg-[#FCE4D6]" />
                             <div className="w-full"></div>
                         </FormRow>
                     </div>
@@ -105,20 +105,20 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                             DATOS DEL USUARIO
                         </div>
                         <FormRow className="border-b border-gray-800">
-                            <FormField label="NOMBRE" className="w-16 font-bold" />
+                            <FormField label="NOMBRE" className="w-16 font-bold bg-[#FCE4D6]" />
                             <FormInput
                                 value={formData.nombre_trabajador} // Read only mapping from step 1
                                 disabled={true}
                             />
                         </FormRow>
                         <FormRow className="border-b border-gray-800">
-                            <FormField label="C.C" className="w-16 font-bold" />
+                            <FormField label="C.C" className="w-16 font-bold bg-[#FCE4D6]" />
                             <FormInput
                                 value={formData.numero_documento} // Read only mapping from step 1
                                 disabled={true}
                             />
                         </FormRow>
-                        <div className="h-16 flex items-end justify-center pb-2">
+                        <div className="h-16 flex items-end justify-center pb-2 bg-white">
                             <span className="text-xs text-gray-400">Firma</span>
                         </div>
                     </div>

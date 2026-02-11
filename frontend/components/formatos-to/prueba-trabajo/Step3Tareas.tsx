@@ -147,7 +147,7 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                                             checked={tarea.conclusion === opt.value}
                                             onChange={(e) => updateTarea(idx, 'conclusion', e.target.value)}
                                             disabled={readOnly}
-                                            className="accent-gray-800"
+                                            className="accent-gray-800 h-3 w-3"
                                         />
                                         {opt.label}
                                     </label>
@@ -155,7 +155,7 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                             </div>
                         </FormRow>
                         <FormRow className="border-t border-gray-800">
-                            <FormField label="Descripción Conclusión" className="w-32 font-bold bg-[#FCE4D6]" />
+                            <FormField label="Descripción Conclusión" className="w-32 font-bold bg-[#FCE4D6] justify-center" />
                             <FormTextarea
                                 className="min-h-[40px]"
                                 value={tarea.descripcion_conclusion}

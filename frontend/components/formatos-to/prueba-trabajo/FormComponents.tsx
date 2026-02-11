@@ -53,18 +53,18 @@ interface FormFieldProps {
 export const FormField = ({ label, children, className, width, noBorderRight = false, col = false, center = false, header = false }: FormFieldProps) => {
     return (
         <div className={cn(
-            "flex p-1 relative min-h-[2rem]",
+            "flex p-1 relative min-h-[1.5rem]", // Reduced min-height
             !noBorderRight && "border-r border-gray-800",
-            col ? "flex-col" : "items-center gap-2",
+            col ? "flex-col justify-center" : "items-center gap-2", // Added justify-center for col
             center && "justify-center text-center",
-            header && HEADER_BG + " font-bold justify-center",
-            width, // Tailwind width classes (e.g. w-1/2, w-64) or auto
+            header && HEADER_BG + " font-bold justify-center items-center text-center",
+            width,
             className
         )}>
             {label && (
                 <span className={cn(
-                    "text-[10px] font-bold uppercase leading-tight text-gray-700",
-                    col ? "mb-1" : "whitespace-nowrap mr-1",
+                    "text-[10px] font-bold uppercase leading-tight text-gray-700 select-none", // Added select-none
+                    col ? "mb-0.5 text-center w-full" : "whitespace-nowrap mr-1", // Centered col label
                     header && "text-xs"
                 )}>
                     {label}
@@ -84,8 +84,9 @@ export const FormInput = React.forwardRef<HTMLInputElement, InputProps>(
         return (
             <input
                 className={cn(
-                    "flex h-6 w-full px-1 py-0 text-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-                    transparent ? "bg-transparent border-none focus:ring-0" : "rounded-md border border-input bg-background shadow-sm focus-visible:ring-1 focus-visible:ring-ring",
+                    "flex h-full w-full px-1 py-0 text-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                    // REMOVED border and ring for transparent inputs to make them blend in
+                    transparent ? "bg-transparent border-none shadow-none focus:ring-0 focus:outline-none" : "rounded-md border border-input bg-background shadow-sm focus-visible:ring-1 focus-visible:ring-ring",
                     className
                 )}
                 ref={ref}
@@ -105,8 +106,8 @@ export const FormTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>
         return (
             <textarea
                 className={cn(
-                    "flex min-h-[60px] w-full px-1 py-1 text-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none",
-                    transparent ? "bg-transparent border-none focus:ring-0" : "rounded-md border border-input bg-background shadow-sm focus-visible:ring-1 focus-visible:ring-ring",
+                    "flex min-h-[40px] w-full px-1 py-1 text-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none",
+                    transparent ? "bg-transparent border-none shadow-none focus:ring-0 focus:outline-none" : "rounded-md border border-input bg-background shadow-sm focus-visible:ring-1 focus-visible:ring-ring",
                     className
                 )}
                 ref={ref}

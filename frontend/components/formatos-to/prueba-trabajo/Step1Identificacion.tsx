@@ -31,7 +31,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                         <FormField label="FECHA DE VALORACIÓN:" className="bg-[#FCE4D6] w-48 font-bold justify-end" />
                         <FormInput
                             type="date"
-                            className="w-full text-center"
+                            className="w-full text-center font-mono"
                             value={formData.fecha_valoracion}
                             onChange={(e) => updateField('fecha_valoracion', e.target.value)}
                             disabled={readOnly}
@@ -41,7 +41,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                         <FormField label="ÚLTIMO DIA DE INCAPACIDAD:" className="bg-[#FCE4D6] w-48 font-bold justify-end" />
                         <FormInput
                             type="date"
-                            className="w-full text-center"
+                            className="w-full text-center font-mono"
                             value={formData.ultimo_dia_incapacidad}
                             onChange={(e) => updateField('ultimo_dia_incapacidad', e.target.value)}
                             disabled={readOnly}
@@ -89,7 +89,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                         <div className="flex-1 flex border-r border-gray-800">
                             <FormInput
                                 type="date"
-                                className="w-full text-center"
+                                className="w-full text-center font-mono"
                                 value={formData.fecha_nacimiento}
                                 onChange={(e) => updateField('fecha_nacimiento', e.target.value)}
                                 disabled={readOnly}
@@ -108,9 +108,9 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                 {/* Dominancia */}
                 <FormRow>
                     <FormField label="Dominancia" className="w-48 bg-[#FCE4D6]" />
-                    <div className="flex w-full items-center justify-around">
+                    <div className="flex w-full items-center justify-start gap-8 px-4">
                         {['Derecha', 'Izquierda', 'Ambidiestra'].map((opt) => (
-                            <label key={opt} className="flex items-center gap-1 text-xs cursor-pointer">
+                            <label key={opt} className="flex items-center gap-2 text-xs cursor-pointer">
                                 <input
                                     type="radio"
                                     name="dominancia"
@@ -118,7 +118,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                     checked={formData.dominancia === opt}
                                     onChange={(e) => updateField('dominancia', e.target.value)}
                                     disabled={readOnly}
-                                    className="accent-gray-800"
+                                    className="accent-gray-800 h-3 w-3"
                                 />
                                 {opt}
                             </label>
@@ -138,38 +138,47 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                 {/* Nivel Educativo - Grid */}
                 <FormRow>
                     <FormField label="Nivel educativo" className="w-48 bg-[#FCE4D6] flex items-center" />
-                    <div className="w-full grid grid-cols-3 text-xs">
+                    <div className="w-full grid grid-cols-3 text-xs bg-white">
                         {/* Row 1 */}
-                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="formacion_empirica" checked={formData.nivel_educativo === 'formacion_empirica'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Formación empírica
+                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="formacion_empirica" checked={formData.nivel_educativo === 'formacion_empirica'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Formación empírica</span>
                         </div>
-                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="basica_primaria" checked={formData.nivel_educativo === 'basica_primaria'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Básica primaria
+                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="basica_primaria" checked={formData.nivel_educativo === 'basica_primaria'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Básica primaria</span>
                         </div>
-                        <div className="border-b border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="bachillerato_vocacional" checked={formData.nivel_educativo === 'bachillerato_vocacional'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Bachillerato: vocacional 9°
+                        <div className="border-b border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="bachillerato_vocacional" checked={formData.nivel_educativo === 'bachillerato_vocacional'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Bachillerato: vocacional 9°</span>
                         </div>
 
                         {/* Row 2 */}
-                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="bachillerato_modalidad" checked={formData.nivel_educativo === 'bachillerato_modalidad'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Bachillerato: modalidad
+                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="bachillerato_modalidad" checked={formData.nivel_educativo === 'bachillerato_modalidad'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Bachillerato: modalidad</span>
                         </div>
-                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="tecnico" checked={formData.nivel_educativo === 'tecnico'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Técnico/Tecnológico
+                        <div className="border-b border-r border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="tecnico" checked={formData.nivel_educativo === 'tecnico'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Técnico/Tecnológico</span>
                         </div>
-                        <div className="border-b border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="profesional" checked={formData.nivel_educativo === 'profesional'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Profesional
+                        <div className="border-b border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="profesional" checked={formData.nivel_educativo === 'profesional'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Profesional</span>
                         </div>
 
                         {/* Row 3 */}
-                        <div className="border-r border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="postgrado" checked={formData.nivel_educativo === 'postgrado'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Especialización/maestría
+                        <div className="border-r border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="postgrado" checked={formData.nivel_educativo === 'postgrado'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Especialización/maestría</span>
                         </div>
-                        <div className="border-r border-gray-800 p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="formacion_informal" checked={formData.nivel_educativo === 'formacion_informal'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Formación informal
+                        <div className="border-r border-gray-800 p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="formacion_informal" checked={formData.nivel_educativo === 'formacion_informal'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Formación informal</span>
                         </div>
-                        <div className="p-1 flex items-center gap-1">
-                            <input type="radio" name="educacion" value="analfabeta" checked={formData.nivel_educativo === 'analfabeta'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} /> Analfabeta
+                        <div className="p-1 flex items-center gap-1.5 h-8">
+                            <input type="radio" name="educacion" value="analfabeta" checked={formData.nivel_educativo === 'analfabeta'} onChange={(e) => updateField('nivel_educativo', e.target.value)} disabled={readOnly} className="accent-gray-800" />
+                            <span className="truncate">Analfabeta</span>
                         </div>
                     </div>
                 </FormRow>
@@ -273,9 +282,9 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
 
                 <FormRow>
                     <FormField label="Cargo único de las mismas características" className="w-64 bg-[#FCE4D6]" />
-                    <div className="flex w-full items-center justify-around">
+                    <div className="flex w-full items-center justify-start gap-8 px-4">
                         {['Si', 'No'].map((opt) => (
-                            <label key={opt} className="flex items-center gap-1 text-xs cursor-pointer">
+                            <label key={opt} className="flex items-center gap-2 text-xs cursor-pointer">
                                 <input
                                     type="radio"
                                     name="cargo_unico"
@@ -283,7 +292,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                     checked={formData.cargo_unico == opt} // Loose equality for "Si"/"No" string match
                                     onChange={(e) => updateField('cargo_unico', e.target.value)}
                                     disabled={readOnly}
-                                    className="accent-gray-800"
+                                    className="accent-gray-800 h-3 w-3"
                                 />
                                 {opt}
                             </label>
@@ -308,7 +317,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                         <div className="flex-1 flex border-r border-gray-800">
                             <FormInput
                                 type="date"
-                                className="w-full text-center"
+                                className="w-full text-center font-mono"
                                 value={formData.fecha_ingreso_cargo}
                                 onChange={(e) => updateField('fecha_ingreso_cargo', e.target.value)}
                                 disabled={readOnly}
@@ -331,7 +340,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                         <div className="flex-1 flex border-r border-gray-800">
                             <FormInput
                                 type="date"
-                                className="w-full text-center"
+                                className="w-full text-center font-mono"
                                 value={formData.fecha_ingreso_empresa}
                                 onChange={(e) => updateField('fecha_ingreso_empresa', e.target.value)}
                                 disabled={readOnly}
@@ -368,7 +377,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                     checked={formData.modalidad === opt}
                                     onChange={(e) => updateField('modalidad', e.target.value)}
                                     disabled={readOnly}
-                                    className="accent-gray-800"
+                                    className="accent-gray-800 h-3 w-3"
                                 />
                                 {opt}
                             </label>
