@@ -133,6 +133,7 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
     const active = item.href && item.href !== '#' ? isActive(item.href) : item.children?.some((child: any) => isActive(child.href) || child.children?.some((grandChild: any) => isActive(grandChild.href)));
 
     const key = item.title + depth;
+    const isNested = depth > 0;
 
     return (
       <li key={key}>
@@ -140,13 +141,13 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
           <>
             <button
               onClick={() => toggleExpand(item.title)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${active
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 font-medium transition-all duration-200 ${active
                 ? 'bg-indigo-500/10 text-indigo-600 shadow-sm'
                 : 'text-gray-600 hover:bg-gray-100'
-                } ${collapsed ? 'justify-center px-2' : ''}`}
-              style={{ paddingLeft: depth > 0 ? `${depth * 1 + 0.75}rem` : '' }}
+                } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
+              style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
             >
-              <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
+              <Icon className={`${isNested ? 'h-4 w-4' : 'h-5 w-5'} flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
               {!collapsed && (
                 <>
                   <span className="flex-1 text-left">{item.title}</span>
@@ -163,13 +164,13 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         ) : (
           <Link
             href={item.href}
-            className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${active
+            className={`flex items-center gap-3 rounded-lg px-3 py-2.5 font-medium transition-all duration-200 ${active
               ? 'bg-indigo-500/10 text-indigo-600 shadow-sm'
               : 'text-gray-600 hover:bg-gray-100'
-              } ${collapsed ? 'justify-center px-2' : ''}`}
-            style={{ paddingLeft: depth > 0 ? `${depth * 1 + 0.75}rem` : '' }}
+              } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
+            style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
           >
-            <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
+            <Icon className={`${isNested ? 'h-4 w-4' : 'h-5 w-5'} flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
             {!collapsed && <span>{item.title}</span>}
           </Link>
         )}
