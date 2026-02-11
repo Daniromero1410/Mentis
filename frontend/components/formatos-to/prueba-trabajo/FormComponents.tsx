@@ -122,21 +122,17 @@ export const DateInputs = ({
     dateString,
     onChange
 }: {
-    export const DateInputs = ({
-        dateString,
-        onChange
-    }: {
-        dateString: string,
-        onChange: (date: string) => void
-    }) => {
-        return (
-            <div className="flex justify-center items-center px-2">
-                <FormInput
-                    type="date"
-                    value={dateString}
-                    onChange={(e) => onChange(e.target.value)}
-                    className="font-mono text-center uppercase text-slate-700 max-w-[160px] bg-slate-50/50 rounded border border-gray-200"
-                />
-            </div>
-        )
-    }
+    dateString: string,
+    onChange: (date: string) => void
+}) => {
+    return (
+        <div className="flex justify-center items-center px-2">
+            <FormInput
+                type="date"
+                value={dateString}
+                onChange={(e) => onChange(e.target.value)}
+                className="font-mono text-center uppercase text-slate-700 max-w-[160px] bg-slate-50/50 rounded border border-gray-200"
+            />
+        </div>
+    )
+}
