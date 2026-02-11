@@ -112,10 +112,10 @@ export default function UsuariosPage() {
             apellido: usuario.apellido,
             rol: usuario.rol,
             password: '', // No mostramos la contraseña
-            acceso_valoraciones: usuario.acceso_valoraciones,
-            acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo,
-            acceso_formatos_to: usuario.acceso_formatos_to,
-            activo: usuario.activo,
+            acceso_valoraciones: usuario.acceso_valoraciones ?? false,
+            acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo ?? false,
+            acceso_formatos_to: usuario.acceso_formatos_to ?? false,
+            activo: usuario.activo ?? true,
         });
         setModalOpen(true);
     };
