@@ -1,10 +1,13 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Colores del PDF (Beige/Peach para headers)
-const HEADER_BG = "bg-[#FCE4D6]";
-const BORDER_COLOR = "border-gray-800"; // Bordes oscuros para look de formato
+// ==========================================
+// Modern UI Components (Shadcn/Tailwind)
+// ==========================================
 
 interface FormSectionProps {
     title: string;
@@ -14,26 +17,28 @@ interface FormSectionProps {
 
 export const FormSection = ({ title, children, className }: FormSectionProps) => {
     return (
-        <div className={cn("border-2 border-gray-800 mb-6", className)}>
-            <div className={cn("w-full px-2 py-1 font-bold text-sm uppercase border-b-2 border-gray-800", HEADER_BG)}>
-                {title}
-            </div>
-            <div className="bg-white">
+        <Card className={cn("mb-6 shadow-sm border-slate-200", className)}>
+            <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-3 pt-3">
+                <CardTitle className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+                    {title}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 space-y-4 pt-4">
                 {children}
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 };
 
 interface FormRowProps {
     children: React.ReactNode;
     className?: string;
-    noBorderBottom?: boolean;
+    noBorderBottom?: boolean; // Kept for type compatibility but ignored in usage
 }
 
 export const FormRow = ({ children, className, noBorderBottom = false }: FormRowProps) => {
     return (
-        <div className={cn("flex w-full", !noBorderBottom && "border-b border-gray-800", className)}>
+        <div className={cn("flex flex-col md:flex-row gap-4 w-full", className)}>
             {children}
         </div>
     );
@@ -44,52 +49,46 @@ interface FormFieldProps {
     children?: React.ReactNode;
     className?: string;
     width?: string;
-    noBorderRight?: boolean;
-    col?: boolean; // Label arriba, input abajo
-    center?: boolean;
-    header?: boolean; // Si es true, actúa como un header de columna
+    noBorderRight?: boolean; // Kept for compatibility, ignored
+    col?: boolean; // Kept for compatibility
+    center?: boolean; // Kept for compatibility
+    header?: boolean; // Kept for compatibility
 }
 
-export const FormField = ({ label, children, className, width, noBorderRight = false, col = false, center = false, header = false }: FormFieldProps) => {
+export const FormField = ({ label, children, className, width, noBorderRight, col, center, header }: FormFieldProps) => {
+    // If it's a "header" field (old table headers), render as a simple div or label
+    if (header) {
+        return (
+            <div className={cn("font-semibold text-sm text-slate-700 uppercase", className)}>
+                {label}
+            </div>
+        );
+    }
+
     return (
-        <div className={cn(
-            "flex p-1 relative min-h-[1.5rem]", // Reduced min-height
-            !noBorderRight && "border-r border-gray-800",
-            col ? "flex-col justify-center" : "items-center gap-2", // Added justify-center for col
-            center && "justify-center text-center",
-            header && HEADER_BG + " font-bold justify-center items-center text-center",
-            width,
-            className
-        )}>
+        <div className={cn("flex flex-col space-y-1.5 w-full", width, className)}>
             {label && (
-                <span className={cn(
-                    "text-[10px] font-bold uppercase leading-tight text-gray-700 select-none", // Added select-none
-                    col ? "mb-0.5 text-center w-full" : "whitespace-nowrap mr-1", // Centered col label
-                    header && "text-xs"
-                )}>
+                <Label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
                     {label}
-                </span>
+                </Label>
             )}
-            {children}
+            <div className={cn("flex-1", center && "flex justify-center")}>
+                {children}
+            </div>
         </div>
     );
 };
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    transparent?: boolean;
+    transparent?: boolean; // Deprecated, kept for compatibility
 }
 
 export const FormInput = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className, transparent = true, ...props }, ref) => {
+    ({ className, transparent, ...props }, ref) => {
         return (
-            <input
-                className={cn(
-                    "flex h-full w-full px-1 py-0 text-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-                    // REMOVED border and ring for transparent inputs to make them blend in
-                    transparent ? "bg-transparent border-none shadow-none focus:ring-0 focus:outline-none" : "rounded-md border border-input bg-background shadow-sm focus-visible:ring-1 focus-visible:ring-ring",
-                    className
-                )}
+            <Input
                 ref={ref}
+                className={cn("bg-white", className)}
                 {...props}
             />
         );
@@ -98,19 +97,15 @@ export const FormInput = React.forwardRef<HTMLInputElement, InputProps>(
 FormInput.displayName = "FormInput";
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-    transparent?: boolean;
+    transparent?: boolean; // Deprecated
 }
 
 export const FormTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-    ({ className, transparent = true, ...props }, ref) => {
+    ({ className, transparent, ...props }, ref) => {
         return (
-            <textarea
-                className={cn(
-                    "flex min-h-[40px] w-full px-1 py-1 text-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none",
-                    transparent ? "bg-transparent border-none shadow-none focus:ring-0 focus:outline-none" : "rounded-md border border-input bg-background shadow-sm focus-visible:ring-1 focus-visible:ring-ring",
-                    className
-                )}
+            <Textarea
                 ref={ref}
+                className={cn("bg-white min-h-[80px]", className)}
                 {...props}
             />
         );
@@ -126,12 +121,12 @@ export const DateInputs = ({
     onChange: (date: string) => void
 }) => {
     return (
-        <div className="flex justify-center items-center px-2">
-            <FormInput
+        <div className="w-full">
+            <Input
                 type="date"
                 value={dateString}
                 onChange={(e) => onChange(e.target.value)}
-                className="font-mono text-center uppercase text-slate-700 max-w-[160px] bg-slate-50/50 rounded border border-gray-200"
+                className="w-full"
             />
         </div>
     )
