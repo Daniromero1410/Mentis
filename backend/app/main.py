@@ -44,11 +44,48 @@ PDFS_DIR = Path("pdfs")
 PDFS_DIR.mkdir(exist_ok=True)
 app.mount("/pdfs", StaticFiles(directory="pdfs"), name="pdfs")
 
-# Evento de inicio: crear tablas
+# Evento de inicio: migrar y crear tablas
 @app.on_event("startup")
 def on_startup():
+    # Ejecutar migraciones automáticas antes de crear tablas nuevas
+    _run_migrations()
     create_db_and_tables()
     print("Base de datos inicializada correctamente")
+
+
+def _run_migrations():
+    """Ejecuta migraciones pendientes de forma segura (idempotente)."""
+    from sqlalchemy import text
+    from app.database.connection import engine
+
+    migrations = [
+        # Agregar valor al enum rolusuario
+        """
+        DO $$
+        BEGIN
+            ALTER TYPE rolusuario ADD VALUE IF NOT EXISTS 'terapeuta_ocupacional';
+        EXCEPTION WHEN others THEN
+            NULL;
+        END $$;
+        """,
+        # Agregar columna acceso_formatos_to a usuarios
+        """
+        ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acceso_formatos_to BOOLEAN DEFAULT FALSE;
+        """,
+        # Dar acceso al admin
+        """
+        UPDATE usuarios SET acceso_formatos_to = TRUE WHERE email = 'danielromero.software@gmail.com' AND acceso_formatos_to = FALSE;
+        """,
+    ]
+
+    try:
+        with engine.connect() as conn:
+            for sql in migrations:
+                conn.execute(text(sql))
+            conn.commit()
+        print("[MIGRATIONS] Migraciones ejecutadas correctamente")
+    except Exception as e:
+        print(f"[MIGRATIONS] Aviso: {e}")
 
 # Ruta de prueba
 @app.get("/")
