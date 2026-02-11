@@ -32,6 +32,7 @@ import {
     Briefcase,
     CheckCircle,
     XCircle,
+    FileText,
 } from 'lucide-react';
 
 interface Usuario {
@@ -39,10 +40,11 @@ interface Usuario {
     email: string;
     nombre: string;
     apellido: string;
-    rol: 'admin' | 'supervisor' | 'psicologo';
+    rol: 'admin' | 'supervisor' | 'psicologo' | 'terapeuta_ocupacional';
     activo: boolean;
     acceso_valoraciones: boolean;
     acceso_pruebas_trabajo: boolean;
+    acceso_formatos_to: boolean;
     created_at: string;
 }
 
@@ -50,10 +52,11 @@ interface UsuarioForm {
     email: string;
     nombre: string;
     apellido: string;
-    rol: 'admin' | 'supervisor' | 'psicologo';
+    rol: 'admin' | 'supervisor' | 'psicologo' | 'terapeuta_ocupacional';
     password: string;
     acceso_valoraciones: boolean;
     acceso_pruebas_trabajo: boolean;
+    acceso_formatos_to: boolean;
     activo: boolean;
 }
 
@@ -65,6 +68,7 @@ const initialFormState: UsuarioForm = {
     password: '',
     acceso_valoraciones: true,
     acceso_pruebas_trabajo: true,
+    acceso_formatos_to: false,
     activo: true,
 };
 
@@ -110,6 +114,7 @@ export default function UsuariosPage() {
             password: '', // No mostramos la contraseña
             acceso_valoraciones: usuario.acceso_valoraciones,
             acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo,
+            acceso_formatos_to: usuario.acceso_formatos_to,
             activo: usuario.activo,
         });
         setModalOpen(true);
@@ -146,6 +151,7 @@ export default function UsuariosPage() {
                     activo: formData.activo,
                     acceso_valoraciones: formData.acceso_valoraciones,
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
+                    acceso_formatos_to: formData.acceso_formatos_to,
                     ...(formData.password.trim() && { password: formData.password }),
                 });
                 toast.success('Usuario actualizado correctamente');
@@ -159,6 +165,7 @@ export default function UsuariosPage() {
                     password: formData.password,
                     acceso_valoraciones: formData.acceso_valoraciones,
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
+                    acceso_formatos_to: formData.acceso_formatos_to,
                 });
                 toast.success('Usuario creado correctamente');
             }
@@ -197,6 +204,7 @@ export default function UsuariosPage() {
             admin: { label: 'Administrador', icon: Shield, color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
             supervisor: { label: 'Supervisor', icon: ShieldCheck, color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
             psicologo: { label: 'Psicólogo', icon: User, color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
+            terapeuta_ocupacional: { label: 'Terapeuta Ocupacional', icon: Briefcase, color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400' },
         };
         const badge = badges[rol as keyof typeof badges] || badges.psicologo;
         const Icon = badge.icon;
@@ -447,7 +455,7 @@ export default function UsuariosPage() {
                         {/* Rol */}
                         <div className="space-y-2">
                             <Label>Rol</Label>
-                            <div className="grid grid-cols-3 gap-2">
+                            <div className="grid grid-cols-4 gap-2">
                                 <button
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'psicologo' })}
@@ -459,6 +467,19 @@ export default function UsuariosPage() {
                                     <User className={`h-5 w-5 ${formData.rol === 'psicologo' ? 'text-green-600' : 'text-gray-400'}`} />
                                     <span className={`text-xs font-medium ${formData.rol === 'psicologo' ? 'text-green-700 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
                                         Psicólogo
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, rol: 'terapeuta_ocupacional' })}
+                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'terapeuta_ocupacional'
+                                        ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
+                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <Briefcase className={`h-5 w-5 ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-600' : 'text-gray-400'}`} />
+                                    <span className={`text-xs font-medium ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-700 dark:text-teal-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                                        T. Ocupacional
                                     </span>
                                 </button>
                                 <button
@@ -518,6 +539,19 @@ export default function UsuariosPage() {
                                     <label htmlFor="acceso_pruebas_trabajo" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <Briefcase className="h-4 w-4 text-blue-600" />
                                         Pruebas de Trabajo
+                                    </label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="acceso_formatos_to"
+                                        checked={formData.acceso_formatos_to}
+                                        onCheckedChange={(checked) =>
+                                            setFormData({ ...formData, acceso_formatos_to: !!checked })
+                                        }
+                                    />
+                                    <label htmlFor="acceso_formatos_to" className="flex items-center gap-2 text-sm cursor-pointer">
+                                        <FileText className="h-4 w-4 text-teal-600" />
+                                        Formatos TO
                                     </label>
                                 </div>
                             </div>
