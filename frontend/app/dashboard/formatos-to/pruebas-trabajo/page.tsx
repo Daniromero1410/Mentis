@@ -195,10 +195,14 @@ function PruebasTrabajoTOList() {
     );
 }
 
+import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
+
 export default function PruebasTrabajoTOPage() {
     return (
         <ModuleGuard requiredModule="formatos_to">
-            <PruebasTrabajoTOList />
+            <DashboardLayout>
+                <PruebasTrabajoTOList />
+            </DashboardLayout>
         </ModuleGuard>
     );
 }
