@@ -243,10 +243,13 @@ export default function UsuariosPage() {
                 <div className="relative max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
+                        id="search-usuarios"
+                        name="search-usuarios"
                         placeholder="Buscar por nombre o email..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="pl-10"
+                        autoComplete="off"
                     />
                 </div>
 
