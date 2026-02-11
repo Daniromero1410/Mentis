@@ -240,18 +240,19 @@ export default function UsuariosPage() {
                 </div>
 
                 {/* Search */}
-                <div className="relative max-w-md">
+                <form onSubmit={(e) => e.preventDefault()} autoComplete="off" className="relative max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
-                        id="search-usuarios"
-                        name="search-usuarios"
+                        id="search_query_safe"
+                        name="search_query_safe"
                         placeholder="Buscar por nombre o email..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="pl-10"
                         autoComplete="off"
+                        data-lpignore="true" // Agnostic attribute for LastPass/others
                     />
-                </div>
+                </form>
 
                 {/* Users Table */}
                 <Card>
