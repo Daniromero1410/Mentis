@@ -60,7 +60,7 @@ class UsuarioRead(SQLModel):
     activo: bool
     acceso_valoraciones: bool
     acceso_pruebas_trabajo: bool
-    acceso_formatos_to: bool
+    acceso_formatos_to: Optional[bool] = False
     created_at: datetime
 
 class UsuarioLogin(SQLModel):
