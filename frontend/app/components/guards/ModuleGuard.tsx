@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 interface ModuleGuardProps {
     children: React.ReactNode;
-    requiredModule: 'valoraciones' | 'pruebas_trabajo';
+    requiredModule: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to';
 }
 
 export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
@@ -28,7 +28,9 @@ export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
         // Verificar permiso específico
         const hasAccess = requiredModule === 'valoraciones'
             ? user.acceso_valoraciones
-            : user.acceso_pruebas_trabajo;
+            : requiredModule === 'pruebas_trabajo'
+                ? user.acceso_pruebas_trabajo
+                : user.acceso_formatos_to;
 
         if (!hasAccess) {
             toast.error('No tienes acceso a este módulo');
@@ -51,7 +53,9 @@ export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
     if (user.rol !== 'admin') {
         const hasAccess = requiredModule === 'valoraciones'
             ? user.acceso_valoraciones
-            : user.acceso_pruebas_trabajo;
+            : requiredModule === 'pruebas_trabajo'
+                ? user.acceso_pruebas_trabajo
+                : user.acceso_formatos_to;
 
         if (!hasAccess) return null;
     }

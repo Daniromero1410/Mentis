@@ -15,6 +15,7 @@ import {
   PlusCircle,
   List,
   Briefcase,
+  FileText,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -47,6 +48,16 @@ const menuItems = [
           { title: 'Nueva Prueba', href: '/dashboard/pruebas-trabajo/nueva', icon: PlusCircle },
         ],
       },
+      {
+        title: 'Formatos TO',
+        icon: FileText,
+        href: '/dashboard/formatos-to/pruebas-trabajo',
+        requiresAccess: 'formatos_to' as const,
+        children: [
+          { title: 'Lista', href: '/dashboard/formatos-to/pruebas-trabajo', icon: List },
+          { title: 'Nueva Prueba TO', href: '/dashboard/formatos-to/pruebas-trabajo/nueva', icon: PlusCircle },
+        ],
+      },
     ],
   },
   {
@@ -69,13 +80,14 @@ const menuItems = [
 ];
 
 // Función para verificar si el usuario tiene acceso a un módulo
-const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo') => {
+const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to') => {
   if (!accessType) return true; // Sin restricción
   if (!user) return false;
   if (user.rol === 'admin') return true; // Admin tiene acceso a todo
 
   if (accessType === 'valoraciones') return user.acceso_valoraciones !== false;
   if (accessType === 'pruebas_trabajo') return user.acceso_pruebas_trabajo !== false;
+  if (accessType === 'formatos_to') return user.acceso_formatos_to !== false;
 
   return true;
 };

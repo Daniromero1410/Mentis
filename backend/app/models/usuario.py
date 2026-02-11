@@ -10,6 +10,7 @@ class RolUsuario(str, Enum):
     ADMIN = "admin"
     SUPERVISOR = "supervisor"
     PSICOLOGO = "psicologo"
+    TERAPEUTA_OCUPACIONAL = "terapeuta_ocupacional"
 
 class Usuario(SQLModel, table=True):
     __tablename__ = "usuarios"
@@ -24,6 +25,7 @@ class Usuario(SQLModel, table=True):
     # Permisos de acceso a módulos
     acceso_valoraciones: bool = Field(default=True)
     acceso_pruebas_trabajo: bool = Field(default=True)
+    acceso_formatos_to: bool = Field(default=False)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
@@ -37,6 +39,7 @@ class UsuarioCreate(SQLModel):
     password: str
     acceso_valoraciones: bool = True
     acceso_pruebas_trabajo: bool = True
+    acceso_formatos_to: bool = False
 
 class UsuarioUpdate(SQLModel):
     nombre: Optional[str] = None
@@ -46,6 +49,7 @@ class UsuarioUpdate(SQLModel):
     password: Optional[str] = None  # Solo si se quiere cambiar
     acceso_valoraciones: Optional[bool] = None
     acceso_pruebas_trabajo: Optional[bool] = None
+    acceso_formatos_to: Optional[bool] = None
 
 class UsuarioRead(SQLModel):
     id: int
@@ -56,6 +60,7 @@ class UsuarioRead(SQLModel):
     activo: bool
     acceso_valoraciones: bool
     acceso_pruebas_trabajo: bool
+    acceso_formatos_to: bool
     created_at: datetime
 
 class UsuarioLogin(SQLModel):

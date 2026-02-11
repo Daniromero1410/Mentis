@@ -5,6 +5,7 @@ from pathlib import Path
 from app.config import settings
 from app.database.connection import create_db_and_tables
 from app.routers import auth, valoraciones, usuarios, conceptos, reportes, uploads, pruebas_trabajo
+from app.routers import pruebas_trabajo_to
 
 # Crear la aplicación FastAPI
 app = FastAPI(
@@ -31,6 +32,7 @@ app.include_router(conceptos.router)
 app.include_router(reportes.router)
 app.include_router(uploads.router)
 app.include_router(pruebas_trabajo.router)
+app.include_router(pruebas_trabajo_to.router)
 
 # Montar directorio de uploads como archivos estáticos
 UPLOAD_DIR = Path("uploads")

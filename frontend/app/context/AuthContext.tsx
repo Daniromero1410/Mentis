@@ -8,10 +8,11 @@ interface User {
   email: string;
   nombre: string;
   apellido: string;
-  rol: 'admin' | 'supervisor' | 'psicologo';
+  rol: 'admin' | 'supervisor' | 'psicologo' | 'terapeuta_ocupacional';
   activo: boolean;
   acceso_valoraciones: boolean;
   acceso_pruebas_trabajo: boolean;
+  acceso_formatos_to: boolean;
 }
 
 interface AuthContextType {

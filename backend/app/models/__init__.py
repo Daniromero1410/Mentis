@@ -30,3 +30,9 @@ from app.models.prueba_trabajo import (
     NivelRiesgo
 )
 from app.models.password_reset import PasswordResetRequest, PasswordResetRequestCreate, PasswordResetRequestRead
+from app.models.prueba_trabajo_to import (
+    PruebaTrabajoTO, IdentificacionTO, SeccionesTextoTO,
+    DesempenoOrgTO, TareaTO, MaterialEquipoTO,
+    PeligroProcesoTO, RecomendacionesTO, RegistroTO,
+    EstadoPruebaTO
+)
