@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import {
     Save, ChevronLeft, ChevronRight, Download, Loader2,
     Plus, Trash2, CheckCircle2, FileText, User, Briefcase,
-    ClipboardList, Shield
+    Activity, AlertTriangle // Updated icons
 } from 'lucide-react';
 import { Step1Identificacion } from './prueba-trabajo/Step1Identificacion';
 import { Step2MetodologiaCondiciones } from './prueba-trabajo/Step2MetodologiaCondiciones';
@@ -38,19 +38,6 @@ const CONCLUSION_OPTIONS = [
     { value: 'reintegro_con_modificaciones', label: 'Reintegro con modificaciones' },
     { value: 'desarrollo_capacidades', label: 'Desarrollo de capacidades' },
     { value: 'no_puede_desempenarla', label: 'No puede desempeñarla' },
-];
-
-const NIVEL_EDUCATIVO_OPTIONS = [
-    { value: 'formacion_empirica', label: 'Formación empírica' },
-    { value: 'basica_primaria', label: 'Básica primaria' },
-    { value: 'bachillerato_vocacional', label: 'Bachillerato vocacional 9°' },
-    { value: 'bachillerato_modalidad', label: 'Bachillerato modalidad' },
-    { value: 'tecnico_tecnologico', label: 'Técnico/Tecnológico' },
-    { value: 'profesional', label: 'Profesional' },
-    { value: 'especializacion_postgrado', label: 'Especialización/Postgrado/Maestría' },
-    { value: 'formacion_informal', label: 'Formación informal oficios' },
-    { value: 'analfabeta', label: 'Analfabeta' },
-    { value: 'otros', label: 'Otros' },
 ];
 
 // ── Initial data ────────────────────────────────────────────────────
@@ -85,15 +72,16 @@ const initialFormData = {
     para_trabajador: '', para_empresa: '',
     // Registro
     nombre_elaboro: '', firma_elaboro: '', nombre_revisor: '', firma_revisor: '', nombre_proveedor: '',
+    firma_elaboro: '', firma_revisor: '',
 };
 
-// ── Steps ───────────────────────────────────────────────────────────
+// ── Steps (Updated) ─────────────────────────────────────────────────
 const STEPS = [
-    { id: 1, title: 'Identificación', icon: User, desc: 'Datos del trabajador y empresa' },
-    { id: 2, title: 'Metodología y Condiciones', icon: ClipboardList, desc: 'Metodología y condiciones de trabajo' },
-    { id: 3, title: 'Tareas', icon: Briefcase, desc: 'Requerimientos por tarea' },
-    { id: 4, title: 'Materiales y Peligros', icon: Shield, desc: 'Equipos, herramientas y peligros' },
-    { id: 5, title: 'Concepto y Registro', icon: FileText, desc: 'Conclusiones, recomendaciones y firmas' },
+    { id: 1, title: 'Identificación', icon: User, desc: 'Datos del trabajador' },
+    { id: 2, title: 'Contexto y Participantes', icon: Briefcase, desc: 'Metodología y condiciones' },
+    { id: 3, title: 'Descripción del Cargo', icon: Activity, desc: 'Tareas y requerimientos' },
+    { id: 4, title: 'Factores de Riesgo', icon: AlertTriangle, desc: 'Materiales y peligros' },
+    { id: 5, title: 'Resumen y Concepto', icon: FileText, desc: 'Concepto y firmas' },
 ];
 
 
@@ -221,7 +209,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         },
     });
 
-    // ── Save ──────────────────────────────────────────────────────────
     const handleSave = async (finalizar = false) => {
         setSaving(true);
         try {
@@ -280,8 +267,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         }
     };
 
-
-
     if (loading) {
         return (
             <div className="flex items-center justify-center py-32">
@@ -293,31 +278,46 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     return (
         <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-800">
-                    {mode === 'create' ? 'Nueva Prueba de Trabajo TO' : mode === 'edit' ? 'Editar Prueba' : 'Detalle Prueba'}
+            <div className="mb-10">
+                <h1 className="text-2xl font-bold text-gray-900">
+                    Nueva Prueba de Trabajo
                 </h1>
-                <p className="text-sm text-gray-500 mt-1">Formato de Terapia Ocupacional — Positiva S.A.</p>
+                <p className="text-sm text-gray-500 mt-1">
+                    Complete el formulario de evaluación paso a paso
+                </p>
             </div>
 
-            {/* Step indicator */}
-            <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2">
+            {/* Stepper (Orange Theme) */}
+            <div className="flex items-start justify-between relative mb-12 px-4">
+                {/* Connecting Line */}
+                <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-100 -z-10" />
+
                 {STEPS.map((step, idx) => {
                     const StepIcon = step.icon;
                     const isActive = currentStep === step.id;
                     const isCompleted = currentStep > step.id;
+
                     return (
-                        <button
-                            key={step.id}
-                            onClick={() => setCurrentStep(step.id)}
-                            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap
-                ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' :
-                                    isCompleted ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
-                        >
-                            {isCompleted ? <CheckCircle2 className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
-                            <span className="hidden sm:inline">{step.title}</span>
-                            <span className="sm:hidden">{step.id}</span>
-                        </button>
+                        <div key={step.id} className="flex flex-col items-center relative flex-1">
+                            {/* Connector segment */}
+                            {idx !== 0 && (
+                                <div className={`absolute top-5 right-1/2 w-full h-0.5 -z-20 ${isCompleted ? 'bg-orange-200' : 'bg-gray-100'}`} />
+                            )}
+
+                            <button
+                                onClick={() => setCurrentStep(step.id)}
+                                className={`
+                                    flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300
+                                    ${isActive ? 'bg-orange-500 text-white shadow-lg shadow-orange-200 scale-110' :
+                                        isCompleted ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'}
+                                `}
+                            >
+                                <StepIcon className="h-5 w-5" />
+                            </button>
+                            <div className={`mt-3 text-center transition-colors duration-300 ${isActive ? 'text-orange-600 font-bold' : 'text-gray-500 slide-in-from-top-1'}`}>
+                                <span className="text-xs font-semibold block">{step.title}</span>
+                            </div>
+                        </div>
                     );
                 })}
             </div>
@@ -325,7 +325,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             {/* Form content */}
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
 
-                {/* ── STEP 1: Identificación ───────────────────────────────── */}
                 {currentStep === 1 && (
                     <Step1Identificacion
                         formData={formData}
@@ -334,7 +333,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     />
                 )}
 
-                {/* ── STEP 2: Metodología y Condiciones ────────────────────── */}
                 {currentStep === 2 && (
                     <Step2MetodologiaCondiciones
                         formData={formData}
@@ -343,7 +341,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     />
                 )}
 
-                {/* ── STEP 3: Tareas ───────────────────────────────────────── */}
                 {currentStep === 3 && (
                     <Step3Tareas
                         tareas={tareas}
@@ -352,7 +349,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     />
                 )}
 
-                {/* ── STEP 4: Materiales y Peligros ────────────────────────── */}
                 {currentStep === 4 && (
                     <Step4MaterialesPeligros
                         materiales={materiales}
@@ -365,7 +361,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     />
                 )}
 
-                {/* ── STEP 5: Concepto y Registro ──────────────────────────── */}
                 {currentStep === 5 && (
                     <Step5ConceptoRegistro
                         formData={formData}
