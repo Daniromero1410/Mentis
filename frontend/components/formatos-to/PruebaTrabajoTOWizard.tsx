@@ -77,10 +77,10 @@ const initialFormData = {
 // ── Steps (Updated) ─────────────────────────────────────────────────
 const STEPS = [
     { id: 1, title: 'Identificación', icon: User, desc: 'Datos del trabajador' },
-    { id: 2, title: 'Contexto y Participantes', icon: Briefcase, desc: 'Metodología y condiciones' },
-    { id: 3, title: 'Descripción del Cargo', icon: Activity, desc: 'Tareas y requerimientos' },
-    { id: 4, title: 'Factores de Riesgo', icon: AlertTriangle, desc: 'Materiales y peligros' },
-    { id: 5, title: 'Resumen y Concepto', icon: FileText, desc: 'Concepto y firmas' },
+    { id: 2, title: 'Metodología y Condiciones', icon: Briefcase, desc: 'Metodología y entorno' },
+    { id: 3, title: 'Tareas y Requerimientos', icon: Activity, desc: 'Análisis de tareas' },
+    { id: 4, title: 'Materiales y Peligros', icon: AlertTriangle, desc: 'Equipos y riesgos' },
+    { id: 5, title: 'Concepto y Registro', icon: FileText, desc: 'Conclusión y firmas' },
 ];
 
 
