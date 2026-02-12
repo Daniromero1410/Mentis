@@ -34,7 +34,7 @@ const menuItems = [
         href: '/dashboard/valoraciones',
         requiresAccess: 'valoraciones' as const,
         children: [
-          { title: 'Lista', href: '/dashboard/valoraciones', icon: List },
+          { title: 'Lista', href: '/dashboard/valoraciones', icon: List, exact: true },
           { title: 'Nueva Valoración', href: '/dashboard/valoraciones/nueva', icon: PlusCircle },
         ],
       },
@@ -44,7 +44,7 @@ const menuItems = [
         href: '/dashboard/pruebas-trabajo',
         requiresAccess: 'pruebas_trabajo' as const,
         children: [
-          { title: 'Lista', href: '/dashboard/pruebas-trabajo', icon: List },
+          { title: 'Lista', href: '/dashboard/pruebas-trabajo', icon: List, exact: true },
           { title: 'Nueva Prueba', href: '/dashboard/pruebas-trabajo/nueva', icon: PlusCircle },
         ],
       },
@@ -59,7 +59,7 @@ const menuItems = [
             href: '/dashboard/formatos-to/pruebas-trabajo',
             icon: Briefcase,
             children: [
-              { title: 'Lista', href: '/dashboard/formatos-to/pruebas-trabajo', icon: List },
+              { title: 'Lista', href: '/dashboard/formatos-to/pruebas-trabajo', icon: List, exact: true },
               { title: 'Nueva', href: '/dashboard/formatos-to/pruebas-trabajo/nueva', icon: PlusCircle },
             ]
           },
@@ -112,9 +112,10 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
     );
   };
 
-  const isActive = (href: string) => {
+  const isActive = (href: string, exact = false) => {
     if (href === '#' || href === '') return false;
     if (href === '/dashboard') return pathname === href;
+    if (exact) return pathname === href;
     return pathname === href || pathname.startsWith(href + '/');
   };
 
@@ -130,7 +131,9 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.includes(item.title);
     // For parent items without href, check if any child is active
-    const active = item.href && item.href !== '#' ? isActive(item.href) : item.children?.some((child: any) => isActive(child.href) || child.children?.some((grandChild: any) => isActive(grandChild.href)));
+    const active = item.href && item.href !== '#'
+      ? isActive(item.href, item.exact)
+      : item.children?.some((child: any) => isActive(child.href, child.exact) || child.children?.some((grandChild: any) => isActive(grandChild.href, grandChild.exact)));
 
     const key = item.title + depth;
     const isNested = depth > 0;

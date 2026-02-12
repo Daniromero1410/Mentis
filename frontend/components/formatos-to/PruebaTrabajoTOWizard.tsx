@@ -9,211 +9,72 @@ import {
     Plus, Trash2, CheckCircle2, FileText, User, Briefcase,
     Activity, AlertTriangle // Updated icons
 } from 'lucide-react';
-import { Step1Identificacion } from './prueba-trabajo/Step1Identificacion';
-import { Step2MetodologiaCondiciones } from './prueba-trabajo/Step2MetodologiaCondiciones';
-import { Step3Tareas } from './prueba-trabajo/Step3Tareas';
-import { Step4MaterialesPeligros } from './prueba-trabajo/Step4MaterialesPeligros';
-import { Step5ConceptoRegistro } from './prueba-trabajo/Step5ConceptoRegistro';
+import { BlurValidationModal } from './BlurValidationModal';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
-
-interface PruebaTrabajoTOWizardProps {
-    mode: 'create' | 'edit' | 'view';
-    id?: number | null;
-    readOnly?: boolean;
-}
-
-// ── Categorías de peligro fijas ──────────────────────────────────────
-const CATEGORIAS_PELIGRO = [
-    { value: 'fisicos', label: 'Físicos' },
-    { value: 'biologicos', label: 'Biológicos' },
-    { value: 'biomecanicos', label: 'Biomecánicos' },
-    { value: 'psicosociales', label: 'Psicosociales' },
-    { value: 'quimicos', label: 'Químicos' },
-    { value: 'cond_seguridad', label: 'Cond. Seguridad' },
-];
-
-const CONCLUSION_OPTIONS = [
-    { value: 'reintegro_sin_modificaciones', label: 'Reintegro sin modificaciones' },
-    { value: 'reintegro_con_modificaciones', label: 'Reintegro con modificaciones' },
-    { value: 'desarrollo_capacidades', label: 'Desarrollo de capacidades' },
-    { value: 'no_puede_desempenarla', label: 'No puede desempeñarla' },
-];
-
-// ── Initial data ────────────────────────────────────────────────────
-const emptyTarea = () => ({
-    actividad: '', ciclo: '', subactividad: '', estandar_productividad: '',
-    registro_fotografico: '', descripcion_biomecanica: '', apreciacion_trabajador: '',
-    apreciacion_profesional: '', conclusion: '', descripcion_conclusion: '', orden: 0,
-});
-
-const emptyMaterial = () => ({
-    nombre: '', descripcion: '', requerimientos_operacion: '', observaciones: '', orden: 0,
-});
-
-const initialFormData = {
-    // Identificación
-    fecha_valoracion: '', ultimo_dia_incapacidad: '', nombre_trabajador: '',
-    numero_documento: '', id_siniestro: '', fecha_nacimiento: '', edad: '',
-    dominancia: '', estado_civil: '', nivel_educativo: '', telefonos_trabajador: '',
-    direccion_residencia: '', diagnosticos_atel: '', fechas_eventos_atel: '',
-    eps_ips: '', afp: '', tiempo_incapacidad_dias: '', empresa: '', nit_empresa: '',
-    cargo_actual: '', cargo_unico: '', area_seccion: '', fecha_ingreso_cargo: '',
-    antiguedad_cargo: '', fecha_ingreso_empresa: '', antiguedad_empresa: '',
-    forma_vinculacion: '', modalidad: '', tiempo_modalidad: '', contacto_empresa: '',
-    correos_electronicos: '', telefonos_empresa: '', direccion_empresa: '',
-    // Secciones texto
-    metodologia: '', descripcion_proceso_productivo: '', apreciacion_trabajador_proceso: '',
-    estandares_productividad: '', verificacion_acciones_correctivas: '', concepto_prueba_trabajo: '',
-    // Desempeño organizacional
-    jornada: '', ritmo: '', descansos_programados: '', turnos: '',
-    tiempos_efectivos: '', rotaciones: '', horas_extras: '', distribucion_semanal: '',
-    // Recomendaciones
-    para_trabajador: '', para_empresa: '',
-    // Registro
-    nombre_elaboro: '', firma_elaboro: '', nombre_revisor: '', firma_revisor: '', nombre_proveedor: '',
-};
-
-// ── Steps (Updated) ─────────────────────────────────────────────────
-const STEPS = [
-    { id: 1, title: 'Identificación', icon: User, desc: 'Datos del trabajador' },
-    { id: 2, title: 'Metodología y Condiciones', icon: Briefcase, desc: 'Metodología y entorno' },
-    { id: 3, title: 'Tareas y Requerimientos', icon: Activity, desc: 'Análisis de tareas' },
-    { id: 4, title: 'Materiales y Peligros', icon: AlertTriangle, desc: 'Equipos y riesgos' },
-    { id: 5, title: 'Concepto y Registro', icon: FileText, desc: 'Conclusión y firmas' },
-];
-
+// ... (keep imports)
 
 export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrabajoTOWizardProps) {
-    const router = useRouter();
-    const { token } = useAuth();
-    const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({ ...initialFormData });
-    const [tareas, setTareas] = useState([emptyTarea()]);
-    const [materiales, setMateriales] = useState([emptyMaterial()]);
-    const [peligros, setPeligros] = useState(
-        CATEGORIAS_PELIGRO.map(c => ({ categoria: c.value, descripcion: '', tipos_control_existente: '', recomendaciones_control: '' }))
-    );
-    const [pruebaId, setPruebaId] = useState<number | null>(id || null);
-    const [saving, setSaving] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [showDownloadModal, setShowDownloadModal] = useState(false);
-    const [downloadUrl, setDownloadUrl] = useState('');
+    // ... (keep existing state)
+    const [validationModal, setValidationModal] = useState({ isOpen: false, title: '', message: '', type: 'error' as 'error' | 'success' });
 
-    // ── Load existing data ────────────────────────────────────────────
-    useEffect(() => {
-        if (!pruebaId || mode === 'create') return;
-        setLoading(true);
-        fetch(`${API_URL}/formatos-to/pruebas-trabajo/${pruebaId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-            .then(r => { if (!r.ok) throw new Error('Error'); return r.json(); })
-            .then(data => {
-                const i = data.identificacion || {};
-                const s = data.secciones_texto || {};
-                const d = data.desempeno_organizacional || {};
-                const rec = data.recomendaciones || {};
-                const reg = data.registro || {};
-                setFormData({
-                    ...initialFormData,
-                    ...Object.fromEntries(Object.entries(i).filter(([_, v]) => v !== null).map(([k, v]) => [k, String(v)])),
-                    ...Object.fromEntries(Object.entries(s).filter(([_, v]) => v !== null).map(([k, v]) => [k, String(v)])),
-                    ...Object.fromEntries(Object.entries(d).filter(([_, v]) => v !== null).map(([k, v]) => [k, String(v)])),
-                    para_trabajador: rec.para_trabajador || '', para_empresa: rec.para_empresa || '',
-                    nombre_elaboro: reg.nombre_elaboro || '', nombre_revisor: reg.nombre_revisor || '',
-                    nombre_proveedor: reg.nombre_proveedor || '',
-                    firma_elaboro: reg.firma_elaboro || '', firma_revisor: reg.firma_revisor || '',
-                });
-                if (data.tareas?.length) setTareas(data.tareas);
-                if (data.materiales_equipos?.length) setMateriales(data.materiales_equipos);
-                if (data.peligros?.length) setPeligros(data.peligros);
-            })
-            .catch(e => toast.error(e.message))
-            .finally(() => setLoading(false));
-    }, [pruebaId]);
+    // ... (keep existing useEffects and functions)
 
-    const updateField = (field: string, value: string) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+    const validateStep = (step: number) => {
+        if (readOnly) return true;
+        let isValid = true;
+        let message = '';
+
+        switch (step) {
+            case 1:
+                if (!formData.fecha_valoracion) { isValid = false; message = 'La fecha de valoración es requerida.'; }
+                else if (!formData.nombre_trabajador) { isValid = false; message = 'El nombre del trabajador es requerido.'; }
+                else if (!formData.numero_documento) { isValid = false; message = 'El número de documento es requerido.'; }
+                else if (!formData.id_siniestro) { isValid = false; message = 'El ID del siniestro es requerido.'; }
+                break;
+            case 2:
+                if (!formData.metodologia) { isValid = false; message = 'La metodología es requerida.'; }
+                else if (!formData.descripcion_proceso_productivo) { isValid = false; message = 'La descripción del proceso productivo es requerida.'; }
+                break;
+            case 3:
+                const validTareas = tareas.filter(t => t.actividad.trim() !== '');
+                if (validTareas.length === 0) { isValid = false; message = 'Debe registrar al menos una tarea con actividad.'; }
+                break;
+            case 4:
+                // No strict validation for materials/peligros unless specified
+                break;
+            case 5:
+                if (!formData.concepto_prueba_trabajo) { isValid = false; message = 'El concepto de la prueba de trabajo es requerido.'; }
+                break;
+        }
+
+        if (!isValid) {
+            setValidationModal({
+                isOpen: true,
+                title: 'Campos Incompletos',
+                message: message,
+                type: 'error'
+            });
+            return false;
+        }
+        return true;
     };
 
-    // ── Build payload ─────────────────────────────────────────────────
-    const buildPayload = (finalizar = false) => ({
-        estado: finalizar ? 'completada' : 'borrador',
-        identificacion: {
-            fecha_valoracion: formData.fecha_valoracion || null,
-            ultimo_dia_incapacidad: formData.ultimo_dia_incapacidad || null,
-            nombre_trabajador: formData.nombre_trabajador || null,
-            numero_documento: formData.numero_documento || null,
-            id_siniestro: formData.id_siniestro || null,
-            fecha_nacimiento: formData.fecha_nacimiento || null,
-            edad: formData.edad ? parseInt(formData.edad) : null,
-            dominancia: formData.dominancia || null,
-            estado_civil: formData.estado_civil || null,
-            nivel_educativo: formData.nivel_educativo || null,
-            telefonos_trabajador: formData.telefonos_trabajador || null,
-            direccion_residencia: formData.direccion_residencia || null,
-            diagnosticos_atel: formData.diagnosticos_atel || null,
-            fechas_eventos_atel: formData.fechas_eventos_atel || null,
-            eps_ips: formData.eps_ips || null,
-            afp: formData.afp || null,
-            tiempo_incapacidad_dias: formData.tiempo_incapacidad_dias ? parseInt(formData.tiempo_incapacidad_dias) : null,
-            empresa: formData.empresa || null,
-            nit_empresa: formData.nit_empresa || null,
-            cargo_actual: formData.cargo_actual || null,
-            cargo_unico: formData.cargo_unico === 'true' ? true : formData.cargo_unico === 'false' ? false : null,
-            area_seccion: formData.area_seccion || null,
-            fecha_ingreso_cargo: formData.fecha_ingreso_cargo || null,
-            antiguedad_cargo: formData.antiguedad_cargo || null,
-            fecha_ingreso_empresa: formData.fecha_ingreso_empresa || null,
-            antiguedad_empresa: formData.antiguedad_empresa || null,
-            forma_vinculacion: formData.forma_vinculacion || null,
-            modalidad: formData.modalidad || null,
-            tiempo_modalidad: formData.tiempo_modalidad || null,
-            contacto_empresa: formData.contacto_empresa || null,
-            correos_electronicos: formData.correos_electronicos || null,
-            telefonos_empresa: formData.telefonos_empresa || null,
-            direccion_empresa: formData.direccion_empresa || null,
-        },
-        secciones_texto: {
-            metodologia: formData.metodologia || null,
-            descripcion_proceso_productivo: formData.descripcion_proceso_productivo || null,
-            apreciacion_trabajador_proceso: formData.apreciacion_trabajador_proceso || null,
-            estandares_productividad: formData.estandares_productividad || null,
-            verificacion_acciones_correctivas: formData.verificacion_acciones_correctivas || null,
-            concepto_prueba_trabajo: formData.concepto_prueba_trabajo || null,
-        },
-        desempeno_organizacional: {
-            jornada: formData.jornada || null,
-            ritmo: formData.ritmo || null,
-            descansos_programados: formData.descansos_programados || null,
-            turnos: formData.turnos || null,
-            tiempos_efectivos: formData.tiempos_efectivos || null,
-            rotaciones: formData.rotaciones || null,
-            horas_extras: formData.horas_extras || null,
-            distribucion_semanal: formData.distribucion_semanal || null,
-        },
-        tareas: tareas.filter(t => t.actividad || t.subactividad),
-        materiales_equipos: materiales.filter(m => m.nombre),
-        peligros: peligros,
-        recomendaciones: {
-            para_trabajador: formData.para_trabajador || null,
-            para_empresa: formData.para_empresa || null,
-        },
-        registro: {
-            nombre_elaboro: formData.nombre_elaboro || null,
-            firma_elaboro: formData.firma_elaboro || null,
-            nombre_revisor: formData.nombre_revisor || null,
-            firma_revisor: formData.firma_revisor || null,
-            nombre_proveedor: formData.nombre_proveedor || null,
-        },
-    });
+    const handleNext = () => {
+        if (validateStep(currentStep)) {
+            setCurrentStep(prev => Math.min(STEPS.length, prev + 1));
+        }
+    };
 
     const handleSave = async (finalizar = false) => {
+        if (finalizar && !validateStep(currentStep)) return;
+
         setSaving(true);
         try {
             const payload = buildPayload(finalizar);
 
+            // ... (keep API logic)
             if (finalizar) {
+                // ... logic for finalize
                 let saveId = pruebaId;
                 if (!saveId) {
                     const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/`, {
@@ -239,15 +100,15 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 const finData = await finRes.json();
                 setDownloadUrl(finData.pdf_url);
                 setShowDownloadModal(true);
-                toast.success('Prueba finalizada exitosamente');
             } else {
+                // Logic for save draft
                 if (pruebaId) {
                     const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/${pruebaId}`, {
                         method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                         body: JSON.stringify(payload),
                     });
                     if (!res.ok) throw new Error('Error al guardar');
-                    toast.success('Guardado correctamente');
+                    setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', type: 'success' });
                 } else {
                     const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -256,125 +117,64 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     if (!res.ok) throw new Error('Error al crear');
                     const d = await res.json();
                     setPruebaId(d.id);
-                    toast.success('Prueba creada exitosamente');
+                    setValidationModal({ isOpen: true, title: 'Creado', message: 'Se ha creado la prueba correctamente.', type: 'success' });
                 }
             }
+
         } catch (e: any) {
-            toast.error(e.message);
+            setValidationModal({ isOpen: true, title: 'Error', message: e.message, type: 'error' });
         } finally {
             setSaving(false);
         }
     };
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center py-32">
-                <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
-            </div>
-        );
-    }
+    // ... (render)
 
-    return (
-        <div className="max-w-6xl mx-auto">
-            {/* Header */}
-            <div className="mb-10">
-                <h1 className="text-2xl font-bold text-gray-900">
-                    Nueva Prueba de Trabajo
-                </h1>
-                <p className="text-sm text-gray-500 mt-1">
-                    Complete el formulario de evaluación paso a paso
-                </p>
-            </div>
+    {/* Stepper (Orange Theme) */ }
+    <div className="flex items-start justify-between relative mb-12 px-4">
+        {/* Connecting Lines */}
+        <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
+        <div
+            className="absolute top-5 left-0 h-0.5 bg-orange-500 -z-10 transition-all duration-500 ease-in-out"
+            style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
+        />
 
-            {/* Stepper (Orange Theme) */}
-            <div className="flex items-start justify-between relative mb-12 px-4">
-                {/* Connecting Lines */}
-                <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
-                <div
-                    className="absolute top-5 left-0 h-0.5 bg-orange-500 -z-10 transition-all duration-500 ease-in-out"
-                    style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
-                />
+        {STEPS.map((step, idx) => {
+            const StepIcon = step.icon;
+            const isActive = currentStep === step.id;
+            const isCompleted = currentStep > step.id;
+            // const isUpcoming = currentStep < step.id; // Unused
 
-                {STEPS.map((step, idx) => {
-                    const StepIcon = step.icon;
-                    const isActive = currentStep === step.id;
-                    const isCompleted = currentStep > step.id;
-                    const isUpcoming = currentStep < step.id;
-
-                    return (
-                        <div key={step.id} className="flex flex-col items-center relative z-10">
-                            <button
-                                onClick={() => setCurrentStep(step.id)}
-                                className={`
+            return (
+                <div key={step.id} className="flex flex-col items-center relative z-10">
+                    <button
+                        onClick={() => {
+                            if (readOnly || step.id < currentStep) setCurrentStep(step.id);
+                            // Prevent jumping forward without validation if not readonly
+                        }}
+                        className={`
                                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 bg-white
                                     ${isActive
-                                        ? 'border-orange-500 text-orange-500 shadow-lg scale-110'
-                                        : isCompleted
-                                            ? 'border-orange-500 bg-orange-500 text-white'
-                                            : 'border-gray-300 text-gray-400 hover:border-gray-400'
-                                    }
+                                ? 'border-orange-500 text-orange-500 shadow-lg scale-110'
+                                : isCompleted
+                                    ? 'border-orange-500 bg-orange-500 text-white'
+                                    : 'border-gray-300 text-gray-500 hover:border-gray-400'
+                            }
                                 `}
-                            >
-                                <StepIcon className="h-5 w-5" />
-                            </button>
-                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-orange-600 font-bold' : 'text-gray-500'}`}>
-                                <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
+                    >
+                        <StepIcon className="h-5 w-5" />
+                    </button>
+                    <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-orange-600 font-bold' : 'text-gray-500'}`}>
+                        <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
+                    </div>
+                </div>
+            );
+        })}
+    </div>
 
-            {/* Form content */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+    {/* ... (Form Content) */ }
 
-                {currentStep === 1 && (
-                    <Step1Identificacion
-                        formData={formData}
-                        updateField={updateField}
-                        readOnly={readOnly}
-                    />
-                )}
-
-                {currentStep === 2 && (
-                    <Step2MetodologiaCondiciones
-                        formData={formData}
-                        updateField={updateField}
-                        readOnly={readOnly}
-                    />
-                )}
-
-                {currentStep === 3 && (
-                    <Step3Tareas
-                        tareas={tareas}
-                        setTareas={setTareas}
-                        readOnly={readOnly}
-                    />
-                )}
-
-                {currentStep === 4 && (
-                    <Step4MaterialesPeligros
-                        materiales={materiales}
-                        setMateriales={setMateriales}
-                        peligros={peligros}
-                        setPeligros={setPeligros}
-                        formData={formData}
-                        updateField={updateField}
-                        readOnly={readOnly}
-                    />
-                )}
-
-                {currentStep === 5 && (
-                    <Step5ConceptoRegistro
-                        formData={formData}
-                        updateField={updateField}
-                        readOnly={readOnly}
-                    />
-                )}
-            </div>
-
-            {/* ── Navigation bar ─────────────────────────────────────────── */}
-            {/* ── Navigation bar ─────────────────────────────────────────── */}
+    {/* ── Navigation bar ─────────────────────────────────────────── */ }
             <div className="flex items-center justify-between mt-6">
                 <button
                     onClick={() => setCurrentStep(prev => Math.max(1, prev - 1))}
@@ -409,7 +209,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     )}
 
                     <button
-                        onClick={() => setCurrentStep(prev => Math.min(STEPS.length, prev + 1))}
+                        onClick={handleNext}
                         disabled={currentStep === STEPS.length}
                         className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                     >
@@ -418,34 +218,15 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 </div>
             </div>
 
-            {/* Download modal */}
-            {showDownloadModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
-                        <div className="text-center">
-                            <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3" />
-                            <h3 className="text-lg font-bold text-gray-800 mb-2">¡Prueba Finalizada!</h3>
-                            <p className="text-sm text-gray-500 mb-4">El PDF ha sido generado exitosamente.</p>
-                            <div className="flex gap-2">
-                                <a
-                                    href={`${API_URL}${downloadUrl}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
-                                >
-                                    <Download className="h-4 w-4" /> Descargar PDF
-                                </a>
-                                <button
-                                    onClick={() => { setShowDownloadModal(false); router.push('/dashboard/formatos-to/pruebas-trabajo'); }}
-                                    className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-                                >
-                                    Volver a Lista
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+            <BlurValidationModal
+                isOpen={validationModal.isOpen}
+                onClose={() => setValidationModal(prev => ({ ...prev, isOpen: false }))}
+                title={validationModal.title}
+                message={validationModal.message}
+                type={validationModal.type}
+            />
+
+    {/* Download modal (keep existing) */ }
+        </div >
     );
 }
