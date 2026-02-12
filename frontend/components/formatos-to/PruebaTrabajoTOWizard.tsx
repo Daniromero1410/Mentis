@@ -288,33 +288,37 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
             {/* Stepper (Orange Theme) */}
             <div className="flex items-start justify-between relative mb-12 px-4">
-                {/* Connecting Line */}
-                <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-100 -z-10" />
+                {/* Connecting Lines */}
+                <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
+                <div
+                    className="absolute top-5 left-0 h-0.5 bg-orange-500 -z-10 transition-all duration-500 ease-in-out"
+                    style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
+                />
 
                 {STEPS.map((step, idx) => {
                     const StepIcon = step.icon;
                     const isActive = currentStep === step.id;
                     const isCompleted = currentStep > step.id;
+                    const isUpcoming = currentStep < step.id;
 
                     return (
-                        <div key={step.id} className="flex flex-col items-center relative flex-1">
-                            {/* Connector segment */}
-                            {idx !== 0 && (
-                                <div className={`absolute top-5 right-1/2 w-full h-0.5 -z-20 ${isCompleted ? 'bg-orange-200' : 'bg-gray-100'}`} />
-                            )}
-
+                        <div key={step.id} className="flex flex-col items-center relative z-10">
                             <button
                                 onClick={() => setCurrentStep(step.id)}
                                 className={`
-                                    flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300
-                                    ${isActive ? 'bg-orange-500 text-white shadow-lg shadow-orange-200 scale-110' :
-                                        isCompleted ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'}
+                                    flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 bg-white
+                                    ${isActive
+                                        ? 'border-orange-500 text-orange-500 shadow-lg scale-110'
+                                        : isCompleted
+                                            ? 'border-orange-500 bg-orange-500 text-white'
+                                            : 'border-gray-300 text-gray-400 hover:border-gray-400'
+                                    }
                                 `}
                             >
                                 <StepIcon className="h-5 w-5" />
                             </button>
-                            <div className={`mt-3 text-center transition-colors duration-300 ${isActive ? 'text-orange-600 font-bold' : 'text-gray-500 slide-in-from-top-1'}`}>
-                                <span className="text-xs font-semibold block">{step.title}</span>
+                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-orange-600 font-bold' : 'text-gray-500'}`}>
+                                <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
                             </div>
                         </div>
                     );
