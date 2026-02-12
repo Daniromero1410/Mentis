@@ -374,7 +374,8 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             </div>
 
             {/* ── Navigation bar ─────────────────────────────────────────── */}
-            <div className="flex items-center justify-between mt-6 bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+            {/* ── Navigation bar ─────────────────────────────────────────── */}
+            <div className="flex items-center justify-between mt-6">
                 <button
                     onClick={() => setCurrentStep(prev => Math.max(1, prev - 1))}
                     disabled={currentStep === 1}
@@ -383,13 +384,13 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     <ChevronLeft className="h-4 w-4" /> Anterior
                 </button>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     {!readOnly && (
                         <>
                             <button
                                 onClick={() => handleSave(false)}
                                 disabled={saving}
-                                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-60 transition-colors"
+                                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-60 transition-colors shadow-sm"
                             >
                                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                                 Guardar Borrador
@@ -406,15 +407,15 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                             )}
                         </>
                     )}
-                </div>
 
-                <button
-                    onClick={() => setCurrentStep(prev => Math.min(STEPS.length, prev + 1))}
-                    disabled={currentStep === STEPS.length}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                >
-                    Siguiente <ChevronRight className="h-4 w-4" />
-                </button>
+                    <button
+                        onClick={() => setCurrentStep(prev => Math.min(STEPS.length, prev + 1))}
+                        disabled={currentStep === STEPS.length}
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                    >
+                        Siguiente <ChevronRight className="h-4 w-4" />
+                    </button>
+                </div>
             </div>
 
             {/* Download modal */}
