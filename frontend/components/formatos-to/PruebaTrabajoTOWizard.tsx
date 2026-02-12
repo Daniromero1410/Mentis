@@ -72,7 +72,6 @@ const initialFormData = {
     para_trabajador: '', para_empresa: '',
     // Registro
     nombre_elaboro: '', firma_elaboro: '', nombre_revisor: '', firma_revisor: '', nombre_proveedor: '',
-    firma_elaboro: '', firma_revisor: '',
 };
 
 // ── Steps (Updated) ─────────────────────────────────────────────────
