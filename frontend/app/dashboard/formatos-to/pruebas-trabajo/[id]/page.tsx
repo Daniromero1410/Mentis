@@ -5,7 +5,7 @@ import { PruebaTrabajoTOWizard } from '@/components/formatos-to/PruebaTrabajoTOW
 
 export default function DetallePruebaTrabajoTOPage() {
     const params = useParams();
-    const id = params.id ? parseInt(params.id as string) : null;
+    const id = params.id ? parseInt(params.id as string) : undefined;
 
     return <PruebaTrabajoTOWizard mode="view" id={id} readOnly={true} />;
 }
