@@ -34,6 +34,9 @@ class Settings:
 
     def get_cors_origins(self) -> list:
         """Retorna la lista de origenes CORS permitidos"""
-        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        origins = [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        # Agregar dominios de producción explícitamente para asegurar acceso
+        origins.append("https://mentis-nu.vercel.app")
+        return list(set(origins))
 
 settings = Settings()
