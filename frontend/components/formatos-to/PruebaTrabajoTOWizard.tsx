@@ -246,7 +246,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 {/* Connecting Lines */}
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
                 <div
-                    className="absolute top-5 left-0 h-0.5 bg-orange-500 -z-10 transition-all duration-500 ease-in-out"
+                    className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-10 transition-all duration-500 ease-in-out"
                     style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
                 />
 
@@ -261,18 +261,18 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                             <button
                                 onClick={() => setCurrentStep(step.id)}
                                 className={`
-                                    flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 bg-white
+                                    flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
                                     ${isActive
-                                        ? 'border-orange-500 text-orange-500 shadow-lg scale-110'
+                                        ? 'border-blue-600 bg-white text-blue-600 shadow-lg scale-110'
                                         : isCompleted
-                                            ? 'border-orange-500 bg-orange-500 text-white'
-                                            : 'border-gray-300 text-gray-500 hover:border-gray-400'
+                                            ? 'border-blue-600 bg-blue-600 text-white'
+                                            : 'border-gray-300 bg-white text-gray-500 hover:border-gray-400'
                                     }
                                 `}
                             >
                                 <StepIcon className="h-5 w-5" />
                             </button>
-                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-orange-600 font-bold' : 'text-gray-500'}`}>
+                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-blue-600 font-bold' : 'text-gray-500'}`}>
                                 <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
                             </div>
                         </div>

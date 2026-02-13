@@ -54,7 +54,7 @@ export function BlurValidationModal({ isOpen, onClose, title, message, errors, t
                 <DialogFooter className="sm:justify-end">
                     <button
                         onClick={onClose}
-                        className="px-6 py-2 rounded-lg font-medium text-white shadow-sm transition-colors bg-orange-500 hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-1"
+                        className="px-6 py-2 rounded-lg font-medium text-white shadow-sm transition-colors bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-1"
                     >
                         Entendido
                     </button>
