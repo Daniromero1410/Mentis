@@ -2,17 +2,17 @@
 
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
 import { ModuleGuard } from '@/app/components/guards/ModuleGuard';
-import { useParams } from 'next/navigation';
+import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
+import { ModuleGuard } from '@/app/components/guards/ModuleGuard';
+import { useParams, useSearchParams } from 'next/navigation';
 import { PruebaTrabajoTOWizard } from '@/components/formatos-to/PruebaTrabajoTOWizard';
 
-export default function DetallePruebaTrabajoTOPage({
-    searchParams,
-}: {
-    searchParams: { mode?: string };
-}) {
+export default function DetallePruebaTrabajoTOPage() {
     const params = useParams();
+    const searchParams = useSearchParams();
     const id = params.id ? parseInt(params.id as string) : undefined;
-    const isViewMode = searchParams.mode === 'view';
+    const mode = searchParams.get('mode');
+    const isViewMode = mode === 'view';
 
     return (
         <ModuleGuard requiredModule="pruebas_trabajo">

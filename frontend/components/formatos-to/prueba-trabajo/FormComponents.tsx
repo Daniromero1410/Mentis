@@ -115,10 +115,12 @@ FormTextarea.displayName = "FormTextarea";
 
 export const DateInputs = ({
     dateString,
-    onChange
+    onChange,
+    disabled
 }: {
     dateString: string,
-    onChange: (date: string) => void
+    onChange: (date: string) => void,
+    disabled?: boolean
 }) => {
     return (
         <div className="w-full">
@@ -127,6 +129,7 @@ export const DateInputs = ({
                 value={dateString}
                 onChange={(e) => onChange(e.target.value)}
                 className="w-full"
+                disabled={disabled}
             />
         </div>
     )
