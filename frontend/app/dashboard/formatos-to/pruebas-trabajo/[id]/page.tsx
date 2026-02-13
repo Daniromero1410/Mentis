@@ -2,8 +2,6 @@
 
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
 import { ModuleGuard } from '@/app/components/guards/ModuleGuard';
-import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
-import { ModuleGuard } from '@/app/components/guards/ModuleGuard';
 import { useParams, useSearchParams } from 'next/navigation';
 import { PruebaTrabajoTOWizard } from '@/components/formatos-to/PruebaTrabajoTOWizard';
 
