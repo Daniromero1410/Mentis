@@ -77,9 +77,9 @@ export const Step4MaterialesPeligros = ({ materiales, setMateriales, peligros, s
                             {!readOnly && (
                                 <Button
                                     variant="ghost"
-                                    size="icon"
+                                    size="sm"
                                     onClick={() => removeMaterial(idx)}
-                                    className="text-red-500 hover:text-red-700 h-8 w-8 hover:bg-red-50"
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 h-8 w-8"
                                 >
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
