@@ -99,6 +99,7 @@ def listar_pruebas(
             fecha_creacion=p.fecha_creacion,
             fecha_actualizacion=p.fecha_actualizacion,
             trabajador_nombre=ident.nombre_trabajador if ident else None,
+            trabajador_tipo_documento=ident.tipo_documento if ident else None,
             trabajador_documento=ident.numero_documento if ident else None,
             empresa=ident.empresa if ident else None,
         ))

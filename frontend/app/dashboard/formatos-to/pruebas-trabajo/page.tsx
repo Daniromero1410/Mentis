@@ -45,6 +45,7 @@ interface PruebaTrabajoTO {
     fecha_creacion: string;
     fecha_actualizacion: string;
     trabajador_nombre?: string;
+    trabajador_tipo_documento?: string;
     trabajador_documento?: string;
     empresa?: string;
 }
@@ -281,6 +282,9 @@ export default function PruebasTrabajoTOPage() {
                                                     Trabajador
                                                 </th>
                                                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                                                    Tipo Doc
+                                                </th>
+                                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                                                     Documento
                                                 </th>
                                                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
@@ -314,6 +318,11 @@ export default function PruebasTrabajoTOPage() {
                                                                 {prueba.trabajador_nombre || 'Sin nombre'}
                                                             </span>
                                                         </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <span className="text-sm text-gray-600 dark:text-gray-300">
+                                                            {prueba.trabajador_tipo_documento || '-'}
+                                                        </span>
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                         <span className="text-sm text-gray-600 dark:text-gray-300">

@@ -205,6 +205,7 @@ class PruebaTrabajoTOListItem(BaseModel):
     fecha_creacion: datetime
     fecha_actualizacion: datetime
     trabajador_nombre: Optional[str] = None
+    trabajador_tipo_documento: Optional[str] = None
     trabajador_documento: Optional[str] = None
     empresa: Optional[str] = None
 
