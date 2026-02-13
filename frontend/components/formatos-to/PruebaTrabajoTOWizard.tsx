@@ -305,8 +305,8 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             case 3:
                 const validTareas = tareas.filter(t => t.actividad.trim() !== '');
                 if (validTareas.length === 0) errors.push('Debe registrar al menos una tarea con actividad');
-                const invalidTareas = tareas.some(t => !t.actividad || !t.frecuencia || !t.tiempo);
-                if (invalidTareas) errors.push('Complete todos los campos de las tareas (Actividad, Frecuencia, Tiempo)');
+                const invalidTareas = tareas.some(t => !t.actividad || !t.ciclo || !t.subactividad || !t.estandar_productividad);
+                if (invalidTareas) errors.push('Complete todos los campos obligatorios de las tareas (Actividad, Ciclo, Subactividad, Estándar)');
                 break;
             case 4:
                 // No strict validation for materials/peligros unless specified
