@@ -42,6 +42,16 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        // Check if limit reached (defensive, though UI hides button)
+        const currentUrls = tareas[index].registro_fotografico
+            ? tareas[index].registro_fotografico.split(';').filter((u: string) => u.trim())
+            : [];
+
+        if (currentUrls.length >= 3) {
+            toast.error('Máximo 3 imágenes por tarea');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
 
@@ -57,7 +67,12 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
             if (!res.ok) throw new Error('Error al subir imagen');
 
             const data = await res.json();
-            updateTarea(index, 'registro_fotografico', data.url);
+
+            // Append new URL
+            const newUrl = data.url;
+            const updatedUrls = [...currentUrls, newUrl].join(';');
+
+            updateTarea(index, 'registro_fotografico', updatedUrls);
             toast.success('Evidencia subida correctamente');
         } catch (error) {
             console.error(error);
@@ -65,8 +80,13 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
         }
     };
 
-    const removeImage = (index: number) => {
-        updateTarea(index, 'registro_fotografico', '');
+    const removeImage = (index: number, imgIndex: number) => {
+        const currentUrls = tareas[index].registro_fotografico
+            ? tareas[index].registro_fotografico.split(';').filter((u: string) => u.trim())
+            : [];
+
+        const newUrls = currentUrls.filter((_: string, i: number) => i !== imgIndex);
+        updateTarea(index, 'registro_fotografico', newUrls.join(';'));
     };
 
     const addTarea = () => setTareas([...tareas, emptyTarea()]);
@@ -139,60 +159,49 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                         </div>
 
                         {/* Registro Fotográfico */}
-                        <div className="space-y-2">
-                            <Label className="text-sm font-semibold text-slate-700">REGISTRO FOTOGRÁFICO</Label>
-                            <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 relative hover:bg-slate-50 transition-colors text-center w-full flex flex-col items-center justify-center min-h-[150px]">
+                        <div className="space-y-4">
+                            <Label className="text-sm font-semibold text-slate-700">REGISTRO FOTOGRÁFICO (Máx 3)</Label>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {tarea.registro_fotografico ? (
-                                    <div className="relative w-full max-w-sm mx-auto">
-                                        <div className="relative rounded-md overflow-hidden bg-slate-100 border border-slate-200 min-h-[200px] flex items-center justify-center">
+                                    tarea.registro_fotografico.split(';').filter((url: string) => url.trim() !== '').map((url: string, imgIdx: number) => (
+                                        <div key={imgIdx} className="relative w-full aspect-[4/3] rounded-md overflow-hidden bg-slate-100 border border-slate-200 group">
                                             <img
-                                                src={`${API_URL || ''}${tarea.registro_fotografico}`}
-                                                alt="Evidencia"
-                                                className="w-full h-full object-contain max-h-[300px]"
+                                                src={`${API_URL || ''}${url}`}
+                                                alt={`Evidencia ${imgIdx + 1}`}
+                                                className="w-full h-full object-contain"
                                                 onError={(e) => {
                                                     const target = e.target as HTMLImageElement;
                                                     target.onerror = null;
-                                                    target.src = "https://placehold.co/400x300?text=Error+Cargando+Imagen";
+                                                    target.src = "https://placehold.co/400x300?text=Error+Cargando";
                                                 }}
                                             />
+                                            {!readOnly && (
+                                                <Button
+                                                    variant="destructive"
+                                                    size="icon"
+                                                    className="absolute top-2 right-2 h-7 w-7 rounded-full shadow-md z-10 bg-red-600 hover:bg-red-700 text-white border-2 border-white opacity-90 hover:opacity-100"
+                                                    onClick={() => removeImage(idx, imgIdx)}
+                                                    type="button"
+                                                    title="Eliminar imagen"
+                                                >
+                                                    <X className="h-4 w-4" />
+                                                </Button>
+                                            )}
                                         </div>
-                                        {!readOnly && (
-                                            <Button
-                                                variant="destructive"
-                                                size="icon"
-                                                className="absolute -top-3 -right-3 h-8 w-8 rounded-full shadow-lg z-50 bg-red-600 hover:bg-red-700 text-white border-2 border-white"
-                                                onClick={() => removeImage(idx)}
-                                                type="button"
-                                                title="Eliminar imagen"
-                                            >
-                                                <X className="h-5 w-5" />
-                                            </Button>
-                                        )}
-                                        {/* Debug/Fallback Link */}
-                                        <div className="mt-2 text-xs text-slate-400">
-                                            <a
-                                                href={`${API_URL || ''}${tarea.registro_fotografico}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="hover:text-indigo-600 underline"
-                                            >
-                                                Ver imagen original
-                                            </a>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-col items-center justify-center space-y-2 w-full h-full cursor-pointer py-6">
-                                        <Upload className="h-10 w-10 text-slate-400" />
-                                        <div className="text-sm text-slate-500">
-                                            <span className="font-semibold text-indigo-600">Clic para subir evidencia</span>
-                                            <p className="text-xs text-slate-400 mt-1">Formato: JPG, PNG (Max 5MB)</p>
-                                        </div>
+                                    ))
+                                ) : null}
+
+                                {/* Upload Placeholder - SÓLO SI HAY MENOS DE 3 IMÁGENES */}
+                                {!readOnly && (!tarea.registro_fotografico || tarea.registro_fotografico.split(';').filter((u: string) => u.trim()).length < 3) && (
+                                    <div className="border-2 border-dashed border-slate-300 rounded-lg p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 hover:border-indigo-400 transition-colors bg-white aspect-[4/3] relative">
+                                        <Upload className="h-8 w-8 text-slate-400 mb-2" />
+                                        <div className="text-xs text-slate-500 font-medium">Subir Foto</div>
                                         <input
                                             type="file"
                                             accept="image/*"
                                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                            onChange={(e) => !readOnly && handleImageUpload(idx, e)}
-                                            disabled={readOnly}
+                                            onChange={(e) => handleImageUpload(idx, e)}
                                         />
                                     </div>
                                 )}

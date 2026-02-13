@@ -220,22 +220,27 @@ def generar_pdf_prueba_trabajo_to(
 
         # Registro Fotográfico
         if tarea.registro_fotografico:
-            # Remove leading slash if present to get relative file path
-            img_path = tarea.registro_fotografico.lstrip("/")
-            # Also handle potential backward slashes if stored differently, though URL usually /
-            if os.path.exists(img_path):
-                try:
-                    elements.append(Paragraph("<b>Registro Fotográfico:</b>", styles["CellBold"]))
-                    elements.append(Spacer(1, 2))
-                    # Add image with fixed size for consistency
-                    img = Image(img_path, width=7*cm, height=5*cm)
-                    elements.append(img)
-                    elements.append(Spacer(1, 4))
-                except Exception as e:
-                    print(f"Error embedding image {img_path}: {e}")
-                    pass
-        
-        elements.append(Spacer(1, 6))
+            # Split potentially multiple images
+            img_paths = [p.strip() for p in tarea.registro_fotografico.split(';') if p.strip()]
+            
+            if img_paths:
+                elements.append(Paragraph("<b>Registro Fotográfico:</b>", styles["CellBold"]))
+                elements.append(Spacer(1, 2))
+                
+                # Render keys/images
+                for img_path_raw in img_paths:
+                    # Remove leading slash if present to get relative file path
+                    img_path = img_path_raw.lstrip("/")
+                    # Also handle potential backward slashes if stored differently, though URL usually /
+                    if os.path.exists(img_path):
+                        try:
+                            # Add image with fixed size for consistency
+                            img = Image(img_path, width=7*cm, height=5*cm)
+                            elements.append(img)
+                            elements.append(Spacer(1, 4))
+                        except Exception as e:
+                            print(f"Error embedding image {img_path}: {e}")
+                            pass
 
     # ── SECCIÓN 5: MATERIALES ────────────────────────────────────────
     elements.append(section_header("5. MATERIALES, EQUIPOS Y HERRAMIENTAS"))
