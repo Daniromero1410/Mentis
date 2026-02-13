@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FormSection, FormRow, FormField, FormTextarea, FormInput } from './FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, X, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Step5Props {
     formData: any;
@@ -22,7 +23,7 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
 
         setUploading(field);
         try {
-            const res = await fetch(`${API_URL}/upload/`, { // Generic upload endpoint
+            const res = await fetch(`${API_URL}/uploads/evidencia`, { // Corrected endpoint
                 method: 'POST',
                 body: formDataUpload
             });
@@ -31,9 +32,10 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
 
             const data = await res.json();
             updateField(field, data.url);
+            toast.success('Firma subida correctamente');
         } catch (error) {
             console.error('Error uploading image:', error);
-            alert('Error al subir la imagen');
+            toast.error('Error al subir la imagen');
         } finally {
             setUploading(null);
         }
