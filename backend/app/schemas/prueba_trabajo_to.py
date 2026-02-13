@@ -144,6 +144,25 @@ class PruebaTrabajoTOUpdate(BaseModel):
 # Schemas de respuesta
 # ══════════════════════════════════════════════════════════════════════
 
+# ══════════════════════════════════════════════════════════════════════
+# Schemas de respuesta (Read) - Incluyen ID y from_attributes
+# ══════════════════════════════════════════════════════════════════════
+
+class TareaTOResponse(TareaTOCreate):
+    id: int
+    class Config:
+        from_attributes = True
+
+class MaterialEquipoTOResponse(MaterialEquipoTOCreate):
+    id: int
+    class Config:
+        from_attributes = True
+
+class PeligroProcesoTOResponse(PeligroProcesoTOCreate):
+    id: int
+    class Config:
+        from_attributes = True
+
 class PruebaTrabajoTOResponse(BaseModel):
     id: int
     estado: str
@@ -154,9 +173,9 @@ class PruebaTrabajoTOResponse(BaseModel):
     identificacion: Optional[IdentificacionTOCreate] = None
     secciones_texto: Optional[SeccionesTextoTOCreate] = None
     desempeno_organizacional: Optional[DesempenoOrgTOCreate] = None
-    tareas: Optional[List[TareaTOCreate]] = None
-    materiales_equipos: Optional[List[MaterialEquipoTOCreate]] = None
-    peligros: Optional[List[PeligroProcesoTOCreate]] = None
+    tareas: Optional[List[TareaTOResponse]] = None
+    materiales_equipos: Optional[List[MaterialEquipoTOResponse]] = None
+    peligros: Optional[List[PeligroProcesoTOResponse]] = None
     recomendaciones: Optional[RecomendacionesTOCreate] = None
     registro: Optional[RegistroTOCreate] = None
 
