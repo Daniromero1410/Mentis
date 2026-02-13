@@ -221,7 +221,10 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                         body: JSON.stringify(payload),
                     });
-                    if (!res.ok) throw new Error('Error al crear');
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({ detail: 'Error al crear' }));
+                        throw new Error(err.detail || JSON.stringify(err));
+                    }
                     const d = await res.json();
                     saveId = d.id;
                     setPruebaId(d.id);
@@ -230,13 +233,19 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                         body: JSON.stringify(payload),
                     });
-                    if (!res.ok) throw new Error('Error al actualizar');
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({ detail: 'Error al actualizar' }));
+                        throw new Error(err.detail || JSON.stringify(err));
+                    }
                 }
                 const finRes = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/${saveId}/finalizar`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                     body: JSON.stringify({}),
                 });
-                if (!finRes.ok) throw new Error('Error al finalizar');
+                if (!finRes.ok) {
+                    const err = await finRes.json().catch(() => ({ detail: 'Error al finalizar' }));
+                    throw new Error(err.detail || JSON.stringify(err));
+                }
                 const finData = await finRes.json();
                 setDownloadUrl(finData.pdf_url);
                 setShowDownloadModal(true);
@@ -246,14 +255,20 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                         body: JSON.stringify(payload),
                     });
-                    if (!res.ok) throw new Error('Error al guardar');
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({ detail: 'Error al guardar' }));
+                        throw new Error(err.detail || JSON.stringify(err));
+                    }
                     setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', errors: [], type: 'success' });
                 } else {
                     const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                         body: JSON.stringify(payload),
                     });
-                    if (!res.ok) throw new Error('Error al crear');
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({ detail: 'Error al crear' }));
+                        throw new Error(err.detail || JSON.stringify(err));
+                    }
                     const d = await res.json();
                     setPruebaId(d.id);
                     setValidationModal({ isOpen: true, title: 'Creado', message: 'Se ha creado la prueba correctamente.', errors: [], type: 'success' });
