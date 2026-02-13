@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormSection, FormRow, FormField, FormInput, DateInputs } from './FormComponents';
+import { FormSection, FormRow, FormField, FormInput, FormTextarea, DateInputs } from './FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
@@ -203,11 +203,13 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 />
                             </FormField>
 
-                            <FormField label="Diagnósticos Clínicos">
-                                <FormInput
+                            <FormField label="Diagnóstico Clínico por Evento ATEL" className="col-span-full">
+                                <FormTextarea
+                                    className="min-h-[120px]"
                                     value={formData.diagnosticos_clinicos}
                                     onChange={(e) => updateField('diagnosticos_clinicos', e.target.value)}
                                     disabled={readOnly}
+                                    placeholder="Ingrese el diagnóstico completo..."
                                 />
                             </FormField>
 
