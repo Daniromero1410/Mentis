@@ -199,9 +199,71 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
                     setFormData(prev => ({
                         ...prev,
-                        ...data,
-                        fecha_valoracion: data.fecha_valoracion?.split('T')[0] || prev.fecha_valoracion,
-                        fecha_nacimiento: data.fecha_nacimiento?.split('T')[0] || prev.fecha_nacimiento,
+                        ...data, // Keep top-level fields like estado, id
+                        // Identificacion
+                        fecha_valoracion: data.identificacion?.fecha_valoracion?.split('T')[0] || prev.fecha_valoracion,
+                        nombre_trabajador: data.identificacion?.nombre_trabajador || prev.nombre_trabajador,
+                        tipo_documento: data.identificacion?.tipo_documento || prev.tipo_documento,
+                        numero_documento: data.identificacion?.numero_documento || prev.numero_documento,
+                        id_siniestro: data.identificacion?.id_siniestro || prev.id_siniestro,
+                        fecha_nacimiento: data.identificacion?.fecha_nacimiento?.split('T')[0] || prev.fecha_nacimiento,
+                        edad: data.identificacion?.edad?.toString() || prev.edad,
+                        dominancia: data.identificacion?.dominancia || prev.dominancia,
+                        genero: data.identificacion?.genero || prev.genero,
+                        estado_civil: data.identificacion?.estado_civil || prev.estado_civil,
+                        escolaridad: data.identificacion?.nivel_educativo || prev.escolaridad,
+                        cargo_empresa: data.identificacion?.cargo_actual || prev.cargo_empresa,
+                        antiguedad_cargo: data.identificacion?.antiguedad_cargo || prev.antiguedad_cargo,
+                        antiguedad_empresa: data.identificacion?.antiguedad_empresa || prev.antiguedad_empresa,
+                        telefono: data.identificacion?.telefonos_trabajador || prev.telefono,
+                        ciudad_residencia: data.identificacion?.ciudad_residencia || prev.ciudad_residencia,
+                        direccion: data.identificacion?.direccion_residencia || prev.direccion,
+                        diagnosticos_atel: data.identificacion?.diagnosticos_atel || prev.diagnosticos_atel,
+                        fechas_eventos_atel: data.identificacion?.fechas_eventos_atel || prev.fechas_eventos_atel,
+                        eps_ips: data.identificacion?.eps_ips || prev.eps_ips,
+                        afp: data.identificacion?.afp || prev.afp,
+                        tiempo_incapacidad_dias: data.identificacion?.tiempo_incapacidad_dias?.toString() || prev.tiempo_incapacidad_dias,
+                        empresa: data.identificacion?.empresa || prev.empresa,
+                        nit_empresa: data.identificacion?.nit_empresa || prev.nit_empresa,
+                        cargo_unico: data.identificacion?.cargo_unico ? 'Si' : 'No',
+                        area_seccion: data.identificacion?.area_seccion || prev.area_seccion,
+                        fecha_ingreso_cargo: data.identificacion?.fecha_ingreso_cargo?.split('T')[0] || prev.fecha_ingreso_cargo,
+                        fecha_ingreso_empresa: data.identificacion?.fecha_ingreso_empresa?.split('T')[0] || prev.fecha_ingreso_empresa,
+                        forma_vinculacion: data.identificacion?.forma_vinculacion || prev.forma_vinculacion,
+                        modalidad: data.identificacion?.modalidad || prev.modalidad,
+                        tiempo_modalidad: data.identificacion?.tiempo_modalidad || prev.tiempo_modalidad,
+                        jefe_inmediato: data.identificacion?.contacto_empresa || prev.jefe_inmediato,
+                        correos_electronicos: data.identificacion?.correos_electronicos || prev.correos_electronicos,
+                        telefono_jefe: data.identificacion?.telefonos_empresa || prev.telefono_jefe,
+                        direccion_empresa: data.identificacion?.direccion_empresa || prev.direccion_empresa,
+                        objetivo_prueba: data.identificacion?.objetivo_prueba || prev.objetivo_prueba,
+
+                        // Secciones Texto
+                        metodologia: data.secciones_texto?.metodologia || prev.metodologia,
+                        descripcion_proceso_productivo: data.secciones_texto?.descripcion_proceso_productivo || prev.descripcion_proceso_productivo,
+                        concepto_prueba_trabajo: data.secciones_texto?.concepto_prueba_trabajo || prev.concepto_prueba_trabajo,
+                        apreciacion_trabajador_proceso: data.secciones_texto?.apreciacion_trabajador_proceso || prev.apreciacion_trabajador_proceso,
+                        estandares_productividad: data.secciones_texto?.estandares_productividad || prev.estandares_productividad,
+                        verificacion_acciones_correctivas: data.secciones_texto?.verificacion_acciones_correctivas || prev.verificacion_acciones_correctivas,
+
+                        // Desempeno Organizacional
+                        jornada: data.desempeno_organizacional?.jornada || prev.jornada,
+                        ritmo: data.desempeno_organizacional?.ritmo || prev.ritmo,
+                        descansos_programados: data.desempeno_organizacional?.descansos_programados || prev.descansos_programados,
+                        turnos: data.desempeno_organizacional?.turnos || prev.turnos,
+                        tiempos_efectivos: data.desempeno_organizacional?.tiempos_efectivos || prev.tiempos_efectivos,
+                        rotaciones: data.desempeno_organizacional?.rotaciones || prev.rotaciones,
+                        horas_extras: data.desempeno_organizacional?.horas_extras || prev.horas_extras,
+                        distribucion_semanal: data.desempeno_organizacional?.distribucion_semanal || prev.distribucion_semanal,
+
+                        // Recomendaciones & Registro
+                        recomendaciones_trabajador: data.recomendaciones?.para_trabajador || prev.recomendaciones_trabajador,
+                        recomendaciones_empresa: data.recomendaciones?.para_empresa || prev.recomendaciones_empresa,
+                        nombre_elaboro: data.registro?.nombre_elaboro || prev.nombre_elaboro,
+                        firma_elaboro: data.registro?.firma_elaboro || prev.firma_elaboro,
+                        nombre_revisor: data.registro?.nombre_revisor || prev.nombre_revisor,
+                        firma_revisor: data.registro?.firma_revisor || prev.firma_revisor,
+                        nombre_proveedor: data.registro?.nombre_proveedor || prev.nombre_proveedor
                     }));
 
                     if (data.tareas) setTareas(data.tareas);
