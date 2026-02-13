@@ -15,7 +15,7 @@ interface Step4Props {
     readOnly?: boolean;
 }
 
-const CATEGORIAS_PELIGRO = [
+export const CATEGORIAS_PELIGRO = [
     { value: 'fisicos', label: 'Físicos' },
     { value: 'biologicos', label: 'Biológicos' },
     { value: 'biomecanicos', label: 'Biomecánicos' },

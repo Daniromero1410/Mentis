@@ -14,7 +14,7 @@ import { BlurValidationModal } from './BlurValidationModal';
 import { Step1Identificacion } from './prueba-trabajo/Step1Identificacion';
 import { Step2MetodologiaCondiciones } from './prueba-trabajo/Step2MetodologiaCondiciones';
 import { Step3Tareas } from './prueba-trabajo/Step3Tareas';
-import { Step4MaterialesPeligros } from './prueba-trabajo/Step4MaterialesPeligros';
+import { Step4MaterialesPeligros, CATEGORIAS_PELIGRO } from './prueba-trabajo/Step4MaterialesPeligros';
 import { Step5ConceptoRegistro } from './prueba-trabajo/Step5ConceptoRegistro';
 
 const STEPS = [
@@ -111,7 +111,14 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
     const [tareas, setTareas] = useState<any[]>([{ id: 1, actividad: '', frecuencia: '', tiempo: '', observacion: '' }]);
     const [materiales, setMateriales] = useState<any[]>([]);
-    const [peligros, setPeligros] = useState<any[]>([]);
+    const [peligros, setPeligros] = useState<any[]>(
+        CATEGORIAS_PELIGRO.map(cat => ({
+            categoria: cat.value,
+            descripcion: '',
+            tipos_control_existente: '',
+            recomendaciones_control: ''
+        }))
+    );
 
     const buildPayload = (finalizar: boolean) => {
         return {
@@ -272,7 +279,18 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
                     if (data.tareas) setTareas(data.tareas);
                     if (data.materiales) setMateriales(data.materiales);
-                    if (data.peligros) setPeligros(data.peligros);
+                    if (data.peligros) {
+                        const mergedPeligros = CATEGORIAS_PELIGRO.map(cat => {
+                            const existing = data.peligros.find((p: any) => p.categoria === cat.value);
+                            return existing || {
+                                categoria: cat.value,
+                                descripcion: '',
+                                tipos_control_existente: '',
+                                recomendaciones_control: ''
+                            };
+                        });
+                        setPeligros(mergedPeligros);
+                    }
                     if (data.finalizado && data.pdf_url) {
                         setDownloadUrl(data.pdf_url);
                         // setShowDownloadModal(true); // Don't auto-show modal on load
