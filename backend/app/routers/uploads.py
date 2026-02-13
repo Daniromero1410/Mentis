@@ -130,10 +130,112 @@ async def eliminar_firma(
 
         return {"message": "Archivo eliminado exitosamente"}
 
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al eliminar el archivo: {str(e)}"
+        )
+
+
+# ── Evidencias Fotográficas ─────────────────────────────────────────
+
+EVIDENCIAS_DIR = UPLOAD_DIR / "evidencias"
+EVIDENCIAS_DIR.mkdir(exist_ok=True)
+
+@router.post("/evidencia")
+async def subir_evidencia(
+    file: UploadFile = File(...),
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user)
+):
+    """
+    Sube una evidencia fotográfica.
+    Retorna la URL/path del archivo subido.
+    """
+    try:
+        # Validar archivo
+        validate_file(file)
+
+        # Generar nombre único
+        file_ext = Path(file.filename or "").suffix.lower()
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        unique_id = str(uuid.uuid4())[:8]
+        new_filename = f"evidencia_{current_user.id}_{timestamp}_{unique_id}{file_ext}"
+
+        # Ruta completa
+        file_path = EVIDENCIAS_DIR / new_filename
+
+        # Leer y validar tamaño
+        contents = await file.read()
+        if len(contents) > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"El archivo es demasiado grande. Tamaño máximo: {MAX_FILE_SIZE / 1024 / 1024} MB"
+            )
+
+        # Guardar archivo
+        with open(file_path, "wb") as f:
+            f.write(contents)
+
+        return {
+            "filename": new_filename,
+            "path": f"uploads/evidencias/{new_filename}",
+            "url": f"/uploads/evidencias/{new_filename}",
+            "size": len(contents),
+            "content_type": file.content_type
+        }
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error al eliminar el archivo: {str(e)}"
+            detail=f"Error al subir evidencia: {str(e)}"
+        )
+
+@router.get("/evidencias/{filename}")
+async def descargar_evidencia(
+    filename: str,
+    current_user: Usuario = Depends(get_current_user)
+):
+    """Descarga/muestra una evidencia fotográfica"""
+    file_path = EVIDENCIAS_DIR / filename
+
+    if not file_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evidencia no encontrada"
+        )
+
+    return FileResponse(
+        path=file_path,
+        filename=filename,
+        media_type="application/octet-stream" 
+    )
+
+@router.delete("/evidencia/{filename}")
+async def eliminar_evidencia(
+    filename: str,
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user)
+):
+    """Elimina una evidencia"""
+    try:
+        file_path = EVIDENCIAS_DIR / filename
+
+        if not file_path.exists():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Evidencia no encontrada"
+            )
+
+        file_path.unlink()
+        return {"message": "Evidencia eliminada exitosamente"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al eliminar evidencia: {str(e)}"
         )

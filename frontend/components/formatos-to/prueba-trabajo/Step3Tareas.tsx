@@ -1,9 +1,10 @@
 import React from 'react';
 import { FormSection, FormRow, FormField, FormTextarea, FormInput } from './FormComponents';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, X, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 interface Step3Props {
     tareas: any[];
@@ -31,6 +32,36 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
         const newTareas = [...tareas];
         newTareas[index] = { ...newTareas[index], [field]: value };
         setTareas(newTareas);
+    };
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+    const handleImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const res = await fetch(`${API_URL}/uploads/evidencia`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!res.ok) throw new Error('Error al subir imagen');
+
+            const data = await res.json();
+            updateTarea(index, 'registro_fotografico', data.url);
+            toast.success('Evidencia subida correctamente');
+        } catch (error) {
+            console.error(error);
+            toast.error('Error al subir la evidencia');
+        }
+    };
+
+    const removeImage = (index: number) => {
+        updateTarea(index, 'registro_fotografico', '');
     };
 
     const addTarea = () => setTareas([...tareas, emptyTarea()]);
@@ -102,6 +133,47 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                             </FormField>
                         </div>
 
+                        {/* Registro Fotográfico */}
+                        <div className="space-y-2">
+                            <Label className="text-sm font-semibold text-slate-700">REGISTRO FOTOGRÁFICO</Label>
+                            <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 relative hover:bg-slate-50 transition-colors text-center min-h-[150px] flex items-center justify-center">
+                                {tarea.registro_fotografico ? (
+                                    <div className="relative inline-block group">
+                                        <img
+                                            src={`${API_URL}${tarea.registro_fotografico}`}
+                                            alt="Evidencia"
+                                            className="max-h-64 rounded-md object-contain shadow-sm"
+                                        />
+                                        {!readOnly && (
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                className="absolute -top-3 -right-3 h-7 w-7 rounded-full shadow-md"
+                                                onClick={() => removeImage(idx)}
+                                                type="button"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center space-y-2 w-full h-full cursor-pointer">
+                                        <Upload className="h-8 w-8 text-slate-400" />
+                                        <div className="text-sm text-slate-500">
+                                            <span className="font-semibold text-indigo-600">Clic para subir evidencia</span>
+                                        </div>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            onChange={(e) => !readOnly && handleImageUpload(idx, e)}
+                                            disabled={readOnly}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
                         {/* Descriptions */}
                         <FormField label="DESCRIPCIÓN Y REQUERIMIENTOS BIOMECÁNICOS DEL PUESTO DE TRABAJO">
                             <FormTextarea
@@ -141,8 +213,8 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                                     <label
                                         key={opt.value}
                                         className={`flex items-center gap-3 p-3 rounded-md border cursor-pointer transition-all ${tarea.conclusion === opt.value
-                                                ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
-                                                : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
+                                            ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                                            : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
                                             }`}
                                     >
                                         <input
