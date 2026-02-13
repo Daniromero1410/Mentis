@@ -12,30 +12,49 @@ interface BlurValidationModalProps {
     isOpen: boolean;
     onClose: () => void;
     title: string;
-    message: string;
+    message?: string;
+    errors?: string[];
     type?: 'error' | 'success';
 }
 
-export function BlurValidationModal({ isOpen, onClose, title, message, type = 'error' }: BlurValidationModalProps) {
+export function BlurValidationModal({ isOpen, onClose, title, message, errors, type = 'error' }: BlurValidationModalProps) {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-md bg-white/90 backdrop-blur-md border border-white/20 shadow-2xl">
-                <DialogHeader className="flex flex-col items-center text-center">
-                    <div className={`p-3 rounded-full mb-4 ${type === 'error' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
-                        {type === 'error' ? <AlertCircle className="h-8 w-8" /> : <CheckCircle2 className="h-8 w-8" />}
-                    </div>
+            <DialogContent className="sm:max-w-md bg-white border-0 shadow-2xl rounded-xl">
+                <DialogHeader className="flex flex-row items-center justify-between border-b pb-4">
                     <DialogTitle className="text-xl font-bold text-gray-900">{title}</DialogTitle>
-                    <DialogDescription className="text-gray-600 mt-2 text-base">
-                        {message}
-                    </DialogDescription>
+                    {/* Close button is handled by Dialog primitive usually, but we can add one if needed or rely on default */}
                 </DialogHeader>
-                <DialogFooter className="sm:justify-center mt-4">
+
+                <div className="py-4">
+                    {type === 'error' && errors && errors.length > 0 ? (
+                        <div className="bg-red-50 border border-red-100 rounded-lg p-4">
+                            <div className="flex items-start gap-3">
+                                <AlertCircle className="h-6 w-6 text-red-600 flex-shrink-0 mt-0.5" />
+                                <div className="text-red-800 text-sm">
+                                    <p className="font-semibold mb-2">Por favor complete los siguientes campos:</p>
+                                    <ul className="list-disc pl-4 space-y-1">
+                                        {errors.map((err, idx) => (
+                                            <li key={idx}>{err}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center text-center">
+                            <div className={`p-3 rounded-full mb-4 ${type === 'error' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                {type === 'error' ? <AlertCircle className="h-8 w-8" /> : <CheckCircle2 className="h-8 w-8" />}
+                            </div>
+                            <p className="text-gray-600 text-base">{message}</p>
+                        </div>
+                    )}
+                </div>
+
+                <DialogFooter className="sm:justify-end">
                     <button
                         onClick={onClose}
-                        className={`px-6 py-2 rounded-lg font-medium text-white shadow-md transition-colors ${type === 'error'
-                                ? 'bg-red-600 hover:bg-red-700'
-                                : 'bg-green-600 hover:bg-green-700'
-                            }`}
+                        className="px-6 py-2 rounded-lg font-medium text-white shadow-sm transition-colors bg-orange-500 hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-1"
                     >
                         Entendido
                     </button>

@@ -84,7 +84,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             finalizado: finalizar
         };
     };
-    const [validationModal, setValidationModal] = useState({ isOpen: false, title: '', message: '', type: 'error' as 'error' | 'success' });
+    const [validationModal, setValidationModal] = useState({ isOpen: false, title: '', message: '', errors: [] as string[], type: 'error' as 'error' | 'success' });
 
     useEffect(() => {
         if (id && token) {
@@ -120,37 +120,40 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
     const validateStep = (step: number) => {
         if (readOnly) return true;
-        let isValid = true;
-        let message = '';
+
+        let errors: string[] = [];
 
         switch (step) {
             case 1:
-                if (!formData.fecha_valoracion) { isValid = false; message = 'La fecha de valoración es requerida.'; }
-                else if (!formData.nombre_trabajador) { isValid = false; message = 'El nombre del trabajador es requerido.'; }
-                else if (!formData.numero_documento) { isValid = false; message = 'El número de documento es requerido.'; }
-                else if (!formData.id_siniestro) { isValid = false; message = 'El ID del siniestro es requerido.'; }
+                if (!formData.fecha_valoracion) errors.push('Fecha de Valoración');
+                if (!formData.nombre_trabajador) errors.push('Nombre del Trabajador');
+                if (!formData.numero_documento) errors.push('Número de Documento');
+                if (!formData.id_siniestro) errors.push('ID Siniestro');
                 break;
             case 2:
-                if (!formData.metodologia) { isValid = false; message = 'La metodología es requerida.'; }
-                else if (!formData.descripcion_proceso_productivo) { isValid = false; message = 'La descripción del proceso productivo es requerida.'; }
+                if (!formData.metodologia) errors.push('Metodología');
+                if (!formData.descripcion_proceso_productivo) errors.push('Descripción del Proceso Productivo');
                 break;
             case 3:
                 const validTareas = tareas.filter(t => t.actividad.trim() !== '');
-                if (validTareas.length === 0) { isValid = false; message = 'Debe registrar al menos una tarea con actividad.'; }
+                if (validTareas.length === 0) errors.push('Debe registrar al menos una tarea con actividad');
+                const invalidTareas = tareas.some(t => !t.actividad || !t.frecuencia || !t.tiempo);
+                if (invalidTareas) errors.push('Complete todos los campos de las tareas (Actividad, Frecuencia, Tiempo)');
                 break;
             case 4:
                 // No strict validation for materials/peligros unless specified
                 break;
             case 5:
-                if (!formData.concepto_prueba_trabajo) { isValid = false; message = 'El concepto de la prueba de trabajo es requerido.'; }
+                if (!formData.concepto_prueba_trabajo) errors.push('Concepto de la Prueba de Trabajo');
                 break;
         }
 
-        if (!isValid) {
+        if (errors.length > 0) {
             setValidationModal({
                 isOpen: true,
-                title: 'Campos Incompletos',
-                message: message,
+                title: 'Campos Requeridos',
+                message: '',
+                errors: errors,
                 type: 'error'
             });
             return false;
@@ -207,7 +210,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         body: JSON.stringify(payload),
                     });
                     if (!res.ok) throw new Error('Error al guardar');
-                    setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', type: 'success' });
+                    setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', errors: [], type: 'success' });
                 } else {
                     const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -216,12 +219,12 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     if (!res.ok) throw new Error('Error al crear');
                     const d = await res.json();
                     setPruebaId(d.id);
-                    setValidationModal({ isOpen: true, title: 'Creado', message: 'Se ha creado la prueba correctamente.', type: 'success' });
+                    setValidationModal({ isOpen: true, title: 'Creado', message: 'Se ha creado la prueba correctamente.', errors: [], type: 'success' });
                 }
             }
 
         } catch (e: any) {
-            setValidationModal({ isOpen: true, title: 'Error', message: e.message, type: 'error' });
+            setValidationModal({ isOpen: true, title: 'Error', message: e.message, errors: [], type: 'error' });
         } finally {
             setSaving(false);
         }
@@ -230,11 +233,12 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     return (
         <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-orange-600">
+            {/* Header */}
+            <div className="text-left mb-8">
+                <h1 className="text-3xl font-bold text-slate-900">
                     {mode === 'create' ? 'Nueva Prueba de Trabajo' : 'Editar Prueba de Trabajo'}
                 </h1>
-                <p className="text-gray-500 mt-2">Complete la información paso a paso</p>
+                <p className="text-slate-600 mt-2">Complete el formulario de evaluación paso a paso</p>
             </div>
 
             {/* Stepper (Orange Theme) */}
@@ -255,10 +259,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     return (
                         <div key={step.id} className="flex flex-col items-center relative z-10">
                             <button
-                                onClick={() => {
-                                    if (readOnly || step.id < currentStep) setCurrentStep(step.id);
-                                    // Prevent jumping forward without validation if not readonly
-                                }}
+                                onClick={() => setCurrentStep(step.id)}
                                 className={`
                                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 bg-white
                                     ${isActive
@@ -376,6 +377,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 onClose={() => setValidationModal(prev => ({ ...prev, isOpen: false }))}
                 title={validationModal.title}
                 message={validationModal.message}
+                errors={validationModal.errors}
                 type={validationModal.type}
             />
 
