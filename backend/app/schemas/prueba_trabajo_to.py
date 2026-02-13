@@ -43,6 +43,9 @@ class IdentificacionTOCreate(BaseModel):
     telefonos_empresa: Optional[str] = None
     direccion_empresa: Optional[str] = None
 
+    class Config:
+        from_attributes = True
+
 
 # ── Secciones de texto (2, 3.1-3.3, 6.1, 7) ────────────────────────
 class SeccionesTextoTOCreate(BaseModel):
@@ -52,6 +55,9 @@ class SeccionesTextoTOCreate(BaseModel):
     estandares_productividad: Optional[str] = None
     verificacion_acciones_correctivas: Optional[str] = None
     concepto_prueba_trabajo: Optional[str] = None
+
+    class Config:
+        from_attributes = True
 
 
 # ── Desempeño Organizacional (3.4) ──────────────────────────────────
@@ -64,6 +70,9 @@ class DesempenoOrgTOCreate(BaseModel):
     rotaciones: Optional[str] = None
     horas_extras: Optional[str] = None
     distribucion_semanal: Optional[str] = None
+
+    class Config:
+        from_attributes = True
 
 
 # ── Tarea (Sección 4) ───────────────────────────────────────────────
@@ -103,6 +112,9 @@ class RecomendacionesTOCreate(BaseModel):
     para_trabajador: Optional[str] = None
     para_empresa: Optional[str] = None
 
+    class Config:
+        from_attributes = True
+
 
 # ── Registro / Firmas (Sección 9) ───────────────────────────────────
 class RegistroTOCreate(BaseModel):
@@ -111,6 +123,9 @@ class RegistroTOCreate(BaseModel):
     nombre_revisor: Optional[str] = None
     firma_revisor: Optional[str] = None
     nombre_proveedor: Optional[str] = None
+
+    class Config:
+        from_attributes = True
 
 
 # ══════════════════════════════════════════════════════════════════════
