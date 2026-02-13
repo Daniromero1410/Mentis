@@ -32,8 +32,8 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                             <FormTextarea
                                 className="min-h-[150px] border-none focus-visible:ring-0 p-0 resize-none shadow-none"
                                 placeholder="Escriba aquí las recomendaciones..."
-                                value={formData.para_trabajador}
-                                onChange={(e) => updateField('para_trabajador', e.target.value)}
+                                value={formData.recomendaciones_trabajador}
+                                onChange={(e) => updateField('recomendaciones_trabajador', e.target.value)}
                                 disabled={readOnly}
                             />
                         </CardContent>
@@ -47,8 +47,8 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                             <FormTextarea
                                 className="min-h-[150px] border-none focus-visible:ring-0 p-0 resize-none shadow-none"
                                 placeholder="Escriba aquí las recomendaciones..."
-                                value={formData.para_empresa}
-                                onChange={(e) => updateField('para_empresa', e.target.value)}
+                                value={formData.recomendaciones_empresa}
+                                onChange={(e) => updateField('recomendaciones_empresa', e.target.value)}
                                 disabled={readOnly}
                             />
                         </CardContent>

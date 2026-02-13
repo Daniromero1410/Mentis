@@ -197,8 +197,8 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                             <FormField label="Fecha(s) del Evento ATEL">
                                 <FormInput
                                     type="date"
-                                    value={formData.fecha_evento_atel}
-                                    onChange={(e) => updateField('fecha_evento_atel', e.target.value)}
+                                    value={formData.fechas_eventos_atel}
+                                    onChange={(e) => updateField('fechas_eventos_atel', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
@@ -206,8 +206,8 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                             <FormField label="Diagnóstico Clínico por Evento ATEL" className="col-span-full">
                                 <FormTextarea
                                     className="min-h-[120px]"
-                                    value={formData.diagnosticos_clinicos}
-                                    onChange={(e) => updateField('diagnosticos_clinicos', e.target.value)}
+                                    value={formData.diagnosticos_atel}
+                                    onChange={(e) => updateField('diagnosticos_atel', e.target.value)}
                                     disabled={readOnly}
                                     placeholder="Ingrese el diagnóstico completo..."
                                 />
@@ -215,8 +215,8 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
 
                             <FormField label="EPS - IPS">
                                 <FormInput
-                                    value={formData.eps}
-                                    onChange={(e) => updateField('eps', e.target.value)}
+                                    value={formData.eps_ips}
+                                    onChange={(e) => updateField('eps_ips', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
@@ -232,8 +232,8 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                             <FormField label="Tiempo Total Incapacidad">
                                 <div className="flex gap-2 items-center">
                                     <FormInput
-                                        value={formData.tiempo_total_incapacidad}
-                                        onChange={(e) => updateField('tiempo_total_incapacidad', e.target.value)}
+                                        value={formData.tiempo_incapacidad_dias}
+                                        onChange={(e) => updateField('tiempo_incapacidad_dias', e.target.value)}
                                         disabled={readOnly}
                                     />
                                     <span className="text-sm text-slate-500">días</span>
@@ -242,11 +242,12 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
 
                             <FormField label="Empresa">
                                 <FormInput
-                                    value={formData.empresa_labora}
-                                    onChange={(e) => updateField('empresa_labora', e.target.value)}
+                                    value={formData.empresa}
+                                    onChange={(e) => updateField('empresa', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
+
 
                             <FormField label="NIT Empresa">
                                 <FormInput
@@ -376,16 +377,16 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
 
                             <FormField label="Teléfono Contacto">
                                 <FormInput
-                                    value={formData.telefonos_contacto_empresa}
-                                    onChange={(e) => updateField('telefonos_contacto_empresa', e.target.value)}
+                                    value={formData.telefonos_empresa}
+                                    onChange={(e) => updateField('telefonos_empresa', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
 
                             <FormField label="Correo Contacto">
                                 <FormInput
-                                    value={formData.correo_contacto}
-                                    onChange={(e) => updateField('correo_contacto', e.target.value)}
+                                    value={formData.correos_electronicos}
+                                    onChange={(e) => updateField('correos_electronicos', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
