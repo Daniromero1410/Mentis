@@ -141,31 +141,51 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                         {/* Registro Fotográfico */}
                         <div className="space-y-2">
                             <Label className="text-sm font-semibold text-slate-700">REGISTRO FOTOGRÁFICO</Label>
-                            <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 relative hover:bg-slate-50 transition-colors text-center min-h-[150px] flex items-center justify-center">
+                            <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 relative hover:bg-slate-50 transition-colors text-center w-full flex flex-col items-center justify-center min-h-[150px]">
                                 {tarea.registro_fotografico ? (
-                                    <div className="relative inline-block group">
-                                        <img
-                                            src={`${API_URL}${tarea.registro_fotografico}`}
-                                            alt="Evidencia"
-                                            className="max-h-64 rounded-md object-contain shadow-sm"
-                                        />
+                                    <div className="relative w-full max-w-sm mx-auto">
+                                        <div className="relative rounded-md overflow-hidden bg-slate-100 border border-slate-200 min-h-[200px] flex items-center justify-center">
+                                            <img
+                                                src={`${API_URL || ''}${tarea.registro_fotografico}`}
+                                                alt="Evidencia"
+                                                className="w-full h-full object-contain max-h-[300px]"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.onerror = null;
+                                                    target.src = "https://placehold.co/400x300?text=Error+Cargando+Imagen";
+                                                }}
+                                            />
+                                        </div>
                                         {!readOnly && (
                                             <Button
                                                 variant="destructive"
                                                 size="icon"
-                                                className="absolute -top-3 -right-3 h-7 w-7 rounded-full shadow-md"
+                                                className="absolute -top-3 -right-3 h-8 w-8 rounded-full shadow-lg z-10"
                                                 onClick={() => removeImage(idx)}
                                                 type="button"
+                                                title="Eliminar imagen"
                                             >
                                                 <X className="h-4 w-4" />
                                             </Button>
                                         )}
+                                        {/* Debug/Fallback Link */}
+                                        <div className="mt-2 text-xs text-slate-400">
+                                            <a
+                                                href={`${API_URL || ''}${tarea.registro_fotografico}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="hover:text-indigo-600 underline"
+                                            >
+                                                Ver imagen original
+                                            </a>
+                                        </div>
                                     </div>
                                 ) : (
-                                    <div className="flex flex-col items-center justify-center space-y-2 w-full h-full cursor-pointer">
-                                        <Upload className="h-8 w-8 text-slate-400" />
+                                    <div className="flex flex-col items-center justify-center space-y-2 w-full h-full cursor-pointer py-6">
+                                        <Upload className="h-10 w-10 text-slate-400" />
                                         <div className="text-sm text-slate-500">
                                             <span className="font-semibold text-indigo-600">Clic para subir evidencia</span>
+                                            <p className="text-xs text-slate-400 mt-1">Formato: JPG, PNG (Max 5MB)</p>
                                         </div>
                                         <input
                                             type="file"
