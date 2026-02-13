@@ -75,6 +75,7 @@ class IdentificacionTO(SQLModel, table=True):
 
     # Datos trabajador
     nombre_trabajador: Optional[str] = None
+    tipo_documento: Optional[str] = None  # CC, CE, TI, NIT, etc.
     numero_documento: Optional[str] = None
     id_siniestro: Optional[str] = None
     fecha_nacimiento: Optional[date] = None

@@ -11,6 +11,7 @@ class IdentificacionTOCreate(BaseModel):
     fecha_valoracion: Optional[date] = None
     ultimo_dia_incapacidad: Optional[date] = None
     nombre_trabajador: Optional[str] = None
+    tipo_documento: Optional[str] = None
     numero_documento: Optional[str] = None
     id_siniestro: Optional[str] = None
     fecha_nacimiento: Optional[date] = None

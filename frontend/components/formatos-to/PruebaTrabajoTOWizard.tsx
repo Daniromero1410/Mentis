@@ -78,11 +78,37 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
     const buildPayload = (finalizar: boolean) => {
         return {
-            ...formData,
+            identificacion: {
+                fecha_valoracion: formData.fecha_valoracion,
+                nombre_trabajador: formData.nombre_trabajador,
+                tipo_documento: formData.tipo_documento,
+                numero_documento: formData.numero_documento,
+                id_siniestro: formData.id_siniestro,
+                fecha_nacimiento: formData.fecha_nacimiento,
+                edad: formData.edad ? parseInt(formData.edad) : null,
+                genero: formData.genero,
+                escolaridad: formData.escolaridad,
+                cargo_empresa: formData.cargo_empresa,
+                antiguedad_cargo: formData.antiguedad_cargo,
+                antiguedad_empresa: formData.antiguedad_empresa,
+                telefono: formData.telefono,
+                ciudad_residencia: formData.ciudad_residencia,
+                direccion: formData.direccion,
+                empresa: formData.empresa,
+                jefe_inmediato: formData.jefe_inmediato,
+                telefono_jefe: formData.telefono_jefe,
+                cargo_jefe: formData.cargo_jefe,
+                objetivo_prueba: formData.objetivo_prueba
+            },
+            secciones_texto: {
+                metodologia: formData.metodologia,
+                descripcion_proceso_productivo: formData.descripcion_proceso_productivo,
+                concepto_prueba_trabajo: formData.concepto_prueba_trabajo
+            },
             tareas,
-            materiales,
+            materiales_equipos: materiales,
             peligros,
-            finalizado: finalizar
+            estado: finalizar ? 'completada' : 'borrador'
         };
     };
     const [validationModal, setValidationModal] = useState({ isOpen: false, title: '', message: '', errors: [] as string[], type: 'error' as 'error' | 'success' });
@@ -109,7 +135,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     if (data.peligros) setPeligros(data.peligros);
                     if (data.finalizado && data.pdf_url) {
                         setDownloadUrl(data.pdf_url);
-                        setShowDownloadModal(true);
+                        // setShowDownloadModal(true); // Don't auto-show modal on load
                     }
                 } catch (e) {
                     toast.error('Error cargando datos');
@@ -188,9 +214,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             const payload = buildPayload(finalizar);
             console.log('Iniciando guardado...', { API_URL, pruebaId, finalizar, payload });
 
-            // ... (keep API logic)
             if (finalizar) {
-                // ... logic for finalize
                 let saveId = pruebaId;
                 if (!saveId) {
                     const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/`, {
@@ -217,7 +241,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 setDownloadUrl(finData.pdf_url);
                 setShowDownloadModal(true);
             } else {
-                // Logic for save draft
                 if (pruebaId) {
                     const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/${pruebaId}`, {
                         method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -247,7 +270,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     return (
         <div className="max-w-6xl mx-auto">
             {/* Header */}
-            {/* Header */}
             <div className="text-left mb-8">
                 <h1 className="text-3xl font-bold text-slate-900">
                     {mode === 'create' ? 'Nueva Prueba de Trabajo' : 'Editar Prueba de Trabajo'}
@@ -268,7 +290,6 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     const StepIcon = step.icon;
                     const isActive = currentStep === step.id;
                     const isCompleted = currentStep > step.id;
-                    // const isUpcoming = currentStep < step.id; // Unused
 
                     return (
                         <div key={step.id} className="flex flex-col items-center relative z-10">
@@ -353,6 +374,16 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 </button>
 
                 <div className="flex items-center gap-3">
+                    {downloadUrl && (
+                        <a
+                            href={`${API_URL}${downloadUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors"
+                        >
+                            <Download className="h-4 w-4" /> PDF Actual
+                        </a>
+                    )}
                     {!readOnly && (
                         <>
                             <button
@@ -361,7 +392,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-60 transition-colors shadow-sm"
                             >
                                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                                Guardar Borrador
+                                Guardar Cambios
                             </button>
                             {currentStep === STEPS.length && (
                                 <button
@@ -370,7 +401,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                                     className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-60 transition-colors shadow-sm"
                                 >
                                     {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-                                    Finalizar y Generar PDF
+                                    Finalizar y Regenerar PDF
                                 </button>
                             )}
                         </>

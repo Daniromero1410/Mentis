@@ -342,15 +342,27 @@ export default function PruebasTrabajoTOPage() {
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                         <div className="flex items-center justify-center gap-1">
-                                                            {/* Ver / Editar */}
-                                                            <Link href={`/dashboard/formatos-to/pruebas-trabajo/${prueba.id}`}>
+                                                            {/* Ver (siempre visible) */}
+                                                            <Link href={`/dashboard/formatos-to/pruebas-trabajo/${prueba.id}?mode=view`}>
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="sm"
                                                                     className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600"
-                                                                    title="Ver / Editar"
+                                                                    title="Ver detalles"
                                                                 >
-                                                                    {prueba.estado === 'borrador' ? <Pencil className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                                    <Eye className="h-4 w-4" />
+                                                                </Button>
+                                                            </Link>
+
+                                                            {/* Editar (siempre visible) */}
+                                                            <Link href={`/dashboard/formatos-to/pruebas-trabajo/${prueba.id}?mode=edit`}>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    className="h-8 w-8 p-0 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600"
+                                                                    title="Editar prueba"
+                                                                >
+                                                                    <Pencil className="h-4 w-4" />
                                                                 </Button>
                                                             </Link>
 
