@@ -313,15 +313,27 @@ def generar_pdf_prueba_trabajo_to(
         elements.append(r_table)
 
         # Firma images
-        for firma_field, nombre in [(registro.firma_elaboro, "Firma Elaboró"),
-                                     (registro.firma_revisor, "Firma Revisor")]:
-            if firma_field and os.path.exists(firma_field):
-                try:
-                    elements.append(Spacer(1, 4))
-                    elements.append(Paragraph(f"<b>{nombre}:</b>", styles["CellBold"]))
-                    elements.append(Image(firma_field, width=4 * cm, height=2 * cm))
-                except Exception:
-                    pass
+        # Firma images
+        firmas_to_render = [
+            (registro.firma_elaboro, "Firma Elaboró"),
+            (registro.firma_revisor, "Firma Revisor"),
+            (registro.firma_trabajador, "Firma Trabajador")
+        ]
+        
+        for firma_field, nombre in firmas_to_render:
+            if firma_field:
+                # Remove leading slash for local path check
+                clean_path = firma_field.lstrip("/")
+                if os.path.exists(clean_path):
+                    try:
+                        elements.append(Paragraph(f"<b>{nombre}:</b>", styles["CellBold"]))
+                        elements.append(Spacer(1, 4))
+                        img = Image(clean_path, width=4 * cm, height=2 * cm)
+                        elements.append(img)
+                        elements.append(Spacer(1, 8))
+                    except Exception as e:
+                        print(f"Error embedding signature {clean_path}: {e}")
+                        pass
 
     # ── BUILD ────────────────────────────────────────────────────────
     doc.build(elements)

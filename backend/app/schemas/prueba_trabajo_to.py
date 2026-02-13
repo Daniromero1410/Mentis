@@ -125,6 +125,7 @@ class RegistroTOCreate(BaseModel):
     firma_revisor: Optional[str] = None
     licencia_so_revisor: Optional[str] = None
     nombre_proveedor: Optional[str] = None
+    firma_trabajador: Optional[str] = None
 
     class Config:
         from_attributes = True

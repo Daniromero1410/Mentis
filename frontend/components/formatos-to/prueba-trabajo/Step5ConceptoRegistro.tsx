@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormSection, FormRow, FormField, FormTextarea, FormInput } from './FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Upload, X, Loader2 } from 'lucide-react';
 
 interface Step5Props {
     formData: any;
@@ -9,6 +10,89 @@ interface Step5Props {
 }
 
 export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5Props) => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    const [uploading, setUploading] = useState<string | null>(null);
+
+    const handleImageUpload = async (field: string, e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+
+        const file = e.target.files[0];
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', file);
+
+        setUploading(field);
+        try {
+            const res = await fetch(`${API_URL}/upload/`, { // Generic upload endpoint
+                method: 'POST',
+                body: formDataUpload
+            });
+
+            if (!res.ok) throw new Error('Error subiendo imagen');
+
+            const data = await res.json();
+            updateField(field, data.url);
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            alert('Error al subir la imagen');
+        } finally {
+            setUploading(null);
+        }
+    };
+
+    const removeImage = (field: string) => {
+        updateField(field, '');
+    };
+
+    const renderSignatureField = (field: string, label: string) => {
+        const value = formData[field];
+        return (
+            <div className="space-y-2">
+                <label className="text-xs font-medium text-slate-500">{label}</label>
+                {value ? (
+                    <div className="relative group border border-slate-200 rounded-md overflow-hidden bg-white h-24 flex items-center justify-center">
+                        <img
+                            src={`${API_URL}${value}`}
+                            alt="Firma"
+                            className="h-full object-contain"
+                        />
+                        {!readOnly && (
+                            <button
+                                onClick={() => removeImage(field)}
+                                className="absolute top-1 right-1 p-1 bg-red-100 text-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                title="Eliminar firma"
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        )}
+                    </div>
+                ) : (
+                    <div className="h-24 border border-dashed border-slate-300 rounded-md flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition-colors">
+                        {!readOnly ? (
+                            <>
+                                {uploading === field ? (
+                                    <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
+                                ) : (
+                                    <label className="cursor-pointer flex flex-col items-center justify-center w-full h-full">
+                                        <Upload className="h-6 w-6 text-slate-400 mb-1" />
+                                        <span className="text-xs text-slate-500">Subir firma</span>
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={(e) => handleImageUpload(field, e)}
+                                        />
+                                    </label>
+                                )}
+                            </>
+                        ) : (
+                            <span className="text-xs text-slate-400 italic">Sin firma registrada</span>
+                        )}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     return (
         <div className="space-y-6">
             <FormSection title="7. CONCEPTO PARA PRUEBA DE TRABAJO">
@@ -71,9 +155,7 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                                     disabled={readOnly}
                                 />
                             </FormField>
-                            <div className="h-24 border border-dashed border-slate-200 rounded-md flex items-center justify-center text-slate-400 text-xs">
-                                Espacio para firma
-                            </div>
+                            {renderSignatureField('firma_elaboro', 'FIRMA')}
                             <FormField label="Licencia S.O">
                                 <FormInput
                                     value={formData.licencia_so_elaboro}
@@ -97,9 +179,7 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                                     disabled={readOnly}
                                 />
                             </FormField>
-                            <div className="h-24 border border-dashed border-slate-200 rounded-md flex items-center justify-center text-slate-400 text-xs">
-                                Espacio para firma
-                            </div>
+                            {renderSignatureField('firma_revisor', 'FIRMA')}
                             <FormField label="Licencia S.O">
                                 <FormInput
                                     value={formData.licencia_so_revisor}
@@ -122,15 +202,14 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                                     disabled={true}
                                 />
                             </FormField>
+                            {/* Reordered: Signature then Document */}
+                            {renderSignatureField('firma_trabajador', 'FIRMA DEL TRABAJADOR')}
                             <FormField label="C.C">
                                 <FormInput
                                     value={formData.numero_documento}
                                     disabled={true}
                                 />
                             </FormField>
-                            <div className="h-24 border border-dashed border-slate-200 rounded-md flex items-end justify-center pb-2 text-slate-400 text-xs">
-                                Firma del trabajador
-                            </div>
                         </CardContent>
                     </Card>
                 </div>

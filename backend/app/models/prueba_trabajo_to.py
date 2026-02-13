@@ -237,6 +237,7 @@ class RegistroTO(SQLModel, table=True):
     firma_revisor: Optional[str] = None            # ruta o base64
     licencia_so_revisor: Optional[str] = None
     nombre_proveedor: Optional[str] = None
+    firma_trabajador: Optional[str] = None         # Nuva firma del trabajador
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)

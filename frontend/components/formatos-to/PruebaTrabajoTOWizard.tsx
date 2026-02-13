@@ -102,7 +102,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         firma_revisor: '',
         licencia_so_revisor: '',
         nombre_proveedor: '',
-
+        firma_trabajador: '' // Added
     });
 
     const updateField = (field: string, value: any) => {
