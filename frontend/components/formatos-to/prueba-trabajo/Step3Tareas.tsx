@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { useAuth } from '@/app/context/AuthContext';
 
 interface Step3Props {
     tareas: any[];
@@ -20,6 +21,7 @@ const CONCLUSION_OPTIONS = [
 ];
 
 export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
+    const { token } = useAuth();
 
     // Helper to empty task
     const emptyTarea = () => ({
@@ -46,6 +48,9 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
         try {
             const res = await fetch(`${API_URL}/uploads/evidencia`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData,
             });
 
