@@ -203,13 +203,13 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 />
                             </FormField>
 
-                            <FormField label="Diagnóstico Clínico por Evento ATEL" className="col-span-full">
+                            <FormField label="DIAGNÓSTICO CLÍNICO POR EVENTO ATEL" className="col-span-full">
                                 <FormTextarea
-                                    className="min-h-[120px]"
+                                    className="min-h-[120px] resize-y"
                                     value={formData.diagnosticos_atel}
                                     onChange={(e) => updateField('diagnosticos_atel', e.target.value)}
                                     disabled={readOnly}
-                                    placeholder="Ingrese el diagnóstico completo..."
+                                    placeholder="Ingrese el diagnóstico clínico detallado aquí..."
                                 />
                             </FormField>
 
