@@ -76,7 +76,8 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                             </div>
                             <FormField label="Licencia S.O">
                                 <FormInput
-                                    value=""
+                                    value={formData.licencia_so_elaboro}
+                                    onChange={(e) => updateField('licencia_so_elaboro', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
@@ -101,7 +102,8 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                             </div>
                             <FormField label="Licencia S.O">
                                 <FormInput
-                                    value=""
+                                    value={formData.licencia_so_revisor}
+                                    onChange={(e) => updateField('licencia_so_revisor', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>

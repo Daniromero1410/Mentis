@@ -97,8 +97,10 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         recomendaciones_empresa: '',
         nombre_elaboro: '',
         firma_elaboro: '',
+        licencia_so_elaboro: '',
         nombre_revisor: '',
         firma_revisor: '',
+        licencia_so_revisor: '',
         nombre_proveedor: '',
 
     });
@@ -177,8 +179,10 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             registro: {
                 nombre_elaboro: formData.nombre_elaboro,
                 firma_elaboro: formData.firma_elaboro,
+                licencia_so_elaboro: formData.licencia_so_elaboro,
                 nombre_revisor: formData.nombre_revisor,
                 firma_revisor: formData.firma_revisor,
+                licencia_so_revisor: formData.licencia_so_revisor,
                 nombre_proveedor: formData.nombre_proveedor
             },
             estado: finalizar ? 'completada' : 'borrador'
@@ -259,8 +263,10 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         recomendaciones_empresa: data.recomendaciones?.para_empresa || prev.recomendaciones_empresa,
                         nombre_elaboro: data.registro?.nombre_elaboro || prev.nombre_elaboro,
                         firma_elaboro: data.registro?.firma_elaboro || prev.firma_elaboro,
+                        licencia_so_elaboro: data.registro?.licencia_so_elaboro || prev.licencia_so_elaboro,
                         nombre_revisor: data.registro?.nombre_revisor || prev.nombre_revisor,
                         firma_revisor: data.registro?.firma_revisor || prev.firma_revisor,
+                        licencia_so_revisor: data.registro?.licencia_so_revisor || prev.licencia_so_revisor,
                         nombre_proveedor: data.registro?.nombre_proveedor || prev.nombre_proveedor
                     }));
 

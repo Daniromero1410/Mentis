@@ -120,8 +120,10 @@ class RecomendacionesTOCreate(BaseModel):
 class RegistroTOCreate(BaseModel):
     nombre_elaboro: Optional[str] = None
     firma_elaboro: Optional[str] = None
+    licencia_so_elaboro: Optional[str] = None
     nombre_revisor: Optional[str] = None
     firma_revisor: Optional[str] = None
+    licencia_so_revisor: Optional[str] = None
     nombre_proveedor: Optional[str] = None
 
     class Config:
