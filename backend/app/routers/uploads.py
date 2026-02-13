@@ -195,8 +195,7 @@ async def subir_evidencia(
 
 @router.get("/evidencias/{filename}")
 async def descargar_evidencia(
-    filename: str,
-    current_user: Usuario = Depends(get_current_user)
+    filename: str
 ):
     """Descarga/muestra una evidencia fotográfica"""
     file_path = EVIDENCIAS_DIR / filename

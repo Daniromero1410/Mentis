@@ -160,12 +160,12 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                                             <Button
                                                 variant="destructive"
                                                 size="icon"
-                                                className="absolute -top-3 -right-3 h-8 w-8 rounded-full shadow-lg z-10"
+                                                className="absolute -top-3 -right-3 h-8 w-8 rounded-full shadow-lg z-50 bg-red-600 hover:bg-red-700 text-white border-2 border-white"
                                                 onClick={() => removeImage(idx)}
                                                 type="button"
                                                 title="Eliminar imagen"
                                             >
-                                                <X className="h-4 w-4" />
+                                                <X className="h-5 w-5" />
                                             </Button>
                                         )}
                                         {/* Debug/Fallback Link */}
