@@ -45,6 +45,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     const [formData, setFormData] = useState({
         fecha_valoracion: new Date().toISOString().split('T')[0],
         nombre_trabajador: '',
+        tipo_documento: '',
         numero_documento: '',
         id_siniestro: '',
         fecha_nacimiento: '',
@@ -127,6 +128,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             case 1:
                 if (!formData.fecha_valoracion) errors.push('Fecha de Valoración');
                 if (!formData.nombre_trabajador) errors.push('Nombre del Trabajador');
+                if (!formData.tipo_documento) errors.push('Tipo de Documento');
                 if (!formData.numero_documento) errors.push('Número de Documento');
                 if (!formData.id_siniestro) errors.push('ID Siniestro');
                 break;
@@ -170,9 +172,21 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     const handleSave = async (finalizar = false) => {
         if (finalizar && !validateStep(currentStep)) return;
 
+        if (!API_URL) {
+            setValidationModal({
+                isOpen: true,
+                title: 'Error de Configuración',
+                message: 'La URL de la API no está definida. Por favor verifique las variables de entorno.',
+                errors: [],
+                type: 'error'
+            });
+            return;
+        }
+
         setSaving(true);
         try {
             const payload = buildPayload(finalizar);
+            console.log('Iniciando guardado...', { API_URL, pruebaId, finalizar, payload });
 
             // ... (keep API logic)
             if (finalizar) {
