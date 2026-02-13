@@ -276,7 +276,28 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             }
 
         } catch (e: any) {
-            setValidationModal({ isOpen: true, title: 'Error', message: e.message, errors: [], type: 'error' });
+            console.error('Error in handleSave:', e);
+            let errorMessage = e.message;
+
+            // Try to parse if it looks like a JSON array (Pydantic error)
+            try {
+                const parsed = JSON.parse(errorMessage);
+                if (Array.isArray(parsed)) {
+                    // Pydantic validation error list
+                    errorMessage = parsed.map((err: any) =>
+                        `${err.loc ? err.loc[err.loc.length - 1] + ': ' : ''}${err.msg}`
+                    ).join('\n');
+                }
+            } catch (ignore) {
+                // Not JSON, use original string
+            }
+
+            toast.error('No se pudo guardar', {
+                description: errorMessage,
+                duration: 5000, // Give user time to read
+            });
+            // Also keep validation modal for fallback or detailed view if needed, 
+            // but user prefers toast. Let's rely on toast for the "Error al crear" feedback.
         } finally {
             setSaving(false);
         }
