@@ -223,7 +223,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     });
                     if (!res.ok) {
                         const err = await res.json().catch(() => ({ detail: 'Error al crear' }));
-                        throw new Error(err.detail || JSON.stringify(err));
+                        throw new Error(JSON.stringify(err));
                     }
                     const d = await res.json();
                     saveId = d.id;
@@ -235,7 +235,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     });
                     if (!res.ok) {
                         const err = await res.json().catch(() => ({ detail: 'Error al actualizar' }));
-                        throw new Error(err.detail || JSON.stringify(err));
+                        throw new Error(JSON.stringify(err));
                     }
                 }
                 const finRes = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/${saveId}/finalizar`, {
@@ -244,7 +244,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 });
                 if (!finRes.ok) {
                     const err = await finRes.json().catch(() => ({ detail: 'Error al finalizar' }));
-                    throw new Error(err.detail || JSON.stringify(err));
+                    throw new Error(JSON.stringify(err));
                 }
                 const finData = await finRes.json();
                 setDownloadUrl(finData.pdf_url);
@@ -257,7 +257,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     });
                     if (!res.ok) {
                         const err = await res.json().catch(() => ({ detail: 'Error al guardar' }));
-                        throw new Error(err.detail || JSON.stringify(err));
+                        throw new Error(JSON.stringify(err));
                     }
                     setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', errors: [], type: 'success' });
                 } else {
@@ -267,7 +267,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     });
                     if (!res.ok) {
                         const err = await res.json().catch(() => ({ detail: 'Error al crear' }));
-                        throw new Error(err.detail || JSON.stringify(err));
+                        throw new Error(JSON.stringify(err));
                     }
                     const d = await res.json();
                     setPruebaId(d.id);
@@ -278,26 +278,29 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         } catch (e: any) {
             console.error('Error in handleSave:', e);
             let errorMessage = e.message;
+            let errorDetails = '';
 
-            // Try to parse if it looks like a JSON array (Pydantic error)
+            // Try to parse if it is JSON (Pydantic error usually comes as { detail: [...] })
             try {
                 const parsed = JSON.parse(errorMessage);
-                if (Array.isArray(parsed)) {
+                if (parsed.detail && Array.isArray(parsed.detail)) {
                     // Pydantic validation error list
-                    errorMessage = parsed.map((err: any) =>
+                    errorMessage = 'Datos inválidos/faltantes';
+                    errorDetails = parsed.detail.map((err: any) =>
                         `${err.loc ? err.loc[err.loc.length - 1] + ': ' : ''}${err.msg}`
                     ).join('\n');
+                } else if (parsed.detail) {
+                    // Single detail message
+                    errorMessage = parsed.detail;
                 }
             } catch (ignore) {
                 // Not JSON, use original string
             }
 
-            toast.error('No se pudo guardar', {
-                description: errorMessage,
-                duration: 5000, // Give user time to read
+            toast.error(errorMessage, {
+                description: errorDetails || undefined,
+                duration: 8000,
             });
-            // Also keep validation modal for fallback or detailed view if needed, 
-            // but user prefers toast. Let's rely on toast for the "Error al crear" feedback.
         } finally {
             setSaving(false);
         }
