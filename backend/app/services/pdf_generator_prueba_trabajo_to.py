@@ -397,15 +397,32 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(id_table)
     elements.append(Spacer(1, 6))
 
+    col_w = page_width / 4  # Restore variable for legacy sections
 
+    # Orange background for section headers
+    orange_bg = colors.HexColor("#ffccbc")
+    
+    def section_title_table(text):
+        """Creates a full-width table with orange background for section titles"""
+        data = [[Paragraph(f"<b>{text}</b>", styles["CellBold"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,-1), orange_bg),
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('LEFTPADDING', (0,0), (-1,-1), 4),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ]))
+        return t
 
     # ── SECCIÓN 2: METODOLOGÍA ───────────────────────────────────────
-    elements.append(section_header("2. METODOLOGÍA"))
+    elements.append(section_title_table("2. METODOLOGÍA"))
+    elements.append(Spacer(1, 2))
     elements.append(long_text(secciones.metodologia if secciones else ""))
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 3: CONDICIONES DE TRABAJO ────────────────────────────
-    elements.append(section_header("3. CONDICIONES DE TRABAJO"))
+    elements.append(section_title_table("3. CONDICIONES DE TRABAJO"))
+    elements.append(Spacer(1, 2))
 
     elements.append(Paragraph("<b>3.1 Descripción del proceso productivo</b>", styles["CellBold"]))
     elements.append(long_text(secciones.descripcion_proceso_productivo if secciones else ""))
@@ -423,44 +440,73 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(Paragraph("<b>3.4 Requerimientos del desempeño organizacional</b>", styles["CellBold"]))
     if desempeno:
         d = desempeno
+        # Use simple grid but with Bold Labels
         do_data = [
-            [label("Jornada"), value(d.jornada), label("Ritmo"), value(d.ritmo)],
-            [label("Descansos programados"), value(d.descansos_programados), label("Turnos"), value(d.turnos)],
-            [label("Tiempos efectivos"), value(d.tiempos_efectivos), label("Rotaciones"), value(d.rotaciones)],
-            [label("Horas extras"), value(d.horas_extras), label("Distribución semanal"), value(d.distribucion_semanal)],
+            [bold("Jornada"), p(d.jornada), bold("Ritmo"), p(d.ritmo)],
+            [bold("Descansos programados"), p(d.descansos_programados), bold("Turnos"), p(d.turnos)],
+            [bold("Tiempos efectivos"), p(d.tiempos_efectivos), bold("Rotaciones"), p(d.rotaciones)],
+            [bold("Horas extras"), p(d.horas_extras), bold("Distribución semanal"), p(d.distribucion_semanal)],
         ]
-        do_table = Table(do_data, colWidths=[col_w] * 4 if i else [page_width / 4] * 4)
-        do_table.setStyle(TableStyle(base_style + [
-            ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e8eaf6")),
-            ("BACKGROUND", (2, 0), (2, -1), colors.HexColor("#e8eaf6")),
+        do_table = Table(do_data, colWidths=[page_width*0.2, page_width*0.3, page_width*0.2, page_width*0.3])
+        do_table.setStyle(TableStyle([
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('BACKGROUND', (0,0), (0,-1), colors.HexColor("#e8eaf6")), # Light blue for labels cols 0 and 2
+            ('BACKGROUND', (2,0), (2,-1), colors.HexColor("#e8eaf6")),
+            ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
+            ('FONTSIZE', (0,0), (-1,-1), 7),
         ]))
         elements.append(do_table)
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 4: TAREAS ────────────────────────────────────────────
-    elements.append(section_header("4. REQUERIMIENTOS DEL PROCESO PRODUCTIVO POR TAREA"))
+    elements.append(section_title_table("4. REQUERIMIENTOS DEL PROCESO PRODUCTIVO POR TAREA"))
+    elements.append(Spacer(1, 4))
+    
     conclusion_labels = {
         "reintegro_sin_modificaciones": "Reintegro sin modificaciones",
         "reintegro_con_modificaciones": "Reintegro con modificaciones",
         "desarrollo_capacidades": "Desarrollo de capacidades",
         "no_puede_desempenarla": "No puede desempeñarla",
     }
+    
     for idx, tarea in enumerate(tareas):
-        elements.append(Paragraph(f"<b>Tarea {idx + 1}</b>", styles["CellBold"]))
+        # Tarea Header (Sub-header style)
+        t_header = [[Paragraph(f"<b>Tarea {idx + 1}</b>", styles["CellBold"])]]
+        th_table = Table(t_header, colWidths=[page_width])
+        th_table.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#e0e0e0")), # Grey for tasks
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+        ]))
+        elements.append(th_table)
+        
+        # Tarea Data Table
         t_data = [
-            [label("Actividad"), value(tarea.actividad), label("Ciclo"), value(tarea.ciclo)],
-            [label("Subactividad"), value(tarea.subactividad), label("Estándar productividad"), value(tarea.estandar_productividad)],
+            [bold("Actividad"), p(tarea.actividad), bold("Ciclo"), p(tarea.ciclo)],
+            [bold("Subactividad"), p(tarea.subactividad), bold("Estándar productividad"), p(tarea.estandar_productividad)],
         ]
-        t_table = Table(t_data, colWidths=[page_width / 4] * 4)
-        t_table.setStyle(TableStyle(base_style))
+        t_table = Table(t_data, colWidths=[page_width*0.2, page_width*0.3, page_width*0.2, page_width*0.3])
+        t_table.setStyle(TableStyle([
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('BACKGROUND', (0,0), (0,-1), colors.HexColor("#f5f5f5")),
+            ('BACKGROUND', (2,0), (2,-1), colors.HexColor("#f5f5f5")),
+        ]))
         elements.append(t_table)
+        elements.append(Spacer(1, 2))
 
-        elements.append(Paragraph("<i>Descripción y requerimientos biomecánicos:</i>", styles["CellText"]))
+        # Text blocks
+        elements.append(Paragraph("<b>Descripción y requerimientos biomecánicos:</b>", styles["CellBold"]))
         elements.append(long_text(tarea.descripcion_biomecanica))
-        elements.append(Paragraph("<i>Apreciación del trabajador:</i>", styles["CellText"]))
+        elements.append(Spacer(1, 2))
+        
+        elements.append(Paragraph("<b>Apreciación del trabajador:</b>", styles["CellBold"]))
         elements.append(long_text(tarea.apreciacion_trabajador))
-        elements.append(Paragraph("<i>Apreciación del profesional:</i>", styles["CellText"]))
+        elements.append(Spacer(1, 2))
+        
+        elements.append(Paragraph("<b>Apreciación del profesional:</b>", styles["CellBold"]))
         elements.append(long_text(tarea.apreciacion_profesional))
+        elements.append(Spacer(1, 2))
 
         concl_text = conclusion_labels.get(tarea.conclusion or "", tarea.conclusion or "")
         elements.append(Paragraph(f"<b>Conclusión:</b> {concl_text}", styles["CellBold"]))
@@ -469,64 +515,67 @@ def generar_pdf_prueba_trabajo_to(
 
         # Registro Fotográfico
         if tarea.registro_fotografico:
-            # Split potentially multiple images
             img_paths = [p.strip() for p in tarea.registro_fotografico.split(';') if p.strip()]
-            
             if img_paths:
                 elements.append(Paragraph("<b>Registro Fotográfico:</b>", styles["CellBold"]))
                 elements.append(Spacer(1, 2))
-                
-                # Render keys/images
                 for img_path_raw in img_paths:
-                    # Remove leading slash if present to get relative file path
                     img_path = img_path_raw.lstrip("/")
-                    # Also handle potential backward slashes if stored differently, though URL usually /
                     if os.path.exists(img_path):
                         try:
-                            # Add image with fixed size for consistency
+                            # 7cm x 5cm image
                             img = Image(img_path, width=7*cm, height=5*cm)
                             elements.append(img)
                             elements.append(Spacer(1, 4))
                         except Exception as e:
                             print(f"Error embedding image {img_path}: {e}")
                             pass
+        
+        elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 5: MATERIALES ────────────────────────────────────────
-    elements.append(section_header("5. MATERIALES, EQUIPOS Y HERRAMIENTAS"))
+    elements.append(section_title_table("5. MATERIALES, EQUIPOS Y HERRAMIENTAS"))
     if materiales:
-        m_header = [label("Nombre"), label("Descripción"), label("Requerimientos"), label("Observaciones")]
+        # Header Row with Orange BG via TableStyle
+        m_header = [bold("Nombre"), bold("Descripción"), bold("Requerimientos"), bold("Observaciones")]
         m_rows = [m_header]
         for mat in materiales:
-            m_rows.append([value(mat.nombre), value(mat.descripcion),
-                           value(mat.requerimientos_operacion), value(mat.observaciones)])
+            m_rows.append([p(mat.nombre), p(mat.descripcion),
+                           p(mat.requerimientos_operacion), p(mat.observaciones)])
+        
         m_table = Table(m_rows, colWidths=[page_width * 0.2, page_width * 0.3, page_width * 0.25, page_width * 0.25])
-        m_table.setStyle(TableStyle(base_style + [
-            ("BACKGROUND", (0, 0), (-1, 0), header_bg),
-            ("TEXTCOLOR", (0, 0), (-1, 0), header_text),
+        m_table.setStyle(TableStyle([
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('BACKGROUND', (0,0), (-1,0), orange_bg), # Header row orange
+            ('ALIGN', (0,0), (-1,0), 'CENTER'),
         ]))
         elements.append(m_table)
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 6: PELIGROS ──────────────────────────────────────────
-    elements.append(section_header("6. IDENTIFICACIÓN DE PELIGROS"))
+    elements.append(section_title_table("6. IDENTIFICACIÓN DE PELIGROS"))
     cat_labels = {
         "fisicos": "Físicos", "biologicos": "Biológicos", "biomecanicos": "Biomecánicos",
         "psicosociales": "Psicosociales", "quimicos": "Químicos", "cond_seguridad": "Cond. Seguridad",
     }
     if peligros:
-        p_header = [label("Categoría"), label("Descripción"), label("Tipos de control"), label("Recomendaciones")]
+        p_header = [bold("Categoría"), bold("Descripción"), bold("Tipos de control"), bold("Recomendaciones")]
         p_rows = [p_header]
         for pel in peligros:
             p_rows.append([
-                value(cat_labels.get(pel.categoria, pel.categoria)),
-                value(pel.descripcion),
-                value(pel.tipos_control_existente),
-                value(pel.recomendaciones_control),
+                p(cat_labels.get(pel.categoria, pel.categoria)),
+                p(pel.descripcion),
+                p(pel.tipos_control_existente),
+                p(pel.recomendaciones_control),
             ])
+        
         p_table = Table(p_rows, colWidths=[page_width * 0.18, page_width * 0.27, page_width * 0.27, page_width * 0.28])
-        p_table.setStyle(TableStyle(base_style + [
-            ("BACKGROUND", (0, 0), (-1, 0), header_bg),
-            ("TEXTCOLOR", (0, 0), (-1, 0), header_text),
+        p_table.setStyle(TableStyle([
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('BACKGROUND', (0,0), (-1,0), orange_bg), # Header row orange
+            ('ALIGN', (0,0), (-1,0), 'CENTER'),
         ]))
         elements.append(p_table)
     elements.append(Spacer(1, 4))
@@ -536,54 +585,91 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 7: CONCEPTO ──────────────────────────────────────────
-    elements.append(section_header("7. CONCEPTO PARA PRUEBA DE TRABAJO"))
+    elements.append(section_title_table("7. CONCEPTO PARA PRUEBA DE TRABAJO"))
+    elements.append(Spacer(1, 2))
+    elements.append(Paragraph("<b>COMPETENCIA, SEGURIDAD, CONFORT, RELACIONES SOCIALES, OTROS ASPECTOS</b>", styles["CellBold"]))
     elements.append(long_text(secciones.concepto_prueba_trabajo if secciones else ""))
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 8: RECOMENDACIONES ───────────────────────────────────
-    elements.append(section_header("8. RECOMENDACIONES"))
-    elements.append(Paragraph("<b>Para el trabajador:</b>", styles["CellBold"]))
-    elements.append(long_text(recomendaciones.para_trabajador if recomendaciones else ""))
-    elements.append(Spacer(1, 4))
-    elements.append(Paragraph("<b>Para la empresa:</b>", styles["CellBold"]))
-    elements.append(long_text(recomendaciones.para_empresa if recomendaciones else ""))
+    elements.append(section_title_table("8. RECOMENDACIONES"))
+    elements.append(Spacer(1, 2))
+    
+    # Grid for Recommendations: Worker | Company
+    rec_data = [
+        [bold("PARA EL TRABAJADOR"), bold("PARA LA EMPRESA")],
+        [p(recomendaciones.para_trabajador if recomendaciones else ""), p(recomendaciones.para_empresa if recomendaciones else "")]
+    ]
+    rec_table = Table(rec_data, colWidths=[page_width*0.5, page_width*0.5])
+    rec_table.setStyle(TableStyle([
+        ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('BACKGROUND', (0,0), (-1,0), orange_bg),
+        ('ALIGN', (0,0), (-1,0), 'CENTER'),
+    ]))
+    elements.append(rec_table)
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 9: REGISTRO ──────────────────────────────────────────
-    elements.append(section_header("9. REGISTRO"))
+    elements.append(section_title_table("9. REGISTRO"))
+    elements.append(Spacer(1, 2))
+    
     if registro:
-        r_data = [
-            [label("Elaboró"), value(registro.nombre_elaboro),
-             label("Revisor"), value(registro.nombre_revisor)],
-            [label("Proveedor"), value(registro.nombre_proveedor), "", ""],
-        ]
-        r_table = Table(r_data, colWidths=[page_width / 4] * 4)
-        r_table.setStyle(TableStyle(base_style))
-        elements.append(r_table)
-
-        # Firma images
-        # Firma images
-        firmas_to_render = [
-            (registro.firma_elaboro, "Firma Elaboró"),
-            (registro.firma_revisor, "Firma Revisor"),
-            (registro.firma_trabajador, "Firma Trabajador")
+        # Signatures table
+        # 3 Columns: Elaboro, Reviso, Trabajador (Usuario)
+        # Note: Image might show Provider too, but we have fields for Elaboro, Revisor, Trabajador.
+        # Let's check schema: nombre_elaboro, firma_elaboro...
+        
+        # Row 1: Titles
+        reg_header = [bold("ELABORÓ"), bold("REVISÓ"), bold("DATOS DEL USUARIO")]
+        
+        # Row 2: Content (Name, Signature, License/ID)
+        # Elaborao
+        elaboro_content = [
+            bold("NOMBRE:"), p(registro.nombre_elaboro),
+            Spacer(1, 4),
+            bold("FIRMA:"),
+            Image(registro.firma_elaboro.lstrip("/"), width=3*cm, height=1.5*cm) if registro.firma_elaboro and os.path.exists(registro.firma_elaboro.lstrip("/")) else Spacer(1, 30),
+            Spacer(1, 4),
+            bold("LICENCIA S.O:"), p(registro.licencia_so_elaboro if hasattr(registro, 'licencia_so_elaboro') else "")
         ]
         
-        for firma_field, nombre in firmas_to_render:
-            if firma_field:
-                # Remove leading slash for local path check
-                clean_path = firma_field.lstrip("/")
-                if os.path.exists(clean_path):
-                    try:
-                        elements.append(Paragraph(f"<b>{nombre}:</b>", styles["CellBold"]))
-                        elements.append(Spacer(1, 4))
-                        img = Image(clean_path, width=4 * cm, height=2 * cm)
-                        elements.append(img)
-                        elements.append(Spacer(1, 8))
-                    except Exception as e:
-                        print(f"Error embedding signature {clean_path}: {e}")
-                        pass
-
+        reviso_content = [
+            bold("NOMBRE:"), p(registro.nombre_revisor),
+            Spacer(1, 4),
+            bold("FIRMA:"),
+             Image(registro.firma_revisor.lstrip("/"), width=3*cm, height=1.5*cm) if registro.firma_revisor and os.path.exists(registro.firma_revisor.lstrip("/")) else Spacer(1, 30),
+             Spacer(1, 4),
+             bold("LICENCIA S.O:"), p(registro.licencia_so_revisor if hasattr(registro, 'licencia_so_revisor') else "")
+        ]
+        
+        trabajador_content = [
+             bold("NOMBRE:"), p(registro.nombre_trabajador if hasattr(registro, 'nombre_trabajador') else identificacion.nombre_trabajador if identificacion else ""),
+             Spacer(1, 4),
+             bold("FIRMA DEL TRABAJADOR:"),
+              Image(registro.firma_trabajador.lstrip("/"), width=3*cm, height=1.5*cm) if registro.firma_trabajador and os.path.exists(registro.firma_trabajador.lstrip("/")) else Spacer(1, 30),
+              Spacer(1, 4),
+              bold("C.C:"), p(identificacion.numero_documento if identificacion else "")
+        ]
+        
+        reg_data = [[elaboro_content, reviso_content, trabajador_content]]
+        reg_table = Table(reg_data, colWidths=[page_width/3]*3)
+        reg_table.setStyle(TableStyle([
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ]))
+        
+        # Create a header table just for the titles 
+        reg_header_table = Table([reg_header], colWidths=[page_width/3]*3)
+        reg_header_table.setStyle(TableStyle([
+             ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+             ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#f5f5f5")),
+             ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ]))
+        
+        elements.append(reg_header_table)
+        elements.append(reg_table)
+    
     # ── BUILD ────────────────────────────────────────────────────────
     doc.build(elements)
     return filepath
