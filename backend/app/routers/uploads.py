@@ -91,8 +91,7 @@ async def subir_firma(
 
 @router.get("/firmas/{filename}")
 async def descargar_firma(
-    filename: str,
-    current_user: Usuario = Depends(get_current_user)
+    filename: str
 ):
     """Descarga/muestra un archivo de firma"""
     file_path = FIRMAS_DIR / filename
