@@ -6,9 +6,10 @@ from sqlalchemy import text
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sqlalchemy import create_engine, text
+from app.config import settings
 
-# Railway DB URL provided by user
-DATABASE_URL = "postgresql://postgres:yioHjzbJfMCaXoGORKHmCAGqUraAWics@interchange.proxy.rlwy.net:30267/railway"
+# Use settings from config
+DATABASE_URL = settings.DATABASE_URL
 
 engine = create_engine(DATABASE_URL)
 

@@ -278,7 +278,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     }));
 
                     if (data.tareas) setTareas(data.tareas);
-                    if (data.materiales) setMateriales(data.materiales);
+                    if (data.materiales_equipos) setMateriales(data.materiales_equipos);
                     if (data.peligros) {
                         const mergedPeligros = CATEGORIAS_PELIGRO.map(cat => {
                             const existing = data.peligros.find((p: any) => p.categoria === cat.value);
@@ -604,13 +604,14 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         </>
                     )}
 
-                    <button
-                        onClick={handleNext}
-                        disabled={currentStep === STEPS.length}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
-                    >
-                        Siguiente <ChevronRight className="h-4 w-4" />
-                    </button>
+                    {currentStep !== STEPS.length && (
+                        <button
+                            onClick={handleNext}
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
+                        >
+                            Siguiente <ChevronRight className="h-4 w-4" />
+                        </button>
+                    )}
                 </div>
             </div>
 

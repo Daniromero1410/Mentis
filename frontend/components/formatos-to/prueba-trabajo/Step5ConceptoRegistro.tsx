@@ -23,7 +23,7 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
 
         setUploading(field);
         try {
-            const res = await fetch(`${API_URL}/uploads/evidencia`, { // Corrected endpoint
+            const res = await fetch(`${API_URL}/uploads/firma`, { // Use dedicated signature endpoint
                 method: 'POST',
                 body: formDataUpload
             });
