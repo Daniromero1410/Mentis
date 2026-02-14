@@ -10,7 +10,10 @@ interface Step5Props {
     readOnly?: boolean;
 }
 
+import { useAuth } from '@/app/context/AuthContext';
+
 export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5Props) => {
+    const { token } = useAuth();
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const [uploading, setUploading] = useState<string | null>(null);
 
@@ -25,6 +28,9 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
         try {
             const res = await fetch(`${API_URL}/uploads/firma`, { // Use dedicated signature endpoint
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formDataUpload
             });
 
