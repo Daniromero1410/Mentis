@@ -49,10 +49,11 @@ def generar_pdf_prueba_trabajo_to(
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name="HeaderTitle", fontSize=10, fontName="Helvetica-Bold", alignment=TA_CENTER, leading=12))
     styles.add(ParagraphStyle(name="HeaderSub", fontSize=8, fontName="Helvetica", alignment=TA_CENTER, leading=10))
+    styles.add(ParagraphStyle(name="HeaderSubLeft", fontSize=8, fontName="Helvetica", alignment=TA_LEFT, leading=10))
     styles.add(ParagraphStyle(name="LabelSmall", fontSize=7, fontName="Helvetica-Bold", leading=8, textColor=colors.black))
     styles.add(ParagraphStyle(name="ValueSmall", fontSize=7, fontName="Helvetica", leading=8, textColor=colors.black))
     styles.add(ParagraphStyle(name="DateDigit", fontSize=8, fontName="Helvetica", alignment=TA_CENTER, leading=10))
-    styles.add(ParagraphStyle(name="SectionTitle", fontSize=9, fontName="Helvetica-Bold", spaceAfter=2, spaceBefore=4, textColor=colors.black)) # Changed color to black to match image
+    styles.add(ParagraphStyle(name="SectionTitle", fontSize=10, fontName="Helvetica-Bold", spaceAfter=2, spaceBefore=4, textColor=colors.white, alignment=TA_CENTER))
     
     # Existing styles reuse/tweak
     styles.add(ParagraphStyle(name="CellText", fontSize=8, fontName="Helvetica", leading=9))
@@ -152,86 +153,62 @@ def generar_pdf_prueba_trabajo_to(
 
         
     # ── ENCABEZADO (HEADER) ──────────────────────────────────────────
-    # Logo placeholder / Text
-    logo_path = "frontend/public/images/mentis-logo.svg" # Placeholder, using text for now to match style
-    # Header Table Structure
-    # Row 1: Logo | Title Stack | Provider Logo
-    # Row 2: Code | Date | Title | Page
-    # Row 3: Approver | Process | Reviewer
-    # Row 4: Version
-
-    # Row 1
+    # Logos
+    logo_positiva_path = "frontend/public/images/logo-positiva-hq.png"
+    logo_santa_isabel_path = "frontend/public/images/logo-santa-isabel.png"
+    
+    # Header Content
+    # Row 1: Logo Positiva | Center Text | Logo Santa Isabel
     r1_c1 = Paragraph("<b>POSITIVA S.A</b><br/>Compañía de Seguros / ARL<br/>-Gestión Documental-", styles["HeaderSub"])
     
-    # Row 2
-    r2_c1 = bold("Código")
-    r2_c2 = p("2022/07") # Static date from image, or dynamic? Image has 2022/07
-    r2_c3 = Paragraph("<b>VALORACIÓN<br/>PRUEBA DE TRABAJO</b>", styles["HeaderTitle"])
-    r2_c4 = p("Página 1 de __")
-
-    # Row 3
-    r3_c1 = Paragraph("Aprobado por:<br/><b>Gerencia Médica</b>", styles["HeaderSub"])
+    # Row 2: Code | Title | Page
+    r2_c1 = Paragraph("<b>Código:</b><br/>__________", styles["HeaderSubLeft"])
+    r2_c2 = Paragraph("<b>VALORACIÓN<br/>PRUEBA DE TRABAJO</b>", styles["HeaderTitle"])
+    r2_c3 = Paragraph("Página 1 de __", styles["HeaderSub"])
+    
+    # Row 3: Date | Process | Revised
+    r3_c1 = Paragraph("<b>Fecha:</b><br/>2021/12", styles["HeaderSubLeft"])
     r3_c2 = Paragraph("Proceso:<br/><b>Rehabilitación Integral</b>", styles["HeaderSub"])
     r3_c3 = Paragraph("Revisado por:<br/><b>Coordinación Técnica</b>", styles["HeaderSub"])
-
-    header_data = [
-        [Image("frontend/public/images/logo-positiva.png", width=2.5*cm, height=1*cm) if os.path.exists("frontend/public/images/logo-positiva.png") else bold("POSITIVA"), 
-         r1_c1, 
-         bold("Logo Proveedor")],
-        [r2_c1, r2_c2, r2_c3, r2_c4],
-        [r3_c1, r3_c2, r3_c3],
-        [bold("Versión: 01")]
-    ]
     
-    # Table layout is complex, using nested tables or spans.
-    # Let's use a main table with 3 cols.
-    # Row 1 spans: [0,0] (Logo), [0,1] (Center Text), [0,2] (Right Logo)
-    # The image shows complex borders.
-    # Let's try to map grid:
-    
-    # Simplified approach: 3 main columns.
-    # Col 1: Logo / Code / Approver
-    # Col 2: Center Text / Title / Process
-    # Col 3: Right Logo / Page / Reviewer
-    
-    # Actually, Row 2 has 4 cells in image. Row 1 has 3. Row 3 has 3.
-    # Let's use a Main Table for the whole block.
-    
-    # Re-structuring header data for a 4-column grid to accommodate Row 2
-    # Row 1: Logo (span 1), Center (span 2), Right (span 1)
-    # Row 2: Code, Date, Title, Page
-    # Row 3: Approv (span 1), Process (span 2), Review (span 1) - wait image shows 3 equal cols?
-    # Image: 
-    # R1: [Logo (small)] [     Center Text (wide)     ] [Logo Prov (small)]
-    # R2: [Code] [Date] [         Title          ] [Page] -> 4 cols?
-    # R3: [Approv] [          Process           ] [Review]
-    
-    # Let's use 4 columns with widths: 15%, 15%, 40%, 30%
+    # Row 4: Approved | Version | Empty/Merged
+    r4_c1 = Paragraph("Aprobado por:<br/><b>Gerencia Médica</b>", styles["HeaderSub"])
+    # Version separate line? Let's check typical ISO. Usually Version is bottom right or bottom center.
+    # Image showed "Version: 01" alone in Row 4.
+    r4_c2 = Paragraph("<b>Versión: 01</b>", styles["HeaderSub"])
     
     h_data = [
-        # R1
-        [bold("POSITIVA"), r1_c1, "", bold("Logo Proveedor")],
-        # R2
-        [r2_c1, r2_c2, r2_c3, r2_c4],
-        # R3
-        [r3_c1, r3_c2, "", r3_c3],
-        # R4
-        [bold("Versión: 01"), "", "", ""]
+        # R1: Logos and Center Text
+        [
+            Image(logo_positiva_path, width=3*cm, height=1.5*cm) if os.path.exists(logo_positiva_path) else bold("POSITIVA"),
+            r1_c1,
+            Image(logo_santa_isabel_path, width=3*cm, height=1.5*cm) if os.path.exists(logo_santa_isabel_path) else bold("Santa Isabel")
+        ],
+        # R2: Code | Title | Page
+        [r2_c1, r2_c2, r2_c3],
+        # R3: Fecha | Process | Revisado
+        [r3_c1, r3_c2, r3_c3],
+        # R4: Aprobado | Version | (Empty)
+        [r4_c1, r4_c2, ""]
     ]
     
-    header_t = Table(h_data, colWidths=[page_width*0.2, page_width*0.15, page_width*0.35, page_width*0.3])
+    header_t = Table(h_data, colWidths=[page_width*0.25, page_width*0.5, page_width*0.25])
     header_t.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 0.5, colors.black),
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         
-        # Spans
-        ('SPAN', (1,0), (2,0)), # Center Text R1
-        ('SPAN', (1,2), (2,2)), # Process R3 - wait, image shows Proceso in middle.
-        ('SPAN', (0,3), (-1,3)), # Version R4
+        # Spans? No spans needed if we align content well in 3 cols.
+        # R4: Version is center. Aprobado is left.
+        # But wait, [r4_c1, r4_c2, ""] means Aprobado is Col 0, Version is Col 1.
+        # This matches "Aprobado" (Left), "Version" (Center). 
+        # But "Revisado" was on Right (Col 2, Row 3).
+        # Where does "Version" go? Image showed it at bottom.
         
         ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
         ('FONTSIZE', (0,0), (-1,-1), 8),
+        ('LEFTPADDING', (0,0), (-1,-1), 6),
+        ('RIGHTPADDING', (0,0), (-1,-1), 6),
     ]))
     elements.append(header_t)
     
@@ -278,7 +255,7 @@ def generar_pdf_prueba_trabajo_to(
     # 7. Dominancia / Estado Civil
     # 8. ...
     
-    orange_bg = colors.HexColor("#ffccbc") # Approximate orange from image header
+    orange_bg = colors.HexColor("#FF7043") # Stronger Premium Orange
 
     # Row helpers
     row_1 = [bold("1. IDENTIFICACIÓN"), "", "", ""]
@@ -400,7 +377,7 @@ def generar_pdf_prueba_trabajo_to(
     col_w = page_width / 4  # Restore variable for legacy sections
 
     # Orange background for section headers
-    orange_bg = colors.HexColor("#ffccbc")
+    orange_bg = colors.HexColor("#FF7043")
     
     def section_title_table(text):
         """Creates a full-width table with orange background for section titles"""

@@ -10,6 +10,7 @@ import {
     Activity, AlertTriangle // Updated icons
 } from 'lucide-react';
 import { BlurValidationModal } from './BlurValidationModal';
+import { BlurSuccessModal } from './BlurSuccessModal';
 
 import { Step1Identificacion } from './prueba-trabajo/Step1Identificacion';
 import { Step2MetodologiaCondiciones } from './prueba-trabajo/Step2MetodologiaCondiciones';
@@ -625,35 +626,15 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             />
 
             {/* Download modal */}
-            {
-                showDownloadModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
-                            <div className="text-center">
-                                <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3" />
-                                <h3 className="text-lg font-bold text-gray-800 mb-2">¡Prueba Finalizada!</h3>
-                                <p className="text-sm text-gray-500 mb-4">El PDF ha sido generado exitosamente.</p>
-                                <div className="flex gap-2">
-                                    <a
-                                        href={`${API_URL}${downloadUrl}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
-                                    >
-                                        <Download className="h-4 w-4" /> Descargar PDF
-                                    </a>
-                                    <button
-                                        onClick={() => { setShowDownloadModal(false); router.push('/dashboard/formatos-to/pruebas-trabajo'); }}
-                                        className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-                                    >
-                                        Volver a Lista
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
+            <BlurSuccessModal
+                isOpen={showDownloadModal}
+                downloadUrl={downloadUrl}
+                onClose={() => {
+                    setShowDownloadModal(false);
+                    router.push('/dashboard/formatos-to/pruebas-trabajo');
+                }}
+            />
+
         </div >
     );
 }
