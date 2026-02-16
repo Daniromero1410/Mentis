@@ -1,6 +1,7 @@
 """
 Generador de PDF para Prueba de Trabajo TO (Terapia Ocupacional)
 Formato basado en Positiva S.A. - Valoración Prueba de Trabajo
+Diseño alineado al formato institucional 2022/07
 """
 import os
 from datetime import datetime
@@ -39,31 +40,38 @@ def generar_pdf_prueba_trabajo_to(
     doc = SimpleDocTemplate(
         filepath,
         pagesize=letter,
-        topMargin=1 * cm,
-        bottomMargin=1 * cm,
-        leftMargin=1.5 * cm,
-        rightMargin=1.5 * cm,
+        topMargin=0.8 * cm,
+        bottomMargin=0.8 * cm,
+        leftMargin=1.2 * cm,
+        rightMargin=1.2 * cm,
     )
 
     # ── ESTILOS PERSONALIZADOS ───────────────────────────────────────
     styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="HeaderTitle", fontSize=10, fontName="Helvetica-Bold", alignment=TA_CENTER, leading=12))
-    styles.add(ParagraphStyle(name="HeaderSub", fontSize=8, fontName="Helvetica", alignment=TA_CENTER, leading=10))
-    styles.add(ParagraphStyle(name="HeaderSubLeft", fontSize=8, fontName="Helvetica", alignment=TA_LEFT, leading=10))
-    styles.add(ParagraphStyle(name="LabelSmall", fontSize=7, fontName="Helvetica-Bold", leading=8, textColor=colors.black))
-    styles.add(ParagraphStyle(name="ValueSmall", fontSize=7, fontName="Helvetica", leading=8, textColor=colors.black))
-    styles.add(ParagraphStyle(name="DateDigit", fontSize=8, fontName="Helvetica", alignment=TA_CENTER, leading=10))
-    styles.add(ParagraphStyle(name="SectionTitle", fontSize=10, fontName="Helvetica-Bold", spaceAfter=2, spaceBefore=4, textColor=colors.white, alignment=TA_CENTER))
-    
-    # Existing styles reuse/tweak
-    styles.add(ParagraphStyle(name="CellText", fontSize=8, fontName="Helvetica", leading=9))
-    styles.add(ParagraphStyle(name="CellBold", fontSize=8, fontName="Helvetica-Bold", leading=9))
-    styles.add(ParagraphStyle(name="LongText", fontSize=8, fontName="Helvetica", leading=10, alignment=TA_JUSTIFY))
-    styles.add(ParagraphStyle(name="FieldLabel", fontSize=8, fontName="Helvetica-Bold", leading=10, textColor=colors.HexColor("#333333")))
-    styles.add(ParagraphStyle(name="FieldValue", fontSize=8, fontName="Helvetica", leading=10))
+    styles.add(ParagraphStyle(name="HeaderTitle", fontSize=9, fontName="Helvetica-Bold", alignment=TA_CENTER, leading=11))
+    styles.add(ParagraphStyle(name="HeaderSub", fontSize=7, fontName="Helvetica", alignment=TA_CENTER, leading=9))
+    styles.add(ParagraphStyle(name="HeaderSubBold", fontSize=7, fontName="Helvetica-Bold", alignment=TA_CENTER, leading=9))
+    styles.add(ParagraphStyle(name="HeaderSubLeft", fontSize=7, fontName="Helvetica", alignment=TA_LEFT, leading=9))
+    styles.add(ParagraphStyle(name="LabelSmall", fontSize=6.5, fontName="Helvetica-Bold", leading=8, textColor=colors.black))
+    styles.add(ParagraphStyle(name="ValueSmall", fontSize=6.5, fontName="Helvetica", leading=8, textColor=colors.black))
+    styles.add(ParagraphStyle(name="DateDigit", fontSize=7, fontName="Helvetica", alignment=TA_CENTER, leading=9))
+    styles.add(ParagraphStyle(name="DateLabel", fontSize=5.5, fontName="Helvetica", alignment=TA_CENTER, leading=7, textColor=colors.HexColor("#666666")))
+    styles.add(ParagraphStyle(name="SectionTitle", fontSize=8, fontName="Helvetica-Bold", spaceAfter=0, spaceBefore=0, textColor=colors.white, alignment=TA_LEFT, leftIndent=4))
+    styles.add(ParagraphStyle(name="CellText", fontSize=7, fontName="Helvetica", leading=8.5))
+    styles.add(ParagraphStyle(name="CellBold", fontSize=7, fontName="Helvetica-Bold", leading=8.5))
+    styles.add(ParagraphStyle(name="LongText", fontSize=7, fontName="Helvetica", leading=9, alignment=TA_JUSTIFY))
+    styles.add(ParagraphStyle(name="FieldLabel", fontSize=7, fontName="Helvetica-Bold", leading=9, textColor=colors.HexColor("#333333")))
+    styles.add(ParagraphStyle(name="FieldValue", fontSize=7, fontName="Helvetica", leading=9))
+    styles.add(ParagraphStyle(name="CheckLabel", fontSize=6, fontName="Helvetica", leading=7.5))
 
     elements = []
-    page_width = letter[0] - 3 * cm  # usable width
+    page_width = letter[0] - 2.4 * cm  # usable width
+
+    # ── COLORES ──────────────────────────────────────────────────────
+    ORANGE_BG = colors.HexColor("#E65100")       # Naranja oscuro para headers
+    LIGHT_BLUE_BG = colors.HexColor("#E3F2FD")   # Azul claro para headers de fechas
+    BORDER_COLOR = colors.HexColor("#424242")     # Gris oscuro bordes
+    LIGHT_GRAY = colors.HexColor("#f5f5f5")
 
     # ── HELPER FUNCTIONS ─────────────────────────────────────────────
     def date_grid(date_obj):
@@ -71,52 +79,53 @@ def generar_pdf_prueba_trabajo_to(
         if not date_obj:
             d, m, y = "", "", ""
         else:
-            # Handle both date object and string
             if isinstance(date_obj, str):
                 try:
                     dt = datetime.strptime(date_obj, "%Y-%m-%d")
                     d, m, y = f"{dt.day:02}", f"{dt.month:02}", f"{dt.year:04}"
-                except:
+                except Exception:
                     d, m, y = "", "", ""
             else:
                 d, m, y = f"{date_obj.day:02}", f"{date_obj.month:02}", f"{date_obj.year:04}"
-        
-        # Digits
-        d1, d2 = (d[0], d[1]) if len(d)==2 else ("","")
-        m1, m2 = (m[0], m[1]) if len(m)==2 else ("","")
-        y1, y2, y3, y4 = (y[0], y[1], y[2], y[3]) if len(y)==4 else ("","","","")
 
-        data = [[
-            Paragraph("día", styles["HeaderSub"]), "",
-            Paragraph("mes", styles["HeaderSub"]), "",
-            Paragraph("año", styles["HeaderSub"]), "", "", ""
-        ], [
+        d1, d2 = (d[0], d[1]) if len(d) == 2 else ("", "")
+        m1, m2 = (m[0], m[1]) if len(m) == 2 else ("", "")
+        y1, y2, y3, y4 = (y[0], y[1], y[2], y[3]) if len(y) == 4 else ("", "", "", "")
+
+        header_row = [
+            Paragraph("día", styles["DateLabel"]), "",
+            Paragraph("mes", styles["DateLabel"]), "",
+            Paragraph("año", styles["DateLabel"]), "", "", ""
+        ]
+        digit_row = [
             Paragraph(d1, styles["DateDigit"]), Paragraph(d2, styles["DateDigit"]),
             Paragraph(m1, styles["DateDigit"]), Paragraph(m2, styles["DateDigit"]),
             Paragraph(y1, styles["DateDigit"]), Paragraph(y2, styles["DateDigit"]),
             Paragraph(y3, styles["DateDigit"]), Paragraph(y4, styles["DateDigit"])
-        ]]
-        
-        # Column widths
-        cw = 0.4 * cm
-        t = Table(data, colWidths=[cw]*8)
+        ]
+
+        cw = 0.38 * cm
+        t = Table([header_row, digit_row], colWidths=[cw] * 8)
         t.setStyle(TableStyle([
             ('GRID', (0, 1), (-1, -1), 0.5, colors.black),
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('SPAN', (0, 0), (1, 0)), # dia
-            ('SPAN', (2, 0), (3, 0)), # mes
-            ('SPAN', (4, 0), (7, 0)), # año
-            ('FONTSIZE', (0, 0), (-1, -1), 7),
+            ('SPAN', (0, 0), (1, 0)),
+            ('SPAN', (2, 0), (3, 0)),
+            ('SPAN', (4, 0), (7, 0)),
+            ('FONTSIZE', (0, 0), (-1, -1), 6),
             ('LEFTPADDING', (0, 0), (-1, -1), 1),
             ('RIGHTPADDING', (0, 0), (-1, -1), 1),
+            ('TOPPADDING', (0, 0), (-1, -1), 1),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor("#FFF8E1")),
         ]))
         return t
 
     def checkbox(checked, label_text):
-        """Returns visual checkbox [X] Label"""
-        mark = "X" if checked else " "
-        return Paragraph(f"[{mark}] {label_text}", styles["ValueSmall"])
+        """Returns visual checkbox ☑ or ☐ + Label"""
+        mark = "☑" if checked else "☐"
+        return Paragraph(f"{mark} {label_text}", styles["CheckLabel"])
 
     def p(text, style_name="ValueSmall"):
         return Paragraph(str(text) if text else "", styles[style_name])
@@ -124,414 +133,658 @@ def generar_pdf_prueba_trabajo_to(
     def bold(text):
         return Paragraph(str(text), styles["LabelSmall"])
 
-    # ── ESTILOS DE TABLA COMUNES (Legacy for Sections 2-9) ───────────
-    header_bg = colors.HexColor("#283593")
-    header_text = colors.white
-    alt_row = colors.HexColor("#f5f5f5")
-    border_color = colors.HexColor("#9e9e9e")
+    def section_title_table(text):
+        """Creates a full-width table with dark orange background for section titles"""
+        data = [[Paragraph(f"<b>{text}</b>", styles["SectionTitle"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), ORANGE_BG),
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ]))
+        return t
 
-    base_style = [
-        ("GRID", (0, 0), (-1, -1), 0.5, border_color),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-        ("TOPPADDING", (0, 0), (-1, -1), 3),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-        ("LEFTPADDING", (0, 0), (-1, -1), 4),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-    ]
+    def bordered_text_block(text_content):
+        """Wraps text in a bordered table cell"""
+        data = [[Paragraph(str(text_content) if text_content else "", styles["LongText"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ]))
+        return t
 
-    def section_header(text):
-        return Paragraph(text, styles["SectionTitle"])
-
-    def label(text):
-        return Paragraph(text, styles["FieldLabel"]) # Note: FieldLabel style needs to be present
-
-    def value(text):
-        return Paragraph(str(text) if text else "", styles["FieldValue"]) # Note: FieldValue style needs to be present
+    def subsection_header(text):
+        """Creates a sub-section header row with light background"""
+        data = [[Paragraph(f"<b>{text}</b>", styles["CellBold"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ]))
+        return t
 
     def long_text(text):
         return Paragraph(str(text) if text else "", styles["LongText"])
 
-        
+    def value(text):
+        return Paragraph(str(text) if text else "", styles["FieldValue"])
+
+    def label(text):
+        return Paragraph(text, styles["FieldLabel"])
+
     # ── ENCABEZADO (HEADER) ──────────────────────────────────────────
-    # Logos
     logo_positiva_path = "frontend/public/images/logo-positiva-hq.png"
     logo_santa_isabel_path = "frontend/public/images/logo-santa-isabel.png"
-    
-    # Header Content
-    # Row 1: Logo Positiva | Center Text | Logo Santa Isabel
-    r1_c1 = Paragraph("<b>POSITIVA S.A</b><br/>Compañía de Seguros / ARL<br/>-Gestión Documental-", styles["HeaderSub"])
-    
-    # Row 2: Code | Title | Page
-    r2_c1 = Paragraph("<b>Código:</b><br/>__________", styles["HeaderSubLeft"])
-    r2_c2 = Paragraph("<b>VALORACIÓN<br/>PRUEBA DE TRABAJO</b>", styles["HeaderTitle"])
-    r2_c3 = Paragraph("Página 1 de __", styles["HeaderSub"])
-    
-    # Row 3: Date | Process | Revised
-    r3_c1 = Paragraph("<b>Fecha:</b><br/>2021/12", styles["HeaderSubLeft"])
+
+    # Row 1: Logo | Center text | Logo Proveedor
+    logo_left = Image(logo_positiva_path, width=2.8 * cm, height=1.4 * cm) if os.path.exists(logo_positiva_path) else bold("POSITIVA")
+    logo_right = Image(logo_santa_isabel_path, width=2.8 * cm, height=1.4 * cm) if os.path.exists(logo_santa_isabel_path) else Paragraph("<b>Logo Proveedor</b>", styles["HeaderSubBold"])
+
+    center_text = Paragraph(
+        "<b>POSITIVA S.A</b><br/>"
+        "Compañía de Seguros / ARL<br/>"
+        "-Gestión Documental-<br/>"
+        "<b>VALORACIÓN<br/>PRUBA DE TRABAJO</b>",
+        styles["HeaderSub"]
+    )
+
+    # Row 2: Código + Fecha | (merged with title) | Página
+    r2_left = Paragraph("<b>Código</b><br/><b>Fecha</b>&nbsp;&nbsp;&nbsp;&nbsp;2022/07", styles["HeaderSubLeft"])
+    r2_right = Paragraph("Página 1 de ___", styles["HeaderSub"])
+
+    # Row 3: Aprobado por | Proceso | Revisado por
+    r3_c1 = Paragraph("Aprobado por:<br/><b>Gerencia Médica</b>", styles["HeaderSub"])
     r3_c2 = Paragraph("Proceso:<br/><b>Rehabilitación Integral</b>", styles["HeaderSub"])
     r3_c3 = Paragraph("Revisado por:<br/><b>Coordinación Técnica</b>", styles["HeaderSub"])
-    
-    # Row 4: Approved | Version | Empty/Merged
-    r4_c1 = Paragraph("Aprobado por:<br/><b>Gerencia Médica</b>", styles["HeaderSub"])
-    # Version separate line? Let's check typical ISO. Usually Version is bottom right or bottom center.
-    # Image showed "Version: 01" alone in Row 4.
-    r4_c2 = Paragraph("<b>Versión: 01</b>", styles["HeaderSub"])
-    
+
+    # Row 4: Version
+    r4 = Paragraph("Versión: 01", styles["HeaderSubBold"])
+
+    col_left = page_width * 0.22
+    col_center = page_width * 0.56
+    col_right = page_width * 0.22
+
     h_data = [
-        # R1: Logos and Center Text
-        [
-            Image(logo_positiva_path, width=3*cm, height=1.5*cm) if os.path.exists(logo_positiva_path) else bold("POSITIVA"),
-            r1_c1,
-            Image(logo_santa_isabel_path, width=3*cm, height=1.5*cm) if os.path.exists(logo_santa_isabel_path) else bold("Santa Isabel")
-        ],
-        # R2: Code | Title | Page
-        [r2_c1, r2_c2, r2_c3],
-        # R3: Fecha | Process | Revisado
+        [logo_left, center_text, logo_right],
+        [r2_left, "", r2_right],
         [r3_c1, r3_c2, r3_c3],
-        # R4: Aprobado | Version | (Empty)
-        [r4_c1, r4_c2, ""]
+        [r4, "", ""],
     ]
-    
-    header_t = Table(h_data, colWidths=[page_width*0.25, page_width*0.5, page_width*0.25])
+
+    header_t = Table(h_data, colWidths=[col_left, col_center, col_right])
     header_t.setStyle(TableStyle([
-        ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        
-        # Spans? No spans needed if we align content well in 3 cols.
-        # R4: Version is center. Aprobado is left.
-        # But wait, [r4_c1, r4_c2, ""] means Aprobado is Col 0, Version is Col 1.
-        # This matches "Aprobado" (Left), "Version" (Center). 
-        # But "Revisado" was on Right (Col 2, Row 3).
-        # Where does "Version" go? Image showed it at bottom.
-        
-        ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
-        ('FONTSIZE', (0,0), (-1,-1), 8),
-        ('LEFTPADDING', (0,0), (-1,-1), 6),
-        ('RIGHTPADDING', (0,0), (-1,-1), 6),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('SPAN', (0, 0), (0, 0)),
+        ('SPAN', (1, 0), (1, 1)),  # Center text spans rows 0-1
+        ('SPAN', (0, 3), (2, 3)),  # Version spans full width
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
     ]))
     elements.append(header_t)
-    
-    # Date Sub-header
-    # Table with 2 columns: "FECHA DE VALORACIÓN: [GRID]" and "ULTIMO DIA...: [GRID]"
-    # But image shows them stacked or side by side?
-    # Image: 
-    # Row 1 (Right aligned grid): [dia][mes][ano]...
-    # Row 2: "FECHA DE VALORACION:" | [Grid]
-    # Row 3: "ULTIMO DIA..." | [Grid]
-    
-    # Actually looking at image:
-    # There is a sub-header table.
-    # Row 1: Empty | "FECHA DE VALORACIÓN:" | [Grid]
-    # Row 2: "ULTIMO DIA..." | [Grid]
-    
+
+    # ── FECHA DE VALORACIÓN & ÚLTIMO DÍA INCAPACIDAD ────────────────
     i = identificacion
     grid_valoracion = date_grid(i.fecha_valoracion if i else None)
     grid_incapacidad = date_grid(i.ultimo_dia_incapacidad if i else None)
-    
-    sub_data = [
-        ["", bold("FECHA DE VALORACIÓN:"), grid_valoracion],
-        [bold("ÚLTIMO DIA DE INCAPACIDAD RECONOCIDO POR LA ARL:"), "", grid_incapacidad]
-    ]
-    sub_t = Table(sub_data, colWidths=[page_width*0.4, page_width*0.25, page_width*0.35])
-    sub_t.setStyle(TableStyle([
-        ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('SPAN', (0,1), (1,1)), # Span label for Ultimo dia
-        ('BACKGROUND', (0,1), (0,1), colors.HexColor("#fce4ec")), # Light pinkish background from image
-        ('BACKGROUND', (1,0), (1,0), colors.HexColor("#fce4ec")),
-    ]))
-    elements.append(sub_t)
 
+    date_rows = [
+        [
+            "",
+            Paragraph("<b>FECHA DE VALORACIÓN:</b>", styles["LabelSmall"]),
+            grid_valoracion,
+        ],
+        [
+            Paragraph("<b>ÚLTIMO DIA DE INCAPACIDAD RECONOCIDO POR LA ARL:</b>", styles["LabelSmall"]),
+            "",
+            grid_incapacidad,
+        ]
+    ]
+
+    date_t = Table(date_rows, colWidths=[page_width * 0.42, page_width * 0.22, page_width * 0.36])
+    date_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('SPAN', (0, 1), (1, 1)),
+        ('BACKGROUND', (0, 0), (-1, -1), LIGHT_BLUE_BG),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(date_t)
 
     # ── SECCIÓN 1: IDENTIFICACIÓN ────────────────────────────────────
-    # Main Table for Section 1
-    # 1. Header: "1 IDENTIFICACIÓN"
-    # 2. Sub: "(Datos trabajador...)"
-    # 3. Nombre
-    # 4. Num Doc
-    # 5. Siniestro
-    # 6. Nacimiento / Edad (Grid + Value)
-    # 7. Dominancia / Estado Civil
-    # 8. ...
-    
-    orange_bg = colors.HexColor("#FF7043") # Stronger Premium Orange
+    # Build section as a series of 2-column and 4-column rows
+    lw = page_width * 0.30  # label width
+    vw = page_width * 0.70  # value width
+    lw2 = page_width * 0.30  # label width (4-col)
+    vw2 = page_width * 0.20  # value width (4-col)
+    lw3 = page_width * 0.20  # label width small
+    vw3 = page_width * 0.30  # value width small
 
-    # Row helpers
-    row_1 = [bold("1. IDENTIFICACIÓN"), "", "", ""]
-    row_2 = [bold("(Datos trabajador, evento ATEL, Empresa)"), "", "", ""]
-    row_3 = [bold("Nombre del trabajador"), p(i.nombre_trabajador if i else ""), "", ""]
-    row_4 = [bold("Número de documento"), p(i.numero_documento if i else ""), "", ""]
-    row_5 = [bold("Identificación del siniestro"), p(i.id_siniestro if i else ""), "", ""]
-    
-    # Birth/Age Row: "Fecha de nacimiento/edad" | [Grid] | "edad" | [Value] años
-    grid_nac = date_grid(i.fecha_nacimiento if i else None)
-    row_6 = [bold("Fecha de nacimiento/edad"), grid_nac, bold("edad"), p(f"{i.edad or ''} años")]
-    
-    # Dominancia Row: "Dominancia" | Derecha [] | Izquierda [] | Ambidiestra []
-    dom = i.dominancia.lower() if i and i.dominancia else ""
-    dom_cell = [
-        checkbox("derecha" in dom, "Derecha"),
-        checkbox("izquierda" in dom, "Izquierda"), 
-        checkbox("ambidiestra" in dom, "Ambidiestra")
-    ]
-    # We need to nest this or structure it. Let's put it in one cell for now via a flowable?
-    # Or just standard text.
-    p_dom = Paragraph(f"{checkbox('derecha' in dom, 'Derecha').text}  {checkbox('izquierda' in dom, 'Izquierda').text}  {checkbox('ambidiestra' in dom, 'Ambidiestra').text}", styles["ValueSmall"])
-    
-    # Estado Civil: "Estado civil" | [Value] - Image has it on same row?
-    # Image: Row 7: Dominancia | [Options] | Estado Civil | [Value] - NO.
-    # Image Row 7: Dominancia | Derecha | Izquierda | Ambidiestra [ ] ??
-    # Actually from image: 
-    # Row: Dominancia | Derecha | Izquierda | Ambidiestra | (Empty)
-    # Wait, the image shows "Estado civil" below or beside?
-    # Let's look at image again.
-    # Row 7: Dominancia | Derecha | Left | Ambi | (Empty)
-    # Row 8: Estado Civil (spanning?)
-    
-    # Let's simplify and follow the field list roughly matching visual.
-    row_7 = [bold("Dominancia"), p_dom, bold("Ambidiestra"), ""] # Simplified
-    
-    # Nivel Educativo - large block vertically.
-    # We will skip complex vertical spans for now and just list it.
-    row_8 = [bold("Estado civil"), p(i.estado_civil if i else ""), "", ""]
-    
-    row_9 = [bold("Nivel educativo"), p(i.nivel_educativo if i else ""), "", ""]
-
-    # Contact
-    row_10 = [bold("Teléfonos trabajador"), p(i.telefonos_trabajador if i else ""), "", ""]
-    row_11 = [bold("Dirección residencia/ciudad"), p(i.direccion_residencia if i else ""), "", ""]
-    row_12 = [bold("Diagnóstico(s) clínico(s)"), p(i.diagnosticos_atel if i else ""), "", ""]
-    row_13 = [bold("Fecha(s) del evento(s) ATEL"), p(i.fechas_eventos_atel if i else ""), "", ""]
-    row_14 = [bold("EPS - IPS"), p(i.eps_ips if i else ""), "", ""]
-    row_15 = [bold("AFP"), p(i.afp if i else ""), "", ""]
-    row_16 = [bold("Tiempo total incapacidad"), p(f"{i.tiempo_incapacidad_dias or ''} días"), "", ""]
-    
-    # Empresa
-    row_17 = [bold("Empresa donde labora"), p(i.empresa if i else ""), "", ""]
-    row_18 = [bold("NIT de la Empresa"), p(i.nit_empresa if i else ""), "", ""]
-    row_19 = [bold("Cargo actual"), p(i.cargo_actual if i else ""), "", ""]
-    
-    # Cargo Unico
-    c_unico = "Si" if i and i.cargo_unico else "No"
-    row_20 = [bold("Cargo unico de las mismas caracteristicas"), p(c_unico), "", ""]
-    
-    # Fechas cargos
-    # Row: Fecha ingreso cargo | Grid | tiempo | Value
-    grid_fi_cargo = date_grid(i.fecha_ingreso_cargo if i else None)
-    row_21 = [bold("Fecha ingreso cargo/antigüedad"), grid_fi_cargo, bold("tiempo"), p(i.antiguedad_cargo if i else "")]
-    
-    grid_fi_emp = date_grid(i.fecha_ingreso_empresa if i else None)
-    row_22 = [bold("Fecha ingreso empresa/antigüedad"), grid_fi_emp, bold("tiempo"), p(i.antiguedad_empresa if i else "")]
-    
-    # Vinculacion
-    row_23 = [bold("Forma de vinculación laboral"), p(i.forma_vinculacion if i else ""), "", ""]
-    
-    # Modalidad
-    # Row: Modalidad | Presencial | Teletrabajo | Trabajo en casa
-    mod = i.modalidad.lower() if i and i.modalidad else ""
-    # Checkboxes
-    cb_pres = checkbox("presencial" in mod, "Presencial")
-    cb_tele = checkbox("teletrabajo" in mod, "Teletrabajo")
-    cb_casa = checkbox("casa" in mod, "Trabajo en casa")
-    
-    row_24 = [bold("Modalidad"), cb_pres, cb_tele, cb_casa]
-    
-    row_25 = [bold("Tiempo de la Modalidad"), p(i.tiempo_modalidad if i else ""), "", ""]
-    row_26 = [bold("Contacto en empresa/cargo"), p(i.contacto_empresa if i else ""), "", ""]
-    row_27 = [bold("Correo(s) electrónico(s)"), p(i.correos_electronicos if i else ""), "", ""]
-    row_28 = [bold("Teléfonos de contacto empresa"), p(i.telefonos_empresa if i else ""), "", ""]
-    row_29 = [bold("Dirección de empresa/ciudad"), p(i.direccion_empresa if i else ""), "", ""]
-
-    
-    id_data = [
-        row_1, row_2, row_3, row_4, row_5, 
-        row_6, # Birth
-        [bold("Dominancia"), p(i.dominancia if i else ""), bold("Estado Civil"), p(i.estado_civil if i else "")], # Combined for simplicity
-        row_9, row_10, row_11, row_12, row_13, row_14, row_15, row_16,
-        row_17, row_18, row_19, row_20,
-        row_21, row_22,
-        row_23, row_24, row_25, row_26, row_27, row_28, row_29
-    ]
-
-    id_table = Table(id_data, colWidths=[page_width*0.35, page_width*0.35, page_width*0.15, page_width*0.15])
-    id_table.setStyle(TableStyle([
-        ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        
-        # Spans
-        ('SPAN', (0,0), (-1,0)), # Title
-        ('SPAN', (0,1), (-1,1)), # Subtitle
-        ('SPAN', (1,2), (-1,2)), # Name val
-        ('SPAN', (1,3), (-1,3)), # Doc val
-        ('SPAN', (1,4), (-1,4)), # Siniestro val
-        
-        ('BACKGROUND', (0,0), (-1,1), orange_bg), # Headers orange
-        
-        # General formatting
-        ('FONTSIZE', (0,0), (-1,-1), 7),
+    # Section header
+    sec1_header = [[Paragraph("<b>1&nbsp;&nbsp;&nbsp;IDENTIFICACIÓN</b>", styles["SectionTitle"])]]
+    sec1_ht = Table(sec1_header, colWidths=[page_width])
+    sec1_ht.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), ORANGE_BG),
+        ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
     ]))
-    elements.append(id_table)
+    elements.append(sec1_ht)
+
+    # Sub-header
+    sub_h = [[Paragraph("<b>(Datos trabajador, evento ATEL, Empresa)</b>", styles["CellBold"])]]
+    sub_ht = Table(sub_h, colWidths=[page_width])
+    sub_ht.setStyle(TableStyle([
+        ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#FFF3E0")),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(sub_ht)
+
+    # Helper: 2-column row (label | value spanning rest)
+    def id_row_2col(lbl, val):
+        return [bold(lbl), p(val)]
+
+    # Helper: 4-column row
+    def id_row_4col(l1, v1, l2, v2):
+        return [bold(l1), p(v1), bold(l2), p(v2)]
+
+    # Build identification rows
+    id_rows = []
+
+    # Nombre del trabajador
+    id_rows.append(id_row_2col("Nombre del trabajador", i.nombre_trabajador if i else ""))
+
+    # Número de documento
+    id_rows.append(id_row_2col("Número de documento", i.numero_documento if i else ""))
+
+    # Identificación del siniestro
+    id_rows.append(id_row_2col("Identificación del siniestro", i.id_siniestro if i else ""))
+
+    id_table_basic = Table(id_rows, colWidths=[lw, vw])
+    id_table_basic.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(id_table_basic)
+
+    # Fecha de nacimiento/edad row (special: label | date_grid | "edad" | value + "años")
+    grid_nac = date_grid(i.fecha_nacimiento if i else None)
+    edad_val = f"{i.edad or ''}" if i else ""
+
+    nac_row = [
+        [bold("Fecha de nacimiento/edad"), grid_nac, bold("edad"), p(f"{edad_val}    años" if edad_val else "")]
+    ]
+    nac_t = Table(nac_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
+    nac_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('BACKGROUND', (2, 0), (2, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(nac_t)
+
+    # Dominancia row: label | Derecha | Izquierda | Ambidiestra
+    dom = i.dominancia.lower() if i and i.dominancia else ""
+    dom_row = [[
+        bold("Dominancia"),
+        checkbox("derecha" in dom, "Derecha"),
+        checkbox("izquierda" in dom, "Izquierda"),
+        checkbox("ambidiestra" in dom, "Ambidiestra"),
+    ]]
+    dom_t = Table(dom_row, colWidths=[page_width * 0.30, page_width * 0.23, page_width * 0.23, page_width * 0.24])
+    dom_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(dom_t)
+
+    # Estado civil
+    ec_row = [[bold("Estado civil"), p(i.estado_civil if i else "")]]
+    ec_t = Table(ec_row, colWidths=[lw, vw])
+    ec_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(ec_t)
+
+    # Nivel educativo - Grid of checkboxes (3 columns x N rows)
+    ne = i.nivel_educativo.lower() if i and i.nivel_educativo else ""
+
+    ne_options = [
+        ("formacion_empirica", "Formación empírica"),
+        ("basica_primaria", "Básica primaria"),
+        ("bachillerato_vocacional", "Bachillerato:\nvocacional 9°"),
+        ("bachillerato_modalidad", "Bachillerato: modalidad"),
+        ("tecnico_tecnologico", "Técnico/\nTecnológico"),
+        ("profesional", "Profesional"),
+        ("especializacion", "Especialización/\npostgrado/ maestría"),
+        ("formacion_informal", "Formación\ninformal oficios"),
+        ("analfabeta", "Analfabeta"),
+        ("otros", "Otros"),
+    ]
+
+    # Build 2 rows x 5 columns for education checkboxes
+    ne_cells_r1 = []
+    ne_cells_r2 = []
+    for idx, (key, lbl) in enumerate(ne_options):
+        cb = checkbox(key in ne, lbl)
+        if idx < 5:
+            ne_cells_r1.append(cb)
+        else:
+            ne_cells_r2.append(cb)
+
+    # Pad second row if needed
+    while len(ne_cells_r2) < 5:
+        ne_cells_r2.append("")
+
+    ne_inner = Table([ne_cells_r1, ne_cells_r2], colWidths=[page_width * 0.14] * 5)
+    ne_inner.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.3, colors.HexColor("#BDBDBD")),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 2),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 2),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+
+    ne_row_data = [[bold("Nivel educativo"), ne_inner]]
+    ne_t = Table(ne_row_data, colWidths=[page_width * 0.30, page_width * 0.70])
+    ne_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (0, -1), 4),
+        ('LEFTPADDING', (1, 0), (1, -1), 0),
+        ('RIGHTPADDING', (1, 0), (1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(ne_t)
+
+    # Remaining simple 2-column rows
+    simple_rows_data = [
+        ("Teléfonos trabajador", i.telefonos_trabajador if i else ""),
+        ("Dirección residencia/ciudad", i.direccion_residencia if i else ""),
+        ("Diagnóstico(s) clínico(s) por evento ATEL", i.diagnosticos_atel if i else ""),
+        ("Fecha(s) del evento(s) ATEL", i.fechas_eventos_atel if i else ""),
+        ("EPS - IPS", i.eps_ips if i else ""),
+        ("AFP", i.afp if i else ""),
+    ]
+
+    simple_rows = [[bold(lbl_text), p(val_text)] for lbl_text, val_text in simple_rows_data]
+    simple_t = Table(simple_rows, colWidths=[lw, vw])
+    simple_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(simple_t)
+
+    # Tiempo total incapacidad (with "días" label)
+    tti_val = f"{i.tiempo_incapacidad_dias or ''}" if i else ""
+    tti_row = [[bold("Tiempo total de incapacidad"), p(tti_val), bold("días"), ""]]
+    tti_t = Table(tti_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
+    tti_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(tti_t)
+
+    # Empresa section rows
+    empresa_rows_data = [
+        ("Empresa donde labora", i.empresa if i else ""),
+        ("NIT de la Empresa", i.nit_empresa if i else ""),
+        ("Cargo actual", i.cargo_actual if i else ""),
+    ]
+    empresa_rows = [[bold(lbl_text), p(val_text)] for lbl_text, val_text in empresa_rows_data]
+    empresa_t = Table(empresa_rows, colWidths=[lw, vw])
+    empresa_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(empresa_t)
+
+    # Cargo unico de las mismas características (si | no checkboxes)
+    c_unico = i.cargo_unico if i else None
+    cu_row = [[
+        bold("Cargo unico de las mismas\ncaracterísticas"),
+        checkbox(c_unico is True, "si"),
+        checkbox(c_unico is not True, "no"),
+        "",
+    ]]
+    cu_t = Table(cu_row, colWidths=[page_width * 0.30, page_width * 0.15, page_width * 0.15, page_width * 0.40])
+    cu_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(cu_t)
+
+    # Área/sección/proceso
+    area_row = [[bold("Área/sección/proceso"), p(i.area_seccion if i else "")]]
+    area_t = Table(area_row, colWidths=[lw, vw])
+    area_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(area_t)
+
+    # Fecha ingreso cargo/antigüedad (date grid + tiempo + value + años)
+    grid_fi_cargo = date_grid(i.fecha_ingreso_cargo if i else None)
+    fic_row = [[
+        bold("Fecha ingreso cargo/antigüedad en\nel cargo"),
+        grid_fi_cargo,
+        bold("tiempo"),
+        p(f"{i.antiguedad_cargo or ''}    años" if i else ""),
+    ]]
+    fic_t = Table(fic_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
+    fic_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('BACKGROUND', (2, 0), (2, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(fic_t)
+
+    # Fecha ingreso empresa/antigüedad
+    grid_fi_emp = date_grid(i.fecha_ingreso_empresa if i else None)
+    fie_row = [[
+        bold("Fecha ingreso a la\nempresa/antigüedad en la empresa"),
+        grid_fi_emp,
+        bold("tiempo"),
+        p(f"{i.antiguedad_empresa or ''}    años" if i else ""),
+    ]]
+    fie_t = Table(fie_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
+    fie_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('BACKGROUND', (2, 0), (2, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(fie_t)
+
+    # Forma de vinculación laboral
+    fv_row = [[bold("Forma de vinculación laboral"), p(i.forma_vinculacion if i else "")]]
+    fv_t = Table(fv_row, colWidths=[lw, vw])
+    fv_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(fv_t)
+
+    # Modalidad: Presencial | teletrabajo | trabajo en casa
+    mod = i.modalidad.lower() if i and i.modalidad else ""
+    mod_row = [[
+        bold("Modalidad"),
+        checkbox("presencial" in mod, "Presencial"),
+        checkbox("teletrabajo" in mod, "teletrabajo"),
+        checkbox("casa" in mod, "trabajo en casa"),
+    ]]
+    mod_t = Table(mod_row, colWidths=[page_width * 0.30, page_width * 0.23, page_width * 0.23, page_width * 0.24])
+    mod_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(mod_t)
+
+    # Remaining contact rows
+    contact_rows_data = [
+        ("tiempo de la Modalidad", i.tiempo_modalidad if i else ""),
+        ("Contacto en empresa/cargo", i.contacto_empresa if i else ""),
+        ("Correo(s) electrónico(s)", i.correos_electronicos if i else ""),
+        ("Teléfonos de contacto empresa", i.telefonos_empresa if i else ""),
+        ("Dirección de empresa/ciudad", i.direccion_empresa if i else ""),
+    ]
+    contact_rows = [[bold(lbl_text), p(val_text)] for lbl_text, val_text in contact_rows_data]
+    contact_t = Table(contact_rows, colWidths=[lw, vw])
+    contact_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(contact_t)
     elements.append(Spacer(1, 6))
 
-    col_w = page_width / 4  # Restore variable for legacy sections
-
-    # Orange background for section headers
-    orange_bg = colors.HexColor("#FF7043")
-    
-    def section_title_table(text):
-        """Creates a full-width table with orange background for section titles"""
-        data = [[Paragraph(f"<b>{text}</b>", styles["CellBold"])]]
-        t = Table(data, colWidths=[page_width])
-        t.setStyle(TableStyle([
-            ('BACKGROUND', (0,0), (-1,-1), orange_bg),
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-            ('LEFTPADDING', (0,0), (-1,-1), 4),
-            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ]))
-        return t
-
     # ── SECCIÓN 2: METODOLOGÍA ───────────────────────────────────────
-    elements.append(section_title_table("2. METODOLOGÍA"))
-    elements.append(Spacer(1, 2))
-    elements.append(long_text(secciones.metodologia if secciones else ""))
+    elements.append(section_title_table("2   METODOLOGIA"))
+    elements.append(bordered_text_block(secciones.metodologia if secciones else ""))
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 3: CONDICIONES DE TRABAJO ────────────────────────────
-    elements.append(section_title_table("3. CONDICIONES DE TRABAJO"))
-    elements.append(Spacer(1, 2))
+    elements.append(section_title_table("3   CONDICIONES DE TRABAJO"))
 
-    elements.append(Paragraph("<b>3.1 Descripción del proceso productivo</b>", styles["CellBold"]))
-    elements.append(long_text(secciones.descripcion_proceso_productivo if secciones else ""))
+    # 3.1
+    elements.append(subsection_header("3.1  DESCRIPCION DEL PROCESO PRODUCTIVO"))
+    elements.append(bordered_text_block(secciones.descripcion_proceso_productivo if secciones else ""))
     elements.append(Spacer(1, 4))
 
-    elements.append(Paragraph("<b>3.2 Apreciación del trabajador frente a su proceso productivo</b>", styles["CellBold"]))
-    elements.append(long_text(secciones.apreciacion_trabajador_proceso if secciones else ""))
+    # 3.2
+    elements.append(subsection_header("3.2  Apreciación del trabajador frente a su proceso productivo"))
+    elements.append(bordered_text_block(secciones.apreciacion_trabajador_proceso if secciones else ""))
     elements.append(Spacer(1, 4))
 
-    elements.append(Paragraph("<b>3.3 Estándares de productividad</b>", styles["CellBold"]))
-    elements.append(long_text(secciones.estandares_productividad if secciones else ""))
+    # 3.3
+    elements.append(subsection_header("3.3  Estándares de productividad"))
+    elements.append(bordered_text_block(secciones.estandares_productividad if secciones else ""))
     elements.append(Spacer(1, 4))
 
     # 3.4 Desempeño Organizacional
-    elements.append(Paragraph("<b>3.4 Requerimientos del desempeño organizacional</b>", styles["CellBold"]))
+    elements.append(subsection_header("3.4  Requerimientos del desempeño organizacional"))
     if desempeno:
         d = desempeno
-        # Use simple grid but with Bold Labels
         do_data = [
             [bold("Jornada"), p(d.jornada), bold("Ritmo"), p(d.ritmo)],
             [bold("Descansos programados"), p(d.descansos_programados), bold("Turnos"), p(d.turnos)],
             [bold("Tiempos efectivos"), p(d.tiempos_efectivos), bold("Rotaciones"), p(d.rotaciones)],
             [bold("Horas extras"), p(d.horas_extras), bold("Distribución semanal"), p(d.distribucion_semanal)],
         ]
-        do_table = Table(do_data, colWidths=[page_width*0.2, page_width*0.3, page_width*0.2, page_width*0.3])
+        do_table = Table(do_data, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.20, page_width * 0.30])
         do_table.setStyle(TableStyle([
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('BACKGROUND', (0,0), (0,-1), colors.HexColor("#e8eaf6")), # Light blue for labels cols 0 and 2
-            ('BACKGROUND', (2,0), (2,-1), colors.HexColor("#e8eaf6")),
-            ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
-            ('FONTSIZE', (0,0), (-1,-1), 7),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+            ('BACKGROUND', (2, 0), (2, -1), LIGHT_GRAY),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
         elements.append(do_table)
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 4: TAREAS ────────────────────────────────────────────
-    elements.append(section_title_table("4. REQUERIMIENTOS DEL PROCESO PRODUCTIVO POR TAREA"))
+    elements.append(section_title_table("4   REQUERIMIENTOS DEL PROCESO PRODUCTIVO POR TAREA"))
     elements.append(Spacer(1, 4))
-    
+
     conclusion_labels = {
         "reintegro_sin_modificaciones": "Reintegro sin modificaciones",
         "reintegro_con_modificaciones": "Reintegro con modificaciones",
         "desarrollo_capacidades": "Desarrollo de capacidades",
         "no_puede_desempenarla": "No puede desempeñarla",
     }
-    
+
     for idx, tarea in enumerate(tareas):
-        # Tarea Header (Sub-header style)
+        # Tarea Header
         t_header = [[Paragraph(f"<b>Tarea {idx + 1}</b>", styles["CellBold"])]]
         th_table = Table(t_header, colWidths=[page_width])
         th_table.setStyle(TableStyle([
-            ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#e0e0e0")), # Grey for tasks
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#E0E0E0")),
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
         elements.append(th_table)
-        
+
         # Tarea Data Table
         t_data = [
             [bold("Actividad"), p(tarea.actividad), bold("Ciclo"), p(tarea.ciclo)],
             [bold("Subactividad"), p(tarea.subactividad), bold("Estándar productividad"), p(tarea.estandar_productividad)],
         ]
-        t_table = Table(t_data, colWidths=[page_width*0.2, page_width*0.3, page_width*0.2, page_width*0.3])
+        t_table = Table(t_data, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.20, page_width * 0.30])
         t_table.setStyle(TableStyle([
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('BACKGROUND', (0,0), (0,-1), colors.HexColor("#f5f5f5")),
-            ('BACKGROUND', (2,0), (2,-1), colors.HexColor("#f5f5f5")),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+            ('BACKGROUND', (2, 0), (2, -1), LIGHT_GRAY),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
         elements.append(t_table)
         elements.append(Spacer(1, 2))
 
-        # Text blocks
-        elements.append(Paragraph("<b>Descripción y requerimientos biomecánicos:</b>", styles["CellBold"]))
-        elements.append(long_text(tarea.descripcion_biomecanica))
-        elements.append(Spacer(1, 2))
-        
-        elements.append(Paragraph("<b>Apreciación del trabajador:</b>", styles["CellBold"]))
-        elements.append(long_text(tarea.apreciacion_trabajador))
-        elements.append(Spacer(1, 2))
-        
-        elements.append(Paragraph("<b>Apreciación del profesional:</b>", styles["CellBold"]))
-        elements.append(long_text(tarea.apreciacion_profesional))
+        # Text blocks in bordered containers
+        elements.append(subsection_header("Descripción y requerimientos biomecánicos"))
+        elements.append(bordered_text_block(tarea.descripcion_biomecanica))
         elements.append(Spacer(1, 2))
 
+        elements.append(subsection_header("Apreciación del trabajador"))
+        elements.append(bordered_text_block(tarea.apreciacion_trabajador))
+        elements.append(Spacer(1, 2))
+
+        elements.append(subsection_header("Apreciación del profesional"))
+        elements.append(bordered_text_block(tarea.apreciacion_profesional))
+        elements.append(Spacer(1, 2))
+
+        # Conclusión
         concl_text = conclusion_labels.get(tarea.conclusion or "", tarea.conclusion or "")
-        elements.append(Paragraph(f"<b>Conclusión:</b> {concl_text}", styles["CellBold"]))
-        elements.append(long_text(tarea.descripcion_conclusion))
+        concl_data = [
+            [bold("Conclusión"), p(concl_text)],
+        ]
+        if tarea.descripcion_conclusion:
+            concl_data.append([bold("Descripción"), p(tarea.descripcion_conclusion)])
+
+        concl_t = Table(concl_data, colWidths=[page_width * 0.20, page_width * 0.80])
+        concl_t.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ]))
+        elements.append(concl_t)
         elements.append(Spacer(1, 4))
 
         # Registro Fotográfico
         if tarea.registro_fotografico:
-            img_paths = [p.strip() for p in tarea.registro_fotografico.split(';') if p.strip()]
+            img_paths = [path.strip() for path in tarea.registro_fotografico.split(';') if path.strip()]
             if img_paths:
-                elements.append(Paragraph("<b>Registro Fotográfico:</b>", styles["CellBold"]))
+                elements.append(subsection_header("Registro Fotográfico"))
                 elements.append(Spacer(1, 2))
                 for img_path_raw in img_paths:
                     img_path = img_path_raw.lstrip("/")
                     if os.path.exists(img_path):
                         try:
-                            # 7cm x 5cm image
-                            img = Image(img_path, width=7*cm, height=5*cm)
+                            img = Image(img_path, width=7 * cm, height=5 * cm)
                             elements.append(img)
                             elements.append(Spacer(1, 4))
                         except Exception as e:
                             print(f"Error embedding image {img_path}: {e}")
-                            pass
-        
+
         elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 5: MATERIALES ────────────────────────────────────────
-    elements.append(section_title_table("5. MATERIALES, EQUIPOS Y HERRAMIENTAS"))
+    elements.append(section_title_table("5   MATERIALES, EQUIPOS Y HERRAMIENTAS"))
     if materiales:
-        # Header Row with Orange BG via TableStyle
         m_header = [bold("Nombre"), bold("Descripción"), bold("Requerimientos"), bold("Observaciones")]
         m_rows = [m_header]
         for mat in materiales:
             m_rows.append([p(mat.nombre), p(mat.descripcion),
                            p(mat.requerimientos_operacion), p(mat.observaciones)])
-        
-        m_table = Table(m_rows, colWidths=[page_width * 0.2, page_width * 0.3, page_width * 0.25, page_width * 0.25])
+
+        m_table = Table(m_rows, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.25, page_width * 0.25])
         m_table.setStyle(TableStyle([
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('BACKGROUND', (0,0), (-1,0), orange_bg), # Header row orange
-            ('ALIGN', (0,0), (-1,0), 'CENTER'),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (-1, 0), ORANGE_BG),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
         elements.append(m_table)
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 6: PELIGROS ──────────────────────────────────────────
-    elements.append(section_title_table("6. IDENTIFICACIÓN DE PELIGROS"))
+    elements.append(section_title_table("6   IDENTIFICACIÓN DE PELIGROS"))
     cat_labels = {
         "fisicos": "Físicos", "biologicos": "Biológicos", "biomecanicos": "Biomecánicos",
         "psicosociales": "Psicosociales", "quimicos": "Químicos", "cond_seguridad": "Cond. Seguridad",
@@ -546,107 +799,131 @@ def generar_pdf_prueba_trabajo_to(
                 p(pel.tipos_control_existente),
                 p(pel.recomendaciones_control),
             ])
-        
+
         p_table = Table(p_rows, colWidths=[page_width * 0.18, page_width * 0.27, page_width * 0.27, page_width * 0.28])
         p_table.setStyle(TableStyle([
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('BACKGROUND', (0,0), (-1,0), orange_bg), # Header row orange
-            ('ALIGN', (0,0), (-1,0), 'CENTER'),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (-1, 0), ORANGE_BG),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
         elements.append(p_table)
     elements.append(Spacer(1, 4))
 
-    elements.append(Paragraph("<b>6.1 Verificación de acciones correctivas</b>", styles["CellBold"]))
-    elements.append(long_text(secciones.verificacion_acciones_correctivas if secciones else ""))
+    elements.append(subsection_header("6.1  Verificación de acciones correctivas"))
+    elements.append(bordered_text_block(secciones.verificacion_acciones_correctivas if secciones else ""))
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 7: CONCEPTO ──────────────────────────────────────────
-    elements.append(section_title_table("7. CONCEPTO PARA PRUEBA DE TRABAJO"))
+    elements.append(section_title_table("7   CONCEPTO PARA PRUEBA DE TRABAJO"))
     elements.append(Spacer(1, 2))
-    elements.append(Paragraph("<b>COMPETENCIA, SEGURIDAD, CONFORT, RELACIONES SOCIALES, OTROS ASPECTOS</b>", styles["CellBold"]))
-    elements.append(long_text(secciones.concepto_prueba_trabajo if secciones else ""))
+    elements.append(subsection_header("COMPETENCIA, SEGURIDAD, CONFORT, RELACIONES SOCIALES, OTROS ASPECTOS"))
+    elements.append(bordered_text_block(secciones.concepto_prueba_trabajo if secciones else ""))
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 8: RECOMENDACIONES ───────────────────────────────────
-    elements.append(section_title_table("8. RECOMENDACIONES"))
+    elements.append(section_title_table("8   RECOMENDACIONES"))
     elements.append(Spacer(1, 2))
-    
-    # Grid for Recommendations: Worker | Company
+
     rec_data = [
-        [bold("PARA EL TRABAJADOR"), bold("PARA LA EMPRESA")],
-        [p(recomendaciones.para_trabajador if recomendaciones else ""), p(recomendaciones.para_empresa if recomendaciones else "")]
+        [
+            Paragraph("<b>PARA EL TRABAJADOR</b>", styles["CellBold"]),
+            Paragraph("<b>PARA LA EMPRESA</b>", styles["CellBold"])
+        ],
+        [
+            p(recomendaciones.para_trabajador if recomendaciones else ""),
+            p(recomendaciones.para_empresa if recomendaciones else "")
+        ]
     ]
-    rec_table = Table(rec_data, colWidths=[page_width*0.5, page_width*0.5])
+    rec_table = Table(rec_data, colWidths=[page_width * 0.50, page_width * 0.50])
     rec_table.setStyle(TableStyle([
-        ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-        ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('BACKGROUND', (0,0), (-1,0), orange_bg),
-        ('ALIGN', (0,0), (-1,0), 'CENTER'),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('BACKGROUND', (0, 0), (-1, 0), ORANGE_BG),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
     ]))
     elements.append(rec_table)
     elements.append(Spacer(1, 6))
 
     # ── SECCIÓN 9: REGISTRO ──────────────────────────────────────────
-    elements.append(section_title_table("9. REGISTRO"))
+    elements.append(section_title_table("9   REGISTRO"))
     elements.append(Spacer(1, 2))
-    
+
     if registro:
-        # Signatures table
-        # 3 Columns: Elaboro, Reviso, Trabajador (Usuario)
-        # Note: Image might show Provider too, but we have fields for Elaboro, Revisor, Trabajador.
-        # Let's check schema: nombre_elaboro, firma_elaboro...
-        
-        # Row 1: Titles
-        reg_header = [bold("ELABORÓ"), bold("REVISÓ"), bold("DATOS DEL USUARIO")]
-        
-        # Row 2: Content (Name, Signature, License/ID)
-        # Elaborao
-        elaboro_content = [
-            bold("NOMBRE:"), p(registro.nombre_elaboro),
-            Spacer(1, 4),
-            bold("FIRMA:"),
-            Image(registro.firma_elaboro.lstrip("/"), width=3*cm, height=1.5*cm) if registro.firma_elaboro and os.path.exists(registro.firma_elaboro.lstrip("/")) else Spacer(1, 30),
-            Spacer(1, 4),
-            bold("LICENCIA S.O:"), p(registro.licencia_so_elaboro if hasattr(registro, 'licencia_so_elaboro') else "")
+        # Header row
+        reg_header = [
+            Paragraph("<b>ELABORÓ</b>", styles["CellBold"]),
+            Paragraph("<b>REVISÓ</b>", styles["CellBold"]),
+            Paragraph("<b>DATOS DEL USUARIO</b>", styles["CellBold"]),
         ]
-        
-        reviso_content = [
-            bold("NOMBRE:"), p(registro.nombre_revisor),
-            Spacer(1, 4),
-            bold("FIRMA:"),
-             Image(registro.firma_revisor.lstrip("/"), width=3*cm, height=1.5*cm) if registro.firma_revisor and os.path.exists(registro.firma_revisor.lstrip("/")) else Spacer(1, 30),
-             Spacer(1, 4),
-             bold("LICENCIA S.O:"), p(registro.licencia_so_revisor if hasattr(registro, 'licencia_so_revisor') else "")
-        ]
-        
-        trabajador_content = [
-             bold("NOMBRE:"), p(registro.nombre_trabajador if hasattr(registro, 'nombre_trabajador') else identificacion.nombre_trabajador if identificacion else ""),
-             Spacer(1, 4),
-             bold("FIRMA DEL TRABAJADOR:"),
-              Image(registro.firma_trabajador.lstrip("/"), width=3*cm, height=1.5*cm) if registro.firma_trabajador and os.path.exists(registro.firma_trabajador.lstrip("/")) else Spacer(1, 30),
-              Spacer(1, 4),
-              bold("C.C:"), p(identificacion.numero_documento if identificacion else "")
-        ]
-        
-        reg_data = [[elaboro_content, reviso_content, trabajador_content]]
-        reg_table = Table(reg_data, colWidths=[page_width/3]*3)
-        reg_table.setStyle(TableStyle([
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-            ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ]))
-        
-        # Create a header table just for the titles 
-        reg_header_table = Table([reg_header], colWidths=[page_width/3]*3)
+
+        # Build cell content for each column
+        def build_sig_cell(nombre_label, nombre_val, firma_path, extra_label, extra_val):
+            cell_parts = []
+            cell_parts.append(Paragraph(f"<b>{nombre_label}:</b> {nombre_val or ''}", styles["ValueSmall"]))
+            cell_parts.append(Spacer(1, 4))
+            cell_parts.append(Paragraph("<b>FIRMA:</b>", styles["ValueSmall"]))
+            if firma_path and os.path.exists(firma_path.lstrip("/")):
+                try:
+                    cell_parts.append(Image(firma_path.lstrip("/"), width=3 * cm, height=1.5 * cm))
+                except Exception:
+                    cell_parts.append(Spacer(1, 30))
+            else:
+                cell_parts.append(Spacer(1, 30))
+            cell_parts.append(Spacer(1, 4))
+            cell_parts.append(Paragraph(f"<b>{extra_label}:</b> {extra_val or ''}", styles["ValueSmall"]))
+            return cell_parts
+
+        elaboro_cell = build_sig_cell(
+            "NOMBRE", registro.nombre_elaboro,
+            registro.firma_elaboro,
+            "LICENCIA S.O", registro.licencia_so_elaboro if hasattr(registro, 'licencia_so_elaboro') else ""
+        )
+        reviso_cell = build_sig_cell(
+            "NOMBRE", registro.nombre_revisor,
+            registro.firma_revisor,
+            "LICENCIA S.O", registro.licencia_so_revisor if hasattr(registro, 'licencia_so_revisor') else ""
+        )
+        trabajador_cell = build_sig_cell(
+            "NOMBRE",
+            registro.nombre_trabajador if hasattr(registro, 'nombre_trabajador') else (identificacion.nombre_trabajador if identificacion else ""),
+            registro.firma_trabajador,
+            "C.C", identificacion.numero_documento if identificacion else ""
+        )
+
+        # Header table
+        reg_header_table = Table([reg_header], colWidths=[page_width / 3] * 3)
         reg_header_table.setStyle(TableStyle([
-             ('GRID', (0,0), (-1,-1), 0.5, colors.black),
-             ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#f5f5f5")),
-             ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
         ]))
-        
         elements.append(reg_header_table)
+
+        # Content table
+        reg_data = [[elaboro_cell, reviso_cell, trabajador_cell]]
+        reg_table = Table(reg_data, colWidths=[page_width / 3] * 3)
+        reg_table.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
         elements.append(reg_table)
-    
+
     # ── BUILD ────────────────────────────────────────────────────────
     doc.build(elements)
     return filepath
