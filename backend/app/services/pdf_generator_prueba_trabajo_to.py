@@ -123,8 +123,11 @@ def generar_pdf_prueba_trabajo_to(
         return t
 
     def checkbox(checked, label_text):
-        """Returns visual checkbox ☑ or ☐ + Label"""
-        mark = "☑" if checked else "☐"
+        """Returns visual checkbox [X] or [  ] + Label"""
+        if checked:
+            mark = '<b>[X]</b>'
+        else:
+            mark = '[&nbsp;&nbsp;]'
         return Paragraph(f"{mark} {label_text}", styles["CheckLabel"])
 
     def p(text, style_name="ValueSmall"):
@@ -185,12 +188,35 @@ def generar_pdf_prueba_trabajo_to(
         return Paragraph(text, styles["FieldLabel"])
 
     # ── ENCABEZADO (HEADER) ──────────────────────────────────────────
-    logo_positiva_path = "frontend/public/images/logo-positiva-hq.png"
-    logo_santa_isabel_path = "frontend/public/images/logo-santa-isabel.png"
+    # Resolve logo paths relative to this script → backend/app/services/ → go up to repo root
+    _script_dir = Path(__file__).resolve().parent  # backend/app/services
+    _repo_root = _script_dir.parent.parent.parent  # repo root
+
+    # Try multiple possible locations for logos
+    _logo_positiva_candidates = [
+        _repo_root / "Positiva Logo.png",
+        _repo_root / "frontend" / "public" / "images" / "logo-positiva-hq.png",
+    ]
+    _logo_santa_candidates = [
+        _repo_root / "Santa Isabel Logo.png",
+        _repo_root / "frontend" / "public" / "images" / "logo-santa-isabel.png",
+    ]
+
+    logo_positiva_path = None
+    for cp in _logo_positiva_candidates:
+        if cp.exists():
+            logo_positiva_path = str(cp)
+            break
+
+    logo_santa_isabel_path = None
+    for cp in _logo_santa_candidates:
+        if cp.exists():
+            logo_santa_isabel_path = str(cp)
+            break
 
     # Row 1: Logo | Center text | Logo Proveedor
-    logo_left = Image(logo_positiva_path, width=2.8 * cm, height=1.4 * cm) if os.path.exists(logo_positiva_path) else bold("POSITIVA")
-    logo_right = Image(logo_santa_isabel_path, width=2.8 * cm, height=1.4 * cm) if os.path.exists(logo_santa_isabel_path) else Paragraph("<b>Logo Proveedor</b>", styles["HeaderSubBold"])
+    logo_left = Image(logo_positiva_path, width=2.8 * cm, height=1.4 * cm) if logo_positiva_path else bold("POSITIVA")
+    logo_right = Image(logo_santa_isabel_path, width=2.8 * cm, height=1.4 * cm) if logo_santa_isabel_path else Paragraph("<b>Logo Proveedor</b>", styles["HeaderSubBold"])
 
     center_text = Paragraph(
         "<b>POSITIVA S.A</b><br/>"
@@ -354,12 +380,12 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(nac_t)
 
     # Dominancia row: label | Derecha | Izquierda | Ambidiestra
-    dom = i.dominancia.lower() if i and i.dominancia else ""
+    dom = i.dominancia.lower().strip() if i and i.dominancia else ""
     dom_row = [[
         bold("Dominancia"),
-        checkbox("derecha" in dom, "Derecha"),
-        checkbox("izquierda" in dom, "Izquierda"),
-        checkbox("ambidiestra" in dom, "Ambidiestra"),
+        checkbox(dom == "derecha", "Derecha"),
+        checkbox(dom == "izquierda", "Izquierda"),
+        checkbox(dom == "ambidiestra", "Ambidiestra"),
     ]]
     dom_t = Table(dom_row, colWidths=[page_width * 0.30, page_width * 0.23, page_width * 0.23, page_width * 0.24])
     dom_t.setStyle(TableStyle([
@@ -386,7 +412,7 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(ec_t)
 
     # Nivel educativo - Grid of checkboxes (3 columns x N rows)
-    ne = i.nivel_educativo.lower() if i and i.nivel_educativo else ""
+    ne = i.nivel_educativo.lower().strip() if i and i.nivel_educativo else ""
 
     ne_options = [
         ("formacion_empirica", "Formación empírica"),
@@ -405,7 +431,7 @@ def generar_pdf_prueba_trabajo_to(
     ne_cells_r1 = []
     ne_cells_r2 = []
     for idx, (key, lbl) in enumerate(ne_options):
-        cb = checkbox(key in ne, lbl)
+        cb = checkbox(ne == key or ne.startswith(key), lbl)
         if idx < 5:
             ne_cells_r1.append(cb)
         else:
@@ -581,12 +607,12 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(fv_t)
 
     # Modalidad: Presencial | teletrabajo | trabajo en casa
-    mod = i.modalidad.lower() if i and i.modalidad else ""
+    mod = i.modalidad.lower().strip() if i and i.modalidad else ""
     mod_row = [[
         bold("Modalidad"),
-        checkbox("presencial" in mod, "Presencial"),
-        checkbox("teletrabajo" in mod, "teletrabajo"),
-        checkbox("casa" in mod, "trabajo en casa"),
+        checkbox(mod == "presencial", "Presencial"),
+        checkbox(mod == "teletrabajo", "teletrabajo"),
+        checkbox(mod == "trabajo_en_casa" or mod == "trabajo en casa", "trabajo en casa"),
     ]]
     mod_t = Table(mod_row, colWidths=[page_width * 0.30, page_width * 0.23, page_width * 0.23, page_width * 0.24])
     mod_t.setStyle(TableStyle([
