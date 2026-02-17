@@ -37,7 +37,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { toast } from 'sileo';
+import { toast } from '../../../components/ui/sileo-toast';
 
 interface Valoracion {
   id: number;

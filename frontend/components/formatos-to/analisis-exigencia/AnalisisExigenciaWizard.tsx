@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
-import { toast } from 'sileo';
+import { toast } from '../../ui/sileo-toast';
 import {
     Save, ChevronLeft, ChevronRight, Loader2,
     FileText, User, Briefcase,

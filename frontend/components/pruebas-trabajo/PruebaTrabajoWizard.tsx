@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { api } from '@/app/services/api';
-import { toast } from 'sileo';
+import { toast } from '../ui/sileo-toast';
 import { cn } from '@/lib/utils';
 import {
   User,

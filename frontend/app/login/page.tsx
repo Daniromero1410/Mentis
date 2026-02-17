@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/context/AuthContext';
 import { api } from '@/app/services/api';
 import Image from 'next/image';
-import { toast } from 'sileo';
+import { toast } from '../../components/ui/sileo-toast';
 import { Eye, EyeOff, Loader2, Mail, Lock, CheckCircle2, AlertCircle } from 'lucide-react';
 import {
   Dialog,
