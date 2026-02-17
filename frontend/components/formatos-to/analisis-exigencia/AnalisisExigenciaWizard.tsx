@@ -500,11 +500,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                     return (
                         <div key={step.id} className="flex flex-col items-center relative z-10">
                             <button
-                                onClick={() => {
-                                    if (readOnly || step.id < currentStep || validateStep(currentStep)) {
-                                        setCurrentStep(step.id)
-                                    }
-                                }}
+                                onClick={() => setCurrentStep(step.id)}
                                 className={`
                                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
                                     ${isActive

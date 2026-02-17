@@ -90,6 +90,9 @@ class TareaAECreate(BaseModel):
     descripcion_conclusion: Optional[str] = None
     orden: int = 0
 
+    class Config:
+        from_attributes = True
+
 
 # ── Material/Equipo (Sección 5) — con estado ────────────────────────
 class MaterialEquipoAECreate(BaseModel):
@@ -100,6 +103,9 @@ class MaterialEquipoAECreate(BaseModel):
     observaciones: Optional[str] = None
     orden: int = 0
 
+    class Config:
+        from_attributes = True
+
 
 # ── Peligro del Proceso (Sección 6) ─────────────────────────────────
 class PeligroProcesoAECreate(BaseModel):
@@ -107,6 +113,9 @@ class PeligroProcesoAECreate(BaseModel):
     descripcion: Optional[str] = None
     tipos_control_existente: Optional[str] = None
     recomendaciones_control: Optional[str] = None
+
+    class Config:
+        from_attributes = True
 
 
 # ── Recomendaciones (Sección 8) ──────────────────────────────────────
