@@ -112,111 +112,146 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                 )}
 
                 {tareas.map((tarea, idx) => (
-                    <Card key={idx} className="border-slate-200 shadow-sm mb-6">
-                        <CardHeader className="bg-slate-50/50 border-b border-slate-100 flex flex-row items-center justify-between py-3">
-                            <CardTitle className="text-sm font-bold text-slate-700">TAREA {idx + 1}</CardTitle>
+                    <Card key={idx} className="border-slate-200 shadow-sm mb-6 overflow-hidden">
+                        <CardHeader className="bg-slate-50/80 border-b border-slate-100 flex flex-row items-center justify-between py-3">
+                            <div className="flex items-center gap-2">
+                                <div className="bg-blue-100 text-blue-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
+                                    {idx + 1}
+                                </div>
+                                <CardTitle className="text-sm font-bold text-slate-700">TAREA {idx + 1}</CardTitle>
+                            </div>
                             {!readOnly && (
                                 <Button variant="ghost" size="icon" onClick={() => removeTarea(idx)} className="text-red-500 hover:text-red-700 h-8 w-8 hover:bg-red-50">
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             )}
                         </CardHeader>
-                        <CardContent className="p-4 space-y-6">
-                            {/* Basic Info */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <FormField label="Actividad">
-                                    <FormInput value={tarea.actividad} onChange={(e) => updateTarea(idx, 'actividad', e.target.value)} disabled={readOnly} />
+                        <CardContent className="p-5 space-y-6">
+                            {/* 1. Información Básica */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
+                                <div className="lg:col-span-4">
+                                    <FormField label="Actividad">
+                                        <FormInput placeholder="Ej. Levantamiento de cargas" value={tarea.actividad} onChange={(e) => updateTarea(idx, 'actividad', e.target.value)} disabled={readOnly} />
+                                    </FormField>
+                                </div>
+                                <div className="lg:col-span-4">
+                                    <FormField label="Subactividad">
+                                        <FormInput placeholder="Ej. Traslado manual" value={tarea.subactividad} onChange={(e) => updateTarea(idx, 'subactividad', e.target.value)} disabled={readOnly} />
+                                    </FormField>
+                                </div>
+                                <div className="lg:col-span-2">
+                                    <FormField label="Ciclo">
+                                        <FormInput placeholder="Ej. 10 min" value={tarea.ciclo} onChange={(e) => updateTarea(idx, 'ciclo', e.target.value)} disabled={readOnly} />
+                                    </FormField>
+                                </div>
+                                <div className="lg:col-span-2">
+                                    <FormField label="Estándar">
+                                        <FormInput placeholder="Ej. 50 u/h" value={tarea.estandar_productividad} onChange={(e) => updateTarea(idx, 'estandar_productividad', e.target.value)} disabled={readOnly} />
+                                    </FormField>
+                                </div>
+                            </div>
+
+                            {/* 2. Descripciones Técnicas */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-4 rounded-lg border border-slate-100">
+                                <FormField label="Descripción Subactividad">
+                                    <FormTextarea
+                                        className="min-h-[100px] bg-white"
+                                        placeholder="Describa detalladamente la subactividad..."
+                                        value={tarea.descripcion_biomecanica}
+                                        onChange={(e) => updateTarea(idx, 'descripcion_biomecanica', e.target.value)}
+                                        disabled={readOnly}
+                                    />
                                 </FormField>
-                                <FormField label="Ciclo">
-                                    <FormInput value={tarea.ciclo} onChange={(e) => updateTarea(idx, 'ciclo', e.target.value)} disabled={readOnly} />
-                                </FormField>
-                                <FormField label="Subactividad">
-                                    <FormInput value={tarea.subactividad} onChange={(e) => updateTarea(idx, 'subactividad', e.target.value)} disabled={readOnly} />
-                                </FormField>
-                                <FormField label="Estándar de productividad">
-                                    <FormInput value={tarea.estandar_productividad} onChange={(e) => updateTarea(idx, 'estandar_productividad', e.target.value)} disabled={readOnly} />
+                                <FormField label="Requerimientos Motrices - Análisis Biomecánico">
+                                    <FormTextarea
+                                        className="min-h-[100px] bg-white"
+                                        placeholder="Especifique los requerimientos motrices..."
+                                        value={tarea.requerimientos_motrices}
+                                        onChange={(e) => updateTarea(idx, 'requerimientos_motrices', e.target.value)}
+                                        disabled={readOnly}
+                                    />
                                 </FormField>
                             </div>
 
-                            {/* Details + Photos */}
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                {/* Photos */}
-                                <div className="space-y-2">
-                                    <Label className="text-xs font-bold text-slate-500 uppercase">Registro fotográfico</Label>
-                                    <div className="space-y-3">
-                                        {tarea.registro_fotografico ? (
-                                            tarea.registro_fotografico.split(';').filter((url: string) => url.trim()).map((url: string, imgIdx: number) => (
-                                                <div key={imgIdx} className="relative w-full aspect-video rounded-md overflow-hidden bg-slate-100 border border-slate-200 group">
-                                                    <img src={`${API_URL || ''}${url}`} alt={`Evidencia ${imgIdx + 1}`} className="w-full h-full object-cover" />
-                                                    {!readOnly && (
-                                                        <Button variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6" onClick={() => removeImage(idx, imgIdx)}>
+                            {/* 3. Apreciación Profesional */}
+                            <div>
+                                <FormField label="Apreciación del profesional de la salud que evalúa y plan de reincorporación">
+                                    <FormTextarea
+                                        className="min-h-[80px]"
+                                        placeholder="Concepto profesional..."
+                                        value={tarea.apreciacion_profesional}
+                                        onChange={(e) => updateTarea(idx, 'apreciacion_profesional', e.target.value)}
+                                        disabled={readOnly}
+                                    />
+                                </FormField>
+                            </div>
+
+                            {/* 4. Evidencia y Conclusión */}
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                                {/* Columna Izquierda: Fotos */}
+                                <div className="lg:col-span-1 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <Label className="text-xs font-bold text-slate-600 uppercase">Registro Fotográfico</Label>
+                                        <span className="text-[10px] text-slate-400">Máx 3</span>
+                                    </div>
+
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {tarea.registro_fotografico && tarea.registro_fotografico.split(';').filter((u: string) => u.trim()).map((url: string, imgIdx: number) => (
+                                            <div key={imgIdx} className="relative aspect-square rounded-md overflow-hidden border border-slate-200 group">
+                                                <img src={`${API_URL || ''}${url}`} alt="Evidencia" className="w-full h-full object-cover" />
+                                                {!readOnly && (
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                        <Button variant="destructive" size="icon" className="h-6 w-6 rounded-full" onClick={() => removeImage(idx, imgIdx)}>
                                                             <X className="h-3 w-3" />
                                                         </Button>
-                                                    )}
-                                                </div>
-                                            ))
-                                        ) : null}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+
                                         {!readOnly && (!tarea.registro_fotografico || tarea.registro_fotografico.split(';').filter((u: string) => u.trim()).length < 3) && (
-                                            <div className="border-2 border-dashed border-slate-300 rounded-lg p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 bg-white aspect-[4/1] relative">
-                                                <Upload className="h-4 w-4 text-slate-400" />
-                                                <span className="text-[10px] text-slate-500">Subir Foto</span>
+                                            <div className="aspect-square border-2 border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-colors rounded-md flex flex-col items-center justify-center cursor-pointer relative">
+                                                <Upload className="h-4 w-4 text-slate-400 mb-1" />
+                                                <span className="text-[8px] font-medium text-slate-500 text-center px-1">Subir</span>
                                                 <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(idx, e)} />
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* Text Areas */}
-                                <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <FormField label="Descripción subactividad">
-                                        <FormTextarea className="min-h-[120px]" value={tarea.descripcion_biomecanica} onChange={(e) => updateTarea(idx, 'descripcion_biomecanica', e.target.value)} disabled={readOnly} />
-                                    </FormField>
-                                    <FormField label="Requerimientos motrices - analisis biomecanico">
-                                        <FormTextarea className="min-h-[120px]" value={tarea.requerimientos_motrices} onChange={(e) => updateTarea(idx, 'requerimientos_motrices', e.target.value)} disabled={readOnly} />
-                                    </FormField>
-
-                                    {/* Apreciación del profesional */}
-                                    <div className="md:col-span-2">
-                                        <FormField label="Apreciación del profesional de la salud que evalúa y plan de reincorporacion laboral">
-                                            <FormTextarea
-                                                className="min-h-[80px]"
-                                                value={tarea.apreciacion_profesional}
-                                                onChange={(e) => updateTarea(idx, 'apreciacion_profesional', e.target.value)}
-                                                disabled={readOnly}
-                                            />
-                                        </FormField>
-                                    </div>
-
-                                    {/* Conclusión */}
-                                    <div className="md:col-span-2 mt-4 space-y-2">
-                                        <Label className="text-xs font-bold text-slate-500 uppercase">Conclusión con respecto a la actividad</Label>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-                                            {[
-                                                { value: 'reintegro_sin_modificaciones', label: 'Reintegro sin modificaciones' },
-                                                { value: 'reintegro_con_modificaciones', label: 'Reintegro con modificaciones' },
-                                                { value: 'desarrollo_capacidades', label: 'Desarrollo de capacidades' },
-                                                { value: 'no_puede_desempenarla', label: 'No puede desempeñarla' }
-                                            ].map((opt) => (
-                                                <label
-                                                    key={opt.value}
-                                                    className={`flex items-center gap-2 p-2 rounded border cursor-pointer text-xs transition-colors ${tarea.conclusion === opt.value
-                                                            ? 'bg-blue-50 border-blue-500 text-blue-700'
-                                                            : 'bg-white border-slate-200 hover:bg-slate-50'
-                                                        }`}
-                                                >
-                                                    <input
-                                                        type="radio"
-                                                        name={`conclusion-${idx}`}
-                                                        value={opt.value}
-                                                        checked={tarea.conclusion === opt.value}
-                                                        onChange={(e) => updateTarea(idx, 'conclusion', e.target.value)}
-                                                        disabled={readOnly}
-                                                        className="accent-blue-600 h-4 w-4"
-                                                    />
-                                                    <span>{opt.label}</span>
-                                                </label>
-                                            ))}
-                                        </div>
+                                {/* Columna Derecha: Conclusión */}
+                                <div className="lg:col-span-2 space-y-3">
+                                    <Label className="text-xs font-bold text-slate-600 uppercase">Conclusión con respecto a la actividad</Label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {[
+                                            { value: 'reintegro_sin_modificaciones', label: 'Reintegro sin modificaciones' },
+                                            { value: 'reintegro_con_modificaciones', label: 'Reintegro con modificaciones' },
+                                            { value: 'desarrollo_capacidades', label: 'Desarrollo de capacidades' },
+                                            { value: 'no_puede_desempenarla', label: 'No puede desempeñarla' }
+                                        ].map((opt) => (
+                                            <label
+                                                key={opt.value}
+                                                className={`flex items-start gap-3 p-3 rounded-lg border text-sm transition-all cursor-pointer ${tarea.conclusion === opt.value
+                                                        ? 'bg-blue-600 border-blue-600 text-white shadow-md'
+                                                        : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:bg-slate-50'
+                                                    }`}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name={`conclusion-${idx}`}
+                                                    value={opt.value}
+                                                    checked={tarea.conclusion === opt.value}
+                                                    onChange={(e) => updateTarea(idx, 'conclusion', e.target.value)}
+                                                    disabled={readOnly}
+                                                    className="mt-0.5 sr-only" // Hide default radio
+                                                />
+                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${tarea.conclusion === opt.value ? 'border-white bg-white/20' : 'border-slate-300'
+                                                    }`}>
+                                                    {tarea.conclusion === opt.value && <div className="w-2 h-2 rounded-full bg-white" />}
+                                                </div>
+                                                <span className="leading-tight">{opt.label}</span>
+                                            </label>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
