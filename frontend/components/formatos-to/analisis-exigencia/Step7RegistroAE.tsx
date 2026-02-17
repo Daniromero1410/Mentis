@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FormSection } from '../prueba-trabajo/FormComponents';
@@ -15,94 +14,138 @@ export const Step7RegistroAE = ({ formData, updateField, readOnly }: Step7AEProp
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <FormSection title="10. REGISTRO">
-                <div className="border border-slate-300 rounded-lg overflow-hidden">
+            <FormSection title="9. REGISTRO">
+                <div className="border border-slate-200 rounded-lg overflow-hidden shadow-sm">
                     {/* Table Header */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 bg-orange-100 border-b border-orange-200">
-                        <div className="py-2 px-4 text-center font-bold text-slate-800 uppercase text-xs md:text-sm border-b md:border-b-0 md:border-r border-orange-200">
-                            Elaboró
+                    <div className="grid grid-cols-1 md:grid-cols-3 bg-slate-50 border-b border-slate-200">
+                        <div className="py-3 px-4 text-center font-bold text-slate-700 text-sm border-b md:border-b-0 md:border-r border-slate-200 uppercase tracking-wide">
+                            ELABORÓ
                         </div>
-                        <div className="py-2 px-4 text-center font-bold text-slate-800 uppercase text-xs md:text-sm border-b md:border-b-0 md:border-r border-orange-200">
-                            Revisión por Proveedor
+                        <div className="py-3 px-4 text-center font-bold text-slate-700 text-sm border-b md:border-b-0 md:border-r border-slate-200 uppercase tracking-wide">
+                            REVISÓ
                         </div>
-                        <div className="py-2 px-4 text-center font-bold text-slate-800 uppercase text-xs md:text-sm bg-orange-100/50">
-                            {/* Empty header for the third column as per image design, or keep title if needed */}
+                        <div className="py-3 px-4 text-center font-bold text-slate-700 text-sm uppercase tracking-wide">
+                            DATOS DEL USUARIO
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 bg-white">
                         {/* Column 1: ELABORÓ */}
-                        <div className="border-b md:border-b-0 md:border-r border-slate-200 p-4 flex flex-col justify-between min-h-[250px]">
-                            <div className="flex-1 flex flex-col justify-center items-center py-4">
-                                <FileUpload
-                                    value={formData.firma_elaboro}
-                                    onChange={(url) => updateField('firma_elaboro', url)}
-                                    label="Insertar Firma"
-                                    preview={true}
-                                    className="w-full max-w-[200px]"
-                                />
-                            </div>
-                            <div className="space-y-2 border-t border-slate-100 pt-2">
-                                <div>
-                                    <Label className="text-[10px] text-slate-500 uppercase font-bold text-center block mb-1">Nombre y Apellido</Label>
-                                    <Input
-                                        value={formData.nombre_elaboro || ''}
-                                        onChange={(e) => updateField('nombre_elaboro', e.target.value)}
-                                        disabled={readOnly}
-                                        className="text-center font-medium text-xs h-8"
-                                        placeholder="Nombre del profesional"
-                                    />
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-bold text-slate-700 text-center uppercase">Profesionales que realizan la valoración</p>
-                                </div>
-                            </div>
-                        </div>
+                        <div className="border-b md:border-b-0 md:border-r border-slate-200 p-6 flex flex-col gap-6">
 
-                        {/* Column 2: REVISIÓN */}
-                        <div className="border-b md:border-b-0 md:border-r border-slate-200 p-4 flex flex-col justify-between min-h-[250px]">
-                            <div className="flex-1 flex flex-col justify-center items-center py-4">
-                                <FileUpload
-                                    value={formData.firma_revisor}
-                                    onChange={(url) => updateField('firma_revisor', url)}
-                                    label="Insertar Firma"
-                                    preview={true}
-                                    className="w-full max-w-[200px]"
-                                />
-                            </div>
-                            <div className="space-y-2 border-t border-slate-100 pt-2">
-                                <div>
-                                    <Label className="text-[10px] text-slate-500 uppercase font-bold text-center block mb-1">Nombre y Apellido</Label>
-                                    <Input
-                                        value={formData.nombre_revisor || ''}
-                                        onChange={(e) => updateField('nombre_revisor', e.target.value)}
-                                        disabled={readOnly}
-                                        className="text-center font-medium text-xs h-8"
-                                        placeholder="Nombre del revisor"
-                                    />
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-bold text-slate-700 text-center uppercase">Profesional que revisa la valoración</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Column 3: EQUIPO DE REHABILITACIÓN */}
-                        <div className="bg-orange-50/30 p-4 flex flex-col justify-between min-h-[250px]">
-                            <div className="text-center pt-4">
-                                <p className="font-bold text-slate-800 uppercase text-xs md:text-sm mb-6">
-                                    Equipo de<br />Rehabilitación Integral
-                                </p>
+                            {/* Nombre */}
+                            <div className="space-y-2">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">NOMBRE</Label>
                                 <Input
-                                    value={formData.nombre_proveedor || ''}
+                                    value={formData.nombre_elaboro || ''}
+                                    onChange={(e) => updateField('nombre_elaboro', e.target.value)}
+                                    disabled={readOnly}
+                                    className="h-9 bg-slate-50/50"
+                                />
+                            </div>
+
+                            {/* Firma */}
+                            <div className="space-y-2 flex-1 flex flex-col">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">FIRMA</Label>
+                                <div className="flex-1 min-h-[120px]">
+                                    <FileUpload
+                                        value={formData.firma_elaboro}
+                                        onChange={(url) => updateField('firma_elaboro', url)}
+                                        label="Subir firma"
+                                        preview={true}
+                                        className="h-full w-full"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Licencia */}
+                            <div className="space-y-2">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">LICENCIA S.O</Label>
+                                <Input
+                                    value={formData.licencia_elaboro || ''} // Assuming this field exists or needs to be added to state
+                                    onChange={(e) => updateField('licencia_elaboro', e.target.value)}
+                                    disabled={readOnly}
+                                    className="h-9 bg-slate-50/50"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Column 2: REVISÓ */}
+                        <div className="border-b md:border-b-0 md:border-r border-slate-200 p-6 flex flex-col gap-6">
+
+                            {/* Nombre */}
+                            <div className="space-y-2">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">NOMBRE</Label>
+                                <Input
+                                    value={formData.nombre_revisor || ''}
+                                    onChange={(e) => updateField('nombre_revisor', e.target.value)}
+                                    disabled={readOnly}
+                                    className="h-9 bg-slate-50/50"
+                                />
+                            </div>
+
+                            {/* Firma */}
+                            <div className="space-y-2 flex-1 flex flex-col">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">FIRMA</Label>
+                                <div className="flex-1 min-h-[120px]">
+                                    <FileUpload
+                                        value={formData.firma_revisor}
+                                        onChange={(url) => updateField('firma_revisor', url)}
+                                        label="Subir firma"
+                                        preview={true}
+                                        className="h-full w-full"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Licencia */}
+                            <div className="space-y-2">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">LICENCIA S.O</Label>
+                                <Input
+                                    value={formData.licencia_revisor || ''} // Assuming this field exists or needs to be added to state
+                                    onChange={(e) => updateField('licencia_revisor', e.target.value)}
+                                    disabled={readOnly}
+                                    className="h-9 bg-slate-50/50"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Column 3: DATOS DEL USUARIO */}
+                        <div className="p-6 flex flex-col gap-6">
+                            {/* Nombre */}
+                            <div className="space-y-2">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">NOMBRE</Label>
+                                <Input
+                                    value={formData.nombre_proveedor || ''} // Mapping 'nombre_proveedor' to User Name based on previous logic
                                     onChange={(e) => updateField('nombre_proveedor', e.target.value)}
                                     disabled={readOnly}
-                                    className="text-center font-bold text-blue-600 border-none bg-transparent text-sm md:text-base placeholder-blue-300"
-                                    placeholder="Nombre Proveedor"
+                                    className="h-9 bg-slate-50/50"
                                 />
                             </div>
-                            <div className="border-t border-slate-300 pt-2 text-center mt-auto">
-                                <p className="font-bold text-slate-800 uppercase text-xs">Gerencia Médica</p>
+
+                            {/* Firma */}
+                            <div className="space-y-2 flex-1 flex flex-col">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">FIRMA DEL TRABAJADOR</Label>
+                                <div className="flex-1 min-h-[120px]">
+                                    <FileUpload
+                                        value={formData.firma_trabajador} // Assuming specific field for worker signature
+                                        onChange={(url) => updateField('firma_trabajador', url)}
+                                        label="Subir firma"
+                                        preview={true}
+                                        className="h-full w-full"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* C.C */}
+                            <div className="space-y-2">
+                                <Label className="text-xs font-bold text-slate-500 uppercase">C.C</Label>
+                                <Input
+                                    value={formData.cedula_trabajador || ''}
+                                    onChange={(e) => updateField('cedula_trabajador', e.target.value)}
+                                    disabled={readOnly}
+                                    className="h-9 bg-slate-50/50"
+                                />
                             </div>
                         </div>
                     </div>

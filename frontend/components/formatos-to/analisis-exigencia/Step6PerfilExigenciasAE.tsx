@@ -152,7 +152,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="AUDICIÓN"
                     items={audicionItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.sensopercepcion || {}}
                     onChange={(i, f, v) => updatePerfil('sensopercepcion', i, f, v)}
                     readOnly={readOnly}
@@ -160,7 +160,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="SENSIBILIDAD SUPERFICIAL Y PROPIOCEPCIÓN"
                     items={sensibilidadItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.sensopercepcion || {}}
                     onChange={(i, f, v) => updatePerfil('sensopercepcion', i, f, v)}
                     readOnly={readOnly}
@@ -168,7 +168,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="OLFATO GUSTO"
                     items={olfatoItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.sensopercepcion || {}}
                     onChange={(i, f, v) => updatePerfil('sensopercepcion', i, f, v)}
                     readOnly={readOnly}
@@ -179,7 +179,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={motricidadGruesaItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.motricidad_gruesa || {}}
                     onChange={(i, f, v) => updatePerfil('motricidad_gruesa', i, f, v)}
                     readOnly={readOnly}
@@ -190,7 +190,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={motricidadFinaItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.motricidad_fina || {}}
                     onChange={(i, f, v) => updatePerfil('motricidad_fina', i, f, v)}
                     readOnly={readOnly}
@@ -201,7 +201,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={armoniaItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.armonia || {}}
                     onChange={(i, f, v) => updatePerfil('armonia', i, f, v)}
                     readOnly={readOnly}
@@ -212,7 +212,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={cognitivosItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.cognitivos || {}}
                     onChange={(i, f, v) => updatePerfil('cognitivos', i, f, v)}
                     readOnly={readOnly}
@@ -223,7 +223,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={psicosocialesItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.psicosociales || {}}
                     onChange={(i, f, v) => updatePerfil('psicosociales', i, f, v)}
                     readOnly={readOnly}
@@ -234,7 +234,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={laboralesItems}
-                    maxRating={3}
+                    maxRating={4}
                     values={perfil.laborales || {}}
                     onChange={(i, f, v) => updatePerfil('laborales', i, f, v)}
                     readOnly={readOnly}
