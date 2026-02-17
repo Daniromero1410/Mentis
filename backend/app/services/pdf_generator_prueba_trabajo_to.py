@@ -71,7 +71,7 @@ def generar_pdf_prueba_trabajo_to(
 
     # ── COLORES ──────────────────────────────────────────────────────
     ORANGE_BG = colors.HexColor("#E65100")       # Naranja oscuro para headers
-    LIGHT_BLUE_BG = colors.HexColor("#E3F2FD")   # Azul claro para headers de fechas
+    LIGHT_ORANGE_BG = colors.HexColor("#FFF3E0")  # Naranja suave para headers de fechas
     BORDER_COLOR = colors.HexColor("#424242")     # Gris oscuro bordes
     LIGHT_GRAY = colors.HexColor("#f5f5f5")
 
@@ -254,7 +254,7 @@ def generar_pdf_prueba_trabajo_to(
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('SPAN', (0, 1), (1, 1)),
-        ('BACKGROUND', (0, 0), (-1, -1), LIGHT_BLUE_BG),
+        ('BACKGROUND', (0, 0), (-1, -1), LIGHT_ORANGE_BG),
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
         ('RIGHTPADDING', (0, 0), (-1, -1), 4),
         ('TOPPADDING', (0, 0), (-1, -1), 2),
