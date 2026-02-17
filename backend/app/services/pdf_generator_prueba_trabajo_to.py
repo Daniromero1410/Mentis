@@ -386,9 +386,9 @@ def generar_pdf_prueba_trabajo_to(
         ("basica_primaria", "Básica primaria"),
         ("bachillerato_vocacional", "Bachillerato:\nvocacional 9°"),
         ("bachillerato_modalidad", "Bachillerato: modalidad"),
-        ("tecnico_tecnologico", "Técnico/\nTecnológico"),
+        ("tecnico", "Técnico/\nTecnológico"),
         ("profesional", "Profesional"),
-        ("especializacion", "Especialización/\npostgrado/ maestría"),
+        ("postgrado", "Especialización/\npostgrado/ maestría"),
         ("formacion_informal", "Formación\ninformal oficios"),
         ("analfabeta", "Analfabeta"),
         ("otros", "Otros"),
@@ -522,11 +522,29 @@ def generar_pdf_prueba_trabajo_to(
 
     # Fecha ingreso cargo/antigüedad
     fic_fecha = format_date(i.fecha_ingreso_cargo if i else None)
+    # Calculate years from the date (matching frontend calculateAge logic)
+    def calc_years(date_val):
+        if not date_val:
+            return ""
+        try:
+            if isinstance(date_val, str):
+                dt = datetime.strptime(date_val, "%Y-%m-%d")
+            else:
+                dt = date_val
+            today = datetime.today()
+            years = today.year - dt.year
+            if (today.month, today.day) < (dt.month, dt.day):
+                years -= 1
+            return str(years)
+        except Exception:
+            return ""
+
+    cargo_years = calc_years(i.fecha_ingreso_cargo if i else None)
     fic_row = [[
         bold("Fecha ingreso cargo/antigüedad en\nel cargo"),
         p(fic_fecha),
         bold("tiempo"),
-        p(f"{i.antiguedad_cargo or ''}    años" if i else ""),
+        p(f"{cargo_years}    años" if cargo_years else ""),
     ]]
     fic_t = Table(fic_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
     fic_t.setStyle(TableStyle([
@@ -542,11 +560,12 @@ def generar_pdf_prueba_trabajo_to(
 
     # Fecha ingreso empresa/antigüedad
     fie_fecha = format_date(i.fecha_ingreso_empresa if i else None)
+    empresa_years = calc_years(i.fecha_ingreso_empresa if i else None)
     fie_row = [[
         bold("Fecha ingreso a la\nempresa/antigüedad en la empresa"),
         p(fie_fecha),
         bold("tiempo"),
-        p(f"{i.antiguedad_empresa or ''}    años" if i else ""),
+        p(f"{empresa_years}    años" if empresa_years else ""),
     ]]
     fie_t = Table(fie_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
     fie_t.setStyle(TableStyle([
