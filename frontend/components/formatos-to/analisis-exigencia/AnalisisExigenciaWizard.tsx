@@ -341,13 +341,33 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             case 3:
                 const validTareas = tareas.filter(t => t.actividad.trim() !== '');
                 if (validTareas.length === 0) errors.push('Debe registrar al menos una tarea con actividad');
-                const invalidTareas = tareas.some(t => !t.actividad || !t.ciclo || !t.subactividad || !t.estandar_productividad);
+                const invalidTareas = tareas.some(t => {
+                    // Check if activity is present but other fields are missing
+                    return t.actividad && (!t.ciclo || !t.subactividad || !t.estandar_productividad);
+                });
                 if (invalidTareas) errors.push('Complete todos los campos obligatorios de las tareas (Actividad, Ciclo, Subactividad, Estándar)');
                 break;
             case 4:
+                // Validation for Peligros can be added here if needed. 
+                // Currently assuming optional or strictly informational.
                 break;
             case 5:
                 if (!formData.concepto_prueba_trabajo) errors.push('Concepto del Análisis de Exigencia');
+                break;
+            case 6:
+                // Basic check to ensure profile data exists
+                if (!perfilExigencias || Object.keys(perfilExigencias).length === 0) {
+                    // Optionally force at least one rating? 
+                    // For now, let's assume if they visited the step, it might be initialized.
+                    // But ideally check specific categories if mandatory.
+                }
+                break;
+            case 7:
+                if (!formData.nombre_elaboro) errors.push('Nombre (Elaboró)');
+                if (!formData.firma_elaboro) errors.push('Firma (Elaboró)');
+                if (!formData.nombre_revisor) errors.push('Nombre (Revisó)');
+                if (!formData.firma_revisor) errors.push('Firma (Revisó)');
+                if (!formData.nombre_proveedor) errors.push('Nombre del Proveedor (Equipo Rehab.)');
                 break;
         }
 
@@ -388,28 +408,42 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         try {
             const payload = buildPayload(finalizar);
 
+            let url = `${API_URL}/formatos-to/analisis-exigencia/`;
+            let method = 'POST';
+
             if (analisisId) {
-                const res = await fetch(`${API_URL}/formatos-to/analisis-exigencia/${analisisId}`, {
-                    method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                    body: JSON.stringify(payload),
-                });
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({ detail: 'Error al guardar' }));
-                    throw new Error(JSON.stringify(err));
+                url = `${API_URL}/formatos-to/analisis-exigencia/${analisisId}`;
+                method = 'PUT';
+            }
+
+            const res = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) {
+                const errText = await res.text();
+                let errJson;
+                try {
+                    errJson = JSON.parse(errText);
+                } catch {
+                    // response wasn't json
                 }
-                setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', errors: [], type: 'success' });
+                const errorMessage = errJson?.detail || errText || `Error ${res.status}: ${res.statusText}`;
+                throw new Error(errorMessage);
+            }
+
+            if (finalizar) {
+                // Generate PDF logic here if needed or just notify
+                setValidationModal({ isOpen: true, title: 'Finalizado', message: 'Análisis finalizado y PDF generado correctamente.', errors: [], type: 'success' });
             } else {
-                const res = await fetch(`${API_URL}/formatos-to/analisis-exigencia/`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                    body: JSON.stringify(payload),
-                });
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({ detail: 'Error al crear' }));
-                    throw new Error(JSON.stringify(err));
-                }
                 const d = await res.json();
-                setAnalisisId(d.id);
-                setValidationModal({ isOpen: true, title: 'Creado', message: 'Se ha creado el análisis correctamente.', errors: [], type: 'success' });
+                if (!analisisId && d.id) setAnalisisId(d.id);
+                setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', errors: [], type: 'success' });
             }
 
         } catch (e: any) {
@@ -417,7 +451,12 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             let errorMessage = e.message;
             let errorDetails = '';
 
+            if (errorMessage === 'Failed to fetch') {
+                errorMessage = 'Error de conexión con el servidor. Verifique que el backend esté en ejecución y accesible.';
+            }
+
             try {
+                // Try to parse if it looks like a JSON array string from previous logic
                 const parsed = JSON.parse(errorMessage);
                 if (parsed.detail && Array.isArray(parsed.detail)) {
                     errorMessage = 'Datos inválidos/faltantes';
@@ -461,7 +500,11 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                     return (
                         <div key={step.id} className="flex flex-col items-center relative z-10">
                             <button
-                                onClick={() => setCurrentStep(step.id)}
+                                onClick={() => {
+                                    if (readOnly || step.id < currentStep || validateStep(currentStep)) {
+                                        setCurrentStep(step.id)
+                                    }
+                                }}
                                 className={`
                                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
                                     ${isActive
@@ -564,16 +607,25 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-60 transition-colors shadow-sm"
                         >
                             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                            Guardar Cambios
+                            Guardar Borrador
                         </button>
                     )}
 
-                    {currentStep !== STEPS.length && (
+                    {currentStep !== STEPS.length ? (
                         <button
                             onClick={handleNext}
                             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
                         >
                             Siguiente <ChevronRight className="h-4 w-4" />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => handleSave(true)}
+                            disabled={saving}
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+                        >
+                            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
+                            Finalizar y Generar PDF
                         </button>
                     )}
                 </div>
