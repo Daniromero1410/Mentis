@@ -3,7 +3,7 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload, X, FileCheck, Loader2, Eye } from 'lucide-react';
-import { toast } from 'sileo';
+import { toast } from 'sonner';
 import { api } from '@/app/services/api';
 import Image from 'next/image';
 
