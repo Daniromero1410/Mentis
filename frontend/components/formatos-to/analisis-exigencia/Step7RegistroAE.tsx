@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FormSection } from '../prueba-trabajo/FormComponents';
+import { FileUpload } from '@/components/ui/file-upload';
 
 interface Step7AEProps {
     formData: any;
@@ -14,107 +15,97 @@ export const Step7RegistroAE = ({ formData, updateField, readOnly }: Step7AEProp
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <FormSection title="12. REGISTRO">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                    {/* ELABORÓ */}
-                    <Card className="border-slate-200 shadow-sm h-full">
-                        <div className="bg-orange-100 border-b border-orange-200 py-2 px-4 text-center font-bold text-slate-800 uppercase text-sm">
+            <FormSection title="10. REGISTRO">
+                <div className="border border-slate-300 rounded-lg overflow-hidden">
+                    {/* Table Header */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 bg-orange-100 border-b border-orange-200">
+                        <div className="py-2 px-4 text-center font-bold text-slate-800 uppercase text-xs md:text-sm border-b md:border-b-0 md:border-r border-orange-200">
                             Elaboró
                         </div>
-                        <CardContent className="p-6 space-y-6 flex flex-col justify-end h-[calc(100%-40px)]">
-                            {/* Firma Placeholder */}
-                            <div className="border-b border-slate-300 min-h-[80px] flex items-end justify-center pb-2">
-                                <span className="text-slate-400 text-sm italic">Insertar Firma</span>
-                            </div>
+                        <div className="py-2 px-4 text-center font-bold text-slate-800 uppercase text-xs md:text-sm border-b md:border-b-0 md:border-r border-orange-200">
+                            Revisión por Proveedor
+                        </div>
+                        <div className="py-2 px-4 text-center font-bold text-slate-800 uppercase text-xs md:text-sm bg-orange-100/50">
+                            {/* Empty header for the third column as per image design, or keep title if needed */}
+                        </div>
+                    </div>
 
-                            <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 bg-white">
+                        {/* Column 1: ELABORÓ */}
+                        <div className="border-b md:border-b-0 md:border-r border-slate-200 p-4 flex flex-col justify-between min-h-[250px]">
+                            <div className="flex-1 flex flex-col justify-center items-center py-4">
+                                <FileUpload
+                                    value={formData.firma_elaboro}
+                                    onChange={(url) => updateField('firma_elaboro', url)}
+                                    label="Insertar Firma"
+                                    preview={true}
+                                    className="w-full max-w-[200px]"
+                                />
+                            </div>
+                            <div className="space-y-2 border-t border-slate-100 pt-2">
                                 <div>
-                                    <Label className="text-xs text-slate-500 uppercase font-bold text-center block mb-1">Nombre y Apellido</Label>
+                                    <Label className="text-[10px] text-slate-500 uppercase font-bold text-center block mb-1">Nombre y Apellido</Label>
                                     <Input
                                         value={formData.nombre_elaboro || ''}
                                         onChange={(e) => updateField('nombre_elaboro', e.target.value)}
                                         disabled={readOnly}
-                                        className="text-center font-medium"
+                                        className="text-center font-medium text-xs h-8"
                                         placeholder="Nombre del profesional"
                                     />
                                 </div>
-
-                                <div className="text-center pt-2 border-t border-slate-100">
-                                    <p className="text-sm font-bold text-slate-700">Profesionales que realizan la valoración</p>
-                                    <Input
-                                        value={formData.licencia_so_elaboro || ''}
-                                        onChange={(e) => updateField('licencia_so_elaboro', e.target.value)}
-                                        disabled={readOnly}
-                                        className="mt-2 text-center text-xs"
-                                        placeholder="Licencia S.O."
-                                    />
+                                <div>
+                                    <p className="text-[10px] font-bold text-slate-700 text-center uppercase">Profesionales que realizan la valoración</p>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* REVISIÓN POR PROVEEDOR */}
-                    <Card className="border-slate-200 shadow-sm h-full">
-                        <div className="bg-orange-100 border-b border-orange-200 py-2 px-4 text-center font-bold text-slate-800 uppercase text-sm">
-                            Revisión por Proveedor
                         </div>
-                        <CardContent className="p-6 space-y-6 flex flex-col justify-end h-[calc(100%-40px)]">
-                            {/* Firma Placeholder */}
-                            <div className="border-b border-slate-300 min-h-[80px] flex items-end justify-center pb-2">
-                                <span className="text-slate-400 text-sm italic">Insertar Firma</span>
-                            </div>
 
-                            <div className="space-y-4">
+                        {/* Column 2: REVISIÓN */}
+                        <div className="border-b md:border-b-0 md:border-r border-slate-200 p-4 flex flex-col justify-between min-h-[250px]">
+                            <div className="flex-1 flex flex-col justify-center items-center py-4">
+                                <FileUpload
+                                    value={formData.firma_revisor}
+                                    onChange={(url) => updateField('firma_revisor', url)}
+                                    label="Insertar Firma"
+                                    preview={true}
+                                    className="w-full max-w-[200px]"
+                                />
+                            </div>
+                            <div className="space-y-2 border-t border-slate-100 pt-2">
                                 <div>
-                                    <Label className="text-xs text-slate-500 uppercase font-bold text-center block mb-1">Nombre y Apellido</Label>
+                                    <Label className="text-[10px] text-slate-500 uppercase font-bold text-center block mb-1">Nombre y Apellido</Label>
                                     <Input
                                         value={formData.nombre_revisor || ''}
                                         onChange={(e) => updateField('nombre_revisor', e.target.value)}
                                         disabled={readOnly}
-                                        className="text-center font-medium"
+                                        className="text-center font-medium text-xs h-8"
                                         placeholder="Nombre del revisor"
                                     />
                                 </div>
-
-                                <div className="text-center pt-2 border-t border-slate-100">
-                                    <p className="text-sm font-bold text-slate-700">Profesional que revisa la valoración</p>
-                                    <Input
-                                        value={formData.licencia_so_revisor || ''}
-                                        onChange={(e) => updateField('licencia_so_revisor', e.target.value)}
-                                        disabled={readOnly}
-                                        className="mt-2 text-center text-xs"
-                                        placeholder="Licencia S.O."
-                                    />
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* EQUIPO DE REHABILITACIÓN INTEGRAL */}
-                    <Card className="border-slate-200 shadow-sm md:col-span-2 bg-orange-50/30">
-                        <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                            <div className="text-center space-y-2">
-                                <Label className="text-sm font-bold text-slate-700 uppercase">Equipo de Rehabilitación Integral</Label>
-                            </div>
-
-                            <div className="space-y-4">
                                 <div>
-                                    <Input
-                                        value={formData.nombre_proveedor || ''}
-                                        onChange={(e) => updateField('nombre_proveedor', e.target.value)}
-                                        disabled={readOnly}
-                                        className="text-center font-bold text-blue-600 border-blue-200 bg-blue-50/50"
-                                        placeholder="NOMBRE PROVEEDOR"
-                                    />
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-sm font-bold text-slate-800 uppercase border-t border-slate-300 pt-1 inline-block min-w-[200px]">Gerencia Médica</p>
+                                    <p className="text-[10px] font-bold text-slate-700 text-center uppercase">Profesional que revisa la valoración</p>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
 
+                        {/* Column 3: EQUIPO DE REHABILITACIÓN */}
+                        <div className="bg-orange-50/30 p-4 flex flex-col justify-between min-h-[250px]">
+                            <div className="text-center pt-4">
+                                <p className="font-bold text-slate-800 uppercase text-xs md:text-sm mb-6">
+                                    Equipo de<br />Rehabilitación Integral
+                                </p>
+                                <Input
+                                    value={formData.nombre_proveedor || ''}
+                                    onChange={(e) => updateField('nombre_proveedor', e.target.value)}
+                                    disabled={readOnly}
+                                    className="text-center font-bold text-blue-600 border-none bg-transparent text-sm md:text-base placeholder-blue-300"
+                                    placeholder="Nombre Proveedor"
+                                />
+                            </div>
+                            <div className="border-t border-slate-300 pt-2 text-center mt-auto">
+                                <p className="font-bold text-slate-800 uppercase text-xs">Gerencia Médica</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </FormSection>
         </div>

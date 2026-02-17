@@ -9,17 +9,10 @@ interface Step5AEProps {
     readOnly?: boolean;
 }
 
-const CONCEPTO_OPTIONS = [
-    { value: 'no_puede_desempenarla', label: 'No puede desempeñarla' },
-    { value: 'desarrollo_capacidades', label: 'Desarrollo de capacidades' },
-    { value: 'reintegro_con_modificaciones', label: 'Reintegro con modificaciones' },
-    { value: 'reintegro_sin_modificaciones', label: 'Reintegro sin modificaciones' },
-];
-
 export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProps) => {
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 animate-in fade-in duration-500">
 
             {/* 7. CONCEPTO CAPACIDAD DE DESEMPEÑO EN LA ACTIVIDAD */}
             <FormSection title="7. CONCEPTO CAPACIDAD DE DESEMPEÑO EN LA ACTIVIDAD">
@@ -70,76 +63,6 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
                         />
                     </FormField>
                 </div>
-            </FormSection>
-
-            {/* 10. REGISTRO */}
-            <FormSection title="10. REGISTRO">
-                <Card className="border-slate-200 shadow-sm">
-                    <CardContent className="p-6 space-y-6">
-                        {/* ELABORO */}
-                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
-                            <h4 className="font-bold text-slate-700 mb-4 border-b pb-2">ELABORÓ</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField label="Nombre">
-                                    <FormInput
-                                        value={formData.nombre_elaboro}
-                                        onChange={(e) => updateField('nombre_elaboro', e.target.value)}
-                                        disabled={readOnly}
-                                    />
-                                </FormField>
-                                <FormField label="Licencia S.O.">
-                                    <FormInput
-                                        value={formData.licencia_so_elaboro}
-                                        onChange={(e) => updateField('licencia_so_elaboro', e.target.value)}
-                                        disabled={readOnly}
-                                    />
-                                </FormField>
-                            </div>
-                        </div>
-
-                        {/* REVISO */}
-                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
-                            <h4 className="font-bold text-slate-700 mb-4 border-b pb-2">REVISÓ</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField label="Nombre">
-                                    <FormInput
-                                        value={formData.nombre_revisor}
-                                        onChange={(e) => updateField('nombre_revisor', e.target.value)}
-                                        disabled={readOnly}
-                                    />
-                                </FormField>
-                                <FormField label="Licencia S.O.">
-                                    <FormInput
-                                        value={formData.licencia_so_revisor}
-                                        onChange={(e) => updateField('licencia_so_revisor', e.target.value)}
-                                        disabled={readOnly}
-                                    />
-                                </FormField>
-                            </div>
-                        </div>
-
-                        {/* DATOS DEL USUARIO (Trabajador) */}
-                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
-                            <h4 className="font-bold text-slate-700 mb-4 border-b pb-2">DATOS DEL USUARIO (Trabajador)</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField label="Nombre">
-                                    <FormInput
-                                        value={formData.nombre_trabajador}
-                                        disabled={true}
-                                        className="bg-slate-100"
-                                    />
-                                </FormField>
-                                <FormField label="Documento (C.C)">
-                                    <FormInput
-                                        value={formData.numero_documento}
-                                        disabled={true}
-                                        className="bg-slate-100"
-                                    />
-                                </FormField>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
             </FormSection>
         </div>
     );
