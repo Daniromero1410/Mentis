@@ -13,7 +13,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch, cm
 from reportlab.platypus import (
-    SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak
+    SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak, KeepTogether
 )
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
 from reportlab.graphics.shapes import Drawing, Rect, Line
@@ -722,8 +722,8 @@ def generar_pdf_prueba_trabajo_to(
                 from reportlab.lib.utils import ImageReader
                 ir = ImageReader(valid_img_paths[0])
                 iw, ih = ir.getSize()
-                max_w = page_width * 0.30
-                max_h = 7 * cm
+                max_w = page_width * 0.25
+                max_h = 5 * cm
                 sc = min(max_w / iw, max_h / ih)
                 foto_cell = Image(valid_img_paths[0], width=iw * sc, height=ih * sc)
             except Exception as e:
@@ -745,9 +745,9 @@ def generar_pdf_prueba_trabajo_to(
         # Extra images: same proportional size, 2 per row, centered
         if len(valid_img_paths) > 1:
             from reportlab.lib.utils import ImageReader
-            # Use exact same max size for ALL extra images
-            img_fixed_w = page_width * 0.30
-            img_fixed_h = 7 * cm
+            # Use exact same max size as first image
+            img_fixed_w = page_width * 0.25
+            img_fixed_h = 5 * cm
             loaded = []
             for ep in valid_img_paths[1:]:
                 try:
@@ -875,9 +875,13 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(bordered_text_block(secciones.concepto_prueba_trabajo if secciones else ""))
     elements.append(Spacer(1, 6))
 
-    # ── SECCIÓN 8: RECOMENDACIONES ───────────────────────────────────
-    elements.append(section_title_table("8   RECOMENDACIONES"))
-    elements.append(Spacer(1, 2))
+    # ── SECCIÓN 8 + 9: RECOMENDACIONES + REGISTRO (juntos) ───────────
+    # Use KeepTogether to ensure signatures area always appears
+    # on the same page as recommendations for security
+    sec8_9_elements = []
+
+    sec8_9_elements.append(section_title_table("8   RECOMENDACIONES"))
+    sec8_9_elements.append(Spacer(1, 2))
 
     rec_data = [
         [
@@ -901,22 +905,19 @@ def generar_pdf_prueba_trabajo_to(
         ('TOPPADDING', (0, 0), (-1, -1), 4),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
     ]))
-    elements.append(rec_table)
-    elements.append(Spacer(1, 6))
+    sec8_9_elements.append(rec_table)
+    sec8_9_elements.append(Spacer(1, 6))
 
-    # ── SECCIÓN 9: REGISTRO ──────────────────────────────────────────
-    elements.append(section_title_table("9   REGISTRO"))
-    elements.append(Spacer(1, 2))
+    sec8_9_elements.append(section_title_table("9   REGISTRO"))
+    sec8_9_elements.append(Spacer(1, 2))
 
     if registro:
-        # Header row
         reg_header = [
             Paragraph("<b>ELABORÓ</b>", styles["CellBold"]),
             Paragraph("<b>REVISÓ</b>", styles["CellBold"]),
             Paragraph("<b>DATOS DEL USUARIO</b>", styles["CellBold"]),
         ]
 
-        # Build cell content for each column
         def build_sig_cell(nombre_label, nombre_val, firma_path, extra_label, extra_val):
             cell_parts = []
             cell_parts.append(Paragraph(f"<b>{nombre_label}:</b> {nombre_val or ''}", styles["ValueSmall"]))
@@ -950,7 +951,6 @@ def generar_pdf_prueba_trabajo_to(
             "C.C", identificacion.numero_documento if identificacion else ""
         )
 
-        # Header table
         reg_header_table = Table([reg_header], colWidths=[page_width / 3] * 3)
         reg_header_table.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
@@ -959,9 +959,8 @@ def generar_pdf_prueba_trabajo_to(
             ('TOPPADDING', (0, 0), (-1, -1), 3),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
         ]))
-        elements.append(reg_header_table)
+        sec8_9_elements.append(reg_header_table)
 
-        # Content table
         reg_data = [[elaboro_cell, reviso_cell, trabajador_cell]]
         reg_table = Table(reg_data, colWidths=[page_width / 3] * 3)
         reg_table.setStyle(TableStyle([
@@ -972,7 +971,10 @@ def generar_pdf_prueba_trabajo_to(
             ('TOPPADDING', (0, 0), (-1, -1), 4),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
         ]))
-        elements.append(reg_table)
+        sec8_9_elements.append(reg_table)
+
+    # Wrap everything in KeepTogether so they stay on the same page
+    elements.append(KeepTogether(sec8_9_elements))
 
     # ── BUILD ────────────────────────────────────────────────────────
     doc.build(elements)
