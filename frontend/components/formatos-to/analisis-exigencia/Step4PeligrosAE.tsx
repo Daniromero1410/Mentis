@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 interface Step4AEProps {
     peligros: any[];
     setPeligros: React.Dispatch<React.SetStateAction<any[]>>;
+    formData: any;
+    updateField: (field: string, value: any) => void;
     readOnly?: boolean;
 }
 
@@ -18,7 +20,7 @@ export const CATEGORIAS_PELIGRO_AE = [
     { value: 'cond_seguridad', label: 'Condiciones de Seguridad' },
 ];
 
-export const Step4PeligrosAE = ({ peligros, setPeligros, readOnly }: Step4AEProps) => {
+export const Step4PeligrosAE = ({ peligros, setPeligros, formData, updateField, readOnly }: Step4AEProps) => {
 
     const updatePeligro = (index: number, field: string, value: any) => {
         const newPelis = [...peligros];
@@ -69,6 +71,16 @@ export const Step4PeligrosAE = ({ peligros, setPeligros, readOnly }: Step4AEProp
                         </Card>
                     );
                 })}
+            </FormSection>
+
+            {/* 6.1 VERIFICACION ACCIONES CORRECTIVAS - Moved here from Step 5 */}
+            <FormSection title="6.1 VERIFICACIÓN DE LAS ACCIONES CORRECTIVAS PUNTUALES FRENTE AL RIESGO QUE PROPICIÓ EL EVENTO">
+                <FormTextarea
+                    className="min-h-[100px]"
+                    value={formData.verificacion_acciones_correctivas}
+                    onChange={(e) => updateField('verificacion_acciones_correctivas', e.target.value)}
+                    disabled={readOnly}
+                />
             </FormSection>
         </div>
     );

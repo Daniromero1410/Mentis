@@ -80,6 +80,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         metodologia: '',
         descripcion_proceso_productivo: '',
         concepto_prueba_trabajo: '',
+        relaciones_interpersonales: '',
         apreciacion_trabajador_proceso: '',
         estandares_productividad: '',
         verificacion_acciones_correctivas: '',
@@ -166,6 +167,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 metodologia: formData.metodologia,
                 descripcion_proceso_productivo: formData.descripcion_proceso_productivo,
                 concepto_prueba_trabajo: formData.concepto_prueba_trabajo,
+                relaciones_interpersonales: formData.relaciones_interpersonales,
                 apreciacion_trabajador_proceso: formData.apreciacion_trabajador_proceso,
                 estandares_productividad: formData.estandares_productividad,
                 verificacion_acciones_correctivas: formData.verificacion_acciones_correctivas
@@ -258,6 +260,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                         metodologia: data.secciones_texto?.metodologia || prev.metodologia,
                         descripcion_proceso_productivo: data.secciones_texto?.descripcion_proceso_productivo || prev.descripcion_proceso_productivo,
                         concepto_prueba_trabajo: data.secciones_texto?.concepto_prueba_trabajo || prev.concepto_prueba_trabajo,
+                        relaciones_interpersonales: data.secciones_texto?.relaciones_interpersonales || prev.relaciones_interpersonales,
                         apreciacion_trabajador_proceso: data.secciones_texto?.apreciacion_trabajador_proceso || prev.apreciacion_trabajador_proceso,
                         estandares_productividad: data.secciones_texto?.estandares_productividad || prev.estandares_productividad,
                         verificacion_acciones_correctivas: data.secciones_texto?.verificacion_acciones_correctivas || prev.verificacion_acciones_correctivas,
@@ -504,6 +507,8 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                     <Step4PeligrosAE
                         peligros={peligros}
                         setPeligros={setPeligros}
+                        formData={formData}
+                        updateField={updateField}
                         readOnly={readOnly}
                     />
                 )}

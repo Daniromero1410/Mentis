@@ -197,11 +197,15 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                             <div key={imgIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-200 group shadow-sm hover:shadow-md transition-shadow">
                                                 <img src={`${API_URL || ''}${url}`} alt="Evidencia" className="w-full h-full object-cover" />
                                                 {!readOnly && (
-                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                        <Button variant="destructive" size="icon" className="h-8 w-8 rounded-full" onClick={() => removeImage(idx, imgIdx)}>
-                                                            <X className="h-4 w-4" />
-                                                        </Button>
-                                                    </div>
+                                                    <Button
+                                                        variant="destructive"
+                                                        size="icon"
+                                                        className="absolute top-1 right-1 h-6 w-6 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        onClick={() => removeImage(idx, imgIdx)}
+                                                        title="Eliminar imagen"
+                                                    >
+                                                        <X className="h-3 w-3" />
+                                                    </Button>
                                                 )}
                                             </div>
                                         ))}
@@ -231,8 +235,8 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                             <label
                                                 key={opt.value}
                                                 className={`flex flex-col items-start gap-2 p-4 rounded-xl border text-sm transition-all cursor-pointer relative overflow-hidden ${tarea.conclusion === opt.value
-                                                        ? 'bg-blue-50 border-blue-500 text-blue-800 shadow-sm ring-1 ring-blue-500'
-                                                        : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:bg-slate-50'
+                                                    ? 'bg-blue-50 border-blue-500 text-blue-800 shadow-sm ring-1 ring-blue-500'
+                                                    : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:bg-slate-50'
                                                     }`}
                                             >
                                                 <input
