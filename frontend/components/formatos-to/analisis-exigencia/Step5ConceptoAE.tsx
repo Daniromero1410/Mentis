@@ -20,32 +20,9 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
 
     return (
         <div className="space-y-8">
-            {/* 5. APRECIACION DEL PROFESIONAL */}
-            <FormSection title="5. APRECIACIÓN DEL PROFESIONAL DE LA SALUD QUE EVALÚA Y PLAN DE REINCORPORACIÓN LABORAL">
-                <FormTextarea
-                    className="min-h-[150px]"
-                    // Note: We might need to ensure this field exists in 'formData' structure or map it to 'apreciacion_trabajador_proceso' or similar if reusing.
-                    // Checking existing Analysis wizard: 'apreciacion_trabajador_proceso' exists. 'concepto_prueba_trabajo' exists.
-                    // Let's use 'concepto_prueba_trabajo' as the main "Concepto/Apreciacion" field if 'apreciacion_profesional_general' doesn't exist.
-                    // Wait, Step3 had per-task appreciation. This is GLOBAL.
-                    // The payload has 'concepto_prueba_trabajo' in 'secciones_texto'. Let's use that one or 'recomendaciones_trabajador'.
-                    // Actually, let's use 'concepto_prueba_trabajo' for Section 7 (Concepto) and 'apreciacion_trabajador_proceso' for this Section 6.
-                    // Or better yet, 'apreciacion_trabajador_proceso' seems more like "worker's appreciation".
-                    // Let's us 'verificacion_acciones_correctivas' for 6.1.
-                    // For 6, we can use 'metodologia' (used in 2) or 'recomendaciones_empresa'.
-                    // A safe bet is using 'recomendaciones_empresa' or creating a new mapping if strict.
-                    // Given the constraint of existing backend, I will reuse 'apreciacion_trabajador_proceso' for Section 6 if appropriate, or 'recomendaciones_empresa'.
-                    // Let's use 'recomendaciones_empresa' for now as it captures "Plan de reincorporacion".
-                    // RE-READING Step 5 existing: uses 'concepto_prueba_trabajo', 'recomendaciones_trabajador', 'recomendaciones_empresa'.
-                    // Let's map Section 6 to `recomendaciones_empresa` (Plan de reincorporación usually goes here).
-                    onChange={(e) => updateField('recomendaciones_empresa', e.target.value)}
-                    value={formData.recomendaciones_empresa}
-                    disabled={readOnly}
-                />
-            </FormSection>
 
-            {/* 5.1 VERIFICACION ACCIONES */}
-            <FormSection title="5.1 VERIFICACIÓN DE LAS ACCIONES CORRECTIVAS PUNTUALES FRENTE AL RIESGO QUE PROPICIÓ EL EVENTO">
+            {/* 6.1 VERIFICACION ACCIONES CORRECTIVAS */}
+            <FormSection title="6.1 VERIFICACIÓN DE LAS ACCIONES CORRECTIVAS PUNTUALES FRENTE AL RIESGO QUE PROPICIÓ EL EVENTO">
                 <FormTextarea
                     className="min-h-[100px]"
                     value={formData.verificacion_acciones_correctivas}
@@ -54,35 +31,121 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
                 />
             </FormSection>
 
-
-            {/* 6. CONCEPTO */}
-            <FormSection title="6. CONCEPTO CAPACIDAD DE DESEMPEÑO EN LA ACTIVIDAD">
-                <Card className="border-slate-200 shadow-sm">
+            {/* 7. CONCEPTO */}
+            <FormSection title="7. CONCEPTO PARA PRUEBA DE TRABAJO">
+                <Card className="border-slate-200 shadow-sm mb-4">
                     <CardContent className="p-6">
                         <Label className="text-sm font-bold text-slate-700 block mb-4">
-                            Conclusión con respecto a la actividad
+                            COMPETENCIA, SEGURIDAD, CONFORT, RELACIONES SOCIALES, OTROS ASPECTOS
                         </Label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {CONCEPTO_OPTIONS.map((opt) => (
-                                <label
-                                    key={opt.value}
-                                    className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.concepto_prueba_trabajo === opt.value
-                                        ? 'bg-blue-50 border-blue-500 text-blue-700 shadow-sm'
-                                        : 'bg-white border-slate-200 hover:bg-slate-50'
-                                        }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="concepto_ae"
-                                        value={opt.value}
-                                        checked={formData.concepto_prueba_trabajo === opt.value}
-                                        onChange={(e) => updateField('concepto_prueba_trabajo', e.target.value)}
+                        <FormTextarea
+                            className="min-h-[100px] mb-6"
+                            value={formData.concepto_prueba_trabajo} // Note: This text area maps to the concept description/text
+                            onChange={(e) => updateField('concepto_prueba_trabajo', e.target.value)}
+                            disabled={readOnly}
+                            placeholder="Escriba el concepto detallado..."
+                        />
+                        {/* Does the PDF have checkboxes for this section? Actually, the PDF shows text block for section 7.
+                            The checkboxes in the previous code were likely a mix-up with the per-task conclusion or a different form.
+                            The PDF generator code provided shows `secciones.concepto_prueba_trabajo` as a text block.
+                            So we keep it as a text area and remove the checkboxes if they are not in the PDF structure for Section 7.
+                            Wait, let me double check the PDF code.
+                            Line 879: elements.append(bordered_text_block(secciones.concepto_prueba_trabajo if secciones else ""))
+                            Yes, it is a text block.
+                        */}
+                    </CardContent>
+                </Card>
+            </FormSection>
+
+            {/* 8. RECOMENDACIONES */}
+            <FormSection title="8. RECOMENDACIONES">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField label="PARA EL TRABAJADOR">
+                        <FormTextarea
+                            className="min-h-[150px]"
+                            value={formData.recomendaciones_trabajador}
+                            onChange={(e) => updateField('recomendaciones_trabajador', e.target.value)}
+                            disabled={readOnly}
+                        />
+                    </FormField>
+                    <FormField label="PARA LA EMPRESA">
+                        <FormTextarea
+                            className="min-h-[150px]"
+                            value={formData.recomendaciones_empresa}
+                            onChange={(e) => updateField('recomendaciones_empresa', e.target.value)}
+                            disabled={readOnly}
+                        />
+                    </FormField>
+                </div>
+            </FormSection>
+
+            {/* 9. REGISTRO */}
+            <FormSection title="9. REGISTRO">
+                <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-6 space-y-6">
+                        {/* ELABORO */}
+                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <h4 className="font-bold text-slate-700 mb-4 border-b pb-2">ELABORÓ</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField label="Nombre">
+                                    <FormInput
+                                        value={formData.nombre_elaboro}
+                                        onChange={(e) => updateField('nombre_elaboro', e.target.value)}
                                         disabled={readOnly}
-                                        className="accent-blue-600 h-5 w-5"
                                     />
-                                    <span className="font-medium">{opt.label}</span>
-                                </label>
-                            ))}
+                                </FormField>
+                                <FormField label="Licencia S.O.">
+                                    <FormInput
+                                        value={formData.licencia_so_elaboro}
+                                        onChange={(e) => updateField('licencia_so_elaboro', e.target.value)}
+                                        disabled={readOnly}
+                                    />
+                                </FormField>
+                                {/* Placeholder for signature if needed later, or simple text for now */}
+                            </div>
+                        </div>
+
+                        {/* REVISO */}
+                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <h4 className="font-bold text-slate-700 mb-4 border-b pb-2">REVISÓ</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField label="Nombre">
+                                    <FormInput
+                                        value={formData.nombre_revisor}
+                                        onChange={(e) => updateField('nombre_revisor', e.target.value)}
+                                        disabled={readOnly}
+                                    />
+                                </FormField>
+                                <FormField label="Licencia S.O.">
+                                    <FormInput
+                                        value={formData.licencia_so_revisor}
+                                        onChange={(e) => updateField('licencia_so_revisor', e.target.value)}
+                                        disabled={readOnly}
+                                    />
+                                </FormField>
+                            </div>
+                        </div>
+
+                        {/* DATOS DEL USUARIO (Trabajador) */}
+                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <h4 className="font-bold text-slate-700 mb-4 border-b pb-2">DATOS DEL USUARIO (Trabajador)</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* Usually read-only from Step 1 but good to show or allow confirm */}
+                                <FormField label="Nombre">
+                                    <FormInput
+                                        value={formData.nombre_trabajador}
+                                        disabled={true}
+                                        className="bg-slate-100"
+                                    />
+                                </FormField>
+                                <FormField label="Documento (C.C)">
+                                    <FormInput
+                                        value={formData.numero_documento}
+                                        disabled={true}
+                                        className="bg-slate-100"
+                                    />
+                                </FormField>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>

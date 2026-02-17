@@ -28,7 +28,7 @@ export const Step4PeligrosAE = ({ peligros, setPeligros, readOnly }: Step4AEProp
 
     return (
         <div className="space-y-6">
-            <FormSection title="4. IDENTIFICACIÓN DE PELIGROS DENTRO DEL PROCESO PRODUCTIVO">
+            <FormSection title="6. IDENTIFICACIÓN DE PELIGROS DENTRO DEL PROCESO PRODUCTIVO">
                 {peligros.map((pel, idx) => {
                     const label = CATEGORIAS_PELIGRO_AE.find(c => c.value === pel.categoria)?.label || pel.categoria;
                     return (
