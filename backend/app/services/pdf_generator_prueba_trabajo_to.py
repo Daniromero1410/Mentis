@@ -672,19 +672,7 @@ def generar_pdf_prueba_trabajo_to(
     }
 
     for idx, tarea in enumerate(tareas):
-        # Tarea Header
-        t_header = [[Paragraph(f"<b>Tarea {idx + 1}</b>", styles["CellBold"])]]
-        th_table = Table(t_header, colWidths=[page_width])
-        th_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#E0E0E0")),
-            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-            ('LEFTPADDING', (0, 0), (-1, -1), 6),
-            ('TOPPADDING', (0, 0), (-1, -1), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-        ]))
-        elements.append(th_table)
-
-        # Tarea Data Table
+        # Actividad / Ciclo row
         t_data = [
             [bold("Actividad"), p(tarea.actividad), bold("Ciclo"), p(tarea.ciclo)],
             [bold("Subactividad"), p(tarea.subactividad), bold("Estándar productividad"), p(tarea.estandar_productividad)],
@@ -700,56 +688,118 @@ def generar_pdf_prueba_trabajo_to(
             ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
         elements.append(t_table)
-        elements.append(Spacer(1, 2))
 
-        # Text blocks in bordered containers
-        elements.append(subsection_header("Descripción y requerimientos biomecánicos"))
-        elements.append(bordered_text_block(tarea.descripcion_biomecanica))
-        elements.append(Spacer(1, 2))
-
-        elements.append(subsection_header("Apreciación del trabajador"))
-        elements.append(bordered_text_block(tarea.apreciacion_trabajador))
-        elements.append(Spacer(1, 2))
-
-        elements.append(subsection_header("Apreciación del profesional"))
-        elements.append(bordered_text_block(tarea.apreciacion_profesional))
-        elements.append(Spacer(1, 2))
-
-        # Conclusión
-        concl_text = conclusion_labels.get(tarea.conclusion or "", tarea.conclusion or "")
-        concl_data = [
-            [bold("Conclusión"), p(concl_text)],
-        ]
-        if tarea.descripcion_conclusion:
-            concl_data.append([bold("Descripción"), p(tarea.descripcion_conclusion)])
-
-        concl_t = Table(concl_data, colWidths=[page_width * 0.20, page_width * 0.80])
-        concl_t.setStyle(TableStyle([
+        # Registro fotográfico + Descripción biomecánica (side by side)
+        # Header row
+        foto_desc_header = [[
+            Paragraph("<b>Registro fotográfico</b>", styles["CellBold"]),
+            Paragraph("<b>Descripción subactividad y requerimientos motrices por tarea (Biomecánica)</b>", styles["CellBold"]),
+        ]]
+        fd_ht = Table(foto_desc_header, colWidths=[page_width * 0.35, page_width * 0.65])
+        fd_ht.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
             ('LEFTPADDING', (0, 0), (-1, -1), 4),
-            ('TOPPADDING', (0, 0), (-1, -1), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
         ]))
-        elements.append(concl_t)
-        elements.append(Spacer(1, 4))
+        elements.append(fd_ht)
 
-        # Registro Fotográfico
+        # Content row: image on left, description on right
+        foto_cell = ""
         if tarea.registro_fotografico:
             img_paths = [path.strip() for path in tarea.registro_fotografico.split(';') if path.strip()]
             if img_paths:
-                elements.append(subsection_header("Registro Fotográfico"))
-                elements.append(Spacer(1, 2))
-                for img_path_raw in img_paths:
-                    img_path = img_path_raw.lstrip("/")
-                    if os.path.exists(img_path):
-                        try:
-                            img = Image(img_path, width=7 * cm, height=5 * cm)
-                            elements.append(img)
-                            elements.append(Spacer(1, 4))
-                        except Exception as e:
-                            print(f"Error embedding image {img_path}: {e}")
+                img_path = img_paths[0].lstrip("/")
+                if os.path.exists(img_path):
+                    try:
+                        # Get original image size and scale proportionally
+                        from reportlab.lib.utils import ImageReader
+                        img_reader = ImageReader(img_path)
+                        iw, ih = img_reader.getSize()
+                        max_w = page_width * 0.33
+                        max_h = 10 * cm
+                        scale = min(max_w / iw, max_h / ih)
+                        foto_cell = Image(img_path, width=iw * scale, height=ih * scale)
+                    except Exception as e:
+                        print(f"Error embedding image {img_path}: {e}")
+                        foto_cell = p("(Imagen no disponible)")
+
+        desc_cell = Paragraph(str(tarea.descripcion_biomecanica) if tarea.descripcion_biomecanica else "", styles["LongText"])
+
+        fd_content = [[foto_cell, desc_cell]]
+        fd_ct = Table(fd_content, colWidths=[page_width * 0.35, page_width * 0.65])
+        fd_ct.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('ALIGN', (0, 0), (0, -1), 'CENTER'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        elements.append(fd_ct)
+
+        # Additional images (if more than one photo)
+        if tarea.registro_fotografico:
+            img_paths = [path.strip() for path in tarea.registro_fotografico.split(';') if path.strip()]
+            for extra_path_raw in img_paths[1:]:
+                extra_path = extra_path_raw.lstrip("/")
+                if os.path.exists(extra_path):
+                    try:
+                        from reportlab.lib.utils import ImageReader
+                        img_reader = ImageReader(extra_path)
+                        iw, ih = img_reader.getSize()
+                        max_w = page_width * 0.60
+                        max_h = 12 * cm
+                        scale = min(max_w / iw, max_h / ih)
+                        extra_img = Image(extra_path, width=iw * scale, height=ih * scale)
+                        extra_row = [[extra_img]]
+                        extra_t = Table(extra_row, colWidths=[page_width])
+                        extra_t.setStyle(TableStyle([
+                            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+                            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                            ('TOPPADDING', (0, 0), (-1, -1), 4),
+                            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+                        ]))
+                        elements.append(extra_t)
+                    except Exception as e:
+                        print(f"Error embedding extra image {extra_path}: {e}")
+
+        # Apreciación del trabajador
+        elements.append(subsection_header("Apreciación del trabajador"))
+        elements.append(bordered_text_block(tarea.apreciacion_trabajador))
+
+        # Apreciación del profesional de la salud que evalúa
+        elements.append(subsection_header("Apreciación del profesional de la salud que evalúa"))
+        elements.append(bordered_text_block(tarea.apreciacion_profesional))
+
+        # Conclusión con respecto a la actividad
+        elements.append(subsection_header("Conclusión con respecto a la actividad"))
+
+        # 4 checkbox columns for conclusion
+        concl_val = (tarea.conclusion or "").strip()
+        concl_row = [[
+            checkbox(concl_val == "reintegro_sin_modificaciones", "Reintegro sin\nmodificaciones"),
+            checkbox(concl_val == "reintegro_con_modificaciones", "Reintegro con\nmodificaciones"),
+            checkbox(concl_val == "desarrollo_capacidades", "Desarrollo de\ncapacidades"),
+            checkbox(concl_val == "no_puede_desempenarla", "No puede\ndesempeñarla"),
+        ]]
+        concl_t = Table(concl_row, colWidths=[page_width * 0.25] * 4)
+        concl_t.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        elements.append(concl_t)
+
+        # Descripción de conclusión (if any)
+        if tarea.descripcion_conclusion:
+            elements.append(bordered_text_block(tarea.descripcion_conclusion))
 
         elements.append(Spacer(1, 6))
 
