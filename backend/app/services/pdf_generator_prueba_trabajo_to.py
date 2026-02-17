@@ -708,23 +708,22 @@ def generar_pdf_prueba_trabajo_to(
 
         # Content row: image on left, description on right
         foto_cell = ""
+        all_img_paths = []
         if tarea.registro_fotografico:
-            img_paths = [path.strip() for path in tarea.registro_fotografico.split(';') if path.strip()]
-            if img_paths:
-                img_path = img_paths[0].lstrip("/")
-                if os.path.exists(img_path):
-                    try:
-                        # Get original image size and scale proportionally
-                        from reportlab.lib.utils import ImageReader
-                        img_reader = ImageReader(img_path)
-                        iw, ih = img_reader.getSize()
-                        max_w = page_width * 0.33
-                        max_h = 10 * cm
-                        scale = min(max_w / iw, max_h / ih)
-                        foto_cell = Image(img_path, width=iw * scale, height=ih * scale)
-                    except Exception as e:
-                        print(f"Error embedding image {img_path}: {e}")
-                        foto_cell = p("(Imagen no disponible)")
+            all_img_paths = [path.strip().lstrip("/") for path in tarea.registro_fotografico.split(';') if path.strip()]
+
+        if all_img_paths and os.path.exists(all_img_paths[0]):
+            try:
+                from reportlab.lib.utils import ImageReader
+                img_reader = ImageReader(all_img_paths[0])
+                iw, ih = img_reader.getSize()
+                max_w = page_width * 0.30
+                max_h = 7 * cm
+                scale = min(max_w / iw, max_h / ih)
+                foto_cell = Image(all_img_paths[0], width=iw * scale, height=ih * scale)
+            except Exception as e:
+                print(f"Error embedding image {all_img_paths[0]}: {e}")
+                foto_cell = p("(Imagen no disponible)")
 
         desc_cell = Paragraph(str(tarea.descripcion_biomecanica) if tarea.descripcion_biomecanica else "", styles["LongText"])
 
@@ -741,31 +740,40 @@ def generar_pdf_prueba_trabajo_to(
         ]))
         elements.append(fd_ct)
 
-        # Additional images (if more than one photo)
-        if tarea.registro_fotografico:
-            img_paths = [path.strip() for path in tarea.registro_fotografico.split(';') if path.strip()]
-            for extra_path_raw in img_paths[1:]:
-                extra_path = extra_path_raw.lstrip("/")
-                if os.path.exists(extra_path):
+        # Additional images in a 2-column grid (same proportional size)
+        extra_imgs = all_img_paths[1:] if len(all_img_paths) > 1 else []
+        if extra_imgs:
+            from reportlab.lib.utils import ImageReader
+            img_max_w = page_width * 0.45
+            img_max_h = 8 * cm
+            loaded_imgs = []
+            for ep in extra_imgs:
+                if os.path.exists(ep):
                     try:
-                        from reportlab.lib.utils import ImageReader
-                        img_reader = ImageReader(extra_path)
-                        iw, ih = img_reader.getSize()
-                        max_w = page_width * 0.60
-                        max_h = 12 * cm
-                        scale = min(max_w / iw, max_h / ih)
-                        extra_img = Image(extra_path, width=iw * scale, height=ih * scale)
-                        extra_row = [[extra_img]]
-                        extra_t = Table(extra_row, colWidths=[page_width])
-                        extra_t.setStyle(TableStyle([
-                            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-                            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                            ('TOPPADDING', (0, 0), (-1, -1), 4),
-                            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-                        ]))
-                        elements.append(extra_t)
-                    except Exception as e:
-                        print(f"Error embedding extra image {extra_path}: {e}")
+                        ir = ImageReader(ep)
+                        iw, ih = ir.getSize()
+                        sc = min(img_max_w / iw, img_max_h / ih)
+                        loaded_imgs.append(Image(ep, width=iw * sc, height=ih * sc))
+                    except Exception:
+                        pass
+
+            # Arrange in rows of 2
+            for ri in range(0, len(loaded_imgs), 2):
+                row_cells = [loaded_imgs[ri]]
+                if ri + 1 < len(loaded_imgs):
+                    row_cells.append(loaded_imgs[ri + 1])
+                else:
+                    row_cells.append("")
+                extra_t = Table([row_cells], colWidths=[page_width * 0.50, page_width * 0.50])
+                extra_t.setStyle(TableStyle([
+                    ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+                    ('INNERGRID', (0, 0), (-1, -1), 0.3, colors.HexColor("#BDBDBD")),
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('TOPPADDING', (0, 0), (-1, -1), 6),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                ]))
+                elements.append(extra_t)
 
         # Apreciación del trabajador
         elements.append(subsection_header("Apreciación del trabajador"))
