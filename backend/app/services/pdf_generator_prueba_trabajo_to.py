@@ -706,26 +706,28 @@ def generar_pdf_prueba_trabajo_to(
         ]))
         elements.append(fd_ht)
 
-        # Content row: image on left, description on right
-        foto_cell = ""
+        # Content row: description spans full width
+        desc_cell = Paragraph(str(tarea.descripcion_biomecanica) if tarea.descripcion_biomecanica else "", styles["LongText"])
+
+        # Collect all valid images
         all_img_paths = []
         if tarea.registro_fotografico:
             all_img_paths = [path.strip().lstrip("/") for path in tarea.registro_fotografico.split(';') if path.strip()]
+        valid_img_paths = [p_img for p_img in all_img_paths if os.path.exists(p_img)]
 
-        if all_img_paths and os.path.exists(all_img_paths[0]):
+        # Load first image for the side-by-side cell
+        foto_cell = ""
+        if valid_img_paths:
             try:
                 from reportlab.lib.utils import ImageReader
-                img_reader = ImageReader(all_img_paths[0])
-                iw, ih = img_reader.getSize()
+                ir = ImageReader(valid_img_paths[0])
+                iw, ih = ir.getSize()
                 max_w = page_width * 0.30
                 max_h = 7 * cm
-                scale = min(max_w / iw, max_h / ih)
-                foto_cell = Image(all_img_paths[0], width=iw * scale, height=ih * scale)
+                sc = min(max_w / iw, max_h / ih)
+                foto_cell = Image(valid_img_paths[0], width=iw * sc, height=ih * sc)
             except Exception as e:
-                print(f"Error embedding image {all_img_paths[0]}: {e}")
-                foto_cell = p("(Imagen no disponible)")
-
-        desc_cell = Paragraph(str(tarea.descripcion_biomecanica) if tarea.descripcion_biomecanica else "", styles["LongText"])
+                print(f"Error embedding image: {e}")
 
         fd_content = [[foto_cell, desc_cell]]
         fd_ct = Table(fd_content, colWidths=[page_width * 0.35, page_width * 0.65])
@@ -740,40 +742,37 @@ def generar_pdf_prueba_trabajo_to(
         ]))
         elements.append(fd_ct)
 
-        # Additional images in a 2-column grid (same proportional size)
-        extra_imgs = all_img_paths[1:] if len(all_img_paths) > 1 else []
-        if extra_imgs:
+        # Extra images: same proportional size, 2 per row, centered
+        if len(valid_img_paths) > 1:
             from reportlab.lib.utils import ImageReader
-            img_max_w = page_width * 0.45
-            img_max_h = 8 * cm
-            loaded_imgs = []
-            for ep in extra_imgs:
-                if os.path.exists(ep):
-                    try:
-                        ir = ImageReader(ep)
-                        iw, ih = ir.getSize()
-                        sc = min(img_max_w / iw, img_max_h / ih)
-                        loaded_imgs.append(Image(ep, width=iw * sc, height=ih * sc))
-                    except Exception:
-                        pass
+            # Use exact same max size for ALL extra images
+            img_fixed_w = page_width * 0.30
+            img_fixed_h = 7 * cm
+            loaded = []
+            for ep in valid_img_paths[1:]:
+                try:
+                    ir = ImageReader(ep)
+                    iw, ih = ir.getSize()
+                    sc = min(img_fixed_w / iw, img_fixed_h / ih)
+                    loaded.append(Image(ep, width=iw * sc, height=ih * sc))
+                except Exception:
+                    pass
 
-            # Arrange in rows of 2
-            for ri in range(0, len(loaded_imgs), 2):
-                row_cells = [loaded_imgs[ri]]
-                if ri + 1 < len(loaded_imgs):
-                    row_cells.append(loaded_imgs[ri + 1])
+            for ri in range(0, len(loaded), 2):
+                cells = [loaded[ri]]
+                if ri + 1 < len(loaded):
+                    cells.append(loaded[ri + 1])
                 else:
-                    row_cells.append("")
-                extra_t = Table([row_cells], colWidths=[page_width * 0.50, page_width * 0.50])
-                extra_t.setStyle(TableStyle([
+                    cells.append("")
+                row_t = Table([cells], colWidths=[page_width * 0.50, page_width * 0.50])
+                row_t.setStyle(TableStyle([
                     ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-                    ('INNERGRID', (0, 0), (-1, -1), 0.3, colors.HexColor("#BDBDBD")),
                     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                     ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                    ('TOPPADDING', (0, 0), (-1, -1), 6),
-                    ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                    ('TOPPADDING', (0, 0), (-1, -1), 4),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
                 ]))
-                elements.append(extra_t)
+                elements.append(row_t)
 
         # Apreciación del trabajador
         elements.append(subsection_header("Apreciación del trabajador"))
