@@ -706,7 +706,7 @@ def generar_pdf_prueba_trabajo_to(
         ]))
         elements.append(fd_ht)
 
-        # Content row: description spans full width
+        # Content row: all images stacked in left cell, description in right cell
         desc_cell = Paragraph(str(tarea.descripcion_biomecanica) if tarea.descripcion_biomecanica else "", styles["LongText"])
 
         # Collect all valid images
@@ -715,19 +715,36 @@ def generar_pdf_prueba_trabajo_to(
             all_img_paths = [path.strip().lstrip("/") for path in tarea.registro_fotografico.split(';') if path.strip()]
         valid_img_paths = [p_img for p_img in all_img_paths if os.path.exists(p_img)]
 
-        # Load first image for the side-by-side cell
-        foto_cell = ""
+        # Load ALL images at the same proportional size and stack them vertically
+        foto_cell_parts = []
         if valid_img_paths:
-            try:
-                from reportlab.lib.utils import ImageReader
-                ir = ImageReader(valid_img_paths[0])
-                iw, ih = ir.getSize()
-                max_w = page_width * 0.25
-                max_h = 5 * cm
-                sc = min(max_w / iw, max_h / ih)
-                foto_cell = Image(valid_img_paths[0], width=iw * sc, height=ih * sc)
-            except Exception as e:
-                print(f"Error embedding image: {e}")
+            from reportlab.lib.utils import ImageReader
+            img_max_w = page_width * 0.30
+            img_max_h = 5 * cm
+            for img_p in valid_img_paths:
+                try:
+                    ir = ImageReader(img_p)
+                    iw, ih = ir.getSize()
+                    sc = min(img_max_w / iw, img_max_h / ih)
+                    foto_cell_parts.append(Image(img_p, width=iw * sc, height=ih * sc))
+                    foto_cell_parts.append(Spacer(1, 4))
+                except Exception as e:
+                    print(f"Error embedding image: {e}")
+
+        # Stack images vertically in a sub-table for the left cell
+        if foto_cell_parts:
+            foto_inner_rows = [[item] for item in foto_cell_parts]
+            foto_cell = Table(foto_inner_rows, colWidths=[page_width * 0.33])
+            foto_cell.setStyle(TableStyle([
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 0),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+                ('TOPPADDING', (0, 0), (-1, -1), 0),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+            ]))
+        else:
+            foto_cell = ""
 
         fd_content = [[foto_cell, desc_cell]]
         fd_ct = Table(fd_content, colWidths=[page_width * 0.35, page_width * 0.65])
@@ -741,38 +758,6 @@ def generar_pdf_prueba_trabajo_to(
             ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
         ]))
         elements.append(fd_ct)
-
-        # Extra images: same proportional size, 2 per row, centered
-        if len(valid_img_paths) > 1:
-            from reportlab.lib.utils import ImageReader
-            # Use exact same max size as first image
-            img_fixed_w = page_width * 0.25
-            img_fixed_h = 5 * cm
-            loaded = []
-            for ep in valid_img_paths[1:]:
-                try:
-                    ir = ImageReader(ep)
-                    iw, ih = ir.getSize()
-                    sc = min(img_fixed_w / iw, img_fixed_h / ih)
-                    loaded.append(Image(ep, width=iw * sc, height=ih * sc))
-                except Exception:
-                    pass
-
-            for ri in range(0, len(loaded), 2):
-                cells = [loaded[ri]]
-                if ri + 1 < len(loaded):
-                    cells.append(loaded[ri + 1])
-                else:
-                    cells.append("")
-                row_t = Table([cells], colWidths=[page_width * 0.50, page_width * 0.50])
-                row_t.setStyle(TableStyle([
-                    ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                    ('TOPPADDING', (0, 0), (-1, -1), 4),
-                    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-                ]))
-                elements.append(row_t)
 
         # Apreciación del trabajador
         elements.append(subsection_header("Apreciación del trabajador"))
