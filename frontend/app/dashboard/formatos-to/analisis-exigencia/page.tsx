@@ -20,7 +20,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sileo-toast';
 
 export default function AnalisisExigenciaPage() {
     const { token, user } = useAuth();

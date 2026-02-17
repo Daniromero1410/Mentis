@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sileo-toast';
 import { Loader2, User, Lock, Save, Shield, Settings } from 'lucide-react';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
 

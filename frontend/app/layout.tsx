@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-import { Toaster } from 'sonner';
+import { Toaster } from 'sileo';
 
 export default function RootLayout({
   children,
@@ -29,7 +29,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             {children}
-            <Toaster position="bottom-center" richColors />
+            <Toaster position="bottom-center" />
           </AuthProvider>
         </ThemeProvider>
       </body>

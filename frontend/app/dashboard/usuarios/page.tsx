@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { api } from '@/app/services/api';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sileo-toast';
 import {
     Users,
     Plus,

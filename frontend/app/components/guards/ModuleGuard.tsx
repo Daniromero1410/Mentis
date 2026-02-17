@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sileo-toast';
 
 interface ModuleGuardProps {
     children: React.ReactNode;
