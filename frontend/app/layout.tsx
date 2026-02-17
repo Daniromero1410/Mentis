@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/app/context/AuthContext';
 import { ThemeProvider } from '@/app/context/ThemeContext';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from 'sileo';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,7 +27,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             {children}
-            <Toaster />
+            <Toaster position="bottom-center" />
           </AuthProvider>
         </ThemeProvider>
       </body>

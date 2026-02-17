@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
-import { toast } from 'sonner';
+import { toast } from 'sileo';
 import {
     Save, ChevronLeft, ChevronRight, Loader2,
     FileText, User, Briefcase,
@@ -16,13 +16,17 @@ import { Step2MetodologiaCondicionesAE } from './Step2MetodologiaCondicionesAE';
 import { Step3RequerimientosAE } from './Step3RequerimientosAE';
 import { Step4PeligrosAE, CATEGORIAS_PELIGRO_AE } from './Step4PeligrosAE';
 import { Step5ConceptoAE } from './Step5ConceptoAE';
+import { Step6PerfilExigenciasAE } from './Step6PerfilExigenciasAE';
+import { Step7RegistroAE } from './Step7RegistroAE';
 
 const STEPS = [
     { id: 1, title: 'Identificación', icon: User },
     { id: 2, title: 'Metodología', icon: Briefcase },
     { id: 3, title: 'Requerimientos', icon: Activity },
     { id: 4, title: 'Peligros', icon: AlertTriangle },
-    { id: 5, title: 'Concepto', icon: FileText }
+    { id: 5, title: 'Concepto', icon: FileText },
+    { id: 6, title: 'Perfil de Exigencias', icon: Activity },
+    { id: 7, title: 'Registro', icon: FileText }
 ];
 
 interface AnalisisExigenciaWizardProps {
@@ -39,6 +43,11 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
     const [currentStep, setCurrentStep] = useState(1);
     const [analisisId, setAnalisisId] = useState<number | null>(id || null);
     const [saving, setSaving] = useState(false);
+
+    const [perfilExigencias, setPerfilExigencias] = useState<any>({});
+
+    // Estados para validación de pasos
+    const [stepsCompleted, setStepsCompleted] = useState<boolean[]>([false, false, false, false, false, false, false]);
 
     const [formData, setFormData] = useState({
         fecha_valoracion: new Date().toISOString().split('T')[0],
@@ -189,6 +198,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 para_trabajador: formData.recomendaciones_trabajador,
                 para_empresa: formData.recomendaciones_empresa
             },
+            perfil_exigencias: perfilExigencias,
             registro: {
                 nombre_elaboro: formData.nombre_elaboro,
                 firma_elaboro: formData.firma_elaboro,
@@ -290,6 +300,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
 
                     if (data.tareas && data.tareas.length > 0) setTareas(data.tareas);
                     if (data.materiales_equipos) setMateriales(data.materiales_equipos);
+                    if (data.perfil_exigencias) setPerfilExigencias(data.perfil_exigencias);
                     if (data.peligros) {
                         const mergedPeligros = CATEGORIAS_PELIGRO_AE.map(cat => {
                             const existing = data.peligros.find((p: any) => p.categoria === cat.value);
@@ -418,10 +429,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 }
             } catch (ignore) { }
 
-            toast.error(errorMessage, {
-                description: errorDetails || undefined,
-                duration: 8000,
-            });
+            toast.error(`${errorMessage}${errorDetails ? '\n' + errorDetails : ''}`);
         } finally {
             setSaving(false);
         }
@@ -515,6 +523,22 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
 
                 {currentStep === 5 && (
                     <Step5ConceptoAE
+                        formData={formData}
+                        updateField={updateField}
+                        readOnly={readOnly}
+                    />
+                )}
+
+                {currentStep === 6 && (
+                    <Step6PerfilExigenciasAE
+                        perfil={perfilExigencias}
+                        setPerfil={setPerfilExigencias}
+                        readOnly={readOnly}
+                    />
+                )}
+
+                {currentStep === 7 && (
+                    <Step7RegistroAE
                         formData={formData}
                         updateField={updateField}
                         readOnly={readOnly}
