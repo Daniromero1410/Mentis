@@ -16,6 +16,8 @@ from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak
 )
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
+from reportlab.graphics.shapes import Drawing, Rect, Line
+from reportlab.graphics import renderPDF
 
 
 def generar_pdf_prueba_trabajo_to(
@@ -74,61 +76,45 @@ def generar_pdf_prueba_trabajo_to(
     LIGHT_GRAY = colors.HexColor("#f5f5f5")
 
     # ── HELPER FUNCTIONS ─────────────────────────────────────────────
-    def date_grid(date_obj):
-        """Creates a mini-table for date [D][D] [M][M] [A][A][A][A]"""
+    def format_date(date_obj):
+        """Formats a date as DD / MM / YYYY plain text"""
         if not date_obj:
-            d, m, y = "", "", ""
-        else:
+            return ""
+        try:
             if isinstance(date_obj, str):
-                try:
-                    dt = datetime.strptime(date_obj, "%Y-%m-%d")
-                    d, m, y = f"{dt.day:02}", f"{dt.month:02}", f"{dt.year:04}"
-                except Exception:
-                    d, m, y = "", "", ""
+                dt = datetime.strptime(date_obj, "%Y-%m-%d")
             else:
-                d, m, y = f"{date_obj.day:02}", f"{date_obj.month:02}", f"{date_obj.year:04}"
+                dt = date_obj
+            return f"{dt.day:02} / {dt.month:02} / {dt.year:04}"
+        except Exception:
+            return str(date_obj)
 
-        d1, d2 = (d[0], d[1]) if len(d) == 2 else ("", "")
-        m1, m2 = (m[0], m[1]) if len(m) == 2 else ("", "")
-        y1, y2, y3, y4 = (y[0], y[1], y[2], y[3]) if len(y) == 4 else ("", "", "", "")
-
-        header_row = [
-            Paragraph("día", styles["DateLabel"]), "",
-            Paragraph("mes", styles["DateLabel"]), "",
-            Paragraph("año", styles["DateLabel"]), "", "", ""
-        ]
-        digit_row = [
-            Paragraph(d1, styles["DateDigit"]), Paragraph(d2, styles["DateDigit"]),
-            Paragraph(m1, styles["DateDigit"]), Paragraph(m2, styles["DateDigit"]),
-            Paragraph(y1, styles["DateDigit"]), Paragraph(y2, styles["DateDigit"]),
-            Paragraph(y3, styles["DateDigit"]), Paragraph(y4, styles["DateDigit"])
-        ]
-
-        cw = 0.38 * cm
-        t = Table([header_row, digit_row], colWidths=[cw] * 8)
-        t.setStyle(TableStyle([
-            ('GRID', (0, 1), (-1, -1), 0.5, colors.black),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('SPAN', (0, 0), (1, 0)),
-            ('SPAN', (2, 0), (3, 0)),
-            ('SPAN', (4, 0), (7, 0)),
-            ('FONTSIZE', (0, 0), (-1, -1), 6),
-            ('LEFTPADDING', (0, 0), (-1, -1), 1),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 1),
-            ('TOPPADDING', (0, 0), (-1, -1), 1),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor("#FFF8E1")),
-        ]))
-        return t
+    def make_checkbox_drawing(checked, size=8):
+        """Creates a professional checkbox using ReportLab Drawing shapes"""
+        d = Drawing(size, size)
+        d.add(Rect(0, 0, size, size,
+                   fillColor=colors.HexColor('#E65100') if checked else colors.white,
+                   strokeColor=colors.HexColor('#424242'),
+                   strokeWidth=0.6))
+        if checked:
+            # Draw white X inside orange box
+            d.add(Line(2, 2, size - 2, size - 2, strokeColor=colors.white, strokeWidth=1))
+            d.add(Line(2, size - 2, size - 2, 2, strokeColor=colors.white, strokeWidth=1))
+        return d
 
     def checkbox(checked, label_text):
-        """Returns visual checkbox [X] or [  ] + Label"""
-        if checked:
-            mark = '<b>[X]</b>'
-        else:
-            mark = '[&nbsp;&nbsp;]'
-        return Paragraph(f"{mark} {label_text}", styles["CheckLabel"])
+        """Returns a professional checkbox + label as a mini table"""
+        cb = make_checkbox_drawing(checked)
+        lbl = Paragraph(label_text, styles["CheckLabel"])
+        t = Table([[cb, lbl]], colWidths=[0.4 * cm, None])
+        t.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 1),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 1),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+        ]))
+        return t
 
     def p(text, style_name="ValueSmall"):
         return Paragraph(str(text) if text else "", styles[style_name])
@@ -188,35 +174,16 @@ def generar_pdf_prueba_trabajo_to(
         return Paragraph(text, styles["FieldLabel"])
 
     # ── ENCABEZADO (HEADER) ──────────────────────────────────────────
-    # Resolve logo paths relative to this script → backend/app/services/ → go up to repo root
-    _script_dir = Path(__file__).resolve().parent  # backend/app/services
-    _repo_root = _script_dir.parent.parent.parent  # repo root
+    # Resolve logo paths: backend/app/services → 2 parents up → backend/static/images
+    _backend_dir = Path(__file__).resolve().parent.parent.parent  # backend/
+    _static_images = _backend_dir / "static" / "images"
 
-    # Try multiple possible locations for logos
-    _logo_positiva_candidates = [
-        _repo_root / "Positiva Logo.png",
-        _repo_root / "frontend" / "public" / "images" / "logo-positiva-hq.png",
-    ]
-    _logo_santa_candidates = [
-        _repo_root / "Santa Isabel Logo.png",
-        _repo_root / "frontend" / "public" / "images" / "logo-santa-isabel.png",
-    ]
-
-    logo_positiva_path = None
-    for cp in _logo_positiva_candidates:
-        if cp.exists():
-            logo_positiva_path = str(cp)
-            break
-
-    logo_santa_isabel_path = None
-    for cp in _logo_santa_candidates:
-        if cp.exists():
-            logo_santa_isabel_path = str(cp)
-            break
+    _logo_positiva = _static_images / "logo_positiva.png"
+    _logo_santa = _static_images / "logo_santa_isabel.png"
 
     # Row 1: Logo | Center text | Logo Proveedor
-    logo_left = Image(logo_positiva_path, width=2.8 * cm, height=1.4 * cm) if logo_positiva_path else bold("POSITIVA")
-    logo_right = Image(logo_santa_isabel_path, width=2.8 * cm, height=1.4 * cm) if logo_santa_isabel_path else Paragraph("<b>Logo Proveedor</b>", styles["HeaderSubBold"])
+    logo_left = Image(str(_logo_positiva), width=2.8 * cm, height=1.4 * cm) if _logo_positiva.exists() else bold("POSITIVA")
+    logo_right = Image(str(_logo_santa), width=2.8 * cm, height=1.4 * cm) if _logo_santa.exists() else Paragraph("<b>Logo Proveedor</b>", styles["HeaderSubBold"])
 
     center_text = Paragraph(
         "<b>POSITIVA S.A</b><br/>"
@@ -266,19 +233,19 @@ def generar_pdf_prueba_trabajo_to(
 
     # ── FECHA DE VALORACIÓN & ÚLTIMO DÍA INCAPACIDAD ────────────────
     i = identificacion
-    grid_valoracion = date_grid(i.fecha_valoracion if i else None)
-    grid_incapacidad = date_grid(i.ultimo_dia_incapacidad if i else None)
+    val_fecha = format_date(i.fecha_valoracion if i else None)
+    val_incap = format_date(i.ultimo_dia_incapacidad if i else None)
 
     date_rows = [
         [
             "",
             Paragraph("<b>FECHA DE VALORACIÓN:</b>", styles["LabelSmall"]),
-            grid_valoracion,
+            p(val_fecha),
         ],
         [
             Paragraph("<b>ÚLTIMO DIA DE INCAPACIDAD RECONOCIDO POR LA ARL:</b>", styles["LabelSmall"]),
             "",
-            grid_incapacidad,
+            p(val_incap),
         ]
     ]
 
@@ -360,12 +327,12 @@ def generar_pdf_prueba_trabajo_to(
     ]))
     elements.append(id_table_basic)
 
-    # Fecha de nacimiento/edad row (special: label | date_grid | "edad" | value + "años")
-    grid_nac = date_grid(i.fecha_nacimiento if i else None)
+    # Fecha de nacimiento/edad row
+    nac_fecha = format_date(i.fecha_nacimiento if i else None)
     edad_val = f"{i.edad or ''}" if i else ""
 
     nac_row = [
-        [bold("Fecha de nacimiento/edad"), grid_nac, bold("edad"), p(f"{edad_val}    años" if edad_val else "")]
+        [bold("Fecha de nacimiento/edad"), p(nac_fecha), bold("edad"), p(f"{edad_val}    años" if edad_val else "")]
     ]
     nac_t = Table(nac_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
     nac_t.setStyle(TableStyle([
@@ -431,7 +398,7 @@ def generar_pdf_prueba_trabajo_to(
     ne_cells_r1 = []
     ne_cells_r2 = []
     for idx, (key, lbl) in enumerate(ne_options):
-        cb = checkbox(ne == key or ne.startswith(key), lbl)
+        cb = checkbox(ne == key or key in ne or ne in key, lbl)
         if idx < 5:
             ne_cells_r1.append(cb)
         else:
@@ -553,11 +520,11 @@ def generar_pdf_prueba_trabajo_to(
     ]))
     elements.append(area_t)
 
-    # Fecha ingreso cargo/antigüedad (date grid + tiempo + value + años)
-    grid_fi_cargo = date_grid(i.fecha_ingreso_cargo if i else None)
+    # Fecha ingreso cargo/antigüedad
+    fic_fecha = format_date(i.fecha_ingreso_cargo if i else None)
     fic_row = [[
         bold("Fecha ingreso cargo/antigüedad en\nel cargo"),
-        grid_fi_cargo,
+        p(fic_fecha),
         bold("tiempo"),
         p(f"{i.antiguedad_cargo or ''}    años" if i else ""),
     ]]
@@ -574,10 +541,10 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(fic_t)
 
     # Fecha ingreso empresa/antigüedad
-    grid_fi_emp = date_grid(i.fecha_ingreso_empresa if i else None)
+    fie_fecha = format_date(i.fecha_ingreso_empresa if i else None)
     fie_row = [[
         bold("Fecha ingreso a la\nempresa/antigüedad en la empresa"),
-        grid_fi_emp,
+        p(fie_fecha),
         bold("tiempo"),
         p(f"{i.antiguedad_empresa or ''}    años" if i else ""),
     ]]
