@@ -11,16 +11,16 @@ import {
 } from 'lucide-react';
 import { BlurValidationModal } from '../BlurValidationModal';
 
-import { Step1Identificacion } from '../prueba-trabajo/Step1Identificacion';
-import { Step2MetodologiaCondiciones } from '../prueba-trabajo/Step2MetodologiaCondiciones';
-import { Step3TareasAE } from './Step3TareasAE';
-import { Step4MaterialesPeligrosAE, CATEGORIAS_PELIGRO_AE } from './Step4MaterialesPeligrosAE';
-import { Step5ConceptoRegistro } from '../prueba-trabajo/Step5ConceptoRegistro';
+import { Step1IdentificacionAE } from './Step1IdentificacionAE';
+import { Step2MetodologiaCondicionesAE } from './Step2MetodologiaCondicionesAE';
+import { Step3RequerimientosAE } from './Step3RequerimientosAE';
+import { Step4PeligrosAE, CATEGORIAS_PELIGRO_AE } from './Step4PeligrosAE';
+import { Step5ConceptoAE } from './Step5ConceptoAE';
 
 const STEPS = [
     { id: 1, title: 'Identificación', icon: User },
     { id: 2, title: 'Metodología', icon: Briefcase },
-    { id: 3, title: 'Tareas', icon: Activity },
+    { id: 3, title: 'Requerimientos', icon: Activity },
     { id: 4, title: 'Peligros', icon: AlertTriangle },
     { id: 5, title: 'Concepto', icon: FileText }
 ];
@@ -322,7 +322,6 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 break;
             case 2:
                 if (!formData.metodologia) errors.push('Metodología');
-                if (!formData.descripcion_proceso_productivo) errors.push('Descripción del Proceso Productivo');
                 break;
             case 3:
                 const validTareas = tareas.filter(t => t.actividad.trim() !== '');
@@ -333,6 +332,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             case 4:
                 break;
             case 5:
+                if (!formData.descripcion_proceso_productivo) errors.push('Descripción del Proceso Productivo');
                 if (!formData.concepto_prueba_trabajo) errors.push('Concepto del Análisis de Exigencia');
                 break;
         }
@@ -475,7 +475,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
 
                 {currentStep === 1 && (
-                    <Step1Identificacion
+                    <Step1IdentificacionAE
                         formData={formData}
                         updateField={updateField}
                         readOnly={readOnly}
@@ -483,7 +483,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 )}
 
                 {currentStep === 2 && (
-                    <Step2MetodologiaCondiciones
+                    <Step2MetodologiaCondicionesAE
                         formData={formData}
                         updateField={updateField}
                         readOnly={readOnly}
@@ -491,27 +491,25 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 )}
 
                 {currentStep === 3 && (
-                    <Step3TareasAE
+                    <Step3RequerimientosAE
                         tareas={tareas}
                         setTareas={setTareas}
+                        materiales={materiales}
+                        setMateriales={setMateriales}
                         readOnly={readOnly}
                     />
                 )}
 
                 {currentStep === 4 && (
-                    <Step4MaterialesPeligrosAE
-                        materiales={materiales}
-                        setMateriales={setMateriales}
+                    <Step4PeligrosAE
                         peligros={peligros}
                         setPeligros={setPeligros}
-                        formData={formData}
-                        updateField={updateField}
                         readOnly={readOnly}
                     />
                 )}
 
                 {currentStep === 5 && (
-                    <Step5ConceptoRegistro
+                    <Step5ConceptoAE
                         formData={formData}
                         updateField={updateField}
                         readOnly={readOnly}

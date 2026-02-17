@@ -146,6 +146,7 @@ class AnalisisExigenciaCreate(BaseModel):
     peligros: Optional[List[PeligroProcesoAECreate]] = None
     recomendaciones: Optional[RecomendacionesAECreate] = None
     registro: Optional[RegistroAECreate] = None
+    estado: Optional[str] = None
 
 
 class AnalisisExigenciaUpdate(BaseModel):
@@ -157,6 +158,7 @@ class AnalisisExigenciaUpdate(BaseModel):
     peligros: Optional[List[PeligroProcesoAECreate]] = None
     recomendaciones: Optional[RecomendacionesAECreate] = None
     registro: Optional[RegistroAECreate] = None
+    estado: Optional[str] = None
 
 
 # ══════════════════════════════════════════════════════════════════════

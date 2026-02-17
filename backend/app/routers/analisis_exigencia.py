@@ -131,7 +131,7 @@ def crear_analisis(
     current_user: Usuario = Depends(get_current_user),
 ):
     analisis = AnalisisExigencia(
-        estado=EstadoAnalisisExigencia.BORRADOR,
+        estado=data.estado if data.estado else EstadoAnalisisExigencia.BORRADOR,
         creado_por=current_user.id,
         fecha_creacion=datetime.utcnow(),
         fecha_actualizacion=datetime.utcnow(),
@@ -163,6 +163,8 @@ def actualizar_analisis(
     _check_permission(analisis, current_user)
 
     analisis.fecha_actualizacion = datetime.utcnow()
+    if data.estado:
+        analisis.estado = data.estado
     session.add(analisis)
 
     # Borrar hijos existentes y recrear
