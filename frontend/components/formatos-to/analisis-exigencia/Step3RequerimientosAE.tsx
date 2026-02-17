@@ -174,6 +174,50 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                     <FormField label="Requerimientos motrices - analisis biomecanico">
                                         <FormTextarea className="min-h-[120px]" value={tarea.requerimientos_motrices} onChange={(e) => updateTarea(idx, 'requerimientos_motrices', e.target.value)} disabled={readOnly} />
                                     </FormField>
+
+                                    {/* Apreciación del profesional */}
+                                    <div className="md:col-span-2">
+                                        <FormField label="Apreciación del profesional de la salud que evalúa y plan de reincorporacion laboral">
+                                            <FormTextarea
+                                                className="min-h-[80px]"
+                                                value={tarea.apreciacion_profesional}
+                                                onChange={(e) => updateTarea(idx, 'apreciacion_profesional', e.target.value)}
+                                                disabled={readOnly}
+                                            />
+                                        </FormField>
+                                    </div>
+
+                                    {/* Conclusión */}
+                                    <div className="md:col-span-2 mt-4 space-y-2">
+                                        <Label className="text-xs font-bold text-slate-500 uppercase">Conclusión con respecto a la actividad</Label>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                                            {[
+                                                { value: 'reintegro_sin_modificaciones', label: 'Reintegro sin modificaciones' },
+                                                { value: 'reintegro_con_modificaciones', label: 'Reintegro con modificaciones' },
+                                                { value: 'desarrollo_capacidades', label: 'Desarrollo de capacidades' },
+                                                { value: 'no_puede_desempenarla', label: 'No puede desempeñarla' }
+                                            ].map((opt) => (
+                                                <label
+                                                    key={opt.value}
+                                                    className={`flex items-center gap-2 p-2 rounded border cursor-pointer text-xs transition-colors ${tarea.conclusion === opt.value
+                                                            ? 'bg-blue-50 border-blue-500 text-blue-700'
+                                                            : 'bg-white border-slate-200 hover:bg-slate-50'
+                                                        }`}
+                                                >
+                                                    <input
+                                                        type="radio"
+                                                        name={`conclusion-${idx}`}
+                                                        value={opt.value}
+                                                        checked={tarea.conclusion === opt.value}
+                                                        onChange={(e) => updateTarea(idx, 'conclusion', e.target.value)}
+                                                        disabled={readOnly}
+                                                        className="accent-blue-600 h-4 w-4"
+                                                    />
+                                                    <span>{opt.label}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>

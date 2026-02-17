@@ -39,36 +39,10 @@ export const Step2MetodologiaCondicionesAE = ({ formData, updateField, readOnly 
                     />
                 </div>
 
-                {/* 3.2 APRECIACIÓN DEL TRABAJADOR */}
-                <div className="mb-8">
-                    <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-blue-500">
-                        3.2 APRECIACIÓN DEL TRABAJADOR FRENTE A SU PROCESO PRODUCTIVO
-                    </h3>
-                    <FormTextarea
-                        className="min-h-[100px]"
-                        value={formData.apreciacion_trabajador_proceso}
-                        onChange={(e) => updateField('apreciacion_trabajador_proceso', e.target.value)}
-                        disabled={readOnly}
-                    />
-                </div>
-
-                {/* 3.3 ESTÁNDARES DE PRODUCTIVIDAD */}
-                <div className="mb-8">
-                    <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-blue-500">
-                        3.3 ESTÁNDARES DE PRODUCTIVIDAD
-                    </h3>
-                    <FormTextarea
-                        className="min-h-[100px]"
-                        value={formData.estandares_productividad}
-                        onChange={(e) => updateField('estandares_productividad', e.target.value)}
-                        disabled={readOnly}
-                    />
-                </div>
-
-                {/* 3.4 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL */}
+                {/* 3.2 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL */}
                 <div className="mb-4">
                     <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-blue-500">
-                        3.4 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL
+                        3.2 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-lg border border-slate-100">
                         {/* Row 1 */}
