@@ -131,22 +131,22 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
                                 <div className="lg:col-span-4">
                                     <FormField label="Actividad">
-                                        <FormInput placeholder="Ej. Levantamiento de cargas" value={tarea.actividad} onChange={(e) => updateTarea(idx, 'actividad', e.target.value)} disabled={readOnly} />
+                                        <FormInput value={tarea.actividad} onChange={(e) => updateTarea(idx, 'actividad', e.target.value)} disabled={readOnly} />
                                     </FormField>
                                 </div>
                                 <div className="lg:col-span-4">
                                     <FormField label="Subactividad">
-                                        <FormInput placeholder="Ej. Traslado manual" value={tarea.subactividad} onChange={(e) => updateTarea(idx, 'subactividad', e.target.value)} disabled={readOnly} />
+                                        <FormInput value={tarea.subactividad} onChange={(e) => updateTarea(idx, 'subactividad', e.target.value)} disabled={readOnly} />
                                     </FormField>
                                 </div>
                                 <div className="lg:col-span-2">
                                     <FormField label="Ciclo">
-                                        <FormInput placeholder="Ej. 10 min" value={tarea.ciclo} onChange={(e) => updateTarea(idx, 'ciclo', e.target.value)} disabled={readOnly} />
+                                        <FormInput value={tarea.ciclo} onChange={(e) => updateTarea(idx, 'ciclo', e.target.value)} disabled={readOnly} />
                                     </FormField>
                                 </div>
                                 <div className="lg:col-span-2">
                                     <FormField label="Estándar">
-                                        <FormInput placeholder="Ej. 50 u/h" value={tarea.estandar_productividad} onChange={(e) => updateTarea(idx, 'estandar_productividad', e.target.value)} disabled={readOnly} />
+                                        <FormInput value={tarea.estandar_productividad} onChange={(e) => updateTarea(idx, 'estandar_productividad', e.target.value)} disabled={readOnly} />
                                     </FormField>
                                 </div>
                             </div>
@@ -156,7 +156,6 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                 <FormField label="Descripción Subactividad">
                                     <FormTextarea
                                         className="min-h-[100px] bg-white"
-                                        placeholder="Describa detalladamente la subactividad..."
                                         value={tarea.descripcion_biomecanica}
                                         onChange={(e) => updateTarea(idx, 'descripcion_biomecanica', e.target.value)}
                                         disabled={readOnly}
@@ -165,7 +164,6 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                 <FormField label="Requerimientos Motrices - Análisis Biomecánico">
                                     <FormTextarea
                                         className="min-h-[100px] bg-white"
-                                        placeholder="Especifique los requerimientos motrices..."
                                         value={tarea.requerimientos_motrices}
                                         onChange={(e) => updateTarea(idx, 'requerimientos_motrices', e.target.value)}
                                         disabled={readOnly}
@@ -178,7 +176,6 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                 <FormField label="Apreciación del profesional de la salud que evalúa y plan de reincorporación">
                                     <FormTextarea
                                         className="min-h-[80px]"
-                                        placeholder="Concepto profesional..."
                                         value={tarea.apreciacion_profesional}
                                         onChange={(e) => updateTarea(idx, 'apreciacion_profesional', e.target.value)}
                                         disabled={readOnly}
@@ -187,22 +184,22 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                             </div>
 
                             {/* 4. Evidencia y Conclusión */}
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4 border-t border-slate-100">
                                 {/* Columna Izquierda: Fotos */}
-                                <div className="lg:col-span-1 space-y-3">
+                                <div className="space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <Label className="text-xs font-bold text-slate-600 uppercase">Registro Fotográfico</Label>
-                                        <span className="text-[10px] text-slate-400">Máx 3</span>
+                                        <Label className="text-sm font-bold text-slate-700 uppercase">Registro Fotográfico</Label>
+                                        <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Máx 3 imágenes</span>
                                     </div>
 
-                                    <div className="grid grid-cols-3 gap-2">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                         {tarea.registro_fotografico && tarea.registro_fotografico.split(';').filter((u: string) => u.trim()).map((url: string, imgIdx: number) => (
-                                            <div key={imgIdx} className="relative aspect-square rounded-md overflow-hidden border border-slate-200 group">
+                                            <div key={imgIdx} className="relative aspect-square rounded-lg overflow-hidden border border-slate-200 group shadow-sm hover:shadow-md transition-shadow">
                                                 <img src={`${API_URL || ''}${url}`} alt="Evidencia" className="w-full h-full object-cover" />
                                                 {!readOnly && (
                                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                        <Button variant="destructive" size="icon" className="h-6 w-6 rounded-full" onClick={() => removeImage(idx, imgIdx)}>
-                                                            <X className="h-3 w-3" />
+                                                        <Button variant="destructive" size="icon" className="h-8 w-8 rounded-full" onClick={() => removeImage(idx, imgIdx)}>
+                                                            <X className="h-4 w-4" />
                                                         </Button>
                                                     </div>
                                                 )}
@@ -210,9 +207,11 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                         ))}
 
                                         {!readOnly && (!tarea.registro_fotografico || tarea.registro_fotografico.split(';').filter((u: string) => u.trim()).length < 3) && (
-                                            <div className="aspect-square border-2 border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-colors rounded-md flex flex-col items-center justify-center cursor-pointer relative">
-                                                <Upload className="h-4 w-4 text-slate-400 mb-1" />
-                                                <span className="text-[8px] font-medium text-slate-500 text-center px-1">Subir</span>
+                                            <div className="aspect-square border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 transition-all rounded-lg flex flex-col items-center justify-center cursor-pointer relative group">
+                                                <div className="bg-white p-3 rounded-full shadow-sm border border-slate-100 mb-2 group-hover:scale-110 transition-transform">
+                                                    <Upload className="h-6 w-6 text-blue-500" />
+                                                </div>
+                                                <span className="text-xs font-semibold text-slate-600 group-hover:text-blue-600">Subir Foto</span>
                                                 <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(idx, e)} />
                                             </div>
                                         )}
@@ -220,9 +219,9 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                 </div>
 
                                 {/* Columna Derecha: Conclusión */}
-                                <div className="lg:col-span-2 space-y-3">
-                                    <Label className="text-xs font-bold text-slate-600 uppercase">Conclusión con respecto a la actividad</Label>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-4">
+                                    <Label className="text-sm font-bold text-slate-700 uppercase">Conclusión con respecto a la actividad</Label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 h-full content-start">
                                         {[
                                             { value: 'reintegro_sin_modificaciones', label: 'Reintegro sin modificaciones' },
                                             { value: 'reintegro_con_modificaciones', label: 'Reintegro con modificaciones' },
@@ -231,8 +230,8 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                         ].map((opt) => (
                                             <label
                                                 key={opt.value}
-                                                className={`flex items-start gap-3 p-3 rounded-lg border text-sm transition-all cursor-pointer ${tarea.conclusion === opt.value
-                                                        ? 'bg-blue-600 border-blue-600 text-white shadow-md'
+                                                className={`flex flex-col items-start gap-2 p-4 rounded-xl border text-sm transition-all cursor-pointer relative overflow-hidden ${tarea.conclusion === opt.value
+                                                        ? 'bg-blue-50 border-blue-500 text-blue-800 shadow-sm ring-1 ring-blue-500'
                                                         : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:bg-slate-50'
                                                     }`}
                                             >
@@ -243,13 +242,15 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                                     checked={tarea.conclusion === opt.value}
                                                     onChange={(e) => updateTarea(idx, 'conclusion', e.target.value)}
                                                     disabled={readOnly}
-                                                    className="mt-0.5 sr-only" // Hide default radio
+                                                    className="sr-only"
                                                 />
-                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${tarea.conclusion === opt.value ? 'border-white bg-white/20' : 'border-slate-300'
-                                                    }`}>
-                                                    {tarea.conclusion === opt.value && <div className="w-2 h-2 rounded-full bg-white" />}
+                                                <div className="flex items-center justify-between w-full">
+                                                    <span className="font-medium leading-tight">{opt.label}</span>
+                                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${tarea.conclusion === opt.value ? 'border-blue-600 bg-blue-600' : 'border-slate-300'
+                                                        }`}>
+                                                        {tarea.conclusion === opt.value && <div className="w-2 h-2 rounded-full bg-white" />}
+                                                    </div>
                                                 </div>
-                                                <span className="leading-tight">{opt.label}</span>
                                             </label>
                                         ))}
                                     </div>
