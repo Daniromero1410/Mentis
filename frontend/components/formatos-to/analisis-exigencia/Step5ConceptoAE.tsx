@@ -20,19 +20,8 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
 
     return (
         <div className="space-y-8">
-            {/* 5. DESCRIPCION DEL PROCESO PRODUCTIVO */}
-            <FormSection title="5. DESCRIPCIÓN DEL PROCESO PRODUCTIVO">
-                <FormTextarea
-                    className="min-h-[150px]"
-                    value={formData.descripcion_proceso_productivo}
-                    onChange={(e) => updateField('descripcion_proceso_productivo', e.target.value)}
-                    disabled={readOnly}
-                    placeholder="Describa detalladamente el proceso productivo..."
-                />
-            </FormSection>
-
-            {/* 6. APRECIACION DEL PROFESIONAL */}
-            <FormSection title="6. APRECIACIÓN DEL PROFESIONAL DE LA SALUD QUE EVALÚA Y PLAN DE REINCORPORACIÓN LABORAL">
+            {/* 5. APRECIACION DEL PROFESIONAL */}
+            <FormSection title="5. APRECIACIÓN DEL PROFESIONAL DE LA SALUD QUE EVALÚA Y PLAN DE REINCORPORACIÓN LABORAL">
                 <FormTextarea
                     className="min-h-[150px]"
                     // Note: We might need to ensure this field exists in 'formData' structure or map it to 'apreciacion_trabajador_proceso' or similar if reusing.
@@ -55,8 +44,8 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
                 />
             </FormSection>
 
-            {/* 6.1 VERIFICACION ACCIONES */}
-            <FormSection title="6.1 VERIFICACIÓN DE LAS ACCIONES CORRECTIVAS PUNTUALES FRENTE AL RIESGO QUE PROPICIÓ EL EVENTO">
+            {/* 5.1 VERIFICACION ACCIONES */}
+            <FormSection title="5.1 VERIFICACIÓN DE LAS ACCIONES CORRECTIVAS PUNTUALES FRENTE AL RIESGO QUE PROPICIÓ EL EVENTO">
                 <FormTextarea
                     className="min-h-[100px]"
                     value={formData.verificacion_acciones_correctivas}
@@ -66,8 +55,8 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
             </FormSection>
 
 
-            {/* 7. CONCEPTO */}
-            <FormSection title="7. CONCEPTO CAPACIDAD DE DESEMPEÑO EN LA ACTIVIDAD">
+            {/* 6. CONCEPTO */}
+            <FormSection title="6. CONCEPTO CAPACIDAD DE DESEMPEÑO EN LA ACTIVIDAD">
                 <Card className="border-slate-200 shadow-sm">
                     <CardContent className="p-6">
                         <Label className="text-sm font-bold text-slate-700 block mb-4">

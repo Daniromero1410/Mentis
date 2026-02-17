@@ -93,7 +93,7 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
         <div className="space-y-8">
             <div className="mb-4">
                 <h2 className="text-lg font-bold text-slate-800 uppercase pl-1 border-l-4 border-blue-500 mb-6">
-                    3.2 REQUERIMIENTOS DEL PROCESO PRODUCTIVO (Identificando tareas críticas)
+                    3.3 REQUERIMIENTOS DEL PROCESO PRODUCTIVO (Identificando tareas críticas)
                 </h2>
 
                 {/* --- MATERIALES --- */}

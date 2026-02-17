@@ -322,6 +322,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 break;
             case 2:
                 if (!formData.metodologia) errors.push('Metodología');
+                if (!formData.descripcion_proceso_productivo) errors.push('Descripción del Proceso Productivo');
                 break;
             case 3:
                 const validTareas = tareas.filter(t => t.actividad.trim() !== '');
@@ -332,7 +333,6 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             case 4:
                 break;
             case 5:
-                if (!formData.descripcion_proceso_productivo) errors.push('Descripción del Proceso Productivo');
                 if (!formData.concepto_prueba_trabajo) errors.push('Concepto del Análisis de Exigencia');
                 break;
         }

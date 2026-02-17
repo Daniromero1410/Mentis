@@ -25,15 +25,63 @@ export const Step2MetodologiaCondicionesAE = ({ formData, updateField, readOnly 
 
             {/* 3. CONDICIONES DE TRABAJO -> 3.1 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL */}
             <FormSection title="3. CONDICIONES DE TRABAJO">
+                {/* 3.1 DESCRIPCION DEL PROCESO PRODUCTIVO */}
+                <div className="mb-8">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-blue-500">
+                        3.1 DESCRIPCION DEL PROCESO PRODUCTIVO
+                    </h3>
+                    <FormTextarea
+                        className="min-h-[120px]"
+                        value={formData.descripcion_proceso_productivo}
+                        onChange={(e) => updateField('descripcion_proceso_productivo', e.target.value)}
+                        disabled={readOnly}
+                        placeholder="Describa el proceso productivo..."
+                    />
+                </div>
+
+                {/* 3.2 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL */}
                 <div className="mb-4">
                     <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-blue-500">
-                        3.1 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL
+                        3.2 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-lg border border-slate-100">
+                        {/* Row 1 */}
+                        <FormField label="Jornada">
+                            <FormInput
+                                value={formData.jornada}
+                                onChange={(e) => updateField('jornada', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
+                        <FormField label="Ritmo">
+                            <FormInput
+                                value={formData.ritmo}
+                                onChange={(e) => updateField('ritmo', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
+
+                        {/* Row 2 */}
+                        <FormField label="Descansos Programados">
+                            <FormInput
+                                value={formData.descansos_programados}
+                                onChange={(e) => updateField('descansos_programados', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
                         <FormField label="Turnos">
                             <FormInput
                                 value={formData.turnos}
                                 onChange={(e) => updateField('turnos', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
+
+                        {/* Row 3 */}
+                        <FormField label="Tiempos efectivos en la jornada laboral">
+                            <FormInput
+                                value={formData.tiempos_efectivos}
+                                onChange={(e) => updateField('tiempos_efectivos', e.target.value)}
                                 disabled={readOnly}
                             />
                         </FormField>
@@ -44,34 +92,8 @@ export const Step2MetodologiaCondicionesAE = ({ formData, updateField, readOnly 
                                 disabled={readOnly}
                             />
                         </FormField>
-                        <FormField label="Distribución Semanal">
-                            <FormInput
-                                value={formData.distribucion_semanal}
-                                onChange={(e) => updateField('distribucion_semanal', e.target.value)}
-                                disabled={readOnly}
-                            />
-                        </FormField>
-                        <FormField label="Jornada">
-                            <FormInput
-                                value={formData.jornada}
-                                onChange={(e) => updateField('jornada', e.target.value)}
-                                disabled={readOnly}
-                            />
-                        </FormField>
-                        <FormField label="Descansos Programados">
-                            <FormInput
-                                value={formData.descansos_programados}
-                                onChange={(e) => updateField('descansos_programados', e.target.value)}
-                                disabled={readOnly}
-                            />
-                        </FormField>
-                        <FormField label="Tiempos efectivos en la jornada laboral">
-                            <FormInput
-                                value={formData.tiempos_efectivos}
-                                onChange={(e) => updateField('tiempos_efectivos', e.target.value)}
-                                disabled={readOnly}
-                            />
-                        </FormField>
+
+                        {/* Row 4 */}
                         <FormField label="Horas Extras">
                             <FormInput
                                 value={formData.horas_extras}
@@ -79,10 +101,10 @@ export const Step2MetodologiaCondicionesAE = ({ formData, updateField, readOnly 
                                 disabled={readOnly}
                             />
                         </FormField>
-                        <FormField label="Ritmo">
+                        <FormField label="Distribución Semanal">
                             <FormInput
-                                value={formData.ritmo}
-                                onChange={(e) => updateField('ritmo', e.target.value)}
+                                value={formData.distribucion_semanal}
+                                onChange={(e) => updateField('distribucion_semanal', e.target.value)}
                                 disabled={readOnly}
                             />
                         </FormField>
