@@ -36,3 +36,9 @@ from app.models.prueba_trabajo_to import (
     PeligroProcesoTO, RecomendacionesTO, RegistroTO,
     EstadoPruebaTO
 )
+from app.models.analisis_exigencia import (
+    AnalisisExigencia, IdentificacionAE, SeccionesTextoAE,
+    DesempenoOrgAE, TareaAE, MaterialEquipoAE,
+    PeligroProcesoAE, RecomendacionesAE, RegistroAE,
+    EstadoAnalisisExigencia
+)

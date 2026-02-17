@@ -16,6 +16,7 @@ import {
   List,
   Briefcase,
   FileText,
+  Activity,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -61,6 +62,15 @@ const menuItems = [
             children: [
               { title: 'Lista', href: '/dashboard/formatos-to/pruebas-trabajo', icon: List, exact: true },
               { title: 'Nueva', href: '/dashboard/formatos-to/pruebas-trabajo/nueva', icon: PlusCircle },
+            ]
+          },
+          {
+            title: 'Análisis de Exigencia',
+            href: '/dashboard/formatos-to/analisis-exigencia',
+            icon: Activity,
+            children: [
+              { title: 'Lista', href: '/dashboard/formatos-to/analisis-exigencia', icon: List, exact: true },
+              { title: 'Nueva', href: '/dashboard/formatos-to/analisis-exigencia/nueva', icon: PlusCircle },
             ]
           },
         ],
