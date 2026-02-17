@@ -112,13 +112,13 @@ export default function AnalisisExigenciaPage() {
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                                <Activity className="w-8 h-8 text-orange-600" />
+                                <Activity className="w-8 h-8 text-blue-600" />
                                 Análisis de Exigencia TO
                             </h1>
                             <p className="text-gray-500 mt-2">Gestión de análisis de puestos de trabajo y exigencias.</p>
                         </div>
                         <Link href="/dashboard/formatos-to/analisis-exigencia/nueva">
-                            <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                                 <Plus className="mr-2 h-4 w-4" />
                                 Nuevo Análisis
                             </Button>

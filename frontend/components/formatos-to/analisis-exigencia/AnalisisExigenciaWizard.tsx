@@ -438,7 +438,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             <div className="flex items-start justify-between relative mb-12 px-4">
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
                 <div
-                    className="absolute top-5 left-0 h-0.5 bg-orange-600 -z-10 transition-all duration-500 ease-in-out"
+                    className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-10 transition-all duration-500 ease-in-out"
                     style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
                 />
 
@@ -454,16 +454,16 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                                 className={`
                                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
                                     ${isActive
-                                        ? 'border-orange-600 bg-white text-orange-600 shadow-lg scale-110'
+                                        ? 'border-blue-600 bg-white text-blue-600 shadow-lg scale-110'
                                         : isCompleted
-                                            ? 'border-orange-600 bg-orange-600 text-white'
+                                            ? 'border-blue-600 bg-blue-600 text-white'
                                             : 'border-gray-300 bg-white text-gray-500 hover:border-gray-400'
                                     }
                                 `}
                             >
                                 <StepIcon className="h-5 w-5" />
                             </button>
-                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-orange-600 font-bold' : 'text-gray-500'}`}>
+                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-blue-600 font-bold' : 'text-gray-500'}`}>
                                 <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
                             </div>
                         </div>
@@ -544,7 +544,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                     {currentStep !== STEPS.length && (
                         <button
                             onClick={handleNext}
-                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors shadow-sm"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
                         >
                             Siguiente <ChevronRight className="h-4 w-4" />
                         </button>
