@@ -35,7 +35,6 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
             <FormSection title="6. APRECIACIÓN DEL PROFESIONAL DE LA SALUD QUE EVALÚA Y PLAN DE REINCORPORACIÓN LABORAL">
                 <FormTextarea
                     className="min-h-[150px]"
-                    value={formData.apreciacion_profesional_general}
                     // Note: We might need to ensure this field exists in 'formData' structure or map it to 'apreciacion_trabajador_proceso' or similar if reusing.
                     // Checking existing Analysis wizard: 'apreciacion_trabajador_proceso' exists. 'concepto_prueba_trabajo' exists.
                     // Let's use 'concepto_prueba_trabajo' as the main "Concepto/Apreciacion" field if 'apreciacion_profesional_general' doesn't exist.
@@ -79,8 +78,8 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
                                 <label
                                     key={opt.value}
                                     className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.concepto_prueba_trabajo === opt.value
-                                            ? 'bg-blue-50 border-blue-500 text-blue-700 shadow-sm'
-                                            : 'bg-white border-slate-200 hover:bg-slate-50'
+                                        ? 'bg-blue-50 border-blue-500 text-blue-700 shadow-sm'
+                                        : 'bg-white border-slate-200 hover:bg-slate-50'
                                         }`}
                                 >
                                     <input
