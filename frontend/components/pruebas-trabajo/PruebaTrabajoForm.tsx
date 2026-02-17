@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { api } from '@/app/services/api';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sileo-toast';
 import {
   Briefcase,
   ArrowLeft,
