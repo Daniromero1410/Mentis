@@ -23,6 +23,9 @@ export function BlurValidationModal({ isOpen, onClose, title, message, errors, t
             <DialogContent className="sm:max-w-md bg-white border-0 shadow-2xl rounded-xl">
                 <DialogHeader className="flex flex-row items-center justify-between border-b pb-4">
                     <DialogTitle className="text-xl font-bold text-gray-900">{title}</DialogTitle>
+                    <DialogDescription className="sr-only">
+                        {message || "Lista de errores de validación"}
+                    </DialogDescription>
                     {/* Close button is handled by Dialog primitive usually, but we can add one if needed or rely on default */}
                 </DialogHeader>
 

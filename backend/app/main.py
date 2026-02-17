@@ -17,16 +17,17 @@ app = FastAPI(
 
 # Configurar CORS para permitir peticiones del frontend
 # Los orígenes se configuran desde variables de entorno para producción
-# AGREGADO: Lista explícita para asegurar funcionamiento en Vercel
+# AGREGADO: Lista explícita para asegurar funcionamiento en Vercel y Railway
 origins = settings.get_cors_origins()
 origins.extend([
     "https://mentis-nu.vercel.app",
     "https://mentis-nu.vercel.app/",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://localhost:3000/",
 ])
 allowed_origins = list(set(origins))
 
-print(f"✅ CORS CONFIGURADO CON ORIGENES: {allowed_origins}")
+print(f"✅ CORS CONFIGURADO CON ORIGENES ACTUALIZADOS: {allowed_origins}")
 
 app.add_middleware(
     CORSMiddleware,
