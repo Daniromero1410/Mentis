@@ -60,6 +60,22 @@ export const Step1IdentificacionAE = ({ formData, updateField, readOnly }: Step1
                                 />
                             </FormField>
 
+                            <FormField label="Tipo de Documento">
+                                <select
+                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                    value={formData.tipo_documento || ''}
+                                    onChange={(e) => updateField('tipo_documento', e.target.value)}
+                                    disabled={readOnly}
+                                >
+                                    <option value="">Seleccione...</option>
+                                    <option value="CC">Cédula de Ciudadanía</option>
+                                    <option value="CE">Cédula de Extranjería</option>
+                                    <option value="TI">Tarjeta de Identidad</option>
+                                    <option value="PEP">PEP</option>
+                                    <option value="PPT">PPT</option>
+                                </select>
+                            </FormField>
+
                             <FormField label="Número de Documento">
                                 <FormInput
                                     value={formData.numero_documento}

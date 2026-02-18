@@ -187,7 +187,10 @@ export default function AnalisisExigenciaPage() {
                                             <TableCell>
                                                 <div className="flex flex-col">
                                                     <span className="font-medium">{item.identificacion?.nombre_trabajador || 'Sin nombre'}</span>
-                                                    <span className="text-xs text-gray-500">{item.identificacion?.numero_documento}</span>
+                                                    <span className="text-xs text-gray-500">
+                                                        {item.identificacion?.tipo_documento ? `${item.identificacion.tipo_documento} ` : ''}
+                                                        {item.identificacion?.numero_documento || 'Sin documento'}
+                                                    </span>
                                                 </div>
                                             </TableCell>
                                             <TableCell>{item.identificacion?.empresa || '-'}</TableCell>
