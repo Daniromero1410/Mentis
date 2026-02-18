@@ -149,91 +149,105 @@ export default function AnalisisExigenciaPage() {
                     </div>
 
                     {/* Table */}
-                    <div className="bg-white rounded-md border shadow-sm">
+                    <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
                         <Table>
                             <TableHeader>
-                                <TableRow>
-                                    <TableHead>ID</TableHead>
-                                    <TableHead>Fecha</TableHead>
-                                    <TableHead>Trabajador</TableHead>
-                                    <TableHead>Empresa</TableHead>
-                                    <TableHead>Estado</TableHead>
-                                    <TableHead className="text-right">Acciones</TableHead>
+                                <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TIPO DOC</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">FECHA</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">ESTADO</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4 text-right">ACCIONES</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {loading ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center py-8">
+                                        <TableCell colSpan={7} className="text-center py-12 text-gray-500">
                                             Cargando análisis...
                                         </TableCell>
                                     </TableRow>
                                 ) : analisis.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                                        <TableCell colSpan={7} className="text-center py-12 text-gray-500">
                                             No se encontraron análisis de exigencia.
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    analisis.map((item) => (
-                                        <TableRow key={item.id}>
-                                            <TableCell className="font-medium">#{item.id}</TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Calendar className="h-4 w-4 text-gray-400" />
-                                                    {item.identificacion?.fecha_valoracion?.split('T')[0] || item.fecha_creacion?.split('T')[0] || 'Sin fecha'}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex flex-col">
-                                                    <span className="font-medium">{item.trabajador_nombre || 'Sin nombre'}</span>
-                                                    <span className="text-xs text-gray-500">
-                                                        {item.trabajador_tipo_documento ? `${item.trabajador_tipo_documento} ` : ''}
-                                                        {item.trabajador_documento || 'Sin documento'}
-                                                    </span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>{item.empresa || '-'}</TableCell>
-                                            <TableCell>
-                                                <Badge variant={item.estado === 'completada' ? 'default' : 'secondary'}
-                                                    className={item.estado === 'completada' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
-                                                    {item.estado === 'completada' ? 'Completada' : 'Borrador'}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}`}>
-                                                        <Button variant="ghost" size="icon" title="Ver detalles">
-                                                            <Eye className="h-4 w-4 text-gray-500" />
-                                                        </Button>
-                                                    </Link>
-                                                    {(isAdminOrSupervisor || item.created_by === user?.id) && (
-                                                        <>
-                                                            <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}/editar`}>
-                                                                <Button variant="ghost" size="icon" title="Editar">
-                                                                    <Edit className="h-4 w-4 text-blue-500" />
-                                                                </Button>
-                                                            </Link>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                title="Eliminar"
-                                                                onClick={() => setDeleteModal({ isOpen: true, id: item.id })}
-                                                            >
-                                                                <Trash2 className="h-4 w-4 text-red-500" />
+                                    analisis.map((item) => {
+                                        const nombre = item.trabajador_nombre || 'Sin nombre';
+                                        const initial = nombre.charAt(0).toUpperCase();
+                                        return (
+                                            <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
+                                                <TableCell className="py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">
+                                                            {initial}
+                                                        </div>
+                                                        <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-gray-600">
+                                                    {item.trabajador_tipo_documento || '-'}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-gray-600">
+                                                    {item.trabajador_documento || '-'}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-gray-600 flex items-center gap-2">
+                                                    <FileText className="h-3 w-3 text-gray-400" />
+                                                    {item.empresa || '-'}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-gray-500">
+                                                    {item.identificacion?.fecha_valoracion?.split('T')[0] || item.fecha_creacion?.split('T')[0] || '-'}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className={`font-medium rounded-full px-3 py-0.5 ${item.estado === 'completada'
+                                                                ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                                                                : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
+                                                            }`}
+                                                    >
+                                                        {item.estado === 'completada' ? 'Completado' : 'Borrador'}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex items-center justify-end gap-1">
+                                                        <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}`}>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                                                                <Eye className="h-4 w-4" />
                                                             </Button>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
+                                                        </Link>
+                                                        {(isAdminOrSupervisor || item.created_by === user?.id) && (
+                                                            <>
+                                                                <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}/editar`}>
+                                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50">
+                                                                        <Edit className="h-4 w-4" />
+                                                                    </Button>
+                                                                </Link>
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    size="icon"
+                                                                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                                    onClick={() => setDeleteModal({ isOpen: true, id: item.id })}
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
                                 )}
                             </TableBody>
                         </Table>
                     </div>
 
-                    {/* Pagination */}
+                    {/* Pagination - Keep existing logic but maybe style it a bit? Logic is fine */}
                     {totalPages > 1 && (
                         <div className="flex items-center justify-center gap-2 mt-4">
                             <Button
@@ -258,16 +272,19 @@ export default function AnalisisExigenciaPage() {
                         </div>
                     )}
 
-                    {/* Delete Confirmation Modal */}
+                    {/* Delete Confirmation Modal - Force Portal if needed or check Dialog structure */}
                     <Dialog open={deleteModal.isOpen} onOpenChange={(open) => !open && setDeleteModal({ isOpen: false, id: null })}>
-                        <DialogContent>
+                        <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle>¿Eliminar análisis?</DialogTitle>
+                                <DialogTitle className="flex items-center gap-2 text-red-600">
+                                    <Activity className="h-5 w-5" />
+                                    ¿Eliminar análisis?
+                                </DialogTitle>
                                 <DialogDescription>
-                                    Esta acción no se puede deshacer. Se eliminarán permanentemente todos los datos asociados a este análisis de exigencia.
+                                    Esta acción no se puede deshacer. Se eliminarán permanentemente todos los datos asociados a este análisis.
                                 </DialogDescription>
                             </DialogHeader>
-                            <DialogFooter>
+                            <DialogFooter className="mt-4">
                                 <Button variant="outline" onClick={() => setDeleteModal({ isOpen: false, id: null })}>
                                     Cancelar
                                 </Button>
