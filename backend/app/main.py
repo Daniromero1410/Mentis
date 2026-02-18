@@ -94,6 +94,10 @@ def _run_migrations():
         """
         UPDATE usuarios SET acceso_formatos_to = FALSE WHERE acceso_formatos_to IS NULL;
         """,
+        # Agregar columna "laborales" a perfil_exigencias_ae si no existe
+        """
+        ALTER TABLE perfil_exigencias_ae ADD COLUMN IF NOT EXISTS laborales JSON;
+        """,
     ]
 
     try:

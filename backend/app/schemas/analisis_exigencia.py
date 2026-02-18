@@ -150,6 +150,7 @@ class PerfilExigenciasAECreate(BaseModel):
     armonia: Optional[dict] = {}
     cognitivos: Optional[dict] = {}
     psicosociales: Optional[dict] = {}
+    laborales: Optional[dict] = {}
 
     class Config:
         from_attributes = True

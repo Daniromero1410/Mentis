@@ -242,6 +242,7 @@ class PerfilExigenciasAE(SQLModel, table=True):
     armonia: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
     cognitivos: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
     psicosociales: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
+    laborales: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
