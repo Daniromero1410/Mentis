@@ -190,11 +190,17 @@ def generar_pdf_analisis_exigencia(
     col_center = page_width * 0.56
     col_right = page_width * 0.22
 
+    r5_left = Paragraph("<b>ÚLTIMO DIA DE INCAPACIDAD RECONOCIDO POR LA ARL:</b>", styles["LabelSmall"])
+    # This value is likely from identificacion.ultimo_dia_incapacidad
+    udi_val = format_date(i.ultimo_dia_incapacidad) if i and i.ultimo_dia_incapacidad else ""
+    r5_right = p(udi_val)
+
     h_data = [
         [logo_left, center_text, logo_right],
         [r2_left, "", r2_right],
         [r3_c1, r3_c2, r3_c3],
         [r4, "", ""],
+        [r5_left, "", r5_right]
     ]
 
     header_t = Table(h_data, colWidths=[col_left, col_center, col_right])
@@ -205,8 +211,13 @@ def generar_pdf_analisis_exigencia(
         ('SPAN', (0, 0), (0, 0)),
         ('SPAN', (1, 0), (1, 1)),
         ('SPAN', (0, 3), (2, 3)),
+        ('SPAN', (0, 4), (1, 4)), # Label spans 2 cols? Or label is in col 1+2 and value in 3?
+        # Image shows: [Label ........................... | Value ]
+        # Let's verify width. The label needs space. 
+        # Let's span label across col 1 and 2, value in col 3.
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
         ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('ALIGN', (0, 4), (0, 4), 'LEFT'), # Align label left
     ]))
     elements.append(header_t)
 
@@ -333,16 +344,12 @@ def generar_pdf_analisis_exigencia(
     # Nivel Educativo (Matrix)
     ne = i.nivel_educativo.lower() if i and i.nivel_educativo else ""
     
-    # Defining grid like the image: 2 cols of options inside the main value cell? 
-    # Image shows:
-    # [Nivel educativo] | [Formación empirica] [Basica primaria] [Bachillerato: vocacional] ...
-    # It's a grid inside the right cell.
-    
+    # Options mapping
     ne_opts = [
         ("formacion_empirica", "Formación empírica"),
         ("basica_primaria", "Básica primaria"),
         ("bachillerato_vocacional", "Bachillerato:\nvocacional 9°"),
-        ("bachillerato_modalidad", "Bachillerato: modalidad"),
+        ("bachillerato_modalidad", "Bachillerato:\nmodalidad"),
         ("tecnico", "Técnico/\nTecnológico"),
         ("profesional", "Profesional"),
         ("postgrado", "Especialización/\npostgrado/ maestría"),
@@ -351,37 +358,52 @@ def generar_pdf_analisis_exigencia(
         ("otros", "Otros"),
     ]
     
-    # Create 3xN grid or 2xN grid? Image looks like 3 columns.
-    # Let's do 3 columns.
     ne_cells = []
-    for key, label_text in ne_opts:
-        checked = (ne == key or key in ne)
-        ne_cells.append([checkbox(checked), p(label_text)])
+    for k, lbl in ne_opts:
+        # Check logic: match key or partial string match
+        isChecked = False
+        if k in ne:
+            isChecked = True
+        elif k == "tecnico" and ("tecnologico" in ne or "técnico" in ne):
+             isChecked = True
+        elif k == "postgrado" and ("maestria" in ne or "especializacion" in ne):
+             isChecked = True
         
-    # We construct a table for the right side
-    # 3 columns of (checkbox + label)
-    # We need to reshape list to grid
-    rows_ne = []
-    curr_row = []
-    for cell in ne_cells:
-        curr_row.extend(cell) # adds cb, label
-        if len(curr_row) >= 6: # 3 pairs
-            rows_ne.append(curr_row)
-            curr_row = []
-    if curr_row:
-        # pad
-        while len(curr_row) < 6:
-            curr_row.append("")
-        rows_ne.append(curr_row)
-        
-    ne_inner = Table(rows_ne, colWidths=[0.5*cm, 3.5*cm, 0.5*cm, 3.5*cm, 0.5*cm, 3.5*cm])
-    ne_inner.setStyle(TableStyle([
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 1),
-    ]))
+        # Cell: [Checkbox, Label]
+        cb = checkbox(isChecked)
+        text_p = Paragraph(lbl, styles["CheckLabel"])
+        # Inner table for alignment
+        c_table = Table([[cb, text_p]], colWidths=[0.4*cm, 3.2*cm])
+        c_table.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE')]))
+        ne_cells.append(c_table)
+
+    # Grid: 5 columns per row to match image (approx)
+    # The image shows roughly 5 columns.
+    # [Empirica] [Basica] [Bach Voc] [Bach Mod] [Tecnico]
+    # [Prof] [Post] [Informal] [Analf] [Otros]
     
-    ne_outer = Table([[bold("Nivel educativo"), ne_inner]], colWidths=[page_width * 0.30, page_width * 0.70])
-    ne_outer.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    row1 = ne_cells[0:5]
+    row2 = ne_cells[5:10]
+    
+    # Pad row2 if needed
+    while len(row2) < 5:
+        row2.append("")
+
+    ne_grid = Table([row1, row2], colWidths=[page_width * 0.14] * 5)
+    ne_grid.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 1),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 1),
+    ]))
+
+    ne_outer = Table([[bold("Nivel educativo"), ne_grid]], colWidths=[page_width * 0.30, page_width * 0.70])
+    ne_outer.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 1),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+    ]))
     elements.append(ne_outer)
 
     # Rest of Identification
