@@ -869,3 +869,7 @@ def generar_pdf_analisis_exigencia(
     
     elements.append(Spacer(1, 10))
 
+    # Build PDF
+    doc.build(elements)
+    return filepath
+

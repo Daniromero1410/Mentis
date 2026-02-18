@@ -485,7 +485,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                     errors: [],
                     type: 'success',
                     action: {
-                        label: 'Descargar PDF Nuevamente',
+                        label: 'Descargar PDF',
                         onClick: () => downloadPDF(d.id)
                     }
                 });
