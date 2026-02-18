@@ -61,8 +61,8 @@ export default function AnalisisExigenciaPage() {
             if (searchTerm) {
                 const term = searchTerm.toLowerCase();
                 items = items.filter((a: any) =>
-                    a.identificacion?.nombre_trabajador?.toLowerCase().includes(term) ||
-                    a.identificacion?.numero_documento?.includes(term) ||
+                    a.trabajador_nombre?.toLowerCase().includes(term) ||
+                    a.trabajador_documento?.includes(term) ||
                     a.id?.toString().includes(term)
                 );
             }
@@ -181,19 +181,19 @@ export default function AnalisisExigenciaPage() {
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
                                                     <Calendar className="h-4 w-4 text-gray-400" />
-                                                    {item.identificacion?.fecha_valoracion?.split('T')[0] || 'Sin fecha'}
+                                                    {item.identificacion?.fecha_valoracion?.split('T')[0] || item.fecha_creacion?.split('T')[0] || 'Sin fecha'}
                                                 </div>
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
-                                                    <span className="font-medium">{item.identificacion?.nombre_trabajador || 'Sin nombre'}</span>
+                                                    <span className="font-medium">{item.trabajador_nombre || 'Sin nombre'}</span>
                                                     <span className="text-xs text-gray-500">
-                                                        {item.identificacion?.tipo_documento ? `${item.identificacion.tipo_documento} ` : ''}
-                                                        {item.identificacion?.numero_documento || 'Sin documento'}
+                                                        {item.trabajador_tipo_documento ? `${item.trabajador_tipo_documento} ` : ''}
+                                                        {item.trabajador_documento || 'Sin documento'}
                                                     </span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell>{item.identificacion?.empresa || '-'}</TableCell>
+                                            <TableCell>{item.empresa || '-'}</TableCell>
                                             <TableCell>
                                                 <Badge variant={item.estado === 'completada' ? 'default' : 'secondary'}
                                                     className={item.estado === 'completada' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
