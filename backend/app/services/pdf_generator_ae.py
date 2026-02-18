@@ -78,10 +78,111 @@ def generar_pdf_analisis_exigencia(
     LIGHT_GRAY = colors.HexColor("#f5f5f5")
 
     # ── HELPER FUNCTIONS ─────────────────────────────────────────────
-    # ... (Keep existing helpers, but maybe update SectionTitle style if needed)
-    # Actually, SectionTitle style definition was: 
-    # styles.add(ParagraphStyle(name="SectionTitle", ..., textColor=colors.black, ...))
-    # In PruebaTrabajo, SectionTitle text is WHITE on ORANGE_BG.
+    def format_date(date_obj):
+        """Formats a date as DD / MM / YYYY plain text"""
+        if not date_obj:
+            return ""
+        try:
+            if isinstance(date_obj, str):
+                dt = datetime.strptime(date_obj, "%Y-%m-%d")
+            else:
+                dt = date_obj
+            return f"{dt.day:02} / {dt.month:02} / {dt.year:04}"
+        except Exception:
+            return str(date_obj)
+
+    def format_date_cells(date_obj):
+        """Formats a date into 3 cells [DD] [MM] [YYYY]"""
+        if not date_obj:
+             return ["", "", ""]
+        try:
+            if isinstance(date_obj, str):
+                dt = datetime.strptime(date_obj, "%Y-%m-%d")
+            else:
+                dt = date_obj
+            return [f"{dt.day:02}", f"{dt.month:02}", f"{dt.year:04}"]
+        except:
+            return ["", "", ""]
+
+    def make_checkbox_drawing(checked, size=8):
+        """Creates a professional checkbox using ReportLab Drawing shapes"""
+        d = Drawing(size, size)
+        d.add(Rect(0, 0, size, size,
+                   fillColor=colors.white,
+                   strokeColor=colors.black,
+                   strokeWidth=0.6))
+        if checked:
+            # Draw X
+            d.add(Line(1, 1, size - 1, size - 1, strokeColor=colors.black, strokeWidth=1))
+            d.add(Line(1, size - 1, size - 1, 1, strokeColor=colors.black, strokeWidth=1))
+        return d
+
+    def checkbox(checked, label_text=""):
+        """Returns a professional checkbox + label as a mini table"""
+        cb = make_checkbox_drawing(checked)
+        if label_text:
+            lbl = Paragraph(label_text, styles["CheckLabel"])
+            t = Table([[cb, lbl]], colWidths=[0.4 * cm, None])
+            t.setStyle(TableStyle([
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 1),
+            ]))
+            return t
+        return cb
+
+    def p(text, style_name="ValueSmall"):
+        return Paragraph(str(text) if text else "", styles[style_name])
+
+    def bold(text):
+        return Paragraph(f"<b>{text}</b>", styles["CellBold"])
+
+    def section_title_table(text):
+        """Creates a full-width table with orange background for section titles"""
+        data = [[Paragraph(f"<b>{text}</b>", styles["SectionTitle"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), ORANGE_BG),
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ]))
+        return t
+
+    def bordered_text_block(text_content):
+        """Wraps text in a bordered table cell"""
+        data = [[Paragraph(str(text_content) if text_content else "", styles["LongText"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ]))
+        return t
+    
+    def subsection_header(text):
+        """Creates a sub-section header row with light background"""
+        data = [[Paragraph(f"<b>{text}</b>", styles["CellBold"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ]))
+        return t
+
+    def long_text(text):
+        return Paragraph(str(text) if text else "", styles["LongText"])
+    
+    def row_2col_simple(label, val):
+        return [bold(label), p(val)]
     
     # ── ENCABEZADO (HEADER) ──────────────────────────────────────────
     _backend_dir = Path(__file__).resolve().parent.parent.parent
@@ -406,25 +507,11 @@ def generar_pdf_analisis_exigencia(
         [bold("Dirección de empresa/ciudad"), p(i.direccion_empresa)],
     ]
     ex_t = Table(extra_rows, colWidths=[page_width*0.30, page_width*0.70])
-    ex_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    ex_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
     elements.append(ex_t)
     
     elements.append(Spacer(1, 10))
     
-    def subsection_header(text):
-        """Creates a sub-section header row with light background"""
-        data = [[Paragraph(f"<b>{text}</b>", styles["CellBold"])]]
-        t = Table(data, colWidths=[page_width])
-        t.setStyle(TableStyle([
-            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-            ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
-            ('LEFTPADDING', (0, 0), (-1, -1), 6),
-            ('TOPPADDING', (0, 0), (-1, -1), 3),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ]))
-        return t
-
     # ── SECCIÓN 2: METODOLOGÍA ───────────────────────────────────────
     elements.append(section_title_table("2   METODOLOGIA"))
     elements.append(bordered_text_block(secciones.metodologia if secciones else ""))
@@ -449,7 +536,7 @@ def generar_pdf_analisis_exigencia(
         ]
         do_table = Table(do_data, colWidths=[page_width * 0.25, page_width * 0.25, page_width * 0.25, page_width * 0.25])
         do_table.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ]))
         elements.append(do_table)
@@ -471,7 +558,7 @@ def generar_pdf_analisis_exigencia(
         ]
         t_table = Table(t_data, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.20, page_width * 0.30])
         t_table.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ('BACKGROUND', (0, 0), (0, -1), ORANGE_BG),
             ('BACKGROUND', (2, 0), (2, -1), ORANGE_BG),
@@ -486,7 +573,7 @@ def generar_pdf_analisis_exigencia(
         ]]
         h_t = Table(h_row, colWidths=[page_width * 0.35, page_width * 0.65])
         h_t.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ]))
         elements.append(h_t)
