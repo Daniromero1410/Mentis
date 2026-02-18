@@ -84,11 +84,9 @@ export function FileUpload({
   };
 
   const isImage = previewUrl && (
-    previewUrl.endsWith('.png') ||
-    previewUrl.endsWith('.jpg') ||
-    previewUrl.endsWith('.jpeg') ||
-    previewUrl.endsWith('.gif') ||
-    previewUrl.endsWith('.webp')
+    previewUrl.startsWith('data:image') ||
+    /\.(jpg|jpeg|png|gif|webp)$/i.test(previewUrl) ||
+    previewUrl.includes('/uploads/') // Assume uploads are images for now unless pdf specified
   );
 
   return (
@@ -132,8 +130,7 @@ export function FileUpload({
               <Button
                 type="button"
                 size="icon"
-                variant="destructive"
-                className="h-8 w-8"
+                className="h-8 w-8 bg-red-600 hover:bg-red-700 text-white"
                 onClick={handleRemove}
               >
                 <X className="h-4 w-4" />
