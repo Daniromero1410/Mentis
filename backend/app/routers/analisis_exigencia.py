@@ -191,6 +191,7 @@ def eliminar_analisis(
     _check_permission(analisis, current_user)
 
     _delete_children(analisis_id, session)
+    session.flush() # Force delete children first
     session.delete(analisis)
     session.commit()
     return None
