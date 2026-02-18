@@ -206,8 +206,8 @@ export default function AnalisisExigenciaPage() {
                                                     <Badge
                                                         variant="secondary"
                                                         className={`font-medium rounded-full px-3 py-0.5 ${item.estado === 'completada'
-                                                                ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                                                                : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
+                                                            ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                                                            : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
                                                             }`}
                                                     >
                                                         {item.estado === 'completada' ? 'Completado' : 'Borrador'}
@@ -284,14 +284,14 @@ export default function AnalisisExigenciaPage() {
                                     Esta acción no se puede deshacer. Se eliminarán permanentemente todos los datos asociados a este análisis.
                                 </DialogDescription>
                             </DialogHeader>
-                            <DialogFooter className="mt-4">
+                            <div className="flex justify-end gap-3 mt-6">
                                 <Button variant="outline" onClick={() => setDeleteModal({ isOpen: false, id: null })}>
                                     Cancelar
                                 </Button>
                                 <Button variant="destructive" onClick={handleDelete}>
                                     Eliminar
                                 </Button>
-                            </DialogFooter>
+                            </div>
                         </DialogContent>
                     </Dialog>
                 </div>
