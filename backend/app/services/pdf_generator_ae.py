@@ -57,7 +57,7 @@ def generar_pdf_analisis_exigencia(
     styles.add(ParagraphStyle(name="HeaderSubLeft", fontSize=7, fontName="Helvetica", alignment=TA_LEFT, leading=9))
     styles.add(ParagraphStyle(name="LabelSmall", fontSize=6.5, fontName="Helvetica-Bold", leading=8, textColor=colors.black))
     styles.add(ParagraphStyle(name="ValueSmall", fontSize=6.5, fontName="Helvetica", leading=8, textColor=colors.black))
-    styles.add(ParagraphStyle(name="SectionTitle", fontSize=8, fontName="Helvetica-Bold", spaceAfter=0, spaceBefore=0, textColor=colors.black, alignment=TA_LEFT, leftIndent=4))
+    styles.add(ParagraphStyle(name="SectionTitle", fontSize=8, fontName="Helvetica-Bold", spaceAfter=0, spaceBefore=0, textColor=colors.white, alignment=TA_LEFT, leftIndent=4))
     styles.add(ParagraphStyle(name="CellText", fontSize=7, fontName="Helvetica", leading=8.5))
     styles.add(ParagraphStyle(name="CellBold", fontSize=7, fontName="Helvetica-Bold", leading=8.5))
     styles.add(ParagraphStyle(name="LongText", fontSize=7, fontName="Helvetica", leading=9, alignment=TA_JUSTIFY))
@@ -65,102 +65,24 @@ def generar_pdf_analisis_exigencia(
     styles.add(ParagraphStyle(name="FieldValue", fontSize=7, fontName="Helvetica", leading=9))
     styles.add(ParagraphStyle(name="CheckLabel", fontSize=6, fontName="Helvetica", leading=7.5))
     styles.add(ParagraphStyle(name="DateDigit", fontSize=7, fontName="Helvetica", alignment=TA_CENTER, leading=8))
+    styles.add(ParagraphStyle(name="DateLabel", fontSize=5.5, fontName="Helvetica", alignment=TA_CENTER, leading=7, textColor=colors.HexColor("#666666")))
 
     elements = []
     page_width = letter[0] - 2.4 * cm  # usable width
 
     # ── COLORES ──────────────────────────────────────────────────────
-    ORANGE_BG = colors.HexColor("#FFE0B2")       # Naranja muy suave (Peach) para headers secciones
-    HEADER_BG = colors.HexColor("#FFFFFF")        # Blanco para header principal
-    BORDER_COLOR = colors.HexColor("#000000")     # Negro para bordes (según imagen)
+    ORANGE_BG = colors.HexColor("#E65100")       # Naranja oscuro institucional
+    LIGHT_ORANGE_BG = colors.HexColor("#FFF3E0")  # Naranja suave
+    HEADER_BG = colors.HexColor("#FFFFFF")
+    BORDER_COLOR = colors.HexColor("#424242")     # Gris oscuro para bordes
+    LIGHT_GRAY = colors.HexColor("#f5f5f5")
 
     # ── HELPER FUNCTIONS ─────────────────────────────────────────────
-    def format_date(date_obj):
-        """Formats a date as DD / MM / YYYY plain text"""
-        if not date_obj:
-            return ""
-        try:
-            if isinstance(date_obj, str):
-                dt = datetime.strptime(date_obj, "%Y-%m-%d")
-            else:
-                dt = date_obj
-            return f"{dt.day:02} / {dt.month:02} / {dt.year:04}"
-        except Exception:
-            return str(date_obj)
-
-    def format_date_cells(date_obj):
-        """Formats a date into 3 cells [DD] [MM] [YYYY]"""
-        if not date_obj:
-             return ["", "", ""]
-        try:
-            if isinstance(date_obj, str):
-                dt = datetime.strptime(date_obj, "%Y-%m-%d")
-            else:
-                dt = date_obj
-            return [f"{dt.day:02}", f"{dt.month:02}", f"{dt.year:04}"]
-        except:
-            return ["", "", ""]
-
-    def make_checkbox_drawing(checked, size=8):
-        """Creates a checkbox using ReportLab Drawing shapes"""
-        d = Drawing(size, size)
-        d.add(Rect(0, 0, size, size,
-                   fillColor=colors.white,
-                   strokeColor=colors.black,
-                   strokeWidth=0.6))
-        if checked:
-            # Draw X
-            d.add(Line(1, 1, size - 1, size - 1, strokeColor=colors.black, strokeWidth=1))
-            d.add(Line(1, size - 1, size - 1, 1, strokeColor=colors.black, strokeWidth=1))
-        return d
-
-    def checkbox(checked, label_text=""):
-        """Returns a checkbox + label as a mini table"""
-        cb = make_checkbox_drawing(checked)
-        if label_text:
-            lbl = Paragraph(label_text, styles["CheckLabel"])
-            t = Table([[cb, lbl]], colWidths=[0.4 * cm, None])
-            t.setStyle(TableStyle([
-                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                ('LEFTPADDING', (0, 0), (-1, -1), 1),
-            ]))
-            return t
-        return cb
-
-    def p(text, style_name="ValueSmall"):
-        return Paragraph(str(text) if text else "", styles[style_name])
-
-    def bold(text):
-        return Paragraph(f"<b>{text}</b>", styles["CellBold"])
-
-    def section_title_table(text):
-        """Creates a full-width table with orange background for section titles"""
-        data = [[Paragraph(f"<b>{text}</b>", styles["SectionTitle"])]]
-        t = Table(data, colWidths=[page_width])
-        t.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, -1), ORANGE_BG),
-            ('BOX', (0, 0), (-1, -1), 1, BORDER_COLOR), # Thick border
-            ('LEFTPADDING', (0, 0), (-1, -1), 6),
-            ('TOPPADDING', (0, 0), (-1, -1), 1),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ]))
-        return t
-
-    def bordered_text_block(text_content):
-        """Wraps text in a bordered table cell"""
-        data = [[Paragraph(str(text_content) if text_content else "", styles["LongText"])]]
-        t = Table(data, colWidths=[page_width])
-        t.setStyle(TableStyle([
-            ('BOX', (0, 0), (-1, -1), 1, BORDER_COLOR),
-            ('LEFTPADDING', (0, 0), (-1, -1), 6),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-            ('TOPPADDING', (0, 0), (-1, -1), 4),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ]))
-        return t
-
+    # ... (Keep existing helpers, but maybe update SectionTitle style if needed)
+    # Actually, SectionTitle style definition was: 
+    # styles.add(ParagraphStyle(name="SectionTitle", ..., textColor=colors.black, ...))
+    # In PruebaTrabajo, SectionTitle text is WHITE on ORANGE_BG.
+    
     # ── ENCABEZADO (HEADER) ──────────────────────────────────────────
     _backend_dir = Path(__file__).resolve().parent.parent.parent
     _static_images = _backend_dir / "static" / "images"
@@ -190,17 +112,12 @@ def generar_pdf_analisis_exigencia(
     col_center = page_width * 0.56
     col_right = page_width * 0.22
 
-    r5_left = Paragraph("<b>ÚLTIMO DIA DE INCAPACIDAD RECONOCIDO POR LA ARL:</b>", styles["LabelSmall"])
-    # This value is likely from identificacion.ultimo_dia_incapacidad
-    udi_val = format_date(i.ultimo_dia_incapacidad) if i and i.ultimo_dia_incapacidad else ""
-    r5_right = p(udi_val)
-
+    # Reverted to 4 rows, removed the "ÚLTIMO DIA..." row
     h_data = [
         [logo_left, center_text, logo_right],
         [r2_left, "", r2_right],
         [r3_c1, r3_c2, r3_c3],
         [r4, "", ""],
-        [r5_left, "", r5_right]
     ]
 
     header_t = Table(h_data, colWidths=[col_left, col_center, col_right])
@@ -211,13 +128,8 @@ def generar_pdf_analisis_exigencia(
         ('SPAN', (0, 0), (0, 0)),
         ('SPAN', (1, 0), (1, 1)),
         ('SPAN', (0, 3), (2, 3)),
-        ('SPAN', (0, 4), (1, 4)), # Label spans 2 cols? Or label is in col 1+2 and value in 3?
-        # Image shows: [Label ........................... | Value ]
-        # Let's verify width. The label needs space. 
-        # Let's span label across col 1 and 2, value in col 3.
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
         ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-        ('ALIGN', (0, 4), (0, 4), 'LEFT'), # Align label left
     ]))
     elements.append(header_t)
 
@@ -260,11 +172,12 @@ def generar_pdf_analisis_exigencia(
     elements.append(section_title_table("1   IDENTIFICACIÓN"))
     
     # Subheader
+    LIGHT_GRAY = colors.HexColor("#f5f5f5")
     sub_h = [[Paragraph("<b>(Datos trabajador, evento ATEL, Empresa)</b>", styles["CellBold"])]]
     sub_ht = Table(sub_h, colWidths=[page_width])
     sub_ht.setStyle(TableStyle([
-        ('BOX', (0, 0), (-1, -1), 1, BORDER_COLOR),
-        ('BACKGROUND', (0, 0), (-1, -1), ORANGE_BG),
+        ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
         ('LEFTPADDING', (0, 0), (-1, -1), 6),
     ]))
     elements.append(sub_ht)
@@ -315,7 +228,7 @@ def generar_pdf_analisis_exigencia(
     # Adjust widths to match visual
     nac_t = Table(nac_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
     nac_t.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('ALIGN', (2, 0), (2, 0), 'CENTER'), # Center age
     ]))
@@ -331,14 +244,14 @@ def generar_pdf_analisis_exigencia(
     ]]
     dom_t = Table(dom_row, colWidths=[page_width * 0.30, page_width * 0.23, page_width * 0.23, page_width * 0.24])
     dom_t.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
     ]))
     elements.append(dom_t)
     
     # Estado Civil
     ec_t = Table([row_2col_simple("Estado civil", i.estado_civil if i else "")], colWidths=[page_width * 0.30, page_width * 0.70])
-    ec_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    ec_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
     elements.append(ec_t)
 
     # Nivel Educativo (Matrix)
@@ -398,7 +311,7 @@ def generar_pdf_analisis_exigencia(
 
     ne_outer = Table([[bold("Nivel educativo"), ne_grid]], colWidths=[page_width * 0.30, page_width * 0.70])
     ne_outer.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
         ('TOPPADDING', (0, 0), (-1, -1), 1),
@@ -418,13 +331,13 @@ def generar_pdf_analisis_exigencia(
     
     s_rows = [[bold(l), p(v)] for l, v in simple_fields]
     s_table = Table(s_rows, colWidths=[page_width * 0.30, page_width * 0.70])
-    s_table.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    s_table.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
     elements.append(s_table)
     
     # Tiempo incapacidad
     tti_row = [[bold("Tiempo total de incapacidad"), p(str(i.tiempo_incapacidad_dias or "")), bold("días")]]
     tti_t = Table(tti_row, colWidths=[page_width*0.30, page_width*0.60, page_width*0.10])
-    tti_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('ALIGN', (2,0), (2,0), 'CENTER')]))
+    tti_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('ALIGN', (2,0), (2,0), 'CENTER')]))
     elements.append(tti_t)
     
     # Empresa Info
@@ -435,7 +348,7 @@ def generar_pdf_analisis_exigencia(
     ]
     e_rows = [[bold(l), p(v)] for l, v in emp_fields]
     e_table = Table(e_rows, colWidths=[page_width * 0.30, page_width * 0.70])
-    e_table.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    e_table.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
     elements.append(e_table)
 
     # Cargo Unico
@@ -498,6 +411,20 @@ def generar_pdf_analisis_exigencia(
     
     elements.append(Spacer(1, 10))
     
+    def subsection_header(text):
+        """Creates a sub-section header row with light background"""
+        data = [[Paragraph(f"<b>{text}</b>", styles["CellBold"])]]
+        t = Table(data, colWidths=[page_width])
+        t.setStyle(TableStyle([
+            ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ]))
+        return t
+
     # ── SECCIÓN 2: METODOLOGÍA ───────────────────────────────────────
     elements.append(section_title_table("2   METODOLOGIA"))
     elements.append(bordered_text_block(secciones.metodologia if secciones else ""))
@@ -507,11 +434,11 @@ def generar_pdf_analisis_exigencia(
     elements.append(section_title_table("3   CONDICIONES DE TRABAJO"))
     
     # 3.1
-    elements.append(Table([[bold("3.1  DESCRIPCION DEL PROCESO PRODUCTIVO")]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
+    elements.append(subsection_header("3.1  DESCRIPCION DEL PROCESO PRODUCTIVO"))
     elements.append(bordered_text_block(secciones.descripcion_proceso_productivo if secciones else ""))
     
     # 3.2 Desempeño Organizacional
-    elements.append(Table([[bold("3.2  REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL")]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
+    elements.append(subsection_header("3.2  REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL"))
     if desempeno:
         d = desempeno
         do_data = [
@@ -613,14 +540,15 @@ def generar_pdf_analisis_exigencia(
         ]))
         elements.append(content_t)
         
+        
         # 4.3 Apreciación y Conclusión
         # Row: Apreciación profesional...
-        elements.append(Table([[bold("Apreciación del profesional de la salud que evalúa y plan de reincorporacion laboral:")]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#E0E0E0"))])))
+        elements.append(Table([[bold("Apreciación del profesional de la salud que evalúa y plan de reincorporacion laboral:")]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), LIGHT_GRAY)])))
         elements.append(bordered_text_block(tarea.apreciacion_profesional))
         elements.append(Spacer(1, 2))
         
         # Row: Conclusión respect a la actividad
-        elements.append(Table([[bold("Conclusión con respecto a la actividad")]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
+        elements.append(Table([[bold("Conclusión con respecto a la actividad")]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), LIGHT_GRAY)])))
         
         concl = tarea.conclusion
         c_row = [[
@@ -630,7 +558,7 @@ def generar_pdf_analisis_exigencia(
             checkbox(concl == "no_puede_desempenarla", "No puede\ndesempeñarla"),
         ]]
         c_t = Table(c_row, colWidths=[page_width * 0.25] * 4)
-        c_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+        c_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
         elements.append(c_t)
         
         elements.append(Spacer(1, 10))
@@ -642,14 +570,18 @@ def generar_pdf_analisis_exigencia(
     # Header
     mat_h = [[bold("Nombre"), bold("Descripcion"), bold("Estado"), bold("Requerimientos para su operación")]]
     mat_ht = Table(mat_h, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.15, page_width * 0.35])
-    mat_ht.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+    mat_ht.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY)
+    ]))
     elements.append(mat_ht)
     
     # Rows
     for m in materiales:
         row = [[p(m.nombre), p(m.descripcion), p(m.estado), p(m.requerimientos_operacion)]]
         mt = Table(row, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.15, page_width * 0.35])
-        mt.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+        mt.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
         elements.append(mt)
         
     elements.append(Spacer(1, 10))
@@ -660,7 +592,11 @@ def generar_pdf_analisis_exigencia(
     # Header
     pel_h = [[bold("Nombre"), bold("Descripción"), bold("Tipos de control existente"), bold("Recomendaciones para su control")]]
     pel_ht = Table(pel_h, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.25, page_width * 0.25])
-    pel_ht.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+    pel_ht.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY)
+    ]))
     elements.append(pel_ht)
     
     # Pre-defined categories
@@ -715,7 +651,7 @@ def generar_pdf_analisis_exigencia(
             
             num_cells = []
             for i in range(5):
-                bg = colors.HexColor("#42A5F5") if val == i else colors.white
+                bg = colors.HexColor("#E65100") if val == i else colors.white # Orange selection to match theme
                 text_color = colors.white if val == i else colors.black
                 n_p = Paragraph(f"<font color='{text_color}'><b>{i}</b></font>" if val == i else str(i), 
                                 ParagraphStyle('Num', parent=styles['DateDigit'], alignment=TA_CENTER))
@@ -725,7 +661,7 @@ def generar_pdf_analisis_exigencia(
                     ('ALIGN', (0,0), (-1,-1), 'CENTER'),
                     ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
                     ('BACKGROUND', (0,0), (-1,-1), bg),
-                    ('BOX', (0,0), (-1,-1), 0.5 if val != i else 0, colors.gray),
+                    ('BOX', (0,0), (-1,-1), 0.5 if val != i else 0, BORDER_COLOR),
                 ]))
                 num_cells.append(t)
             
@@ -734,16 +670,16 @@ def generar_pdf_analisis_exigencia(
             
         t = Table(rows, colWidths=[page_width * 0.35, page_width * 0.35, page_width * 0.30])
         t.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#E0E0E0")),
+            ('BACKGROUND', (0, 0), (-1, 0), LIGHT_GRAY),
             ('ALIGN', (1, 0), (1, -1), 'CENTER'),
         ]))
         return t
 
     if perfil:
         # Sensopercepcion
-        elements.append(Table([[Paragraph("<b>SENSOPERCEPCIÓN</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#BBDEFB"))])))
+        elements.append(Table([[Paragraph("<b>SENSOPERCEPCIÓN</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
         
         visionItems = ['Percepción del Color', 'Percepción de Formas', 'Percepción de Tamaño', 'Relaciones Espaciales']
         elements.append(rating_table("VISIÓN", visionItems, perfil.sensopercepcion))
@@ -762,7 +698,7 @@ def generar_pdf_analisis_exigencia(
         elements.append(Spacer(1, 10))
         
         # Motricidad Gruesa
-        elements.append(Table([[Paragraph("<b>MOTRICIDAD GRUESA</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#BBDEFB"))])))
+        elements.append(Table([[Paragraph("<b>MOTRICIDAD GRUESA</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
         mgItems = [
             'Postura Bípeda', 'Postura Sedente', 'Posición de rodillas', 'Posición de Cuclillas',
             'Caminar', 'Subir (escaleras, rampas)', 'Bajar (escaleras, rampas)',
@@ -773,19 +709,19 @@ def generar_pdf_analisis_exigencia(
         elements.append(Spacer(1, 10))
         
         # Motricidad Fina
-        elements.append(Table([[Paragraph("<b>MOTRICIDAD FINA</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#BBDEFB"))])))
+        elements.append(Table([[Paragraph("<b>MOTRICIDAD FINA</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
         mfItems = ['Enganche', 'Agarre', 'Pinza', 'Pinza Fina']
         elements.append(rating_table(None, mfItems, perfil.motricidad_fina))
         elements.append(Spacer(1, 10))
         
         # Armonia
-        elements.append(Table([[Paragraph("<b>ARMONÍA</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#BBDEFB"))])))
+        elements.append(Table([[Paragraph("<b>ARMONÍA</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
         armItems = ['Uso de Ambas Manos', 'Coordinación Ojo - Mano', 'Coordinación Bimanual', 'Coordinación Mano - Pie']
         elements.append(rating_table(None, armItems, perfil.armonia))
         elements.append(Spacer(1, 10))
         
         # Cognitivos
-        elements.append(Table([[Paragraph("<b>COGNITIVOS</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#BBDEFB"))])))
+        elements.append(Table([[Paragraph("<b>COGNITIVOS</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
         cogItems = [
             'Atención', 'Concentración', 'Creatividad', 'Flexibilidad',
             'Responsabilidad', 'Rapidez de Reacción', 'Percepción Herramientas de Trabajo', 'Percepción Estética'
@@ -794,7 +730,7 @@ def generar_pdf_analisis_exigencia(
         elements.append(Spacer(1, 10))
         
         # Psicosociales
-        elements.append(Table([[Paragraph("<b>PSICOSOCIALES</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#BBDEFB"))])))
+        elements.append(Table([[Paragraph("<b>PSICOSOCIALES</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
         psyItems = [
             'Adaptación al Grupo de Trabajo', 'Adaptación al Ambiente', 'Relación con la Autoridad',
             'Relación con Compañeros', 'Liderazgo', 'Enfoque Constructivo',
@@ -804,7 +740,7 @@ def generar_pdf_analisis_exigencia(
         elements.append(Spacer(1, 10))
         
         # Laborales
-        elements.append(Table([[Paragraph("<b>LABORALES</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 1, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#BBDEFB"))])))
+        elements.append(Table([[Paragraph("<b>LABORALES</b>", styles["SectionTitle"])]], colWidths=[page_width], style=TableStyle([('BOX', (0,0), (-1,-1), 0.5, BORDER_COLOR), ('BACKGROUND', (0,0), (-1,-1), ORANGE_BG)])))
         labItems = [
             'Rendimiento', 'Asistencia', 'Puntualidad', 'Compromiso',
             'Autocontrol', 'Eficiencia', 'Organización y Métodos de Trabajo',
@@ -825,10 +761,10 @@ def generar_pdf_analisis_exigencia(
     sig_h = [[bold("ELABORÓ"), bold("REVISIÓN POR PROVEEDOR"), bold("EQUIPO DE REHABILITACIÓN INTEGRAL")]]
     sig_ht = Table(sig_h, colWidths=[page_width/3]*3)
     sig_ht.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#E0E0E0")),
+        ('BACKGROUND', (0, 0), (-1, -1), LIGHT_GRAY),
     ]))
     elements.append(sig_ht)
     
@@ -882,7 +818,7 @@ def generar_pdf_analisis_exigencia(
     sig_row = [[sig_cell_table(cell_elab), sig_cell_table(cell_rev), sig_cell_table(cell_team)]]
     sig_t = Table(sig_row, colWidths=[page_width/3]*3)
     sig_t.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 1, BORDER_COLOR),
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('TOPPADDING', (0, 0), (-1, -1), 10),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
