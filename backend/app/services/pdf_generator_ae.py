@@ -60,6 +60,7 @@ def generar_pdf_analisis_exigencia(
     styles.add(ParagraphStyle(name="SectionTitle", fontSize=8, fontName="Helvetica-Bold", spaceAfter=0, spaceBefore=0, textColor=colors.white, alignment=TA_LEFT, leftIndent=4))
     styles.add(ParagraphStyle(name="CellText", fontSize=7, fontName="Helvetica", leading=8.5))
     styles.add(ParagraphStyle(name="CellBold", fontSize=7, fontName="Helvetica-Bold", leading=8.5))
+    styles.add(ParagraphStyle(name="CellBoldWhite", fontSize=7, fontName="Helvetica-Bold", leading=8.5, textColor=colors.white))
     styles.add(ParagraphStyle(name="LongText", fontSize=7, fontName="Helvetica", leading=9, alignment=TA_JUSTIFY))
     styles.add(ParagraphStyle(name="FieldLabel", fontSize=7, fontName="Helvetica-Bold", leading=9, textColor=colors.HexColor("#333333")))
     styles.add(ParagraphStyle(name="FieldValue", fontSize=7, fontName="Helvetica", leading=9))
@@ -108,13 +109,13 @@ def generar_pdf_analisis_exigencia(
         """Creates a professional checkbox using ReportLab Drawing shapes"""
         d = Drawing(size, size)
         d.add(Rect(0, 0, size, size,
-                   fillColor=colors.white,
-                   strokeColor=colors.black,
+                   fillColor=ORANGE_BG if checked else colors.white,
+                   strokeColor=ORANGE_BG if checked else colors.black,
                    strokeWidth=0.6))
         if checked:
-            # Draw X
-            d.add(Line(1, 1, size - 1, size - 1, strokeColor=colors.black, strokeWidth=1))
-            d.add(Line(1, size - 1, size - 1, 1, strokeColor=colors.black, strokeWidth=1))
+            # Draw White X
+            d.add(Line(1, 1, size - 1, size - 1, strokeColor=colors.white, strokeWidth=1))
+            d.add(Line(1, size - 1, size - 1, 1, strokeColor=colors.white, strokeWidth=1))
         return d
 
     def checkbox(checked, label_text=""):
@@ -135,6 +136,9 @@ def generar_pdf_analisis_exigencia(
 
     def bold(text):
         return Paragraph(f"<b>{text}</b>", styles["CellBold"])
+
+    def bold_white(text):
+        return Paragraph(f"<b>{text}</b>", styles["CellBoldWhite"])
 
     def section_title_table(text):
         """Creates a full-width table with orange background for section titles"""
@@ -236,28 +240,14 @@ def generar_pdf_analisis_exigencia(
 
     # ── FECHA DE VALORACIÓN ──────────────────────────────────────────
     i = identificacion
-    # Date cells
-    fv_cells = format_date_cells(i.fecha_valoracion if i else None)
+    # Date cells - CHANGED to plain text
+    fv_str = format_date(i.fecha_valoracion if i else None)
     
-    # Create mini table for date cells
-    def date_cell_table(d, m, y):
-        data = [[d, m, y]]
-        t = Table(data, colWidths=[0.8*cm, 0.8*cm, 1.2*cm])
-        t.setStyle(TableStyle([
-             ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-             ('FONTSIZE', (0, 0), (-1, -1), 7),
-        ]))
-        return t
-        
-    fv_table = date_cell_table(*fv_cells)
-
-    # Header Date Row: Right aligned "FECHA DE VALORACIÓN: [D][M][Y]"
+    # Header Date Row: Right aligned "FECHA DE VALORACIÓN: DD/MM/YYYY"
     date_row = [[
         "", 
         Paragraph("<b>FECHA DE VALORACIÓN:</b>", styles["LabelSmall"]),
-        fv_table
+        p(fv_str, "DateDigit")
     ]]
     date_t = Table(date_row, colWidths=[page_width * 0.55, page_width * 0.25, page_width * 0.20])
     date_t.setStyle(TableStyle([
@@ -265,6 +255,8 @@ def generar_pdf_analisis_exigencia(
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('LEFTPADDING', (0, 0), (-1, -1), 2),
         ('RIGHTPADDING', (0, 0), (-1, -1), 2),
+        ('GRID', (2, 0), (2, 0), 0.5, BORDER_COLOR), # Box around the whole date string
+        ('ALIGN', (2, 0), (2, 0), 'CENTER'),
     ]))
     elements.append(date_t)
     elements.append(Spacer(1, 4))
@@ -307,23 +299,18 @@ def generar_pdf_analisis_exigencia(
     
     # Fecha Nacimiento / Edad Row
     # Col 1: Label "Fecha de nacimiento/edad"
-    # Col 2: Date Cells
+    # Col 2: Date Text
     # Col 3: empty
     # Col 4: edad val
     # Col 5: "años"
     
-    nac_cells = format_date_cells(i.fecha_nacimiento if i else None)
-    nac_table = date_cell_table(*nac_cells)
+    nac_str = format_date(i.fecha_nacimiento if i else None)
     edad_val = f"{i.edad or ''}" if i else ""
-    
-    # This row is tricky in the image. It looks like:
-    # [Label Fecha/Edad] | [D][M][Y] | [Label Edad?? or empty] | [Value] | [Label años]
-    # Let's approximate with a 4 col layout
     
     nac_row = [[
         bold("Fecha de nacimiento/edad"),
-        nac_table,
-        p(edad_val, "DateDigit"),
+        p(nac_str), # Plain text
+        p(edad_val),
         p("años")
     ]]
     # Adjust widths to match visual
@@ -553,8 +540,8 @@ def generar_pdf_analisis_exigencia(
         # Subactividad | Estandar Prod
         
         t_data = [
-            [bold("Actividad"), p(tarea.actividad), bold("Ciclo"), p(tarea.ciclo)],
-            [bold("Subactividad"), p(tarea.subactividad), bold("Estándar de\nProductividad"), p(tarea.estandar_productividad)],
+            [bold_white("Actividad"), p(tarea.actividad), bold_white("Ciclo"), p(tarea.ciclo)],
+            [bold_white("Subactividad"), p(tarea.subactividad), bold_white("Estándar de\nProductividad"), p(tarea.estandar_productividad)],
         ]
         t_table = Table(t_data, colWidths=[page_width * 0.20, page_width * 0.30, page_width * 0.20, page_width * 0.30])
         t_table.setStyle(TableStyle([
@@ -912,9 +899,4 @@ def generar_pdf_analisis_exigencia(
     ]))
     elements.append(sig_t)
     
-    elements.append(Spacer(1, 10))
-
-    # Build PDF
-    doc.build(elements)
-    return filepath
-
+    e

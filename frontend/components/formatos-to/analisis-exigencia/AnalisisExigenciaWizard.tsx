@@ -398,7 +398,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         }
     };
 
-    const downloadPDF = async (id: number = analisisId!) => {
+    const generatePDF = async (id: number = analisisId!, action: 'download' | 'preview' = 'download') => {
         if (!id) return;
         try {
             const pdfRes = await fetch(`${API_URL}/formatos-to/analisis-exigencia/${id}/pdf`, {
@@ -408,20 +408,31 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             if (pdfRes.ok) {
                 const blob = await pdfRes.blob();
                 const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Analisis_Exigencia_${id}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
+
+                if (action === 'preview') {
+                    window.open(url, '_blank');
+                } else {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Analisis_Exigencia_${id}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+
+                // Cleanup URL after a delay to allow download/open to start
+                setTimeout(() => window.URL.revokeObjectURL(url), 100);
             } else {
                 throw new Error('Error al generar el PDF');
             }
         } catch (pdfErr) {
             console.error(pdfErr);
-            toast.error('Error descargando el PDF.');
+            toast.error('Error generando el PDF.');
         }
     };
+
+    // Alias for backward compatibility if needed, or update calls
+    const downloadPDF = (id?: number) => generatePDF(id, 'download');
 
     const handleSave = async (finalizar = false) => {
         if (finalizar && !validateStep(currentStep)) return;
@@ -481,13 +492,21 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 setValidationModal({
                     isOpen: true,
                     title: 'Finalizado',
-                    message: 'Análisis finalizado y PDF descargado correctamente.',
+                    message: 'Análisis finalizado correctamente. Puede ver la vista previa o descargar el PDF.',
                     errors: [],
                     type: 'success',
-                    action: {
-                        label: 'Descargar PDF',
-                        onClick: () => downloadPDF(d.id)
-                    }
+                    actions: [
+                        {
+                            label: 'Vista Previa PDF',
+                            onClick: () => generatePDF(d.id, 'preview'),
+                            variant: 'secondary'
+                        },
+                        {
+                            label: 'Descargar PDF',
+                            onClick: () => generatePDF(d.id, 'download'),
+                            variant: 'primary'
+                        }
+                    ]
                 });
             } else {
                 setValidationModal({

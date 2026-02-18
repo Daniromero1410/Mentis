@@ -14,23 +14,28 @@ interface BlurValidationModalProps {
     title: string;
     message?: string;
     errors?: string[];
-    type?: 'error' | 'success';
-    action?: {
+    actions?: {
+        label: string;
+        onClick: () => void;
+        variant?: 'primary' | 'secondary' | 'outline';
+    }[];
+    action?: { // Deprecated but kept for compatibility
         label: string;
         onClick: () => void;
     };
 }
 
-export function BlurValidationModal({ isOpen, onClose, title, message, errors, type = 'error', action }: BlurValidationModalProps) {
+export function BlurValidationModal({ isOpen, onClose, title, message, errors, type = 'error', action, actions }: BlurValidationModalProps) {
+    const allActions = actions || (action ? [action] : []);
+
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-md bg-white border-0 shadow-2xl rounded-xl">
+            <DialogContent className="sm:max-w-md bg-white border-0 shadow-2xl rounded-xl z-50">
                 <DialogHeader className="flex flex-row items-center justify-between border-b pb-4">
                     <DialogTitle className="text-xl font-bold text-gray-900">{title}</DialogTitle>
                     <DialogDescription className="sr-only">
                         {message || "Lista de errores de validación"}
                     </DialogDescription>
-                    {/* Close button is handled by Dialog primitive usually, but we can add one if needed or rely on default */}
                 </DialogHeader>
 
                 <div className="py-4">
@@ -53,25 +58,30 @@ export function BlurValidationModal({ isOpen, onClose, title, message, errors, t
                             <div className={`p-3 rounded-full mb-4 ${type === 'error' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
                                 {type === 'error' ? <AlertCircle className="h-8 w-8" /> : <CheckCircle2 className="h-8 w-8" />}
                             </div>
-                            <p className="text-gray-600 text-base">{message}</p>
+                            {message && <p className="text-gray-600 text-base">{message}</p>}
                         </div>
                     )}
                 </div>
 
-                <DialogFooter className="sm:justify-end gap-2">
-                    {action && (
+                <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+                    {allActions.map((act, idx) => (
                         <button
-                            onClick={action.onClick}
-                            className="px-6 py-2 rounded-lg font-medium text-white shadow-sm transition-colors bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-600 focus:ring-offset-1"
+                            key={idx}
+                            onClick={act.onClick}
+                            className={`px-6 py-2 rounded-lg font-medium shadow-sm transition-colors focus:ring-2 focus:ring-offset-1 ${act.variant === 'secondary'
+                                    ? 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
+                                    : 'text-white ' + (type === 'success' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-600' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-600')
+                                }`}
                         >
-                            {action.label}
+                            {act.label}
                         </button>
-                    )}
+                    ))}
+
                     <button
                         onClick={onClose}
-                        className="px-6 py-2 rounded-lg font-medium text-white shadow-sm transition-colors bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-1"
+                        className="px-6 py-2 rounded-lg font-medium text-gray-700 border border-gray-300 bg-white hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 focus:ring-offset-1"
                     >
-                        {action ? 'Cerrar' : 'Entendido'}
+                        {allActions.length > 0 ? 'Cerrar' : 'Entendido'}
                     </button>
                 </DialogFooter>
             </DialogContent>
