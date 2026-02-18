@@ -288,7 +288,10 @@ export default function AnalisisExigenciaPage() {
                                 <Button variant="outline" onClick={() => setDeleteModal({ isOpen: false, id: null })}>
                                     Cancelar
                                 </Button>
-                                <Button variant="destructive" onClick={handleDelete}>
+                                <Button
+                                    className="bg-red-600 hover:bg-red-700 text-white"
+                                    onClick={handleDelete}
+                                >
                                     Eliminar
                                 </Button>
                             </div>
