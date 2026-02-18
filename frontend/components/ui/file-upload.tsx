@@ -126,15 +126,6 @@ export function FileUpload({
               <Button
                 type="button"
                 size="icon"
-                variant="secondary"
-                className="h-6 w-6 bg-white hover:bg-gray-100 rounded-full shadow-sm"
-                onClick={handleView}
-              >
-                <Eye className="h-3 w-3 text-gray-600" />
-              </Button>
-              <Button
-                type="button"
-                size="icon"
                 className="h-6 w-6 bg-red-100 hover:bg-red-200 text-red-600 rounded-full shadow-sm"
                 onClick={handleRemove}
               >

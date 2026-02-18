@@ -437,12 +437,36 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 throw new Error(errorMessage);
             }
 
+            const d = await res.json();
+            if (!analisisId && d.id) setAnalisisId(d.id);
+
             if (finalizar) {
-                // Generate PDF logic here if needed or just notify
-                setValidationModal({ isOpen: true, title: 'Finalizado', message: 'Análisis finalizado y PDF generado correctamente.', errors: [], type: 'success' });
+                // Descargar PDF
+                try {
+                    const pdfRes = await fetch(`${API_URL}/formatos-to/analisis-exigencia/${d.id}/pdf`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+
+                    if (pdfRes.ok) {
+                        const blob = await pdfRes.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        // Nombre del archivo sugerido o genérico
+                        a.download = `Analisis_Exigencia_${d.id}.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    } else {
+                        throw new Error('Error al generar el PDF');
+                    }
+                } catch (pdfErr) {
+                    console.error(pdfErr);
+                    toast.error('Se guardó el análisis pero hubo un error generando el PDF.');
+                }
+
+                setValidationModal({ isOpen: true, title: 'Finalizado', message: 'Análisis finalizado y PDF descargado correctamente.', errors: [], type: 'success' });
             } else {
-                const d = await res.json();
-                if (!analisisId && d.id) setAnalisisId(d.id);
                 setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', errors: [], type: 'success' });
             }
 

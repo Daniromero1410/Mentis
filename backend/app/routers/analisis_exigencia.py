@@ -2,6 +2,7 @@
 Router para el módulo de Análisis de Exigencia (Terapia Ocupacional)
 """
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from sqlmodel import Session, select, func
 from typing import Optional
 from datetime import datetime
@@ -20,6 +21,7 @@ from app.schemas.analisis_exigencia import (
     AnalisisExigenciaListResponse
 )
 from app.services.auth import get_current_user
+from app.services.pdf_generator_ae import generar_pdf_analisis_exigencia
 
 router = APIRouter(
     prefix="/formatos-to/analisis-exigencia",
@@ -196,7 +198,57 @@ def eliminar_analisis(
     session.flush() # Force delete children first
     session.delete(analisis)
     session.commit()
+    session.delete(analisis)
+    session.commit()
     return None
+
+
+# ═════════════════════════════════════════════════════════════════════
+# GENERAR PDF
+# ═════════════════════════════════════════════════════════════════════
+@router.get("/{analisis_id}/pdf", response_class=FileResponse)
+def generar_pdf_ae(
+    analisis_id: int,
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user),
+):
+    analisis = session.get(AnalisisExigencia, analisis_id)
+    if not analisis:
+        raise HTTPException(404, "Análisis no encontrado")
+    
+    # Fetch all children
+    identificacion = session.exec(select(IdentificacionAE).where(IdentificacionAE.prueba_id == analisis.id)).first()
+    secciones = session.exec(select(SeccionesTextoAE).where(SeccionesTextoAE.prueba_id == analisis.id)).first()
+    desempeno = session.exec(select(DesempenoOrgAE).where(DesempenoOrgAE.prueba_id == analisis.id)).first()
+    tareas = session.exec(select(TareaAE).where(TareaAE.prueba_id == analisis.id).order_by(TareaAE.orden)).all()
+    materiales = session.exec(select(MaterialEquipoAE).where(MaterialEquipoAE.prueba_id == analisis.id).order_by(MaterialEquipoAE.orden)).all()
+    peligros = session.exec(select(PeligroProcesoAE).where(PeligroProcesoAE.prueba_id == analisis.id)).all()
+    recomendaciones = session.exec(select(RecomendacionesAE).where(RecomendacionesAE.prueba_id == analisis.id)).first()
+    perfil = session.exec(select(PerfilExigenciasAE).where(PerfilExigenciasAE.prueba_id == analisis.id)).first()
+    registro = session.exec(select(RegistroAE).where(RegistroAE.prueba_id == analisis.id)).first()
+
+    # Generate PDF
+    try:
+        pdf_path = generar_pdf_analisis_exigencia(
+            analisis=analisis,
+            identificacion=identificacion,
+            secciones=secciones,
+            desempeno=desempeno,
+            tareas=tareas,
+            materiales=materiales,
+            peligros=peligros,
+            recomendaciones=recomendaciones,
+            perfil=perfil,
+            registro=registro
+        )
+        return FileResponse(
+            path=pdf_path,
+            filename=f"Analisis_Exigencia_{analisis.id}.pdf",
+            media_type='application/pdf'
+        )
+    except Exception as e:
+        print(f"Error generando PDF: {e}")
+        raise HTTPException(500, f"Error generando PDF: {str(e)}")
 
 
 # ═════════════════════════════════════════════════════════════════════
