@@ -224,3 +224,24 @@ class RegistroAE(SQLModel, table=True):
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+# ── Sección 6: Perfil de Exigencias (JSON Columns) ──────────────────
+from sqlalchemy import JSON, Column
+from typing import Dict, Any
+
+class PerfilExigenciasAE(SQLModel, table=True):
+    __tablename__ = "perfil_exigencias_ae"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    prueba_id: int = Field(foreign_key="analisis_exigencia.id", index=True)
+
+    sensopercepcion: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
+    motricidad_gruesa: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
+    motricidad_fina: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
+    armonia: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
+    cognitivos: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
+    psicosociales: Optional[Dict] = Field(default={}, sa_column=Column(JSON))
+
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)

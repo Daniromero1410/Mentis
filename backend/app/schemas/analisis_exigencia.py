@@ -142,6 +142,19 @@ class RegistroAECreate(BaseModel):
         from_attributes = True
 
 
+# ── Perfil de Exigencias (Sección 6) ────────────────────────────────
+class PerfilExigenciasAECreate(BaseModel):
+    sensopercepcion: Optional[dict] = {}
+    motricidad_gruesa: Optional[dict] = {}
+    motricidad_fina: Optional[dict] = {}
+    armonia: Optional[dict] = {}
+    cognitivos: Optional[dict] = {}
+    psicosociales: Optional[dict] = {}
+
+    class Config:
+        from_attributes = True
+
+
 # ══════════════════════════════════════════════════════════════════════
 # Schemas monolíticos (Create / Update)
 # ══════════════════════════════════════════════════════════════════════
@@ -154,6 +167,7 @@ class AnalisisExigenciaCreate(BaseModel):
     materiales_equipos: Optional[List[MaterialEquipoAECreate]] = None
     peligros: Optional[List[PeligroProcesoAECreate]] = None
     recomendaciones: Optional[RecomendacionesAECreate] = None
+    perfil_exigencias: Optional[PerfilExigenciasAECreate] = None
     registro: Optional[RegistroAECreate] = None
     estado: Optional[str] = None
 
@@ -166,6 +180,7 @@ class AnalisisExigenciaUpdate(BaseModel):
     materiales_equipos: Optional[List[MaterialEquipoAECreate]] = None
     peligros: Optional[List[PeligroProcesoAECreate]] = None
     recomendaciones: Optional[RecomendacionesAECreate] = None
+    perfil_exigencias: Optional[PerfilExigenciasAECreate] = None
     registro: Optional[RegistroAECreate] = None
     estado: Optional[str] = None
 
@@ -189,6 +204,7 @@ class AnalisisExigenciaResponse(BaseModel):
     materiales_equipos: Optional[List[MaterialEquipoAECreate]] = None
     peligros: Optional[List[PeligroProcesoAECreate]] = None
     recomendaciones: Optional[RecomendacionesAECreate] = None
+    perfil_exigencias: Optional[PerfilExigenciasAECreate] = None
     registro: Optional[RegistroAECreate] = None
 
     class Config:

@@ -12,7 +12,7 @@ from app.models.analisis_exigencia import (
     AnalisisExigencia, IdentificacionAE, SeccionesTextoAE,
     DesempenoOrgAE, TareaAE, MaterialEquipoAE,
     PeligroProcesoAE, RecomendacionesAE, RegistroAE,
-    EstadoAnalisisExigencia
+    PerfilExigenciasAE, EstadoAnalisisExigencia
 )
 from app.schemas.analisis_exigencia import (
     AnalisisExigenciaCreate, AnalisisExigenciaUpdate,
@@ -39,6 +39,7 @@ def _build_response(analisis: AnalisisExigencia, session: Session) -> AnalisisEx
     peligros = session.exec(select(PeligroProcesoAE).where(PeligroProcesoAE.prueba_id == pid)).all()
     recomendaciones = session.exec(select(RecomendacionesAE).where(RecomendacionesAE.prueba_id == pid)).first()
     registro = session.exec(select(RegistroAE).where(RegistroAE.prueba_id == pid)).first()
+    perfil_exigencias = session.exec(select(PerfilExigenciasAE).where(PerfilExigenciasAE.prueba_id == pid)).first()
 
     return AnalisisExigenciaResponse(
         id=analisis.id,
@@ -54,6 +55,7 @@ def _build_response(analisis: AnalisisExigencia, session: Session) -> AnalisisEx
         materiales_equipos=list(materiales) if materiales else [],
         peligros=list(peligros) if peligros else [],
         recomendaciones=recomendaciones,
+        perfil_exigencias=perfil_exigencias,
         registro=registro,
     )
 
@@ -234,12 +236,16 @@ def _save_children(prueba_id: int, data, session: Session):
     if data.registro:
         session.add(RegistroAE(prueba_id=prueba_id, **data.registro.model_dump()))
 
+    if data.perfil_exigencias:
+        # Convert pydantic model to dict if needed, but model_dump() handles it
+        session.add(PerfilExigenciasAE(prueba_id=prueba_id, **data.perfil_exigencias.model_dump()))
+
 
 def _delete_children(prueba_id: int, session: Session):
     """Elimina todas las relaciones hijas de un análisis."""
     for Model in [RegistroAE, RecomendacionesAE, PeligroProcesoAE,
                   MaterialEquipoAE, TareaAE, DesempenoOrgAE,
-                  SeccionesTextoAE, IdentificacionAE]:
+                  SeccionesTextoAE, IdentificacionAE, PerfilExigenciasAE]:
         items = session.exec(select(Model).where(Model.prueba_id == prueba_id)).all()
         for item in items:
             session.delete(item)
