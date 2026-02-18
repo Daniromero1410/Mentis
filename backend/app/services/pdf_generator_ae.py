@@ -64,6 +64,7 @@ def generar_pdf_analisis_exigencia(
     styles.add(ParagraphStyle(name="FieldLabel", fontSize=7, fontName="Helvetica-Bold", leading=9, textColor=colors.HexColor("#333333")))
     styles.add(ParagraphStyle(name="FieldValue", fontSize=7, fontName="Helvetica", leading=9))
     styles.add(ParagraphStyle(name="CheckLabel", fontSize=6, fontName="Helvetica", leading=7.5))
+    styles.add(ParagraphStyle(name="DateDigit", fontSize=7, fontName="Helvetica", alignment=TA_CENTER, leading=8))
 
     elements = []
     page_width = letter[0] - 2.4 * cm  # usable width

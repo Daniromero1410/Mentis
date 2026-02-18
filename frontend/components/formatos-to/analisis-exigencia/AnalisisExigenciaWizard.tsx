@@ -213,7 +213,14 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         };
     };
 
-    const [validationModal, setValidationModal] = useState({ isOpen: false, title: '', message: '', errors: [] as string[], type: 'error' as 'error' | 'success' });
+    const [validationModal, setValidationModal] = useState({
+        isOpen: false,
+        title: '',
+        message: '',
+        errors: [] as string[],
+        type: 'error' as 'error' | 'success',
+        action: undefined as { label: string, onClick: () => void } | undefined
+    });
 
     useEffect(() => {
         if (id && token) {
@@ -377,7 +384,8 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 title: 'Campos Requeridos',
                 message: '',
                 errors: errors,
-                type: 'error'
+                type: 'error',
+                action: undefined
             });
             return false;
         }
@@ -390,6 +398,31 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         }
     };
 
+    const downloadPDF = async (id: number = analisisId!) => {
+        if (!id) return;
+        try {
+            const pdfRes = await fetch(`${API_URL}/formatos-to/analisis-exigencia/${id}/pdf`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (pdfRes.ok) {
+                const blob = await pdfRes.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Analisis_Exigencia_${id}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } else {
+                throw new Error('Error al generar el PDF');
+            }
+        } catch (pdfErr) {
+            console.error(pdfErr);
+            toast.error('Error descargando el PDF.');
+        }
+    };
+
     const handleSave = async (finalizar = false) => {
         if (finalizar && !validateStep(currentStep)) return;
 
@@ -399,7 +432,8 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 title: 'Error de Configuración',
                 message: 'La URL de la API no está definida. Por favor verifique las variables de entorno.',
                 errors: [],
-                type: 'error'
+                type: 'error',
+                action: undefined
             });
             return;
         }
@@ -442,32 +476,28 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
 
             if (finalizar) {
                 // Descargar PDF
-                try {
-                    const pdfRes = await fetch(`${API_URL}/formatos-to/analisis-exigencia/${d.id}/pdf`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
+                await downloadPDF(d.id);
 
-                    if (pdfRes.ok) {
-                        const blob = await pdfRes.blob();
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        // Nombre del archivo sugerido o genérico
-                        a.download = `Analisis_Exigencia_${d.id}.pdf`;
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    } else {
-                        throw new Error('Error al generar el PDF');
+                setValidationModal({
+                    isOpen: true,
+                    title: 'Finalizado',
+                    message: 'Análisis finalizado y PDF descargado correctamente.',
+                    errors: [],
+                    type: 'success',
+                    action: {
+                        label: 'Descargar PDF Nuevamente',
+                        onClick: () => downloadPDF(d.id)
                     }
-                } catch (pdfErr) {
-                    console.error(pdfErr);
-                    toast.error('Se guardó el análisis pero hubo un error generando el PDF.');
-                }
-
-                setValidationModal({ isOpen: true, title: 'Finalizado', message: 'Análisis finalizado y PDF descargado correctamente.', errors: [], type: 'success' });
+                });
             } else {
-                setValidationModal({ isOpen: true, title: 'Guardado', message: 'Se ha guardado el borrador correctamente.', errors: [], type: 'success' });
+                setValidationModal({
+                    isOpen: true,
+                    title: 'Guardado',
+                    message: 'Se ha guardado el borrador correctamente.',
+                    errors: [],
+                    type: 'success',
+                    action: undefined
+                });
             }
 
         } catch (e: any) {
@@ -658,6 +688,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 message={validationModal.message}
                 errors={validationModal.errors}
                 type={validationModal.type}
+                action={validationModal.action}
             />
 
         </div>

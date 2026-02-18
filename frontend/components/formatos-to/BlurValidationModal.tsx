@@ -15,9 +15,13 @@ interface BlurValidationModalProps {
     message?: string;
     errors?: string[];
     type?: 'error' | 'success';
+    action?: {
+        label: string;
+        onClick: () => void;
+    };
 }
 
-export function BlurValidationModal({ isOpen, onClose, title, message, errors, type = 'error' }: BlurValidationModalProps) {
+export function BlurValidationModal({ isOpen, onClose, title, message, errors, type = 'error', action }: BlurValidationModalProps) {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-md bg-white border-0 shadow-2xl rounded-xl">
@@ -54,12 +58,20 @@ export function BlurValidationModal({ isOpen, onClose, title, message, errors, t
                     )}
                 </div>
 
-                <DialogFooter className="sm:justify-end">
+                <DialogFooter className="sm:justify-end gap-2">
+                    {action && (
+                        <button
+                            onClick={action.onClick}
+                            className="px-6 py-2 rounded-lg font-medium text-white shadow-sm transition-colors bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-600 focus:ring-offset-1"
+                        >
+                            {action.label}
+                        </button>
+                    )}
                     <button
                         onClick={onClose}
                         className="px-6 py-2 rounded-lg font-medium text-white shadow-sm transition-colors bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-1"
                     >
-                        Entendido
+                        {action ? 'Cerrar' : 'Entendido'}
                     </button>
                 </DialogFooter>
             </DialogContent>
