@@ -89,6 +89,11 @@ export function FileUpload({
     previewUrl.includes('/uploads/') // Assume uploads are images for now unless pdf specified
   );
 
+  // Resolve full URL for display if it's a relative path from backend
+  const displayUrl = previewUrl?.startsWith('/')
+    ? `${process.env.NEXT_PUBLIC_API_URL}${previewUrl}`
+    : previewUrl;
+
   return (
     <div className={`space-y-3 ${className}`}>
       {/* Área de preview/upload */}
@@ -96,12 +101,12 @@ export function FileUpload({
         {previewUrl ? (
           <div className="relative bg-gray-50 min-h-[120px] flex items-center justify-center p-4">
             {isImage && preview ? (
-              <div className="relative w-full h-32">
-                <Image
-                  src={previewUrl}
+              <div className="relative w-full h-32 flex items-center justify-center">
+                {/* Usamos img normal para evitar problemas de dominios con next/image en uploads dinámicos */}
+                <img
+                  src={displayUrl || ''}
                   alt="Preview"
-                  fill
-                  className="object-contain"
+                  className="max-h-full max-w-full object-contain"
                 />
               </div>
             ) : (
@@ -122,18 +127,18 @@ export function FileUpload({
                 type="button"
                 size="icon"
                 variant="secondary"
-                className="h-8 w-8 bg-white hover:bg-gray-100"
+                className="h-6 w-6 bg-white hover:bg-gray-100 rounded-full shadow-sm"
                 onClick={handleView}
               >
-                <Eye className="h-4 w-4" />
+                <Eye className="h-3 w-3 text-gray-600" />
               </Button>
               <Button
                 type="button"
                 size="icon"
-                className="h-8 w-8 bg-red-600 hover:bg-red-700 text-white"
+                className="h-6 w-6 bg-red-100 hover:bg-red-200 text-red-600 rounded-full shadow-sm"
                 onClick={handleRemove}
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3" />
               </Button>
             </div>
           </div>
