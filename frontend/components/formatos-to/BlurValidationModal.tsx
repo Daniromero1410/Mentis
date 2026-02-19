@@ -14,6 +14,7 @@ interface BlurValidationModalProps {
     title: string;
     message?: string;
     errors?: string[];
+    type?: 'error' | 'success';
     actions?: {
         label: string;
         onClick: () => void;
@@ -22,6 +23,7 @@ interface BlurValidationModalProps {
     action?: { // Deprecated but kept for compatibility
         label: string;
         onClick: () => void;
+        variant?: 'primary' | 'secondary' | 'outline';
     };
 }
 
@@ -69,8 +71,8 @@ export function BlurValidationModal({ isOpen, onClose, title, message, errors, t
                             key={idx}
                             onClick={act.onClick}
                             className={`px-6 py-2 rounded-lg font-medium shadow-sm transition-colors focus:ring-2 focus:ring-offset-1 ${act.variant === 'secondary'
-                                    ? 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
-                                    : 'text-white ' + (type === 'success' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-600' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-600')
+                                ? 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
+                                : 'text-white ' + (type === 'success' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-600' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-600')
                                 }`}
                         >
                             {act.label}

@@ -35,6 +35,16 @@ interface AnalisisExigenciaWizardProps {
     readOnly?: boolean;
 }
 
+interface ValidationModalState {
+    isOpen: boolean;
+    title: string;
+    message: string;
+    errors: string[];
+    type: 'error' | 'success';
+    action?: { label: string; onClick: () => void };
+    actions?: { label: string; onClick: () => void; variant?: 'primary' | 'secondary' | 'outline' }[];
+}
+
 export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: AnalisisExigenciaWizardProps) {
     const { token } = useAuth();
     const router = useRouter();
@@ -213,13 +223,12 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         };
     };
 
-    const [validationModal, setValidationModal] = useState({
+    const [validationModal, setValidationModal] = useState<ValidationModalState>({
         isOpen: false,
         title: '',
         message: '',
-        errors: [] as string[],
-        type: 'error' as 'error' | 'success',
-        action: undefined as { label: string, onClick: () => void } | undefined
+        errors: [],
+        type: 'error',
     });
 
     useEffect(() => {
@@ -431,8 +440,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         }
     };
 
-    // Alias for backward compatibility if needed, or update calls
-    const downloadPDF = (id?: number) => generatePDF(id, 'download');
+
 
     const handleSave = async (finalizar = false) => {
         if (finalizar && !validateStep(currentStep)) return;
@@ -486,27 +494,19 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             if (!analisisId && d.id) setAnalisisId(d.id);
 
             if (finalizar) {
-                // Descargar PDF
-                await downloadPDF(d.id);
+                // Descargar PDF logic moved to success modal button
+                // await downloadPDF(d.id); 
 
                 setValidationModal({
                     isOpen: true,
                     title: 'Finalizado',
-                    message: 'Análisis finalizado correctamente. Puede ver la vista previa o descargar el PDF.',
+                    message: 'Análisis finalizado correctamente. Se abrirá el PDF para descargar.',
                     errors: [],
                     type: 'success',
-                    actions: [
-                        {
-                            label: 'Vista Previa PDF',
-                            onClick: () => generatePDF(d.id, 'preview'),
-                            variant: 'secondary'
-                        },
-                        {
-                            label: 'Descargar PDF',
-                            onClick: () => generatePDF(d.id, 'download'),
-                            variant: 'primary'
-                        }
-                    ]
+                    action: {
+                        label: 'Ver Documento (PDF)',
+                        onClick: () => generatePDF(d.id, 'preview')
+                    }
                 });
             } else {
                 setValidationModal({
@@ -669,7 +669,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 </button>
 
                 <div className="flex items-center gap-3">
-                    {!readOnly && (
+                    {!readOnly ? (
                         <button
                             onClick={() => handleSave(false)}
                             disabled={saving}
@@ -677,6 +677,15 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                         >
                             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                             Guardar Borrador
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => generatePDF(analisisId!, 'preview')} // Default to preview
+                            disabled={!analisisId}
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-60 transition-colors shadow-sm"
+                        >
+                            <FileText className="h-4 w-4" />
+                            Ver Documento (PDF)
                         </button>
                     )}
 
