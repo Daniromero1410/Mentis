@@ -899,4 +899,6 @@ def generar_pdf_analisis_exigencia(
     ]))
     elements.append(sig_t)
     
-    e
+    # Build PDF
+    doc.build(elements)
+    return filepath
