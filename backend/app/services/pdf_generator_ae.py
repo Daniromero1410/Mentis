@@ -186,3 +186,8 @@ def generar_pdf_valoracion(
         trabajador_documento=trabajador_documento,
         output_dir=output_dir
     )
+
+
+def generar_pdf_analisis_exigencia(*args, **kwargs):
+    raise NotImplementedError('No implementado')
+
