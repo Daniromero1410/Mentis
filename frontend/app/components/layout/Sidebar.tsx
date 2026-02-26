@@ -50,6 +50,16 @@ const menuItems = [
         ],
       },
       {
+        title: 'Análisis de Exigencias (M)',
+        icon: ClipboardList,
+        href: '/dashboard/analisis-exigencias-mental',
+        requiresAccess: 'pruebas_trabajo' as const,
+        children: [
+          { title: 'Lista', href: '/dashboard/analisis-exigencias-mental', icon: List, exact: true },
+          { title: 'Nuevo Análisis', href: '/dashboard/analisis-exigencias-mental/nueva', icon: PlusCircle },
+        ],
+      },
+      {
         title: 'Formatos TO',
         icon: FileText,
         href: '#', // No href for parent
