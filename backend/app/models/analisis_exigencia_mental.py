@@ -52,7 +52,7 @@ class AnalisisExigenciaMental(SQLModel, table=True):
     # Relaciones
     datos_empresa: Optional["DatosEmpresaAE"] = Relationship(back_populates="AE")
     trabajador: Optional["TrabajadorAE"] = Relationship(back_populates="AE")
-    evaluador: Optional["DatosEvaluador"] = Relationship(back_populates="AE")
+    evaluador: Optional["DatosEvaluadorAE"] = Relationship(back_populates="AE")
     secciones: Optional["SeccionesAE"] = Relationship(back_populates="AE")
     condiciones_riesgo: List["CondicionRiesgoAE"] = Relationship(back_populates="AE")
     resumen_factores: List["ResumenFactorAE"] = Relationship(back_populates="AE")
@@ -125,7 +125,7 @@ class TrabajadorAE(SQLModel, table=True):
 
 
 # ===== DATOS DEL EVALUADOR =====
-class DatosEvaluador(SQLModel, table=True):
+class DatosEvaluadorAE(SQLModel, table=True):
     """Datos del profesional que realiza la evaluación"""
     __tablename__ = "datos_evaluador_ae"
 

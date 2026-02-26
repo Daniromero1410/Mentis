@@ -14,7 +14,7 @@ from app.database.connection import get_session
 from app.models.usuario import Usuario
 from app.models.analisis_exigencia_mental import (
     AnalisisExigenciaMental, TrabajadorAE, DatosEmpresaAE,
-    DatosEvaluador, SeccionesAE, CondicionRiesgoAE,
+    DatosEvaluadorAE, SeccionesAE, CondicionRiesgoAE,
     ResumenFactorAE, ConceptoFinalAE, EstadoAE
 )
 from app.schemas.analisis_exigencia_mental import (
@@ -322,7 +322,7 @@ def obtener_AE(
     ).first()
     
     evaluador = session.exec(
-        select(DatosEvaluador).where(DatosEvaluador.AE_id == AE_id)
+        select(DatosEvaluadorAE).where(DatosEvaluadorAE.AE_id == AE_id)
     ).first()
     
     secciones = session.exec(
@@ -393,7 +393,7 @@ def eliminar_AE(
     if secciones:
         session.delete(secciones)
     
-    evaluador = session.exec(select(DatosEvaluador).where(DatosEvaluador.AE_id == AE_id)).first()
+    evaluador = session.exec(select(DatosEvaluadorAE).where(DatosEvaluadorAE.AE_id == AE_id)).first()
     if evaluador:
         session.delete(evaluador)
     
@@ -452,7 +452,7 @@ def crear_analisis_exigencia_mental(
         
     # 4. Crear evaluador
     if AE_data.evaluador:
-        evaluador = DatosEvaluador(
+        evaluador = DatosEvaluadorAE(
             AE_id=AE.id,
             **AE_data.evaluador.model_dump()
         )
@@ -567,14 +567,14 @@ def actualizar_AE(
 
     # 3. Actualizar evaluador
     if AE_data.evaluador:
-        evaluador = session.exec(select(DatosEvaluador).where(DatosEvaluador.AE_id == AE_id)).first()
+        evaluador = session.exec(select(DatosEvaluadorAE).where(DatosEvaluadorAE.AE_id == AE_id)).first()
         if evaluador:
             for key, value in AE_data.evaluador.model_dump().items():
                 setattr(evaluador, key, value)
             evaluador.updated_at = datetime.utcnow()
             session.add(evaluador)
         else:
-            evaluador = DatosEvaluador(AE_id=AE_id, **AE_data.evaluador.model_dump())
+            evaluador = DatosEvaluadorAE(AE_id=AE_id, **AE_data.evaluador.model_dump())
             session.add(evaluador)
 
     # 4. Actualizar secciones
@@ -710,7 +710,7 @@ def finalizar_AE(
     ).first()
 
     evaluador = session.exec(
-        select(DatosEvaluador).where(DatosEvaluador.AE_id == AE_id)
+        select(DatosEvaluadorAE).where(DatosEvaluadorAE.AE_id == AE_id)
     ).first()
 
     secciones = session.exec(
@@ -805,7 +805,7 @@ def descargar_pdf(
     ).first()
 
     evaluador = session.exec(
-        select(DatosEvaluador).where(DatosEvaluador.AE_id == AE_id)
+        select(DatosEvaluadorAE).where(DatosEvaluadorAE.AE_id == AE_id)
     ).first()
 
     secciones = session.exec(

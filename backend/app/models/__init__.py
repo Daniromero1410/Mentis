@@ -1,4 +1,4 @@
-﻿from app.models.usuario import Usuario, UsuarioCreate, UsuarioRead, UsuarioLogin, RolUsuario
+from app.models.usuario import Usuario, UsuarioCreate, UsuarioRead, UsuarioLogin, RolUsuario
 from app.models.valoracion import (
     Valoracion,
     Trabajador,
@@ -43,5 +43,5 @@ from app.models.analisis_exigencia import (
     EstadoAnalisisExigencia
 )
 
-from app.models.analisis_exigencia_mental import (AnalisisExigenciaMental, DatosEmpresaAE, TrabajadorAE, DatosEvaluador as DatosEvaluadorAE, SeccionesAE, CondicionRiesgoAE, ResumenFactorAE, ConceptoFinalAE, EstadoAE)
+from app.models.analisis_exigencia_mental import (AnalisisExigenciaMental, DatosEmpresaAE, TrabajadorAE, DatosEvaluadorAE, SeccionesAE, CondicionRiesgoAE, ResumenFactorAE, ConceptoFinalAE, EstadoAE)
 
