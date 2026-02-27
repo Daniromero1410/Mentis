@@ -20,7 +20,8 @@ import { Seccion1ObjetivoIdentificacion } from './Seccion1ObjetivoIdentificacion
 import { Seccion2HistoriaOcupacional } from './Seccion2HistoriaOcupacional';
 import { Seccion3ActividadActual } from './Seccion3ActividadActual';
 import { Seccion4RolLaboralEvento } from './Seccion4RolLaboralEvento';
-import { Seccion5ComposicionRegistro } from './Seccion5ComposicionRegistro';
+import { Seccion5OtrasAreas } from './Seccion5OtrasAreas';
+import { Seccion6ComposicionRegistro } from './Seccion6ComposicionRegistro';
 
 interface WizardProps {
     valoracionId?: number;
@@ -32,7 +33,8 @@ const STEPS = [
     { title: '2. Historial y Eventos', icon: FileCheck2 },
     { title: '3. Actividad Actual', icon: FileCheck2 },
     { title: '4. Rol Laboral y Evento ATEL', icon: FileCheck2 },
-    { title: '5. Composición y Registro', icon: FileCheck2 }
+    { title: '5. Otras Áreas', icon: FileCheck2 },
+    { title: '6. Composición y Registro', icon: FileCheck2 }
 ];
 
 export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: WizardProps) {
@@ -52,6 +54,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
         evento_atel: {},
         composicion_familiar: {},
         miembros_familiares: [],
+        evaluacion_otras_areas: {},
         registro: {}
     });
 
@@ -81,6 +84,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                 evento_atel: Array.isArray(data.evento_atel) ? data.evento_atel[0] || {} : data.evento_atel || {},
                 composicion_familiar: Array.isArray(data.composicion_familiar) ? data.composicion_familiar[0] || {} : data.composicion_familiar || {},
                 miembros_familiares: data.miembros_familiares || [],
+                evaluacion_otras_areas: Array.isArray(data.evaluacion_otras_areas) ? data.evaluacion_otras_areas[0] || {} : data.evaluacion_otras_areas || {},
                 registro: Array.isArray(data.registro) ? data.registro[0] || {} : data.registro || {}
             });
         } catch (error: any) {
@@ -126,6 +130,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                 rol_laboral: Object.keys(formData.rol_laboral).length > 0 ? formData.rol_laboral : null,
                 evento_atel: Object.keys(formData.evento_atel).length > 0 ? formData.evento_atel : null,
                 composicion_familiar: Object.keys(formData.composicion_familiar).length > 0 ? formData.composicion_familiar : null,
+                evaluacion_otras_areas: Object.keys(formData.evaluacion_otras_areas).length > 0 ? formData.evaluacion_otras_areas : null,
                 registro: Object.keys(formData.registro).length > 0 ? formData.registro : null,
             };
 
@@ -162,7 +167,8 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
         <Seccion2HistoriaOcupacional key="s2" data={formData} updateData={updateData} readOnly={readOnly} />,
         <Seccion3ActividadActual key="s3" data={formData} updateData={updateData} readOnly={readOnly} />,
         <Seccion4RolLaboralEvento key="s4" data={formData} updateData={updateData} readOnly={readOnly} />,
-        <Seccion5ComposicionRegistro key="s5" data={formData} updateData={updateData} readOnly={readOnly} />
+        <Seccion5OtrasAreas key="s5" data={formData} updateData={updateData} readOnly={readOnly} />,
+        <Seccion6ComposicionRegistro key="s6" data={formData} updateData={updateData} readOnly={readOnly} />
     ];
 
     if (loading) {

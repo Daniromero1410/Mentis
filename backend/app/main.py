@@ -106,6 +106,25 @@ def _run_migrations():
         """
         ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acceso_valoracion_ocupacional BOOLEAN DEFAULT FALSE;
         """,
+        # Campos nuevos para RegistroVO
+        """
+        ALTER TABLE registro_vo ADD COLUMN IF NOT EXISTS concepto_ocupacional TEXT;
+        """,
+        """
+        ALTER TABLE registro_vo ADD COLUMN IF NOT EXISTS orientacion_ocupacional TEXT;
+        """,
+        """
+        ALTER TABLE registro_vo ADD COLUMN IF NOT EXISTS nombre_proveedor VARCHAR;
+        """,
+        """
+        ALTER TABLE registro_vo ADD COLUMN IF NOT EXISTS firma_proveedor VARCHAR;
+        """,
+        """
+        ALTER TABLE registro_vo ADD COLUMN IF NOT EXISTS nombre_equipo_rhb VARCHAR;
+        """,
+        """
+        ALTER TABLE registro_vo ADD COLUMN IF NOT EXISTS firma_equipo_rhb VARCHAR;
+        """,
     ]
 
     try:

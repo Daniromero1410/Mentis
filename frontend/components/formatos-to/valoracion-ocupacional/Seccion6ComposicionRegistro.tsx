@@ -12,13 +12,13 @@ import {
 } from '@/components/ui/table';
 import { Plus, Trash2, Upload } from 'lucide-react';
 
-interface Seccion5Props {
+interface Seccion6Props {
     data: any;
     updateData: (section: string, field: string, value: any) => void;
     readOnly?: boolean;
 }
 
-export function Seccion5ComposicionRegistro({ data, updateData, readOnly = false }: Seccion5Props) {
+export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false }: Seccion6Props) {
 
     // Helper functions
     const handleComposicionChange = (field: string, value: any) => {
@@ -178,11 +178,67 @@ export function Seccion5ComposicionRegistro({ data, updateData, readOnly = false
                 </div>
             </div>
 
+            {/* CONCEPTO Y ORIENTACIÓN */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                    <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
+                    10. Impresiones Generales y Concepto
+                </h3>
+
+                <div className="grid gap-6">
+                    <div className="space-y-2">
+                        <Label>Observación de Conducta</Label>
+                        <Textarea
+                            value={data?.registro?.observacion_conducta || ''}
+                            onChange={(e) => handleRegistroChange('observacion_conducta', e.target.value)}
+                            disabled={readOnly}
+                            placeholder="Describa la observación de conducta..."
+                            className="min-h-[80px]"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label>Aspecto Socio-Familiar</Label>
+                        <Textarea
+                            value={data?.registro?.aspecto_socio_familiar || ''}
+                            onChange={(e) => handleRegistroChange('aspecto_socio_familiar', e.target.value)}
+                            disabled={readOnly}
+                            placeholder="Describa el aspecto socio-familiar..."
+                            className="min-h-[80px]"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label>Concepto Ocupacional</Label>
+                            <Textarea
+                                value={data?.registro?.concepto_ocupacional || data?.registro?.concepto_to || ''}
+                                onChange={(e) => handleRegistroChange('concepto_ocupacional', e.target.value)}
+                                disabled={readOnly}
+                                placeholder="Concepto final de la evaluación..."
+                                className="min-h-[120px]"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Orientación Ocupacional</Label>
+                            <Textarea
+                                value={data?.registro?.orientacion_ocupacional || ''}
+                                onChange={(e) => handleRegistroChange('orientacion_ocupacional', e.target.value)}
+                                disabled={readOnly}
+                                placeholder="Orientación y recomendaciones..."
+                                className="min-h-[120px]"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* REGISTRO Y FIRMAS */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                     <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-                    10. Registro y Firmas
+                    11. Registro y Firmas
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -296,6 +352,80 @@ export function Seccion5ComposicionRegistro({ data, updateData, readOnly = false
                                     </Label>
                                 )
                             )}
+                        </div>
+
+                        {/* Proveedor */}
+                        <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50 mt-4 md:mt-0">
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Revisión Proveedor</h4>
+
+                            <div className="space-y-2">
+                                <Label>Nombre del Proveedor</Label>
+                                <Input
+                                    value={data?.registro?.nombre_proveedor || ''}
+                                    onChange={(e) => handleRegistroChange('nombre_proveedor', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Nombre proveedor..."
+                                />
+                            </div>
+
+                            <div className="space-y-2 pt-[76px]">
+                                <Label>Firma del Proveedor</Label>
+                                {data?.registro?.firma_proveedor ? (
+                                    <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
+                                        <img src={data.registro.firma_proveedor} alt="Firma Proveedor" className="max-h-24 object-contain" />
+                                        {!readOnly && (
+                                            <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_proveedor', '')} className="text-red-500 mt-2 h-7">Eliminar firma</Button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    !readOnly && (
+                                        <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
+                                            <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                                                <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Subir Firma</span></p>
+                                            </div>
+                                            <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_proveedor')} />
+                                        </Label>
+                                    )
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Equipo RHB */}
+                        <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50 mt-4 md:mt-0">
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Equipo Clínico/Rehabilitación</h4>
+
+                            <div className="space-y-2">
+                                <Label>Nombre completo del Especialista</Label>
+                                <Input
+                                    value={data?.registro?.nombre_equipo_rhb || ''}
+                                    onChange={(e) => handleRegistroChange('nombre_equipo_rhb', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Nombre Equipo RHB..."
+                                />
+                            </div>
+
+                            <div className="space-y-2 pt-[76px]">
+                                <Label>Firma del Equipo</Label>
+                                {data?.registro?.firma_equipo_rhb ? (
+                                    <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
+                                        <img src={data.registro.firma_equipo_rhb} alt="Firma Equipo RHB" className="max-h-24 object-contain" />
+                                        {!readOnly && (
+                                            <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_equipo_rhb', '')} className="text-red-500 mt-2 h-7">Eliminar firma</Button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    !readOnly && (
+                                        <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
+                                            <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                                                <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Subir Firma</span></p>
+                                            </div>
+                                            <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_equipo_rhb')} />
+                                        </Label>
+                                    )
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

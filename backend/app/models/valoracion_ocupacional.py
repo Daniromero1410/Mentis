@@ -181,6 +181,21 @@ class MiembroFamiliarVO(SQLModel, table=True):
     orden: int = Field(default=0)
 
 
+# ── Sección 8: Evaluación Otras Áreas Ocupacionales ──────────────────
+class EvaluacionOtrasAreasVO(SQLModel, table=True):
+    __tablename__ = "evaluacion_otras_areas_vo"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    valoracion_id: int = Field(foreign_key="valoraciones_ocupacionales.id", index=True)
+
+    # Las respuestas de la matriz se guardarán serializadas como JSON
+    cuidado_personal: Optional[str] = None
+    comunicacion: Optional[str] = None
+    movilidad: Optional[str] = None
+    aprendizaje_sensopercepcion: Optional[str] = None
+    vida_domestica: Optional[str] = None
+
+
 # ── Sección N: Registro / Firmas ────────────────────────────────────
 class RegistroVO(SQLModel, table=True):
     __tablename__ = "registro_vo"
@@ -193,6 +208,16 @@ class RegistroVO(SQLModel, table=True):
     licencia_so_elaboro: Optional[str] = None
     nombre_trabajador: Optional[str] = None
     firma_trabajador: Optional[str] = None         # ruta o base64
+
+    # Nuevos campos solicitados: Concepto, Orientación y Firmas extendidas
+    concepto_ocupacional: Optional[str] = None
+    orientacion_ocupacional: Optional[str] = None
+    
+    nombre_proveedor: Optional[str] = None
+    firma_proveedor: Optional[str] = None
+    
+    nombre_equipo_rhb: Optional[str] = None
+    firma_equipo_rhb: Optional[str] = None
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)

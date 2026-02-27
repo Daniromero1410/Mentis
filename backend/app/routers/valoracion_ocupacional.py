@@ -15,7 +15,7 @@ from app.models.valoracion_ocupacional import (
     SeccionesTextoVO, IdentificacionVO, EventoNoLaboralVO,
     HistoriaOcupacionalVO, ActividadActualVO, RolLaboralVO,
     EventoATELVO, ComposicionFamiliarVO, MiembroFamiliarVO,
-    RegistroVO, EstadoValoracion
+    EvaluacionOtrasAreasVO, RegistroVO, EstadoValoracion
 )
 from app.schemas.valoracion_ocupacional import (
     ValoracionOcupacionalCreate, ValoracionOcupacionalUpdate,
@@ -44,6 +44,7 @@ def _build_response(valoracion: ValoracionOcupacional, session: Session) -> Valo
     evento_atel = session.exec(select(EventoATELVO).where(EventoATELVO.valoracion_id == vid)).first()
     composicion_familiar = session.exec(select(ComposicionFamiliarVO).where(ComposicionFamiliarVO.valoracion_id == vid)).first()
     miembros_familiares = session.exec(select(MiembroFamiliarVO).where(MiembroFamiliarVO.valoracion_id == vid).order_by(MiembroFamiliarVO.orden)).all()
+    evaluacion_otras_areas = session.exec(select(EvaluacionOtrasAreasVO).where(EvaluacionOtrasAreasVO.valoracion_id == vid)).first()
     registro = session.exec(select(RegistroVO).where(RegistroVO.valoracion_id == vid)).first()
 
     return ValoracionOcupacionalResponse(
@@ -62,6 +63,7 @@ def _build_response(valoracion: ValoracionOcupacional, session: Session) -> Valo
         evento_atel=evento_atel,
         composicion_familiar=composicion_familiar,
         miembros_familiares=list(miembros_familiares) if miembros_familiares else [],
+        evaluacion_otras_areas=evaluacion_otras_areas,
         registro=registro,
     )
 
@@ -245,6 +247,9 @@ def _save_children(vid: int, data, session: Session):
             d["orden"] = i
             session.add(MiembroFamiliarVO(valoracion_id=vid, **d))
 
+    if data.evaluacion_otras_areas:
+        session.add(EvaluacionOtrasAreasVO(valoracion_id=vid, **data.evaluacion_otras_areas.model_dump()))
+
     if data.registro:
         session.add(RegistroVO(valoracion_id=vid, **data.registro.model_dump()))
 
@@ -252,9 +257,9 @@ def _save_children(vid: int, data, session: Session):
 def _delete_children(vid: int, session: Session):
     """Elimina todas las relaciones hijas de una valoración."""
     for Model in [
-        RegistroVO, MiembroFamiliarVO, ComposicionFamiliarVO,
-        EventoATELVO, RolLaboralVO, ActividadActualVO,
-        HistoriaOcupacionalVO, EventoNoLaboralVO,
+        RegistroVO, EvaluacionOtrasAreasVO, MiembroFamiliarVO, 
+        ComposicionFamiliarVO, EventoATELVO, RolLaboralVO, 
+        ActividadActualVO, HistoriaOcupacionalVO, EventoNoLaboralVO,
         IdentificacionVO, SeccionesTextoVO
     ]:
         items = session.exec(select(Model).where(Model.valoracion_id == vid)).all()
@@ -289,6 +294,7 @@ def descargar_pdf(
     evento_atel = session.exec(select(EventoATELVO).where(EventoATELVO.valoracion_id == valoracion_id)).first()
     composicion_familiar = session.exec(select(ComposicionFamiliarVO).where(ComposicionFamiliarVO.valoracion_id == valoracion_id)).first()
     miembros_familiares = session.exec(select(MiembroFamiliarVO).where(MiembroFamiliarVO.valoracion_id == valoracion_id).order_by(MiembroFamiliarVO.orden)).all()
+    evaluacion_otras_areas = session.exec(select(EvaluacionOtrasAreasVO).where(EvaluacionOtrasAreasVO.valoracion_id == valoracion_id)).first()
     registro = session.exec(select(RegistroVO).where(RegistroVO.valoracion_id == valoracion_id)).first()
 
     # Usuario evaluador
@@ -306,7 +312,9 @@ def descargar_pdf(
             evento_atel=evento_atel,
             composicion_familiar=composicion_familiar,
             miembros_familiares=list(miembros_familiares),
+            evaluacion_otras_areas=evaluacion_otras_areas,
             registro=registro,
+            evaluacion_otras_areas_raw=evaluacion_otras_areas,
             evaluador=evaluador,
             output_dir="pdfs"
         )

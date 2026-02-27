@@ -42,7 +42,9 @@ def generar_pdf_valoracion_ocupacional(
     evento_atel,
     composicion_familiar,
     miembros_familiares,
+    evaluacion_otras_areas,
     registro,
+    evaluacion_otras_areas_raw,
     evaluador,
     output_dir: str = "pdfs"
 ) -> str:
@@ -405,13 +407,41 @@ def generar_pdf_valoracion_ocupacional(
     
     story.append(Spacer(1, 10))
 
+    # ===== EVALUACIÓN OTRAS ÁREAS OCUPACIONALES =====
+    if evaluacion_otras_areas_raw:
+        story.append(crear_seccion_header("IX. EVALUACIÓN OTRAS ÁREAS OCUPACIONALES"))
+        
+        # Simplemente renderizar los JSON (o strings) guardados por el momento
+        areas_rows = [
+            [B("Cuidado Personal:"), P(ActT(evaluacion_otras_areas_raw.cuidado_personal if evaluacion_otras_areas_raw.cuidado_personal else "Sin datos"))],
+            [B("Comunicación:"), P(ActT(evaluacion_otras_areas_raw.comunicacion if evaluacion_otras_areas_raw.comunicacion else "Sin datos"))],
+            [B("Movilidad:"), P(ActT(evaluacion_otras_areas_raw.movilidad if evaluacion_otras_areas_raw.movilidad else "Sin datos"))],
+            [B("Aprendizaje / Sensopercepción:"), P(ActT(evaluacion_otras_areas_raw.aprendizaje_sensopercepcion if evaluacion_otras_areas_raw.aprendizaje_sensopercepcion else "Sin datos"))],
+            [B("Vida Doméstica:"), P(ActT(evaluacion_otras_areas_raw.vida_domestica if evaluacion_otras_areas_raw.vida_domestica else "Sin datos"))],
+        ]
+        
+        t_o_areas = Table(areas_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
+        t_o_areas.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+            ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        story.append(t_o_areas)
+        story.append(Spacer(1, 10))
+
     # ===== IMPRESIONES Y CONCEPTOS (REGISTRO) =====
-    story.append(crear_seccion_header("IX. IMPRESIONES GENERALES Y CONCEPTO DE T.O."))
+    story.append(crear_seccion_header("X. IMPRESIONES GENERALES Y CONCEPTO DE T.O."))
     
+    # Intenta usar conceptos nuevos si existen, sino recae en los viejos o deja en blanco
+    concepto = getattr(registro, 'concepto_ocupacional', None) or getattr(registro, 'concepto_to', None) or ""
+    orientacion = getattr(registro, 'orientacion_ocupacional', None) or ""
+
     reg_rows = [
-        [B("Observación de conducta:"), P(ActT(registro.observacion_conducta if registro else ""))],
-        [B("Aspecto socio-familiar:"), P(ActT(registro.aspecto_socio_familiar if registro else ""))],
-        [B("Concepto T.O. Preliminar:"), P(ActT(registro.concepto_to if registro else ""))],
+        [B("Observación de conducta:"), P(ActT(getattr(registro, 'observacion_conducta', "")))],
+        [B("Aspecto socio-familiar:"), P(ActT(getattr(registro, 'aspecto_socio_familiar', "")))],
+        [B("Concepto Ocupacional:"), P(ActT(concepto))],
+        [B("Orientación Ocupacional:"), P(ActT(orientacion))],
     ]
     t_reg = Table(reg_rows, colWidths=[1.8*inch, PAGE_WIDTH - 1.8*inch])
     t_reg.setStyle(TableStyle([
@@ -424,37 +454,48 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 25))
 
     # ===== FIRMAS =====
-    firma_eval = None
+    firma_eval = Spacer(1, 40)
     if evaluador and hasattr(evaluador, 'firma_path') and evaluador.firma_path and os.path.exists(evaluador.firma_path):
-        try:
-            firma_eval = ReportLabImage(evaluador.firma_path, width=1.5*inch, height=0.6*inch)
-        except:
-            pass
-            
-    if not firma_eval:
-        firma_eval = Spacer(1, 40)
+        try: firma_eval = ReportLabImage(evaluador.firma_path, width=1.5*inch, height=0.6*inch)
+        except: pass
 
     firma_trab_img = Spacer(1, 40)
     if registro and registro.firma_trabajador and os.path.exists(registro.firma_trabajador):
-        try:
-            firma_trab_img = ReportLabImage(registro.firma_trabajador, width=1.5*inch, height=0.6*inch)
-        except:
-            pass
+        try: firma_trab_img = ReportLabImage(registro.firma_trabajador, width=1.5*inch, height=0.6*inch)
+        except: pass
+        
+    firma_prov_img = Spacer(1, 40)
+    if registro and getattr(registro, 'firma_proveedor', None) and os.path.exists(registro.firma_proveedor):
+        try: firma_prov_img = ReportLabImage(registro.firma_proveedor, width=1.5*inch, height=0.6*inch)
+        except: pass
 
-    firmas_data = [
+    firma_rhb_img = Spacer(1, 40)
+    if registro and getattr(registro, 'firma_equipo_rhb', None) and os.path.exists(registro.firma_equipo_rhb):
+        try: firma_rhb_img = ReportLabImage(registro.firma_equipo_rhb, width=1.5*inch, height=0.6*inch)
+        except: pass
+
+    # Fila 1: Elaboró y Trabajador
+    firmas_data_1 = [
         [firma_eval, firma_trab_img],
         [P("_" * 35, style_center), P("_" * 35, style_center)],
-        [B("Profesional Terapia Ocupacional", style_center), B("Trabajador(a)", style_center)],
-        [P(evaluador.nombre if evaluador else "Profesional", style_center), P(nombre, style_center)],
+        [B("Elaboró (Gestor/Profesional T.O)", style_center), B("Trabajador(a)", style_center)],
+        [P(getattr(registro, 'nombre_elaboro', evaluador.nombre if evaluador else "Profesional"), style_center), P(getattr(registro, 'nombre_trabajador', nombre), style_center)],
     ]
+    t_firmas_1 = Table(firmas_data_1, colWidths=[PAGE_WIDTH/2, PAGE_WIDTH/2])
+    t_firmas_1.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')]))
+    story.append(KeepTogether([t_firmas_1]))
+    story.append(Spacer(1, 25))
 
-    t_firmas = Table(firmas_data, colWidths=[PAGE_WIDTH/2, PAGE_WIDTH/2])
-    t_firmas.setStyle(TableStyle([
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-    ]))
-    
-    story.append(KeepTogether([t_firmas]))
+    # Fila 2: Proveedor y Equipo RHB
+    firmas_data_2 = [
+        [firma_prov_img, firma_rhb_img],
+        [P("_" * 35, style_center), P("_" * 35, style_center)],
+        [B("Revisión Proveedor / Profesional Interviniente", style_center), B("Equipo de Rehabilitación EPS", style_center)],
+        [P(getattr(registro, 'nombre_proveedor', "Nombre del Proveedor"), style_center), P(getattr(registro, 'nombre_equipo_rhb', "Nombre Equipo RHB"), style_center)],
+    ]
+    t_firmas_2 = Table(firmas_data_2, colWidths=[PAGE_WIDTH/2, PAGE_WIDTH/2])
+    t_firmas_2.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')]))
+    story.append(KeepTogether([t_firmas_2]))
 
     # Generar PDF
     doc.build(story)

@@ -114,6 +114,17 @@ class MiembroFamiliarVOCreate(BaseModel):
     fecha_nacimiento: Optional[str] = None
     orden: int = 0
 
+# ── Evaluación Otras Áreas Ocupacionales ──────────────────────────────
+class EvaluacionOtrasAreasVOCreate(BaseModel):
+    cuidado_personal: Optional[str] = None
+    comunicacion: Optional[str] = None
+    movilidad: Optional[str] = None
+    aprendizaje_sensopercepcion: Optional[str] = None
+    vida_domestica: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 # ── Registro / Firmas ────────────────────────────────────────────────
 class RegistroVOCreate(BaseModel):
     nombre_elaboro: Optional[str] = None
@@ -121,6 +132,12 @@ class RegistroVOCreate(BaseModel):
     licencia_so_elaboro: Optional[str] = None
     nombre_trabajador: Optional[str] = None
     firma_trabajador: Optional[str] = None
+    concepto_ocupacional: Optional[str] = None
+    orientacion_ocupacional: Optional[str] = None
+    nombre_proveedor: Optional[str] = None
+    firma_proveedor: Optional[str] = None
+    nombre_equipo_rhb: Optional[str] = None
+    firma_equipo_rhb: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -138,6 +155,7 @@ class ValoracionOcupacionalCreate(BaseModel):
     evento_atel: Optional[EventoATELVOCreate] = None
     composicion_familiar: Optional[ComposicionFamiliarVOCreate] = None
     miembros_familiares: Optional[List[MiembroFamiliarVOCreate]] = None
+    evaluacion_otras_areas: Optional[EvaluacionOtrasAreasVOCreate] = None
     registro: Optional[RegistroVOCreate] = None
     estado: Optional[str] = None
 
@@ -151,6 +169,7 @@ class ValoracionOcupacionalUpdate(BaseModel):
     evento_atel: Optional[EventoATELVOCreate] = None
     composicion_familiar: Optional[ComposicionFamiliarVOCreate] = None
     miembros_familiares: Optional[List[MiembroFamiliarVOCreate]] = None
+    evaluacion_otras_areas: Optional[EvaluacionOtrasAreasVOCreate] = None
     registro: Optional[RegistroVOCreate] = None
     estado: Optional[str] = None
 
@@ -188,6 +207,7 @@ class ValoracionOcupacionalResponse(BaseModel):
     evento_atel: Optional[EventoATELVOCreate] = None
     composicion_familiar: Optional[ComposicionFamiliarVOCreate] = None
     miembros_familiares: Optional[List[MiembroFamiliarVOResponse]] = None
+    evaluacion_otras_areas: Optional[EvaluacionOtrasAreasVOCreate] = None
     registro: Optional[RegistroVOCreate] = None
 
     class Config:
