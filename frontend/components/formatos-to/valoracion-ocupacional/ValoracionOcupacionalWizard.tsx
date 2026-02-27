@@ -22,6 +22,7 @@ import { Seccion3ActividadActual } from './Seccion3ActividadActual';
 import { Seccion4RolLaboralEvento } from './Seccion4RolLaboralEvento';
 import { Seccion5OtrasAreas } from './Seccion5OtrasAreas';
 import { Seccion6ComposicionRegistro } from './Seccion6ComposicionRegistro';
+import { BlurValidationModal } from '../BlurValidationModal';
 
 interface WizardProps {
     valoracionId?: number;
@@ -32,7 +33,7 @@ const STEPS = [
     { title: '1. Identificación y Objetivos', icon: FileCheck2 },
     { title: '2. Historial y Eventos', icon: FileCheck2 },
     { title: '3. Actividad Actual', icon: FileCheck2 },
-    { title: '4. Rol Laboral y Evento ATEL', icon: FileCheck2 },
+    { title: '4. Rol Laboral y Evento', icon: FileCheck2 },
     { title: '5. Otras Áreas', icon: FileCheck2 },
     { title: '6. Composición y Registro', icon: FileCheck2 }
 ];
@@ -181,91 +182,99 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
     }
 
     return (
-        <div className="flex flex-col h-full bg-gray-50/30 dark:bg-gray-900/10">
-            {/* PROGRESS BAR */}
-            <div className="mb-8 px-4">
-                <div className="flex justify-between items-center relative">
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-gray-200 dark:bg-gray-800 rounded-full z-0"></div>
-                    <div
-                        className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-indigo-600 rounded-full z-0 transition-all duration-300"
-                        style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
-                    ></div>
-
-                    {STEPS.map((step, index) => {
-                        const Icon = step.icon;
-                        const isActive = index === currentStep;
-                        const isPast = index < currentStep;
-
-                        return (
-                            <div key={index} className="relative z-10 flex flex-col items-center group">
-                                <button
-                                    onClick={() => setCurrentStep(index)}
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300
-                                        ${isActive ? 'bg-indigo-600 border-indigo-600 text-white shadow-md scale-110' :
-                                            isPast ? 'bg-indigo-100 border-indigo-600 text-indigo-600 dark:bg-indigo-900/50' :
-                                                'bg-white border-gray-300 text-gray-400 dark:bg-gray-800 dark:border-gray-600'}
-                                    `}
-                                >
-                                    {isPast && !isActive ? <Check className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
-                                </button>
-                                <span className={`absolute -bottom-6 text-xs font-semibold whitespace-nowrap transition-colors duration-300
-                                    ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 md:opacity-100'}
-                                `}>
-                                    {step.title}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
+        <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-left mb-8">
+                <h1 className="text-3xl font-bold text-slate-900">
+                    {readOnly ? 'Ver Selección Ocupacional' : !valoracionId ? 'Nueva Valoración Ocupacional' : 'Editar Valoración Ocupacional'}
+                </h1>
+                <p className="text-slate-600 mt-2">Complete el formulario paso a paso</p>
             </div>
 
-            <div className="mt-8">
+            {/* PROGRESS BAR (Refactored Stepper) */}
+            <div className="flex items-start justify-between relative mb-12 px-4">
+                <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
+                <div
+                    className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-10 transition-all duration-500 ease-in-out"
+                    style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
+                />
+                {STEPS.map((step, index) => {
+                    const StepIcon = step.icon;
+                    const isActive = currentStep === index;
+                    const isCompleted = currentStep > index;
+
+                    return (
+                        <div key={index} className="flex flex-col items-center relative z-10">
+                            <button
+                                onClick={() => setCurrentStep(index)}
+                                className={`
+                                        flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
+                                        ${isActive
+                                        ? 'border-blue-600 bg-white text-blue-600 shadow-lg scale-110'
+                                        : isCompleted
+                                            ? 'border-blue-600 bg-blue-600 text-white'
+                                            : 'border-gray-300 bg-white text-gray-500 hover:border-gray-400'
+                                    }
+                                    `}
+                            >
+                                <StepIcon className="h-5 w-5" />
+                            </button>
+                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-blue-600 font-bold' : 'text-gray-500'}`}>
+                                <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Form content */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
                 {STEPS_COMPONENTS[currentStep]}
             </div>
 
-            {/* NAVIGATION BOTTOM */}
-            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center sticky bottom-0 bg-white dark:bg-gray-900 p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] rounded-t-xl z-20">
-                <Button
-                    variant="outline"
-                    onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+            {/* Navigation bar */}
+            <div className="flex items-center justify-between mt-6">
+                <button
+                    onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
                     disabled={currentStep === 0 || saving}
-                    className="border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
-                    <ChevronLeft className="w-4 h-4 mr-2" />
-                    Atrás
-                </Button>
+                    <ChevronLeft className="h-4 w-4" /> Anterior
+                </button>
 
-                <div className="flex gap-3">
-                    {!readOnly && (
-                        <Button
-                            variant="outline"
+                <div className="flex items-center gap-3">
+                    {!readOnly ? (
+                        <button
                             onClick={() => handleSave(false)}
                             disabled={saving}
-                            className="bg-gray-50 text-gray-700 hover:bg-gray-100 border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-60 transition-colors shadow-sm"
                         >
-                            <Save className="w-4 h-4 mr-2" />
+                            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                             Guardar Borrador
-                        </Button>
+                        </button>
+                    ) : (
+                        // Optional document generation shortcut if we implement PDF viewer here 
+                        // as we did in Analisis de exigencia. Emulating standard for readOnly
+                        <div />
                     )}
 
-                    {currentStep < STEPS.length - 1 ? (
-                        <Button
-                            onClick={() => setCurrentStep(Math.min(STEPS.length - 1, currentStep + 1))}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                    {currentStep !== STEPS.length - 1 ? (
+                        <button
+                            onClick={() => setCurrentStep(prev => Math.min(STEPS.length - 1, prev + 1))}
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
                         >
-                            Siguiente
-                            <ChevronRight className="w-4 h-4 ml-2" />
-                        </Button>
+                            Siguiente <ChevronRight className="h-4 w-4" />
+                        </button>
                     ) : (
                         !readOnly && (
-                            <Button
+                            <button
                                 onClick={() => handleSave(true)}
                                 disabled={saving}
-                                className="bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-500/20"
+                                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
                             >
-                                <Check className="w-4 h-4 mr-2" />
+                                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                                 Completar Valoración
-                            </Button>
+                            </button>
                         )
                     )}
                 </div>

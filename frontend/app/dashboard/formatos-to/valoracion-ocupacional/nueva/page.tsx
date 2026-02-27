@@ -38,7 +38,7 @@ function ValoracionFormContent() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-6xl mx-auto">
             <div className="flex items-center gap-4 border-b border-gray-200 dark:border-gray-800 pb-5">
                 <Button
                     variant="ghost"
@@ -51,7 +51,7 @@ function ValoracionFormContent() {
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-3">
                         <FileText className="h-7 w-7 text-indigo-500" />
-                        {valoracionId ? `Valoración Ocupacional # ${valoracionId}` : 'Nueva Valoración Ocupacional'}
+                        {valoracionId ? `Valoración Ocupacional #${valoracionId}` : 'Nueva Valoración Ocupacional'}
                     </h1>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                         Complete todos los pasos necesarios para registrar la valoración en el sistema.
@@ -59,7 +59,7 @@ function ValoracionFormContent() {
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-900/50 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col min-h-[600px]">
+            <div className="min-h-[600px] w-full">
                 <ValoracionOcupacionalWizard valoracionId={valoracionId} />
             </div>
         </div>

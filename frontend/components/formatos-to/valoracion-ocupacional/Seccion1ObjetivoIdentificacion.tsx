@@ -1,7 +1,6 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormSection, FormField, FormInput, FormTextarea } from '../prueba-trabajo/FormComponents';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Seccion1Props {
@@ -20,342 +19,311 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* OBJETIVO DE LA VALORACIÓN */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border object-contain shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-                    1. Objetivo de la Valoración
-                </h3>
-                <div className="space-y-4">
-                    <Textarea
+        <div className="space-y-6">
+            <FormSection title="1. Objetivo de la Valoración">
+                <FormField>
+                    <FormTextarea
                         value={data?.secciones_texto?.objetivo_valoracion || ''}
                         onChange={(e) => handleSeccionesTextoChange('objetivo_valoracion', e.target.value)}
                         placeholder="Describa el objetivo de la valoración..."
                         disabled={readOnly}
                         className="min-h-[100px]"
                     />
-                </div>
-            </div>
+                </FormField>
+            </FormSection>
 
-            {/* IDENTIFICACIÓN DEL TRABAJADOR */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border object-contain shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-                    2. Identificación
-                </h3>
+            <FormSection title="2. Identificación">
+                <Card className="border-slate-200 shadow-sm mb-6">
+                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
+                        <CardTitle className="text-sm font-bold text-slate-700">Datos del Trabajador</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <FormField label="Fecha de Valoración">
+                            <FormInput
+                                type="date"
+                                value={data?.identificacion?.fecha_valoracion || ''}
+                                onChange={(e) => handleIdentificacionChange('fecha_valoracion', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="space-y-2">
-                        <Label>Fecha de Valoración</Label>
-                        <Input
-                            type="date"
-                            value={data?.identificacion?.fecha_valoracion || ''}
-                            onChange={(e) => handleIdentificacionChange('fecha_valoracion', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Nombre del Trabajador">
+                            <FormInput
+                                value={data?.identificacion?.nombre_trabajador || ''}
+                                onChange={(e) => handleIdentificacionChange('nombre_trabajador', e.target.value)}
+                                disabled={readOnly}
+                                placeholder="Nombres y apellidos"
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Nombre del Trabajador</Label>
-                        <Input
-                            value={data?.identificacion?.nombre_trabajador || ''}
-                            onChange={(e) => handleIdentificacionChange('nombre_trabajador', e.target.value)}
-                            disabled={readOnly}
-                            placeholder="Nombres y apellidos"
-                        />
-                    </div>
+                        <FormField label="Documento de Identidad (C.C)">
+                            <FormInput
+                                value={data?.identificacion?.numero_documento || ''}
+                                onChange={(e) => handleIdentificacionChange('numero_documento', e.target.value)}
+                                disabled={readOnly}
+                                type="number"
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Documento de Identidad (C.C)</Label>
-                        <Input
-                            value={data?.identificacion?.numero_documento || ''}
-                            onChange={(e) => handleIdentificacionChange('numero_documento', e.target.value)}
-                            disabled={readOnly}
-                            type="number"
-                        />
-                    </div>
+                        <FormField label="Identificación del Siniestro" className="lg:col-span-3">
+                            <FormInput
+                                value={data?.identificacion?.identificacion_siniestro || ''}
+                                onChange={(e) => handleIdentificacionChange('identificacion_siniestro', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2 lg:col-span-3">
-                        <Label>Identificación del Siniestro</Label>
-                        <Input
-                            value={data?.identificacion?.identificacion_siniestro || ''}
-                            onChange={(e) => handleIdentificacionChange('identificacion_siniestro', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Fecha de Nacimiento">
+                            <FormInput
+                                type="date"
+                                value={data?.identificacion?.fecha_nacimiento || ''}
+                                onChange={(e) => handleIdentificacionChange('fecha_nacimiento', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Fecha de Nacimiento</Label>
-                        <Input
-                            type="date"
-                            value={data?.identificacion?.fecha_nacimiento || ''}
-                            onChange={(e) => handleIdentificacionChange('fecha_nacimiento', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Edad">
+                            <FormInput
+                                value={data?.identificacion?.edad || ''}
+                                onChange={(e) => handleIdentificacionChange('edad', parseInt(e.target.value))}
+                                disabled={readOnly}
+                                type="number"
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Edad</Label>
-                        <Input
-                            value={data?.identificacion?.edad || ''}
-                            onChange={(e) => handleIdentificacionChange('edad', parseInt(e.target.value))}
-                            disabled={readOnly}
-                            type="number"
-                        />
-                    </div>
+                        <FormField label="Dominancia">
+                            <Select
+                                disabled={readOnly}
+                                value={data?.identificacion?.dominancia || ''}
+                                onValueChange={(val) => handleIdentificacionChange('dominancia', val)}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Seleccione dominancia" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Derecha">Derecha</SelectItem>
+                                    <SelectItem value="Izquierda">Izquierda</SelectItem>
+                                    <SelectItem value="Ambidiestra">Ambidiestra</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Dominancia</Label>
-                        <Select
-                            disabled={readOnly}
-                            value={data?.identificacion?.dominancia || ''}
-                            onValueChange={(val) => handleIdentificacionChange('dominancia', val)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Seleccione dominancia" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Derecha">Derecha</SelectItem>
-                                <SelectItem value="Izquierda">Izquierda</SelectItem>
-                                <SelectItem value="Ambidiestra">Ambidiestra</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                        <FormField label="Estado Civil">
+                            <FormInput
+                                value={data?.identificacion?.estado_civil || ''}
+                                onChange={(e) => handleIdentificacionChange('estado_civil', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Estado Civil</Label>
-                        <Input
-                            value={data?.identificacion?.estado_civil || ''}
-                            onChange={(e) => handleIdentificacionChange('estado_civil', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Nivel Educativo">
+                            <FormInput
+                                value={data?.identificacion?.nivel_educativo || ''}
+                                onChange={(e) => handleIdentificacionChange('nivel_educativo', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Nivel Educativo</Label>
-                        <Input
-                            value={data?.identificacion?.nivel_educativo || ''}
-                            onChange={(e) => handleIdentificacionChange('nivel_educativo', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Especifique Formación">
+                            <FormInput
+                                value={data?.identificacion?.especificar_formacion || ''}
+                                onChange={(e) => handleIdentificacionChange('especificar_formacion', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Especifique Formación</Label>
-                        <Input
-                            value={data?.identificacion?.especificar_formacion || ''}
-                            onChange={(e) => handleIdentificacionChange('especificar_formacion', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Teléfono(s)">
+                            <FormInput
+                                value={data?.identificacion?.telefonos_trabajador || ''}
+                                onChange={(e) => handleIdentificacionChange('telefonos_trabajador', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Teléfono(s)</Label>
-                        <Input
-                            value={data?.identificacion?.telefonos_trabajador || ''}
-                            onChange={(e) => handleIdentificacionChange('telefonos_trabajador', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Dirección">
+                            <FormInput
+                                value={data?.identificacion?.direccion_residencia || ''}
+                                onChange={(e) => handleIdentificacionChange('direccion_residencia', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Dirección</Label>
-                        <Input
-                            value={data?.identificacion?.direccion_residencia || ''}
-                            onChange={(e) => handleIdentificacionChange('direccion_residencia', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Zona Residencial">
+                            <Select
+                                disabled={readOnly}
+                                value={data?.identificacion?.zona_residencia || ''}
+                                onValueChange={(val) => handleIdentificacionChange('zona_residencia', val)}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Seleccione zona" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Urbano">Urbano</SelectItem>
+                                    <SelectItem value="Rural">Rural</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </FormField>
+                    </CardContent>
+                </Card>
 
-                    <div className="space-y-2">
-                        <Label>Zona Residencial</Label>
-                        <Select
-                            disabled={readOnly}
-                            value={data?.identificacion?.zona_residencia || ''}
-                            onValueChange={(val) => handleIdentificacionChange('zona_residencia', val)}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Seleccione zona" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Urbano">Urbano</SelectItem>
-                                <SelectItem value="Rural">Rural</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
+                <Card className="border-slate-200 shadow-sm mb-6">
+                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
+                        <CardTitle className="text-sm font-bold text-slate-700">Información ATEL</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField label="Diagnóstico(s) del ATEL (CIE10)" className="md:col-span-2">
+                            <FormTextarea
+                                value={data?.identificacion?.diagnosticos_atel || ''}
+                                onChange={(e) => handleIdentificacionChange('diagnosticos_atel', e.target.value)}
+                                disabled={readOnly}
+                                placeholder="Ingrese los diagnósticos..."
+                            />
+                        </FormField>
 
-                <div className="mt-6 border-t pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2 md:col-span-2">
-                        <Label>Diagnóstico(s) del ATEL (CIE10)</Label>
-                        <Textarea
-                            value={data?.identificacion?.diagnosticos_atel || ''}
-                            onChange={(e) => handleIdentificacionChange('diagnosticos_atel', e.target.value)}
-                            disabled={readOnly}
-                            placeholder="Ingrese los diagnósticos..."
-                        />
-                    </div>
+                        <FormField label="Fechas de Ocurrencia y/o Declaración Eventos ATEL" className="md:col-span-2">
+                            <FormTextarea
+                                value={data?.identificacion?.fechas_eventos_atel || ''}
+                                onChange={(e) => handleIdentificacionChange('fechas_eventos_atel', e.target.value)}
+                                disabled={readOnly}
+                                placeholder="Ingrese las fechas de eventos ATEL..."
+                            />
+                        </FormField>
 
-                    <div className="space-y-2 md:col-span-2">
-                        <Label>Fechas de Ocurrencia y/o Declaración Eventos ATEL</Label>
-                        <Textarea
-                            value={data?.identificacion?.fechas_eventos_atel || ''}
-                            onChange={(e) => handleIdentificacionChange('fechas_eventos_atel', e.target.value)}
-                            disabled={readOnly}
-                            placeholder="Ingrese las fechas de eventos ATEL..."
-                        />
-                    </div>
+                        <FormField label="Entidad de Salud Responsable (EPS/IPS)">
+                            <FormInput
+                                value={data?.identificacion?.eps_ips || ''}
+                                onChange={(e) => handleIdentificacionChange('eps_ips', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Entidad de Salud Responsable (EPS/IPS)</Label>
-                        <Input
-                            value={data?.identificacion?.eps_ips || ''}
-                            onChange={(e) => handleIdentificacionChange('eps_ips', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Fondo de Pensiones (AFP)">
+                            <FormInput
+                                value={data?.identificacion?.afp || ''}
+                                onChange={(e) => handleIdentificacionChange('afp', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Fondo de Pensiones (AFP)</Label>
-                        <Input
-                            value={data?.identificacion?.afp || ''}
-                            onChange={(e) => handleIdentificacionChange('afp', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Tiempo de Incapacidad (Días o Fecha Inicio/Fin)" className="md:col-span-2">
+                            <FormInput
+                                value={data?.identificacion?.tiempo_incapacidad_dias || ''}
+                                onChange={(e) => handleIdentificacionChange('tiempo_incapacidad_dias', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
+                    </CardContent>
+                </Card>
+            </FormSection>
 
-                    <div className="space-y-2 md:col-span-2">
-                        <Label>Tiempo de Incapacidad (Días o Fecha Inicio/Fin)</Label>
-                        <Input
-                            value={data?.identificacion?.tiempo_incapacidad_dias || ''}
-                            onChange={(e) => handleIdentificacionChange('tiempo_incapacidad_dias', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
-                </div>
-            </div>
+            <FormSection title="3. Datos de la Empresa">
+                <Card className="border-slate-200 shadow-sm mb-6">
+                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
+                        <CardTitle className="text-sm font-bold text-slate-700">Información Laboral</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <FormField label="Empresa donde labora / laboraba">
+                            <FormInput
+                                value={data?.identificacion?.empresa || ''}
+                                onChange={(e) => handleIdentificacionChange('empresa', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-            {/* DATOS DE LA EMPRESA */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-                    3. Datos de la Empresa
-                </h3>
+                        <FormField label="Vinculación Laboral Actual">
+                            <RadioGroup
+                                disabled={readOnly}
+                                value={data?.identificacion?.vinculacion_laboral === true ? 'si' : (data?.identificacion?.vinculacion_laboral === false ? 'no' : undefined)}
+                                onValueChange={(val) => handleIdentificacionChange('vinculacion_laboral', val === 'si')}
+                                className="flex items-center gap-4"
+                            >
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="si" id="vinc-si" />
+                                    <label htmlFor="vinc-si" className="cursor-pointer text-sm font-medium leading-none text-slate-700">Sí</label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="no" id="vinc-no" />
+                                    <label htmlFor="vinc-no" className="cursor-pointer text-sm font-medium leading-none text-slate-700">No</label>
+                                </div>
+                            </RadioGroup>
+                        </FormField>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="space-y-2">
-                        <Label>Empresa donde labora / laboraba</Label>
-                        <Input
-                            value={data?.identificacion?.empresa || ''}
-                            onChange={(e) => handleIdentificacionChange('empresa', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Forma de Vinculación y/o Cesación">
+                            <FormInput
+                                value={data?.identificacion?.forma_vinculacion || ''}
+                                onChange={(e) => handleIdentificacionChange('forma_vinculacion', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label className="block mb-2">Vinculación Laboral Actual</Label>
-                        <RadioGroup
-                            disabled={readOnly}
-                            value={data?.identificacion?.vinculacion_laboral === true ? 'si' : (data?.identificacion?.vinculacion_laboral === false ? 'no' : undefined)}
-                            onValueChange={(val) => handleIdentificacionChange('vinculacion_laboral', val === 'si')}
-                            className="flex items-center gap-4"
-                        >
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="si" id="vinc-si" />
-                                <Label htmlFor="vinc-si" className="cursor-pointer">Sí</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="no" id="vinc-no" />
-                                <Label htmlFor="vinc-no" className="cursor-pointer">No</Label>
-                            </div>
-                        </RadioGroup>
-                    </div>
+                        <FormField label="Modalidad">
+                            <FormInput
+                                value={data?.identificacion?.modalidad || ''}
+                                onChange={(e) => handleIdentificacionChange('modalidad', e.target.value)}
+                                disabled={readOnly}
+                                placeholder="Ej. Presencial, Teletrabajo..."
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Forma de Vinculación y/o Cesación</Label>
-                        <Input
-                            value={data?.identificacion?.forma_vinculacion || ''}
-                            onChange={(e) => handleIdentificacionChange('forma_vinculacion', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Tiempo de labor (en esta modalidad)">
+                            <FormInput
+                                value={data?.identificacion?.tiempo_modalidad || ''}
+                                onChange={(e) => handleIdentificacionChange('tiempo_modalidad', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Modalidad</Label>
-                        <Input
-                            value={data?.identificacion?.modalidad || ''}
-                            onChange={(e) => handleIdentificacionChange('modalidad', e.target.value)}
-                            disabled={readOnly}
-                            placeholder="Ej. Presencial, Teletrabajo..."
-                        />
-                    </div>
+                        <FormField label="NIT de Empresa">
+                            <FormInput
+                                value={data?.identificacion?.nit_empresa || ''}
+                                onChange={(e) => handleIdentificacionChange('nit_empresa', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Tiempo de labor (en esta modalidad)</Label>
-                        <Input
-                            value={data?.identificacion?.tiempo_modalidad || ''}
-                            onChange={(e) => handleIdentificacionChange('tiempo_modalidad', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Fecha de Ingreso a la Empresa">
+                            <FormInput
+                                type="date"
+                                value={data?.identificacion?.fecha_ingreso_empresa || ''}
+                                onChange={(e) => handleIdentificacionChange('fecha_ingreso_empresa', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>NIT de Empresa</Label>
-                        <Input
-                            value={data?.identificacion?.nit_empresa || ''}
-                            onChange={(e) => handleIdentificacionChange('nit_empresa', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Antigüedad en la Empresa">
+                            <FormInput
+                                value={data?.identificacion?.antiguedad_empresa || ''}
+                                onChange={(e) => handleIdentificacionChange('antiguedad_empresa', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Fecha de Ingreso a la Empresa</Label>
-                        <Input
-                            type="date"
-                            value={data?.identificacion?.fecha_ingreso_empresa || ''}
-                            onChange={(e) => handleIdentificacionChange('fecha_ingreso_empresa', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Contacto dentro de la Empresa">
+                            <FormInput
+                                value={data?.identificacion?.contacto_empresa || ''}
+                                onChange={(e) => handleIdentificacionChange('contacto_empresa', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Antigüedad en la Empresa</Label>
-                        <Input
-                            value={data?.identificacion?.antiguedad_empresa || ''}
-                            onChange={(e) => handleIdentificacionChange('antiguedad_empresa', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
+                        <FormField label="Correo Electrónico (Empresa/Trabajador)">
+                            <FormInput
+                                value={data?.identificacion?.correos_empresa || ''}
+                                onChange={(e) => handleIdentificacionChange('correos_empresa', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
 
-                    <div className="space-y-2">
-                        <Label>Contacto dentro de la Empresa</Label>
-                        <Input
-                            value={data?.identificacion?.contacto_empresa || ''}
-                            onChange={(e) => handleIdentificacionChange('contacto_empresa', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label>Correo Electrónico (Empresa/Trabajador)</Label>
-                        <Input
-                            value={data?.identificacion?.correos_empresa || ''}
-                            onChange={(e) => handleIdentificacionChange('correos_empresa', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label>Teléfono Empresa</Label>
-                        <Input
-                            value={data?.identificacion?.telefonos_empresa || ''}
-                            onChange={(e) => handleIdentificacionChange('telefonos_empresa', e.target.value)}
-                            disabled={readOnly}
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <FormField label="Teléfono Empresa">
+                            <FormInput
+                                value={data?.identificacion?.telefonos_empresa || ''}
+                                onChange={(e) => handleIdentificacionChange('telefonos_empresa', e.target.value)}
+                                disabled={readOnly}
+                            />
+                        </FormField>
+                    </CardContent>
+                </Card>
+            </FormSection>
+        </div >
     );
 }

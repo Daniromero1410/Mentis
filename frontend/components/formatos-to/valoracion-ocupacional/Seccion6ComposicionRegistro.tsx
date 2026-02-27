@@ -1,7 +1,8 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { FormSection, FormField, FormInput, FormTextarea } from '../prueba-trabajo/FormComponents';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Table,
     TableBody,
@@ -66,24 +67,18 @@ export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* COMPOSICIÓN FAMILIAR */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                    <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-                    9. Composición Familiar
-                </h3>
-
+            <FormSection title="11. Composición Familiar">
                 {/* Tabla de Miembros */}
-                <div className="mb-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <Label className="text-base">Miembros del Núcleo Familiar (Edades)</Label>
+                <Card className="border-slate-200 shadow-sm mb-6 overflow-hidden">
+                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3 flex flex-row items-center justify-between">
+                        <CardTitle className="text-sm font-bold text-slate-700">Miembros del Núcleo Familiar (Edades)</CardTitle>
                         {!readOnly && (
                             <Button type="button" onClick={handleAddMiembro} variant="outline" size="sm" className="gap-2">
                                 <Plus className="h-4 w-4" /> Agregar Familiar
                             </Button>
                         )}
-                    </div>
-
-                    <div className="border rounded-md overflow-hidden">
+                    </CardHeader>
+                    <CardContent className="p-0">
                         <Table>
                             <TableHeader className="bg-gray-50 dark:bg-gray-900/50">
                                 <TableRow>
@@ -138,298 +133,289 @@ export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false
                                 )}
                             </TableBody>
                         </Table>
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="space-y-2">
-                        <Label>No. de Personas que Sostienen el Hogar</Label>
-                        <Input
-                            value={data?.composicion_familiar?.personas_sostienen_hogar || ''}
-                            onChange={(e) => handleComposicionChange('personas_sostienen_hogar', e.target.value)}
-                            disabled={readOnly}
-                            type="number"
-                            min="0"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Ingreso Promedio del Hogar</Label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                            <Input
-                                value={data?.composicion_familiar?.ingreso_promedio || ''}
-                                onChange={(e) => handleComposicionChange('ingreso_promedio', e.target.value)}
+                <Card className="border-slate-200 shadow-sm mb-6">
+                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <FormField label="No. de Personas que Sostienen el Hogar">
+                            <FormInput
+                                value={data?.composicion_familiar?.personas_sostienen_hogar || ''}
+                                onChange={(e) => handleComposicionChange('personas_sostienen_hogar', e.target.value)}
                                 disabled={readOnly}
-                                className="pl-7"
-                                placeholder="0.00"
+                                type="number"
+                                min="0"
                             />
-                        </div>
-                    </div>
-                    <div className="space-y-2 lg:col-span-3">
-                        <Label>Convivencia Actual</Label>
-                        <Textarea
-                            value={data?.composicion_familiar?.convivencia_actual || ''}
-                            onChange={(e) => handleComposicionChange('convivencia_actual', e.target.value)}
-                            disabled={readOnly}
-                            placeholder="Describa con quién convive actualmente..."
-                            className="min-h-[60px]"
-                        />
-                    </div>
-                </div>
-            </div>
+                        </FormField>
+                        <FormField label="Ingreso Promedio del Hogar">
+                            <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+                                <FormInput
+                                    value={data?.composicion_familiar?.ingreso_promedio || ''}
+                                    onChange={(e) => handleComposicionChange('ingreso_promedio', e.target.value)}
+                                    disabled={readOnly}
+                                    className="pl-7"
+                                    placeholder="0.00"
+                                />
+                            </div>
+                        </FormField>
+                        <FormField label="Convivencia Actual" className="lg:col-span-3">
+                            <FormTextarea
+                                value={data?.composicion_familiar?.convivencia_actual || ''}
+                                onChange={(e) => handleComposicionChange('convivencia_actual', e.target.value)}
+                                disabled={readOnly}
+                                placeholder="Describa con quién convive actualmente..."
+                                className="min-h-[60px]"
+                            />
+                        </FormField>
+                    </CardContent>
+                </Card>
+            </FormSection>
 
             {/* CONCEPTO Y ORIENTACIÓN */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                    <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-                    10. Impresiones Generales y Concepto
-                </h3>
-
-                <div className="grid gap-6">
-                    <div className="space-y-2">
-                        <Label>Observación de Conducta</Label>
-                        <Textarea
-                            value={data?.registro?.observacion_conducta || ''}
-                            onChange={(e) => handleRegistroChange('observacion_conducta', e.target.value)}
-                            disabled={readOnly}
-                            placeholder="Describa la observación de conducta..."
-                            className="min-h-[80px]"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label>Aspecto Socio-Familiar</Label>
-                        <Textarea
-                            value={data?.registro?.aspecto_socio_familiar || ''}
-                            onChange={(e) => handleRegistroChange('aspecto_socio_familiar', e.target.value)}
-                            disabled={readOnly}
-                            placeholder="Describa el aspecto socio-familiar..."
-                            className="min-h-[80px]"
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <Label>Concepto Ocupacional</Label>
-                            <Textarea
-                                value={data?.registro?.concepto_ocupacional || data?.registro?.concepto_to || ''}
-                                onChange={(e) => handleRegistroChange('concepto_ocupacional', e.target.value)}
+            <FormSection title="12. Impresiones Generales y Concepto">
+                <Card className="border-slate-200 shadow-sm mb-6">
+                    <CardContent className="p-6 grid gap-6">
+                        <FormField label="Observación de Conducta">
+                            <FormTextarea
+                                value={data?.registro?.observacion_conducta || ''}
+                                onChange={(e) => handleRegistroChange('observacion_conducta', e.target.value)}
                                 disabled={readOnly}
-                                placeholder="Concepto final de la evaluación..."
-                                className="min-h-[120px]"
+                                placeholder="Describa la observación de conducta..."
+                                className="min-h-[80px]"
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="space-y-2">
-                            <Label>Orientación Ocupacional</Label>
-                            <Textarea
-                                value={data?.registro?.orientacion_ocupacional || ''}
-                                onChange={(e) => handleRegistroChange('orientacion_ocupacional', e.target.value)}
+                        <FormField label="Aspecto Socio-Familiar">
+                            <FormTextarea
+                                value={data?.registro?.aspecto_socio_familiar || ''}
+                                onChange={(e) => handleRegistroChange('aspecto_socio_familiar', e.target.value)}
                                 disabled={readOnly}
-                                placeholder="Orientación y recomendaciones..."
-                                className="min-h-[120px]"
+                                placeholder="Describa el aspecto socio-familiar..."
+                                className="min-h-[80px]"
                             />
+                        </FormField>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <FormField label="Concepto Ocupacional">
+                                <FormTextarea
+                                    value={data?.registro?.concepto_ocupacional || data?.registro?.concepto_to || ''}
+                                    onChange={(e) => handleRegistroChange('concepto_ocupacional', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Concepto final de la evaluación..."
+                                    className="min-h-[120px]"
+                                />
+                            </FormField>
+
+                            <FormField label="Orientación Ocupacional">
+                                <FormTextarea
+                                    value={data?.registro?.orientacion_ocupacional || ''}
+                                    onChange={(e) => handleRegistroChange('orientacion_ocupacional', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Orientación y recomendaciones..."
+                                    className="min-h-[120px]"
+                                />
+                            </FormField>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </CardContent>
+                </Card>
+            </FormSection>
 
             {/* REGISTRO Y FIRMAS */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                    <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-                    11. Registro y Firmas
-                </h3>
+            <FormSection title="13. Registro y Firmas">
+                <Card className="border-slate-200 shadow-sm mb-6">
+                    <CardContent className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {/* Elaborado por */}
+                            <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50">
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Elaboro</h4>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Elaborado por */}
-                    <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Elaboro</h4>
-
-                        <div className="space-y-2">
-                            <Label>Nombre completo del Profesional</Label>
-                            <Input
-                                value={data?.registro?.nombre_elaboro || ''}
-                                onChange={(e) => handleRegistroChange('nombre_elaboro', e.target.value)}
-                                disabled={readOnly}
-                                placeholder="Nombre de quien elabora..."
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label>Licencia de S.O No.</Label>
-                            <Input
-                                value={data?.registro?.licencia_so_elaboro || ''}
-                                onChange={(e) => handleRegistroChange('licencia_so_elaboro', e.target.value)}
-                                disabled={readOnly}
-                            />
-                        </div>
-
-                        <div className="space-y-2 pt-2">
-                            <Label>Firma del Profesional</Label>
-                            {data?.registro?.firma_elaboro ? (
-                                <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
-                                    <img
-                                        src={data.registro.firma_elaboro}
-                                        alt="Firma Elaboro"
-                                        className="max-h-24 object-contain"
+                                <div className="space-y-2">
+                                    <Label>Nombre completo del Profesional</Label>
+                                    <Input
+                                        value={data?.registro?.nombre_elaboro || ''}
+                                        onChange={(e) => handleRegistroChange('nombre_elaboro', e.target.value)}
+                                        disabled={readOnly}
+                                        placeholder="Nombre de quien elabora..."
                                     />
-                                    {!readOnly && (
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => handleRegistroChange('firma_elaboro', '')}
-                                            className="text-red-500 mt-2 h-7"
-                                        >
-                                            Eliminar firma
-                                        </Button>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Licencia de S.O No.</Label>
+                                    <Input
+                                        value={data?.registro?.licencia_so_elaboro || ''}
+                                        onChange={(e) => handleRegistroChange('licencia_so_elaboro', e.target.value)}
+                                        disabled={readOnly}
+                                    />
+                                </div>
+
+                                <div className="space-y-2 pt-2">
+                                    <Label>Firma del Profesional</Label>
+                                    {data?.registro?.firma_elaboro ? (
+                                        <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
+                                            <img
+                                                src={data.registro.firma_elaboro}
+                                                alt="Firma Elaboro"
+                                                className="max-h-24 object-contain"
+                                            />
+                                            {!readOnly && (
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleRegistroChange('firma_elaboro', '')}
+                                                    className="text-red-500 mt-2 h-7"
+                                                >
+                                                    Eliminar firma
+                                                </Button>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        !readOnly && (
+                                            <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
+                                                <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                                                    <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                        <span className="font-semibold">Haga clic para subir</span> o arrastre y suelte
+                                                    </p>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (MAX. 2MB)</p>
+                                                </div>
+                                                <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_elaboro')} />
+                                            </Label>
+                                        )
                                     )}
                                 </div>
-                            ) : (
-                                !readOnly && (
-                                    <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
-                                        <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                            <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
-                                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                <span className="font-semibold">Haga clic para subir</span> o arrastre y suelte
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (MAX. 2MB)</p>
-                                        </div>
-                                        <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_elaboro')} />
-                                    </Label>
-                                )
-                            )}
-                        </div>
-                    </div>
+                            </div>
 
-                    {/* Trabajador */}
-                    <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50">
-                        <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Trabajador</h4>
+                            {/* Trabajador */}
+                            <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50">
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Trabajador</h4>
 
-                        <div className="space-y-2">
-                            <Label>Nombre completo</Label>
-                            <Input
-                                value={data?.registro?.nombre_trabajador || ''}
-                                onChange={(e) => handleRegistroChange('nombre_trabajador', e.target.value)}
-                                disabled={readOnly}
-                                placeholder="Nombre del trabajador..."
-                            />
-                        </div>
-
-                        <div className="space-y-2 pt-[76px]">
-                            <Label>Firma del Trabajador</Label>
-                            {data?.registro?.firma_trabajador ? (
-                                <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
-                                    <img
-                                        src={data.registro.firma_trabajador}
-                                        alt="Firma Trabajador"
-                                        className="max-h-24 object-contain"
+                                <div className="space-y-2">
+                                    <Label>Nombre completo</Label>
+                                    <Input
+                                        value={data?.registro?.nombre_trabajador || ''}
+                                        onChange={(e) => handleRegistroChange('nombre_trabajador', e.target.value)}
+                                        disabled={readOnly}
+                                        placeholder="Nombre del trabajador..."
                                     />
-                                    {!readOnly && (
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => handleRegistroChange('firma_trabajador', '')}
-                                            className="text-red-500 mt-2 h-7"
-                                        >
-                                            Eliminar firma
-                                        </Button>
+                                </div>
+
+                                <div className="space-y-2 pt-[76px]">
+                                    <Label>Firma del Trabajador</Label>
+                                    {data?.registro?.firma_trabajador ? (
+                                        <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
+                                            <img
+                                                src={data.registro.firma_trabajador}
+                                                alt="Firma Trabajador"
+                                                className="max-h-24 object-contain"
+                                            />
+                                            {!readOnly && (
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleRegistroChange('firma_trabajador', '')}
+                                                    className="text-red-500 mt-2 h-7"
+                                                >
+                                                    Eliminar firma
+                                                </Button>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        !readOnly && (
+                                            <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
+                                                <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                                                    <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                        <span className="font-semibold">Haga clic para subir</span> o arrastre y suelte
+                                                    </p>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (MAX. 2MB)</p>
+                                                </div>
+                                                <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_trabajador')} />
+                                            </Label>
+                                        )
                                     )}
                                 </div>
-                            ) : (
-                                !readOnly && (
-                                    <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
-                                        <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                            <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
-                                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                <span className="font-semibold">Haga clic para subir</span> o arrastre y suelte
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (MAX. 2MB)</p>
+                            </div>
+
+                            {/* Proveedor */}
+                            <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50 mt-4 md:mt-0">
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Revisión Proveedor</h4>
+
+                                <div className="space-y-2">
+                                    <Label>Nombre del Proveedor</Label>
+                                    <Input
+                                        value={data?.registro?.nombre_proveedor || ''}
+                                        onChange={(e) => handleRegistroChange('nombre_proveedor', e.target.value)}
+                                        disabled={readOnly}
+                                        placeholder="Nombre proveedor..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2 pt-[76px]">
+                                    <Label>Firma del Proveedor</Label>
+                                    {data?.registro?.firma_proveedor ? (
+                                        <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
+                                            <img src={data.registro.firma_proveedor} alt="Firma Proveedor" className="max-h-24 object-contain" />
+                                            {!readOnly && (
+                                                <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_proveedor', '')} className="text-red-500 mt-2 h-7">Eliminar firma</Button>
+                                            )}
                                         </div>
-                                        <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_trabajador')} />
-                                    </Label>
-                                )
-                            )}
-                        </div>
-
-                        {/* Proveedor */}
-                        <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50 mt-4 md:mt-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Revisión Proveedor</h4>
-
-                            <div className="space-y-2">
-                                <Label>Nombre del Proveedor</Label>
-                                <Input
-                                    value={data?.registro?.nombre_proveedor || ''}
-                                    onChange={(e) => handleRegistroChange('nombre_proveedor', e.target.value)}
-                                    disabled={readOnly}
-                                    placeholder="Nombre proveedor..."
-                                />
+                                    ) : (
+                                        !readOnly && (
+                                            <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
+                                                <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                                                    <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Subir Firma</span></p>
+                                                </div>
+                                                <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_proveedor')} />
+                                            </Label>
+                                        )
+                                    )}
+                                </div>
                             </div>
 
-                            <div className="space-y-2 pt-[76px]">
-                                <Label>Firma del Proveedor</Label>
-                                {data?.registro?.firma_proveedor ? (
-                                    <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
-                                        <img src={data.registro.firma_proveedor} alt="Firma Proveedor" className="max-h-24 object-contain" />
-                                        {!readOnly && (
-                                            <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_proveedor', '')} className="text-red-500 mt-2 h-7">Eliminar firma</Button>
-                                        )}
-                                    </div>
-                                ) : (
-                                    !readOnly && (
-                                        <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
-                                            <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                                <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
-                                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Subir Firma</span></p>
-                                            </div>
-                                            <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_proveedor')} />
-                                        </Label>
-                                    )
-                                )}
-                            </div>
-                        </div>
+                            {/* Equipo RHB */}
+                            <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50 mt-4 md:mt-0">
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Equipo Clínico/Rehabilitación</h4>
 
-                        {/* Equipo RHB */}
-                        <div className="space-y-4 p-5 rounded-lg border bg-gray-50 dark:bg-gray-900/50 mt-4 md:mt-0">
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Equipo Clínico/Rehabilitación</h4>
+                                <div className="space-y-2">
+                                    <Label>Nombre completo del Especialista</Label>
+                                    <Input
+                                        value={data?.registro?.nombre_equipo_rhb || ''}
+                                        onChange={(e) => handleRegistroChange('nombre_equipo_rhb', e.target.value)}
+                                        disabled={readOnly}
+                                        placeholder="Nombre Equipo RHB..."
+                                    />
+                                </div>
 
-                            <div className="space-y-2">
-                                <Label>Nombre completo del Especialista</Label>
-                                <Input
-                                    value={data?.registro?.nombre_equipo_rhb || ''}
-                                    onChange={(e) => handleRegistroChange('nombre_equipo_rhb', e.target.value)}
-                                    disabled={readOnly}
-                                    placeholder="Nombre Equipo RHB..."
-                                />
-                            </div>
-
-                            <div className="space-y-2 pt-[76px]">
-                                <Label>Firma del Equipo</Label>
-                                {data?.registro?.firma_equipo_rhb ? (
-                                    <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
-                                        <img src={data.registro.firma_equipo_rhb} alt="Firma Equipo RHB" className="max-h-24 object-contain" />
-                                        {!readOnly && (
-                                            <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_equipo_rhb', '')} className="text-red-500 mt-2 h-7">Eliminar firma</Button>
-                                        )}
-                                    </div>
-                                ) : (
-                                    !readOnly && (
-                                        <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
-                                            <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                                <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
-                                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Subir Firma</span></p>
-                                            </div>
-                                            <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_equipo_rhb')} />
-                                        </Label>
-                                    )
-                                )}
+                                <div className="space-y-2 pt-[76px]">
+                                    <Label>Firma del Equipo</Label>
+                                    {data?.registro?.firma_equipo_rhb ? (
+                                        <div className="mt-2 border rounded p-2 bg-white flex justify-center flex-col items-center">
+                                            <img src={data.registro.firma_equipo_rhb} alt="Firma Equipo RHB" className="max-h-24 object-contain" />
+                                            {!readOnly && (
+                                                <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_equipo_rhb', '')} className="text-red-500 mt-2 h-7">Eliminar firma</Button>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        !readOnly && (
+                                            <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white py-6 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700">
+                                                <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                                                    <Upload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Subir Firma</span></p>
+                                                </div>
+                                                <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_equipo_rhb')} />
+                                            </Label>
+                                        )
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </CardContent>
+                </Card>
+            </FormSection>
         </div>
     );
 }

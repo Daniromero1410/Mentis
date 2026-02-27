@@ -1,0 +1,1 @@
+﻿components/formatos-to/valoracion-ocupacional/Seccion6ComposicionRegistro.tsx(228,26): error TS17008: JSX element 'div' has no corresponding closing tag.
