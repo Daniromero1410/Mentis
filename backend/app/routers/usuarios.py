@@ -47,7 +47,8 @@ def crear_usuario(
         hashed_password=hashed_password,
         acceso_valoraciones=usuario.acceso_valoraciones,
         acceso_pruebas_trabajo=usuario.acceso_pruebas_trabajo,
-        acceso_formatos_to=usuario.acceso_formatos_to
+        acceso_formatos_to=usuario.acceso_formatos_to,
+        acceso_analisis_exigencias_mental=usuario.acceso_analisis_exigencias_mental
     )
     
     session.add(db_user)
@@ -104,6 +105,8 @@ def actualizar_usuario(
         usuario.acceso_pruebas_trabajo = datos.acceso_pruebas_trabajo
     if datos.acceso_formatos_to is not None:
         usuario.acceso_formatos_to = datos.acceso_formatos_to
+    if datos.acceso_analisis_exigencias_mental is not None:
+        usuario.acceso_analisis_exigencias_mental = datos.acceso_analisis_exigencias_mental
     if datos.password is not None and datos.password.strip():
         usuario.hashed_password = get_password_hash(datos.password)
     
