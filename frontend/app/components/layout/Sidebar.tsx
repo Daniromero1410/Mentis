@@ -83,6 +83,16 @@ const menuItems = [
               { title: 'Nueva', href: '/dashboard/formatos-to/analisis-exigencia/nueva', icon: PlusCircle },
             ]
           },
+          {
+            title: 'Valoración Ocupacional',
+            href: '/dashboard/formatos-to/valoracion-ocupacional',
+            icon: FileText,
+            requiresAccess: 'valoracion_ocupacional' as const,
+            children: [
+              { title: 'Lista', href: '/dashboard/formatos-to/valoracion-ocupacional', icon: List, exact: true },
+              { title: 'Nueva', href: '/dashboard/formatos-to/valoracion-ocupacional/nueva', icon: PlusCircle },
+            ]
+          },
         ],
       },
     ],
@@ -109,7 +119,7 @@ const menuItems = [
 // ... (keep helper functions same)
 
 // Función para verificar si el usuario tiene acceso a un módulo
-const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental') => {
+const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental' | 'valoracion_ocupacional') => {
   if (!accessType) return true; // Sin restricción
   if (!user) return false;
   if (user.rol === 'admin') return true; // Admin tiene acceso a todo
@@ -118,6 +128,7 @@ const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_traba
   if (accessType === 'pruebas_trabajo') return user.acceso_pruebas_trabajo !== false;
   if (accessType === 'formatos_to') return user.acceso_formatos_to !== false;
   if (accessType === 'analisis_exigencias_mental') return user.acceso_analisis_exigencias_mental !== false;
+  if (accessType === 'valoracion_ocupacional') return user.acceso_valoracion_ocupacional !== false;
 
   return true;
 };

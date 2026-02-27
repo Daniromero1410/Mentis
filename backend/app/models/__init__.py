@@ -45,3 +45,17 @@ from app.models.analisis_exigencia import (
 
 from app.models.analisis_exigencia_mental import (AnalisisExigenciaMental, DatosEmpresaAE, TrabajadorAE, DatosEvaluadorAE, SeccionesAE, CondicionRiesgoAE, ResumenFactorAE, ConceptoFinalAE, EstadoAE)
 
+from app.models.valoracion_ocupacional import (
+    ValoracionOcupacional,
+    SeccionesTextoVO,
+    IdentificacionVO,
+    EventoNoLaboralVO,
+    HistoriaOcupacionalVO,
+    ActividadActualVO,
+    RolLaboralVO,
+    EventoATELVO,
+    ComposicionFamiliarVO,
+    MiembroFamiliarVO,
+    RegistroVO,
+    EstadoValoracion
+)

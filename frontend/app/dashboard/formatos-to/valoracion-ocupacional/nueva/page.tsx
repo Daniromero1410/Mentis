@@ -1,0 +1,82 @@
+'use client';
+
+import { Suspense, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
+import { ValoracionOcupacionalWizard } from '@/components/formatos-to/valoracion-ocupacional/ValoracionOcupacionalWizard';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, FileText, Loader2 } from 'lucide-react';
+import { useAuth } from '@/app/context/AuthContext';
+import { toast } from '@/components/ui/sileo-toast';
+
+function ValoracionFormContent() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const { user, isLoading } = useAuth();
+
+    // Si viene ID, es edición o vista. Si no, es nuevo.
+    const idParam = searchParams.get('id');
+    const valoracionId = idParam ? parseInt(idParam) : undefined;
+
+    useEffect(() => {
+        if (!isLoading && user && !user.acceso_valoracion_ocupacional && user.rol !== 'admin') {
+            toast.error('No tienes permisos para acceder a esta sección');
+            router.push('/dashboard/formatos-to');
+        }
+    }, [user, isLoading, router]);
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center py-20">
+                <Loader2 className="h-8 w-8 text-indigo-500 animate-spin" />
+            </div>
+        );
+    }
+
+    if (!user?.acceso_valoracion_ocupacional && user?.rol !== 'admin') {
+        return null; // El useEffect se encarga de redirigir
+    }
+
+    return (
+        <div className="space-y-6">
+            <div className="flex items-center gap-4 border-b border-gray-200 dark:border-gray-800 pb-5">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => router.push('/dashboard/formatos-to/valoracion-ocupacional')}
+                    className="h-10 w-10 shrink-0 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
+                >
+                    <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-3">
+                        <FileText className="h-7 w-7 text-indigo-500" />
+                        {valoracionId ? `Valoración Ocupacional # ${valoracionId}` : 'Nueva Valoración Ocupacional'}
+                    </h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        Complete todos los pasos necesarios para registrar la valoración en el sistema.
+                    </p>
+                </div>
+            </div>
+
+            <div className="bg-white dark:bg-gray-900/50 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col min-h-[600px]">
+                <ValoracionOcupacionalWizard valoracionId={valoracionId} />
+            </div>
+        </div>
+    );
+}
+
+export default function NuevaValoracionOcupacionalPage() {
+    return (
+        <DashboardLayout>
+            <Suspense fallback={
+                <div className="flex justify-center flex-col gap-4 items-center py-20 min-h-[50vh]">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                    <p className="text-gray-500 font-medium">Cargando el editor...</p>
+                </div>
+            }>
+                <ValoracionFormContent />
+            </Suspense>
+        </DashboardLayout>
+    );
+}

@@ -8,6 +8,7 @@ from app.routers import auth, valoraciones, usuarios, conceptos, reportes, uploa
 from app.routers import pruebas_trabajo_to
 from app.routers import analisis_exigencia
 from app.routers import analisis_exigencias_mental
+from app.routers import valoracion_ocupacional
 
 # Crear la aplicación FastAPI
 app = FastAPI(
@@ -49,6 +50,7 @@ app.include_router(pruebas_trabajo.router)
 app.include_router(pruebas_trabajo_to.router)
 app.include_router(analisis_exigencia.router)
 app.include_router(analisis_exigencias_mental.router)
+app.include_router(valoracion_ocupacional.router)
 
 # Montar directorio de uploads como archivos estáticos
 UPLOAD_DIR = Path("uploads")
@@ -99,6 +101,10 @@ def _run_migrations():
         # Agregar columna "laborales" a perfil_exigencias_ae si no existe
         """
         ALTER TABLE perfil_exigencias_ae ADD COLUMN IF NOT EXISTS laborales JSON;
+        """,
+        # Agregar columna `acceso_valoracion_ocupacional` a usuarios
+        """
+        ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acceso_valoracion_ocupacional BOOLEAN DEFAULT FALSE;
         """,
     ]
 

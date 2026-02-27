@@ -135,7 +135,7 @@ export default function AnalisisExigenciaMentalPage() {
       );
 
       if (!response.ok) {
-        // Obtener el mensaje de error especü­fico del servidor
+        // Obtener el mensaje de error específico del servidor
         const errorData = await response.json().catch(() => ({}));
         const errorMessage = errorData.detail || 'Error al descargar PDF';
         throw new Error(errorMessage);
@@ -216,7 +216,7 @@ export default function AnalisisExigenciaMentalPage() {
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                     <Input
-                      placeholder="Buscar por nombre, identificaciü³n o empresa..."
+                      placeholder="Buscar por nombre, identificación o empresa..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       onKeyPress={handleKeyPress}
@@ -433,7 +433,7 @@ export default function AnalisisExigenciaMentalPage() {
                   <div>
                     <DialogTitle>Eliminar ae de Trabajo</DialogTitle>
                     <DialogDescription>
-                      Esta acciü³n no se puede deshacer
+                      Esta acción no se puede deshacer
                     </DialogDescription>
                   </div>
                 </div>
@@ -444,7 +444,7 @@ export default function AnalisisExigenciaMentalPage() {
                   <span className="font-semibold text-gray-900 dark:text-white">
                     {aeToDelete?.trabajador_nombre || 'Sin nombre'}
                   </span>
-                  ? Se eliminarán todos los datos asociados incluyendo el trabajador, empresa y evaluaciü³n.
+                  ? Se eliminarán todos los datos asociados incluyendo el trabajador, empresa y evaluación.
                 </p>
               </div>
               <DialogFooter className="gap-2 sm:gap-0">
