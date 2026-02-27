@@ -26,6 +26,7 @@ class Usuario(SQLModel, table=True):
     acceso_valoraciones: bool = Field(default=True)
     acceso_pruebas_trabajo: bool = Field(default=True)
     acceso_formatos_to: bool = Field(default=False)
+    acceso_analisis_exigencias_mental: bool = Field(default=False)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
@@ -40,6 +41,7 @@ class UsuarioCreate(SQLModel):
     acceso_valoraciones: bool = True
     acceso_pruebas_trabajo: bool = True
     acceso_formatos_to: bool = False
+    acceso_analisis_exigencias_mental: bool = False
 
 class UsuarioUpdate(SQLModel):
     nombre: Optional[str] = None
@@ -50,6 +52,7 @@ class UsuarioUpdate(SQLModel):
     acceso_valoraciones: Optional[bool] = None
     acceso_pruebas_trabajo: Optional[bool] = None
     acceso_formatos_to: Optional[bool] = None
+    acceso_analisis_exigencias_mental: Optional[bool] = None
 
 class UsuarioRead(SQLModel):
     id: int
@@ -61,6 +64,7 @@ class UsuarioRead(SQLModel):
     acceso_valoraciones: bool
     acceso_pruebas_trabajo: bool
     acceso_formatos_to: Optional[bool] = False
+    acceso_analisis_exigencias_mental: Optional[bool] = False
     created_at: datetime
 
 class UsuarioLogin(SQLModel):

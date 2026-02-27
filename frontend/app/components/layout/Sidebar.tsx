@@ -53,7 +53,7 @@ const menuItems = [
         title: 'Análisis de Exigencias (M)',
         icon: ClipboardList,
         href: '/dashboard/analisis-exigencias-mental',
-        requiresAccess: 'pruebas_trabajo' as const,
+        requiresAccess: 'analisis_exigencias_mental' as const,
         children: [
           { title: 'Lista', href: '/dashboard/analisis-exigencias-mental', icon: List, exact: true },
           { title: 'Nuevo Análisis', href: '/dashboard/analisis-exigencias-mental/nueva', icon: PlusCircle },
@@ -109,7 +109,7 @@ const menuItems = [
 // ... (keep helper functions same)
 
 // Función para verificar si el usuario tiene acceso a un módulo
-const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to') => {
+const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental') => {
   if (!accessType) return true; // Sin restricción
   if (!user) return false;
   if (user.rol === 'admin') return true; // Admin tiene acceso a todo
@@ -117,6 +117,7 @@ const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_traba
   if (accessType === 'valoraciones') return user.acceso_valoraciones !== false;
   if (accessType === 'pruebas_trabajo') return user.acceso_pruebas_trabajo !== false;
   if (accessType === 'formatos_to') return user.acceso_formatos_to !== false;
+  if (accessType === 'analisis_exigencias_mental') return user.acceso_analisis_exigencias_mental !== false;
 
   return true;
 };

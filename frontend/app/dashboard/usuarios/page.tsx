@@ -33,6 +33,7 @@ import {
     CheckCircle,
     XCircle,
     FileText,
+    Activity,
 } from 'lucide-react';
 
 interface Usuario {
@@ -45,6 +46,7 @@ interface Usuario {
     acceso_valoraciones: boolean;
     acceso_pruebas_trabajo: boolean;
     acceso_formatos_to: boolean;
+    acceso_analisis_exigencias_mental: boolean;
     created_at: string;
 }
 
@@ -57,6 +59,7 @@ interface UsuarioForm {
     acceso_valoraciones: boolean;
     acceso_pruebas_trabajo: boolean;
     acceso_formatos_to: boolean;
+    acceso_analisis_exigencias_mental: boolean;
     activo: boolean;
 }
 
@@ -69,6 +72,7 @@ const initialFormState: UsuarioForm = {
     acceso_valoraciones: true,
     acceso_pruebas_trabajo: true,
     acceso_formatos_to: false,
+    acceso_analisis_exigencias_mental: false,
     activo: true,
 };
 
@@ -115,6 +119,7 @@ export default function UsuariosPage() {
             acceso_valoraciones: usuario.acceso_valoraciones ?? false,
             acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo ?? false,
             acceso_formatos_to: usuario.acceso_formatos_to ?? false,
+            acceso_analisis_exigencias_mental: usuario.acceso_analisis_exigencias_mental ?? false,
             activo: usuario.activo ?? true,
         });
         setModalOpen(true);
@@ -152,6 +157,7 @@ export default function UsuariosPage() {
                     acceso_valoraciones: formData.acceso_valoraciones,
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
                     acceso_formatos_to: formData.acceso_formatos_to,
+                    acceso_analisis_exigencias_mental: formData.acceso_analisis_exigencias_mental,
                     ...(formData.password.trim() && { password: formData.password }),
                 });
                 toast.success('Usuario actualizado correctamente');
@@ -166,6 +172,7 @@ export default function UsuariosPage() {
                     acceso_valoraciones: formData.acceso_valoraciones,
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
                     acceso_formatos_to: formData.acceso_formatos_to,
+                    acceso_analisis_exigencias_mental: formData.acceso_analisis_exigencias_mental,
                 });
                 toast.success('Usuario creado correctamente');
             }
@@ -345,6 +352,15 @@ export default function UsuariosPage() {
                                                                 }`}>
                                                                 <FileText className="h-3.5 w-3.5" />
                                                                 <span className="hidden sm:inline">F.TO</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-2" title="Analisis Exigencias Mental">
+                                                            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_analisis_exigencias_mental
+                                                                ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                                                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
+                                                                }`}>
+                                                                <Activity className="h-3.5 w-3.5" />
+                                                                <span className="hidden sm:inline">A.E.M</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -565,6 +581,19 @@ export default function UsuariosPage() {
                                     <label htmlFor="acceso_formatos_to" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <FileText className="h-4 w-4 text-teal-600" />
                                         Formatos TO
+                                    </label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="acceso_analisis_exigencias_mental"
+                                        checked={formData.acceso_analisis_exigencias_mental}
+                                        onCheckedChange={(checked) =>
+                                            setFormData({ ...formData, acceso_analisis_exigencias_mental: !!checked })
+                                        }
+                                    />
+                                    <label htmlFor="acceso_analisis_exigencias_mental" className="flex items-center gap-2 text-sm cursor-pointer">
+                                        <Activity className="h-4 w-4 text-yellow-600" />
+                                        Análisis Exigencias Mental
                                     </label>
                                 </div>
                             </div>

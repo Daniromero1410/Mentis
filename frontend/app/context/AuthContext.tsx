@@ -13,6 +13,7 @@ interface User {
   acceso_valoraciones: boolean;
   acceso_pruebas_trabajo: boolean;
   acceso_formatos_to: boolean;
+  acceso_analisis_exigencias_mental: boolean;
 }
 
 interface AuthContextType {
