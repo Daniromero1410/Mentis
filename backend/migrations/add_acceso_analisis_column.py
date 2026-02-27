@@ -5,6 +5,9 @@ from sqlalchemy import text
 # Add parent directory to path
 sys.path.append(os.getcwd())
 
+import os
+os.environ["DATABASE_URL"] = "postgresql://postgres:yioHjzbJfMCaXoGORKHmCAGqUraAWics@interchange.proxy.rlwy.net:30267/railway"
+
 from app.database.connection import engine
 
 def add_column():
