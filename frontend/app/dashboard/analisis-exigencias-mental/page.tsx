@@ -49,7 +49,7 @@ interface AnalisisExigenciaMental {
   empresa?: string;
 }
 
-export default function aesTrabajoPage() {
+export default function AnalisisExigenciaMentalPage() {
   const [aes, setaes] = useState<AnalisisExigenciaMental[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -80,7 +80,7 @@ export default function aesTrabajoPage() {
       setTotal(response.total || 0);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al cargar aes de trabajo');
+      toast.error('Error al cargar Análisis de Exigencias Mental');
     } finally {
       setLoading(false);
     }
@@ -113,10 +113,10 @@ export default function aesTrabajoPage() {
       setDeleteDialogOpen(false);
       setaeToDelete(null);
       await fetchaes();
-      toast.success('ae eliminada correctamente');
+      toast.success('Análisis eliminado correctamente');
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al eliminar la ae');
+      toast.error('Error al eliminar el análisis');
     } finally {
       setDeleting(false);
     }
@@ -147,8 +147,8 @@ export default function aesTrabajoPage() {
       a.href = url;
       // Usar nombre del trabajador si estÃ¡ disponible
       const nombreArchivo = ae.trabajador_nombre
-        ? `ae_Trabajo_${ae.trabajador_nombre.replace(/\s+/g, '_')}.pdf`
-        : `ae_trabajo_${ae.id}.pdf`;
+        ? `Analisis_Exigencia_Mental_${ae.trabajador_nombre.replace(/\s+/g, '_')}.pdf`
+        : `Analisis_Exigencia_Mental_${ae.id}.pdf`;
       a.download = nombreArchivo;
       document.body.appendChild(a);
       a.click();
@@ -194,16 +194,16 @@ export default function aesTrabajoPage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
                 <Briefcase className="w-8 h-8 text-violet-500" />
-                aes de Trabajo
+                Análisis de Exigencias Mental
               </h1>
               <p className="text-gray-500 dark:text-gray-400 mt-1">
-                Gestiona las aes de trabajo y evaluaciones de riesgos psicosociales
+                Gestiona los análisis de exigencias mental y evaluaciones de riesgos psicosociales
               </p>
             </div>
             <Link href="/dashboard/analisis-exigencias-mental/nueva">
               <Button className="bg-violet-500 hover:bg-violet-600 text-white shadow-lg shadow-violet-500/25">
                 <Plus className="mr-2 h-4 w-4" />
-                Nueva ae
+                Nuevo Análisis
               </Button>
             </Link>
           </div>
