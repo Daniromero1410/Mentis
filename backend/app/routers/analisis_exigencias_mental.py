@@ -22,7 +22,8 @@ from app.schemas.analisis_exigencia_mental import (
     AnalisisExigenciaMentalUpdate, PaginatedAEsResponse,
     DatosEmpresaAECreate, TrabajadorAECreate, DatosEvaluadorCreate,
     SeccionesAECreate, CondicionRiesgoAECreate, ResumenFactorAECreate,
-    ConceptoFinalAECreate, FinalizarAEResponse
+    ConceptoFinalAECreate, FinalizarAEResponse,
+    SeccionesAERead, CondicionRiesgoAERead, ResumenFactorAERead, ConceptoFinalAERead
 )
 from app.services.auth import get_current_user
 from app.services.pdf_generator_analisis_exigencia_mental import generar_pdf_analisis_exigencia_mental
