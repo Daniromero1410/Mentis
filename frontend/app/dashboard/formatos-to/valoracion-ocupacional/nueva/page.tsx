@@ -19,7 +19,7 @@ function ValoracionFormContent() {
     const valoracionId = idParam ? parseInt(idParam) : undefined;
 
     useEffect(() => {
-        if (!isLoading && user && !user.acceso_valoracion_ocupacional && user.rol !== 'admin') {
+        if (!isLoading && user && !user.acceso_formatos_to && user.rol !== 'admin') {
             toast.error('No tienes permisos para acceder a esta sección');
             router.push('/dashboard/formatos-to');
         }
@@ -33,7 +33,7 @@ function ValoracionFormContent() {
         );
     }
 
-    if (!user?.acceso_valoracion_ocupacional && user?.rol !== 'admin') {
+    if (!user?.acceso_formatos_to && user?.rol !== 'admin') {
         return null; // El useEffect se encarga de redirigir
     }
 

@@ -16,8 +16,8 @@ export function Seccion5OtrasAreas({ data, updateData, readOnly = false }: Secci
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* EVALUACIÓN OTRAS ÁREAS OCUPACIONALES */}
             <FormSection title="10. Evaluación Otras Áreas Ocupacionales">
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardContent className="p-6 grid grid-cols-1 gap-6">
+                <div className="mb-6">
+                    <div className="grid grid-cols-1 gap-6">
                         <FormField label="Cuidado Personal">
                             <FormTextarea
                                 value={data?.evaluacion_otras_areas?.cuidado_personal || ''}
@@ -67,8 +67,8 @@ export function Seccion5OtrasAreas({ data, updateData, readOnly = false }: Secci
                                 className="min-h-[80px]"
                             />
                         </FormField>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
         </div>
     );

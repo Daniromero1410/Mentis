@@ -18,11 +18,11 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <FormSection title="7. Descripción Actividad Laboral Actual">
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
-                        <CardTitle className="text-sm font-bold text-slate-700">Información del Cargo</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="mb-6">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide border-b border-slate-100 pb-2 mb-4">
+                        Información del Cargo
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField label="Nombre del Cargo Actual">
                             <FormInput
                                 value={data?.actividad_actual?.nombre_cargo || ''}
@@ -90,14 +90,14 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
                                 className="min-h-[100px]"
                             />
                         </FormField>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
 
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
-                        <CardTitle className="text-sm font-bold text-slate-700">Ocurrencia del Presunto AT/EL (Accidente Trabajo / Enf. Laboral)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6">
+                <div className="mb-6">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide border-b border-slate-100 pb-2 mb-4 mt-6">
+                        Ocurrencia del Presunto AT/EL (Accidente Trabajo / Enf. Laboral)
+                    </h3>
+                    <div>
                         <p className="text-sm text-gray-500 mb-4 block">Marque las opciones correspondientes a donde ocurrió el evento.</p>
 
                         <div className="space-y-4 max-w-xl">
@@ -139,8 +139,8 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
                                 />
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
         </div>
     );

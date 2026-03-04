@@ -128,7 +128,7 @@ const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_traba
   if (accessType === 'pruebas_trabajo') return user.acceso_pruebas_trabajo !== false;
   if (accessType === 'formatos_to') return user.acceso_formatos_to !== false;
   if (accessType === 'analisis_exigencias_mental') return user.acceso_analisis_exigencias_mental !== false;
-  if (accessType === 'valoracion_ocupacional') return user.acceso_valoracion_ocupacional !== false;
+  if (accessType === 'valoracion_ocupacional') return user.acceso_formatos_to !== false;
 
   return true;
 };

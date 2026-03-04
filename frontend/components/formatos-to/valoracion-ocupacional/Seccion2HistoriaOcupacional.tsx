@@ -72,16 +72,16 @@ export function Seccion2HistoriaOcupacional({ data, updateData, readOnly = false
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* HISTORIA OCUPACIONAL */}
             <FormSection title="4. Historia Ocupacional (Cronológico Inverso)">
-                <Card className="border-slate-200 shadow-sm mb-6 overflow-hidden">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3 flex flex-row items-center justify-between">
-                        <CardTitle className="text-sm font-bold text-slate-700">Registros Laborales</CardTitle>
+                <div className="mb-6 overflow-hidden">
+                    <div className="border-b border-slate-100 py-3 flex flex-row items-center justify-between mb-4">
+                        <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Registros Laborales</h3>
                         {!readOnly && (
                             <Button type="button" onClick={handleAddHistoria} variant="outline" size="sm" className="gap-2">
                                 <Plus className="h-4 w-4" /> Agregar Fila
                             </Button>
                         )}
-                    </CardHeader>
-                    <CardContent className="p-0">
+                    </div>
+                    <div className="p-0">
                         <Table>
                             <TableHeader className="bg-gray-50 dark:bg-gray-900/50">
                                 <TableRow>
@@ -152,22 +152,22 @@ export function Seccion2HistoriaOcupacional({ data, updateData, readOnly = false
                                 )}
                             </TableBody>
                         </Table>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
 
             {/* EVENTOS NO LABORALES */}
             <FormSection title="5. Reporte de Eventos No Laborales (ENL)">
-                <Card className="border-slate-200 shadow-sm mb-6 overflow-hidden">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3 flex flex-row items-center justify-between">
-                        <CardTitle className="text-sm font-bold text-slate-700">Registros de Eventos</CardTitle>
+                <div className="mb-6 overflow-hidden">
+                    <div className="border-b border-slate-100 py-3 flex flex-row items-center justify-between mb-4">
+                        <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Registros de Eventos</h3>
                         {!readOnly && (
                             <Button type="button" onClick={handleAddEvento} variant="outline" size="sm" className="gap-2">
                                 <Plus className="h-4 w-4" /> Agregar Evento
                             </Button>
                         )}
-                    </CardHeader>
-                    <CardContent className="p-0">
+                    </div>
+                    <div className="p-0">
                         <Table>
                             <TableHeader className="bg-gray-50 dark:bg-gray-900/50">
                                 <TableRow>
@@ -232,14 +232,14 @@ export function Seccion2HistoriaOcupacional({ data, updateData, readOnly = false
                                 )}
                             </TableBody>
                         </Table>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
 
             {/* OTROS OFICIOS Y OFICIOS DE MAYOR INTERÉS */}
             <FormSection title="6. Otros Oficios y Oficios de Mayor Interés">
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField label="Otros Oficios Desempeñados">
                             <FormTextarea
                                 value={data?.secciones_texto?.otros_oficios_desempenados || ''}
@@ -259,8 +259,8 @@ export function Seccion2HistoriaOcupacional({ data, updateData, readOnly = false
                                 className="min-h-[120px]"
                             />
                         </FormField>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
         </div>
     );

@@ -61,7 +61,6 @@ interface UsuarioForm {
     acceso_pruebas_trabajo: boolean;
     acceso_formatos_to: boolean;
     acceso_analisis_exigencias_mental: boolean;
-    acceso_valoracion_ocupacional: boolean;
     activo: boolean;
 }
 
@@ -75,7 +74,6 @@ const initialFormState: UsuarioForm = {
     acceso_pruebas_trabajo: true,
     acceso_formatos_to: false,
     acceso_analisis_exigencias_mental: false,
-    acceso_valoracion_ocupacional: false,
     activo: true,
 };
 
@@ -123,7 +121,6 @@ export default function UsuariosPage() {
             acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo ?? false,
             acceso_formatos_to: usuario.acceso_formatos_to ?? false,
             acceso_analisis_exigencias_mental: usuario.acceso_analisis_exigencias_mental ?? false,
-            acceso_valoracion_ocupacional: usuario.acceso_valoracion_ocupacional ?? false,
             activo: usuario.activo ?? true,
         });
         setModalOpen(true);
@@ -162,7 +159,6 @@ export default function UsuariosPage() {
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
                     acceso_formatos_to: formData.acceso_formatos_to,
                     acceso_analisis_exigencias_mental: formData.acceso_analisis_exigencias_mental,
-                    acceso_valoracion_ocupacional: formData.acceso_valoracion_ocupacional,
                     ...(formData.password.trim() && { password: formData.password }),
                 });
                 toast.success('Usuario actualizado correctamente');
@@ -178,7 +174,6 @@ export default function UsuariosPage() {
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
                     acceso_formatos_to: formData.acceso_formatos_to,
                     acceso_analisis_exigencias_mental: formData.acceso_analisis_exigencias_mental,
-                    acceso_valoracion_ocupacional: formData.acceso_valoracion_ocupacional,
                 });
                 toast.success('Usuario creado correctamente');
             }
@@ -367,15 +362,6 @@ export default function UsuariosPage() {
                                                                 }`}>
                                                                 <Activity className="h-3.5 w-3.5" />
                                                                 <span className="hidden sm:inline">A.E.M</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-2" title="Valoración Ocupacional">
-                                                            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_valoracion_ocupacional
-                                                                ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400'
-                                                                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
-                                                                }`}>
-                                                                <FileText className="h-3.5 w-3.5" />
-                                                                <span className="hidden sm:inline">V.O</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -609,19 +595,6 @@ export default function UsuariosPage() {
                                     <label htmlFor="acceso_analisis_exigencias_mental" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <Activity className="h-4 w-4 text-yellow-600" />
                                         Análisis Exigencias Mental
-                                    </label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id="acceso_valoracion_ocupacional"
-                                        checked={formData.acceso_valoracion_ocupacional}
-                                        onCheckedChange={(checked) =>
-                                            setFormData({ ...formData, acceso_valoracion_ocupacional: !!checked })
-                                        }
-                                    />
-                                    <label htmlFor="acceso_valoracion_ocupacional" className="flex items-center gap-2 text-sm cursor-pointer">
-                                        <FileText className="h-4 w-4 text-indigo-600" />
-                                        Valoración Ocupacional
                                     </label>
                                 </div>
                             </div>

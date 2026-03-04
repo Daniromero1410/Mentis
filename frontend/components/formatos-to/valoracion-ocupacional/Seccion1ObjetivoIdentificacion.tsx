@@ -33,11 +33,11 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
             </FormSection>
 
             <FormSection title="2. Identificación">
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
-                        <CardTitle className="text-sm font-bold text-slate-700">Datos del Trabajador</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="mb-4">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide border-b border-slate-100 pb-2 mb-4">
+                        Datos del Trabajador
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <FormField label="Fecha de Valoración">
                             <FormInput
                                 type="date"
@@ -163,14 +163,14 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                 </SelectContent>
                             </Select>
                         </FormField>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
 
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
-                        <CardTitle className="text-sm font-bold text-slate-700">Información ATEL</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide border-b border-slate-100 pb-2 mb-4 mt-6">
+                        Información ATEL
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField label="Diagnóstico(s) del ATEL (CIE10)" className="md:col-span-2">
                             <FormTextarea
                                 value={data?.identificacion?.diagnosticos_atel || ''}
@@ -212,16 +212,16 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                 disabled={readOnly}
                             />
                         </FormField>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
 
             <FormSection title="3. Datos de la Empresa">
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
-                        <CardTitle className="text-sm font-bold text-slate-700">Información Laboral</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="mb-4">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide border-b border-slate-100 pb-2 mb-4">
+                        Información Laboral
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <FormField label="Empresa donde labora / laboraba">
                             <FormInput
                                 value={data?.identificacion?.empresa || ''}
@@ -321,8 +321,8 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                 disabled={readOnly}
                             />
                         </FormField>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
         </div >
     );

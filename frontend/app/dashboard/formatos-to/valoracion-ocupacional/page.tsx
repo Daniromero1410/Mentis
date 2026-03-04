@@ -84,7 +84,7 @@ export default function ValoracionOcupacionalPage() {
 
     useEffect(() => {
         // Verificar permisos
-        if (user && !user.acceso_valoracion_ocupacional && user.rol !== 'admin') {
+        if (user && !user.acceso_formatos_to && user.rol !== 'admin') {
             router.push('/dashboard');
             toast.error('No tienes permisos para acceder a este módulo');
             return;

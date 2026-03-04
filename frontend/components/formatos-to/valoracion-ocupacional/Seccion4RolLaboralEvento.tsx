@@ -56,8 +56,8 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* ROL LABORAL */}
             <FormSection title="8. Rol Laboral">
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField label="Tareas / Operaciones exigidas por el cargo" className="md:col-span-2">
                             <FormTextarea
                                 value={data?.rol_laboral?.tareas_operaciones || ''}
@@ -97,14 +97,14 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                 className="min-h-[60px]"
                             />
                         </FormField>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
 
             {/* EVENTO ATEL REHABILITACIÓN */}
             <FormSection title="9. Información Evento ATEL (Tratamiento Rehabilitación Integrado)">
-                <Card className="border-slate-200 shadow-sm mb-6">
-                    <CardContent className="p-6 space-y-8">
+                <div className="mb-6">
+                    <div className="space-y-8">
                         <FormField label="1. Tratamiento o Manejos (Rehabilitación Médica y de la Salud)">
                             <FormTextarea
                                 value={data?.evento_atel?.tratamiento_rehabilitacion || ''}
@@ -184,8 +184,8 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                 )}
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </FormSection>
         </div>
     );
