@@ -1,5 +1,5 @@
 import { FormSection, FormField, FormTextarea } from '../prueba-trabajo/FormComponents';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Seccion5Props {
     data: any;
@@ -16,58 +16,63 @@ export function Seccion5OtrasAreas({ data, updateData, readOnly = false }: Secci
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* EVALUACIÓN OTRAS ÁREAS OCUPACIONALES */}
             <FormSection title="10. Evaluación Otras Áreas Ocupacionales">
-                <div className="mb-6">
-                    <div className="grid grid-cols-1 gap-6">
-                        <FormField label="Cuidado Personal">
-                            <FormTextarea
-                                value={data?.evaluacion_otras_areas?.cuidado_personal || ''}
-                                onChange={(e) => handleAreasChange('cuidado_personal', e.target.value)}
-                                disabled={readOnly}
-                                placeholder="Describa si el trabajador requiere asistencia, es independiente, o experimenta dolor/dificultad para el cuidado personal..."
-                                className="min-h-[80px]"
-                            />
-                        </FormField>
+                <div className="space-y-6">
+                    <Card className="border-slate-200 shadow-sm">
+                        <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
+                            <CardTitle className="text-sm font-bold text-slate-700">Exploración de Áreas</CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-6 grid grid-cols-1 gap-6">
+                            <FormField label="Cuidado Personal">
+                                <FormTextarea
+                                    value={data?.evaluacion_otras_areas?.cuidado_personal || ''}
+                                    onChange={(e) => handleAreasChange('cuidado_personal', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Describa si el trabajador requiere asistencia, es independiente, o experimenta dolor/dificultad para el cuidado personal..."
+                                    className="min-h-[80px]"
+                                />
+                            </FormField>
 
-                        <FormField label="Comunicación">
-                            <FormTextarea
-                                value={data?.evaluacion_otras_areas?.comunicacion || ''}
-                                onChange={(e) => handleAreasChange('comunicacion', e.target.value)}
-                                disabled={readOnly}
-                                placeholder="Describa el nivel de independencia del trabajador en la comunicación y si presenta barreras..."
-                                className="min-h-[80px]"
-                            />
-                        </FormField>
+                            <FormField label="Comunicación">
+                                <FormTextarea
+                                    value={data?.evaluacion_otras_areas?.comunicacion || ''}
+                                    onChange={(e) => handleAreasChange('comunicacion', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Describa el nivel de independencia del trabajador en la comunicación y si presenta barreras..."
+                                    className="min-h-[80px]"
+                                />
+                            </FormField>
 
-                        <FormField label="Movilidad">
-                            <FormTextarea
-                                value={data?.evaluacion_otras_areas?.movilidad || ''}
-                                onChange={(e) => handleAreasChange('movilidad', e.target.value)}
-                                disabled={readOnly}
-                                placeholder="Describa el estado de movilidad, traslados, marcha, etc."
-                                className="min-h-[80px]"
-                            />
-                        </FormField>
+                            <FormField label="Movilidad">
+                                <FormTextarea
+                                    value={data?.evaluacion_otras_areas?.movilidad || ''}
+                                    onChange={(e) => handleAreasChange('movilidad', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Describa el estado de movilidad, traslados, marcha, etc."
+                                    className="min-h-[80px]"
+                                />
+                            </FormField>
 
-                        <FormField label="Aprendizaje / Sensopercepción">
-                            <FormTextarea
-                                value={data?.evaluacion_otras_areas?.aprendizaje_sensopercepcion || ''}
-                                onChange={(e) => handleAreasChange('aprendizaje_sensopercepcion', e.target.value)}
-                                disabled={readOnly}
-                                placeholder="Describa las capacidades de aprendizaje y de sensopercepción evidenciadas..."
-                                className="min-h-[80px]"
-                            />
-                        </FormField>
+                            <FormField label="Aprendizaje / Sensopercepción">
+                                <FormTextarea
+                                    value={data?.evaluacion_otras_areas?.aprendizaje_sensopercepcion || ''}
+                                    onChange={(e) => handleAreasChange('aprendizaje_sensopercepcion', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Describa las capacidades de aprendizaje y de sensopercepción evidenciadas..."
+                                    className="min-h-[80px]"
+                                />
+                            </FormField>
 
-                        <FormField label="Vida Doméstica">
-                            <FormTextarea
-                                value={data?.evaluacion_otras_areas?.vida_domestica || ''}
-                                onChange={(e) => handleAreasChange('vida_domestica', e.target.value)}
-                                disabled={readOnly}
-                                placeholder="Describa la capacidad del trabajador para realizar o participar en tareas del hogar..."
-                                className="min-h-[80px]"
-                            />
-                        </FormField>
-                    </div>
+                            <FormField label="Vida Doméstica">
+                                <FormTextarea
+                                    value={data?.evaluacion_otras_areas?.vida_domestica || ''}
+                                    onChange={(e) => handleAreasChange('vida_domestica', e.target.value)}
+                                    disabled={readOnly}
+                                    placeholder="Describa la capacidad del trabajador para realizar o participar en tareas del hogar..."
+                                    className="min-h-[80px]"
+                                />
+                            </FormField>
+                        </CardContent>
+                    </Card>
                 </div>
             </FormSection>
         </div>

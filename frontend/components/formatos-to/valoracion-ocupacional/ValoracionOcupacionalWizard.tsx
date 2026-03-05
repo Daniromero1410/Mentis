@@ -9,9 +9,14 @@ import {
     ChevronLeft,
     Save,
     Check,
-    FileCheck2,
     AlertCircle,
-    Loader2
+    Loader2,
+    User,
+    Briefcase,
+    Activity,
+    ClipboardList,
+    Heart,
+    PenTool
 } from 'lucide-react';
 import { toast } from '@/components/ui/sileo-toast';
 import { api } from '@/app/services/api';
@@ -30,12 +35,12 @@ interface WizardProps {
 }
 
 const STEPS = [
-    { title: '1. Identificación y Objetivos', icon: FileCheck2 },
-    { title: '2. Historial y Eventos', icon: FileCheck2 },
-    { title: '3. Actividad Actual', icon: FileCheck2 },
-    { title: '4. Rol Laboral y Evento', icon: FileCheck2 },
-    { title: '5. Otras Áreas', icon: FileCheck2 },
-    { title: '6. Composición y Registro', icon: FileCheck2 }
+    { title: '1. Identificación y Objetivos', icon: User },
+    { title: '2. Historial y Eventos', icon: ClipboardList },
+    { title: '3. Actividad Actual', icon: Activity },
+    { title: '4. Rol Laboral y Evento', icon: Briefcase },
+    { title: '5. Otras Áreas', icon: Heart },
+    { title: '6. Composición y Registro', icon: PenTool }
 ];
 
 export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: WizardProps) {
@@ -183,13 +188,6 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
 
     return (
         <div className="max-w-6xl mx-auto">
-            {/* Header */}
-            <div className="text-left mb-8">
-                <h1 className="text-3xl font-bold text-slate-900">
-                    {readOnly ? 'Ver Selección Ocupacional' : !valoracionId ? 'Nueva Valoración Ocupacional' : 'Editar Valoración Ocupacional'}
-                </h1>
-                <p className="text-slate-600 mt-2">Complete el formulario paso a paso</p>
-            </div>
 
             {/* PROGRESS BAR (Refactored Stepper) */}
             <div className="flex items-start justify-between relative mb-12 px-4">
