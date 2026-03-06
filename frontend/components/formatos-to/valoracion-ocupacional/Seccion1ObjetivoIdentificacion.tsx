@@ -19,7 +19,7 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <FormSection title="1. Objetivo de la Valoración">
                 <Card className="border-slate-200 shadow-sm">
                     <CardContent className="p-6">

@@ -43,11 +43,22 @@ const STEPS = [
     { title: '6. Composición y Registro', icon: PenTool }
 ];
 
+interface ValidationModalState {
+    isOpen: boolean;
+    title: string;
+    message: string;
+    errors: string[];
+    type: 'error' | 'success';
+}
+
 export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: WizardProps) {
     const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [validationModal, setValidationModal] = useState<ValidationModalState>({
+        isOpen: false, title: '', message: '', errors: [], type: 'error'
+    });
 
     // Core data state
     const [formData, setFormData] = useState<any>({
@@ -168,6 +179,71 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
         }
     };
 
+    // ===== VALIDATION =====
+    const validateStep = (step: number): boolean => {
+        if (readOnly) return true;
+        const errors: string[] = [];
+
+        switch (step) {
+            case 0: // Identificación y Objetivos
+                if (!formData.secciones_texto?.objetivo_valoracion) errors.push('Objetivo de la Valoración');
+                if (!formData.identificacion?.fecha_valoracion) errors.push('Fecha de Valoración');
+                if (!formData.identificacion?.nombre_trabajador) errors.push('Nombre del Trabajador');
+                if (!formData.identificacion?.numero_documento) errors.push('Documento de Identidad');
+                if (!formData.identificacion?.diagnosticos_atel) errors.push('Diagnóstico(s) del ATEL');
+                if (!formData.identificacion?.empresa) errors.push('Empresa donde labora');
+                break;
+            case 1: { // Historial y Eventos
+                const historia = Array.isArray(formData.historia_ocupacional) ? formData.historia_ocupacional : [];
+                if (historia.length === 0) {
+                    errors.push('Debe registrar al menos un registro de Historia Ocupacional');
+                } else {
+                    const incomplete = historia.some((h: any) => !h.empresa || !h.cargo_funciones);
+                    if (incomplete) errors.push('Complete Empresa y Cargo en todos los registros de Historia Ocupacional');
+                }
+                break;
+            }
+            case 2: // Actividad Actual
+                if (!formData.actividad_actual?.nombre_cargo) errors.push('Nombre del Cargo Actual');
+                if (!formData.actividad_actual?.tareas_descripcion) errors.push('Tareas y Descripción del Cargo');
+                break;
+            case 3: // Rol Laboral y Evento
+                if (!formData.rol_laboral?.tareas_operaciones) errors.push('Tareas / Operaciones exigidas por el cargo');
+                if (!formData.evento_atel?.tratamiento_rehabilitacion) errors.push('Tratamiento o Manejos (Rehabilitación)');
+                break;
+            case 4: // Otras Áreas - sección informativa, sin validación obligatoria
+                break;
+            case 5: // Composición y Registro
+                if (!formData.registro?.nombre_elaboro) errors.push('Nombre completo del Profesional (Elaboró)');
+                if (!formData.registro?.firma_elaboro) errors.push('Firma del Profesional (Elaboró)');
+                break;
+        }
+
+        if (errors.length > 0) {
+            setValidationModal({
+                isOpen: true,
+                title: 'Campos Requeridos',
+                message: '',
+                errors,
+                type: 'error'
+            });
+            return false;
+        }
+        return true;
+    };
+
+    const handleNext = () => {
+        if (validateStep(currentStep)) {
+            setCurrentStep(prev => Math.min(STEPS.length - 1, prev + 1));
+        }
+    };
+
+    const handleComplete = () => {
+        if (validateStep(currentStep)) {
+            handleSave(true);
+        }
+    };
+
     const STEPS_COMPONENTS = [
         <Seccion1ObjetivoIdentificacion key="s1" data={formData} updateData={updateData} readOnly={readOnly} />,
         <Seccion2HistoriaOcupacional key="s2" data={formData} updateData={updateData} readOnly={readOnly} />,
@@ -188,6 +264,14 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
 
     return (
         <div className="max-w-6xl mx-auto">
+
+            {/* Header */}
+            <div className="text-left mb-8">
+                <h1 className="text-3xl font-bold text-slate-900">
+                    {readOnly ? 'Ver Valoración Ocupacional' : (valoracionId ? 'Editar Valoración Ocupacional' : 'Nueva Valoración Ocupacional')}
+                </h1>
+                <p className="text-slate-600 mt-2">Complete el formulario de valoración paso a paso</p>
+            </div>
 
             {/* PROGRESS BAR (Refactored Stepper) */}
             <div className="flex items-start justify-between relative mb-12 px-4">
@@ -258,7 +342,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
 
                     {currentStep !== STEPS.length - 1 ? (
                         <button
-                            onClick={() => setCurrentStep(prev => Math.min(STEPS.length - 1, prev + 1))}
+                            onClick={handleNext}
                             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
                         >
                             Siguiente <ChevronRight className="h-4 w-4" />
@@ -266,7 +350,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                     ) : (
                         !readOnly && (
                             <button
-                                onClick={() => handleSave(true)}
+                                onClick={handleComplete}
                                 disabled={saving}
                                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
                             >
@@ -277,6 +361,16 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                     )}
                 </div>
             </div>
+
+            {/* Validation Modal */}
+            <BlurValidationModal
+                isOpen={validationModal.isOpen}
+                onClose={() => setValidationModal(prev => ({ ...prev, isOpen: false }))}
+                title={validationModal.title}
+                message={validationModal.message}
+                errors={validationModal.errors}
+                type={validationModal.type}
+            />
         </div>
     );
 }
