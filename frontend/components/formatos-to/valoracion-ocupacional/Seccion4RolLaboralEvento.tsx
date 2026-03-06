@@ -3,7 +3,6 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormSection, FormField, FormTextarea } from '../prueba-trabajo/FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useState, useEffect } from 'react';
 
 interface Seccion4Props {
     data: any;
@@ -47,21 +46,21 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
         if (checked && !adaps.includes(opcion)) {
             handleEventoChange('adaptaciones_recibidas', JSON.stringify([...adaps, opcion]));
         } else if (!checked && adaps.includes(opcion)) {
-            handleEventoChange('adaptaciones_recibidas', JSON.stringify(adaps.filter(item => item !== opcion)));
+            handleEventoChange('adaptaciones_recibidas', JSON.stringify(adaps.filter((item: string) => item !== opcion)));
         }
     };
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* ROL LABORAL */}
-            <FormSection title="8. Rol Laboral">
+            <FormSection title="5. Rol Laboral">
                 <div className="space-y-6">
                     <Card className="border-slate-200 shadow-sm">
                         <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
-                            <CardTitle className="text-sm font-bold text-slate-700">Responsabilidades Rol</CardTitle>
+                            <CardTitle className="text-sm font-bold text-slate-700">(Resultado del proceso de rhb)</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <FormField label="Tareas / Operaciones exigidas por el cargo" className="md:col-span-2">
+                            <FormField label="Tareas y Operaciones:" className="md:col-span-2">
                                 <FormTextarea
                                     value={data?.rol_laboral?.tareas_operaciones || ''}
                                     onChange={(e) => handleRolChange('tareas_operaciones', e.target.value)}
@@ -71,7 +70,7 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                 />
                             </FormField>
 
-                            <FormField label="Componentes del Desempeño" className="md:col-span-2">
+                            <FormField label="Componentes del desempeño:" className="md:col-span-2">
                                 <FormTextarea
                                     value={data?.rol_laboral?.componentes_desempeno || ''}
                                     onChange={(e) => handleRolChange('componentes_desempeno', e.target.value)}
@@ -81,23 +80,23 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                 />
                             </FormField>
 
-                            <FormField label="Tiempo Promedio de Ejecución">
+                            <FormField label="Tiempo de Ejecución:">
                                 <FormTextarea
                                     value={data?.rol_laboral?.tiempo_ejecucion || ''}
                                     onChange={(e) => handleRolChange('tiempo_ejecucion', e.target.value)}
                                     disabled={readOnly}
                                     placeholder="Ej. Tiempo por tarea, ciclos..."
-                                    className="min-h-[60px]"
+                                    className="min-h-[80px]"
                                 />
                             </FormField>
 
-                            <FormField label="Forma de Integración y Adaptación al Puesto">
+                            <FormField label="Forma de integración laboral:">
                                 <FormTextarea
                                     value={data?.rol_laboral?.forma_integracion || ''}
                                     onChange={(e) => handleRolChange('forma_integracion', e.target.value)}
                                     disabled={readOnly}
                                     placeholder="Interacciones, uso de equipos, trabajo en equipo..."
-                                    className="min-h-[60px]"
+                                    className="min-h-[80px]"
                                 />
                             </FormField>
                         </CardContent>
@@ -106,7 +105,7 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
             </FormSection>
 
             {/* EVENTO ATEL REHABILITACIÓN */}
-            <FormSection title="9. Información Evento ATEL (Tratamiento Rehabilitación Integrado)">
+            <FormSection title="6. Información Evento ATEL (Tratamiento Rehabilitación Integrado)">
                 <div className="space-y-6">
                     <Card className="border-slate-200 shadow-sm">
                         <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
@@ -149,7 +148,7 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                     <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 w-full md:w-auto md:mr-4 uppercase tracking-wide">¿Tiene calificación para PCL?</Label>
 
                                     <div className="flex items-center gap-4">
-                                        {[{ val: 'si', label: 'Sí' }, { val: 'no', label: 'No' }].map((opt) => (
+                                        {[{ val: 'si', label: 'Sí' }, { val: 'no', label: 'No' }, { val: 'en_tramite', label: 'En trámite' }].map((opt) => (
                                             <label key={opt.val} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer border px-3 py-1 rounded-md hover:bg-slate-50 transition-colors">
                                                 <input
                                                     type="radio"
@@ -158,20 +157,29 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                                     checked={
                                                         opt.val === 'si'
                                                             ? !!data?.evento_atel?.calificacion_pcl_si
-                                                            : !!data?.evento_atel?.calificacion_pcl_no
+                                                            : opt.val === 'no'
+                                                                ? !!data?.evento_atel?.calificacion_pcl_no
+                                                                : !!data?.evento_atel?.calificacion_pcl_tramite
                                                     }
                                                     onChange={() => {
                                                         if (opt.val === 'si') {
                                                             handleEventoChange('calificacion_pcl_si', true);
                                                             handleEventoChange('calificacion_pcl_no', false);
-                                                        } else {
+                                                            handleEventoChange('calificacion_pcl_tramite', false);
+                                                        } else if (opt.val === 'no') {
                                                             handleEventoChange('calificacion_pcl_si', false);
                                                             handleEventoChange('calificacion_pcl_no', true);
+                                                            handleEventoChange('calificacion_pcl_tramite', false);
+                                                            handleEventoChange('calificacion_pcl_porcentaje', '');
+                                                        } else {
+                                                            handleEventoChange('calificacion_pcl_si', false);
+                                                            handleEventoChange('calificacion_pcl_no', false);
+                                                            handleEventoChange('calificacion_pcl_tramite', true);
                                                             handleEventoChange('calificacion_pcl_porcentaje', '');
                                                         }
                                                     }}
                                                     disabled={readOnly}
-                                                    className="accent-slate-900 h-4 w-4"
+                                                    className="accent-blue-600 h-4 w-4"
                                                 />
                                                 {opt.label}
                                             </label>
@@ -179,20 +187,16 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                     </div>
 
                                     {data?.evento_atel?.calificacion_pcl_si && (
-                                        <div className="flex items-center gap-3 w-full md:w-auto md:ml-6 ml-0 animate-in fade-in">
-                                            <Label className="uppercase tracking-wide text-xs text-slate-500 font-medium">Porcentaje:</Label>
+                                        <div className="flex items-center gap-3 animate-in fade-in zoom-in duration-300">
+                                            <Label className="text-sm font-medium text-slate-600 whitespace-nowrap">Porcentaje (%):</Label>
                                             <Input
                                                 type="number"
-                                                step="0.1"
-                                                min="0"
-                                                max="100"
-                                                placeholder="%"
-                                                className="w-24 border-slate-200 focus-visible:ring-blue-500 h-10"
                                                 value={data?.evento_atel?.calificacion_pcl_porcentaje || ''}
                                                 onChange={(e) => handleEventoChange('calificacion_pcl_porcentaje', e.target.value)}
                                                 disabled={readOnly}
+                                                className="w-24 text-center"
+                                                placeholder="Ej. 15"
                                             />
-                                            <span className="text-sm font-medium text-slate-500">%</span>
                                         </div>
                                     )}
                                 </div>
