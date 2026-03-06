@@ -121,19 +121,42 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                 />
                             </FormField>
 
-                            <FormField label="Nivel Educativo">
-                                <FormInput
-                                    value={data?.identificacion?.nivel_educativo || ''}
-                                    onChange={(e) => handleIdentificacionChange('nivel_educativo', e.target.value)}
-                                    disabled={readOnly}
-                                />
+                            <FormField label="Nivel Educativo" className="lg:col-span-3">
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mt-2">
+                                    {[
+                                        { val: 'formacion_empirica', label: 'Formación empírica' },
+                                        { val: 'basica_primaria', label: 'Básica primaria' },
+                                        { val: 'bachillerato_vocacional', label: 'Bachillerato: vocacional 9°' },
+                                        { val: 'bachillerato_modalidad', label: 'Bachillerato: modalidad' },
+                                        { val: 'tecnico', label: 'Técnico/Tecnológico' },
+                                        { val: 'profesional', label: 'Profesional' },
+                                        { val: 'postgrado', label: 'Especialización/postgrado/maestría' },
+                                        { val: 'formacion_informal', label: 'Formación informal oficios' },
+                                        { val: 'analfabeta', label: 'Analfabeta' },
+                                        { val: 'otros', label: 'Otros' },
+                                    ].map((item) => (
+                                        <label key={item.val} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer p-2 border rounded-md hover:bg-slate-50 transition-colors">
+                                            <input
+                                                type="radio"
+                                                name="nivel_educativo_vo"
+                                                value={item.val}
+                                                checked={data?.identificacion?.nivel_educativo === item.val}
+                                                onChange={(e) => handleIdentificacionChange('nivel_educativo', e.target.value)}
+                                                disabled={readOnly}
+                                                className="accent-slate-900 h-4 w-4"
+                                            />
+                                            {item.label}
+                                        </label>
+                                    ))}
+                                </div>
                             </FormField>
 
-                            <FormField label="Especifique Formación">
+                            <FormField label="Especifique Formación y Oficios que Conoce" className="lg:col-span-3">
                                 <FormInput
                                     value={data?.identificacion?.especificar_formacion || ''}
                                     onChange={(e) => handleIdentificacionChange('especificar_formacion', e.target.value)}
                                     disabled={readOnly}
+                                    placeholder="Especifique formación y oficios que conoce..."
                                 />
                             </FormField>
 
@@ -272,12 +295,22 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                             </FormField>
 
                             <FormField label="Modalidad">
-                                <FormInput
-                                    value={data?.identificacion?.modalidad || ''}
-                                    onChange={(e) => handleIdentificacionChange('modalidad', e.target.value)}
-                                    disabled={readOnly}
-                                    placeholder="Ej. Presencial, Teletrabajo..."
-                                />
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {['Presencial', 'Teletrabajo', 'Trabajo en casa'].map((opt) => (
+                                        <label key={opt} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer border px-3 py-1 rounded-md hover:bg-slate-50 transition-colors">
+                                            <input
+                                                type="radio"
+                                                name="modalidad_vo"
+                                                value={opt}
+                                                checked={data?.identificacion?.modalidad && data.identificacion.modalidad.toLowerCase() === opt.toLowerCase()}
+                                                onChange={() => handleIdentificacionChange('modalidad', opt)}
+                                                disabled={readOnly}
+                                                className="accent-slate-900 h-4 w-4"
+                                            />
+                                            {opt}
+                                        </label>
+                                    ))}
+                                </div>
                             </FormField>
 
                             <FormField label="Tiempo de labor (en esta modalidad)">

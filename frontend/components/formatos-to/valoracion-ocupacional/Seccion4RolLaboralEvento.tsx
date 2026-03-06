@@ -1,6 +1,5 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { FormSection, FormField, FormTextarea } from '../prueba-trabajo/FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -149,30 +148,35 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                 <div className="flex flex-col md:flex-row md:items-center gap-6">
                                     <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 w-full md:w-auto md:mr-4 uppercase tracking-wide">¿Tiene calificación para PCL?</Label>
 
-                                    <RadioGroup
-                                        disabled={readOnly}
-                                        value={data?.evento_atel?.calificacion_pcl_si ? 'si' : (data?.evento_atel?.calificacion_pcl_no ? 'no' : undefined)}
-                                        onValueChange={(val) => {
-                                            if (val === 'si') {
-                                                handleEventoChange('calificacion_pcl_si', true);
-                                                handleEventoChange('calificacion_pcl_no', false);
-                                            } else {
-                                                handleEventoChange('calificacion_pcl_si', false);
-                                                handleEventoChange('calificacion_pcl_no', true);
-                                                handleEventoChange('calificacion_pcl_porcentaje', ''); // clear percentage
-                                            }
-                                        }}
-                                        className="flex items-center gap-6"
-                                    >
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="si" id="pcl-si" />
-                                            <Label htmlFor="pcl-si" className="cursor-pointer font-medium text-slate-700 dark:text-slate-300">Sí</Label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="no" id="pcl-no" />
-                                            <Label htmlFor="pcl-no" className="cursor-pointer font-medium text-slate-700 dark:text-slate-300">No</Label>
-                                        </div>
-                                    </RadioGroup>
+                                    <div className="flex items-center gap-4">
+                                        {[{ val: 'si', label: 'Sí' }, { val: 'no', label: 'No' }].map((opt) => (
+                                            <label key={opt.val} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer border px-3 py-1 rounded-md hover:bg-slate-50 transition-colors">
+                                                <input
+                                                    type="radio"
+                                                    name="pcl_vo"
+                                                    value={opt.val}
+                                                    checked={
+                                                        opt.val === 'si'
+                                                            ? !!data?.evento_atel?.calificacion_pcl_si
+                                                            : !!data?.evento_atel?.calificacion_pcl_no
+                                                    }
+                                                    onChange={() => {
+                                                        if (opt.val === 'si') {
+                                                            handleEventoChange('calificacion_pcl_si', true);
+                                                            handleEventoChange('calificacion_pcl_no', false);
+                                                        } else {
+                                                            handleEventoChange('calificacion_pcl_si', false);
+                                                            handleEventoChange('calificacion_pcl_no', true);
+                                                            handleEventoChange('calificacion_pcl_porcentaje', '');
+                                                        }
+                                                    }}
+                                                    disabled={readOnly}
+                                                    className="accent-slate-900 h-4 w-4"
+                                                />
+                                                {opt.label}
+                                            </label>
+                                        ))}
+                                    </div>
 
                                     {data?.evento_atel?.calificacion_pcl_si && (
                                         <div className="flex items-center gap-3 w-full md:w-auto md:ml-6 ml-0 animate-in fade-in">
