@@ -265,14 +265,6 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
     return (
         <div className="max-w-6xl mx-auto">
 
-            {/* Header */}
-            <div className="text-left mb-8">
-                <h1 className="text-3xl font-bold text-slate-900">
-                    {readOnly ? 'Ver Valoración Ocupacional' : (valoracionId ? 'Editar Valoración Ocupacional' : 'Nueva Valoración Ocupacional')}
-                </h1>
-                <p className="text-slate-600 mt-2">Complete el formulario de valoración paso a paso</p>
-            </div>
-
             {/* PROGRESS BAR (Refactored Stepper) */}
             <div className="flex items-start justify-between relative mb-12 px-4">
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />

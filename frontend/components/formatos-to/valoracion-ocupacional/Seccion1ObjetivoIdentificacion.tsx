@@ -1,7 +1,5 @@
 import { FormSection, FormField, FormInput, FormTextarea } from '../prueba-trabajo/FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface Seccion1Props {
     data: any;
@@ -97,20 +95,22 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                             </FormField>
 
                             <FormField label="Dominancia">
-                                <Select
-                                    disabled={readOnly}
-                                    value={data?.identificacion?.dominancia || ''}
-                                    onValueChange={(val) => handleIdentificacionChange('dominancia', val)}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Seleccione dominancia" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Derecha">Derecha</SelectItem>
-                                        <SelectItem value="Izquierda">Izquierda</SelectItem>
-                                        <SelectItem value="Ambidiestra">Ambidiestra</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <div className="flex flex-wrap gap-4 mt-2">
+                                    {['Derecha', 'Izquierda', 'Ambidiestra'].map((opt) => (
+                                        <label key={opt} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="dominancia_vo"
+                                                value={opt}
+                                                checked={data?.identificacion?.dominancia === opt}
+                                                onChange={(e) => handleIdentificacionChange('dominancia', e.target.value)}
+                                                disabled={readOnly}
+                                                className="accent-slate-900 h-4 w-4"
+                                            />
+                                            {opt}
+                                        </label>
+                                    ))}
+                                </div>
                             </FormField>
 
                             <FormField label="Estado Civil">
@@ -154,19 +154,22 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                             </FormField>
 
                             <FormField label="Zona Residencial">
-                                <Select
-                                    disabled={readOnly}
-                                    value={data?.identificacion?.zona_residencia || ''}
-                                    onValueChange={(val) => handleIdentificacionChange('zona_residencia', val)}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Seleccione zona" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Urbano">Urbano</SelectItem>
-                                        <SelectItem value="Rural">Rural</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <div className="flex flex-wrap gap-4 mt-2">
+                                    {['Urbano', 'Rural'].map((opt) => (
+                                        <label key={opt} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer border px-3 py-1 rounded-md hover:bg-slate-50 transition-colors">
+                                            <input
+                                                type="radio"
+                                                name="zona_residencia_vo"
+                                                value={opt}
+                                                checked={data?.identificacion?.zona_residencia === opt}
+                                                onChange={(e) => handleIdentificacionChange('zona_residencia', e.target.value)}
+                                                disabled={readOnly}
+                                                className="accent-slate-900 h-4 w-4"
+                                            />
+                                            {opt}
+                                        </label>
+                                    ))}
+                                </div>
                             </FormField>
                         </CardContent>
                     </Card>
@@ -238,21 +241,26 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                             </FormField>
 
                             <FormField label="Vinculación Laboral Actual">
-                                <RadioGroup
-                                    disabled={readOnly}
-                                    value={data?.identificacion?.vinculacion_laboral === true ? 'si' : (data?.identificacion?.vinculacion_laboral === false ? 'no' : undefined)}
-                                    onValueChange={(val) => handleIdentificacionChange('vinculacion_laboral', val === 'si')}
-                                    className="flex items-center gap-4"
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="si" id="vinc-si" />
-                                        <label htmlFor="vinc-si" className="cursor-pointer text-sm font-medium leading-none text-slate-700">Sí</label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="no" id="vinc-no" />
-                                        <label htmlFor="vinc-no" className="cursor-pointer text-sm font-medium leading-none text-slate-700">No</label>
-                                    </div>
-                                </RadioGroup>
+                                <div className="flex gap-4 mt-2">
+                                    {[{ val: 'si', label: 'Sí' }, { val: 'no', label: 'No' }].map((opt) => (
+                                        <label key={opt.val} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer border px-3 py-1 rounded-md hover:bg-slate-50 transition-colors">
+                                            <input
+                                                type="radio"
+                                                name="vinculacion_laboral_vo"
+                                                value={opt.val}
+                                                checked={
+                                                    opt.val === 'si'
+                                                        ? data?.identificacion?.vinculacion_laboral === true
+                                                        : data?.identificacion?.vinculacion_laboral === false
+                                                }
+                                                onChange={() => handleIdentificacionChange('vinculacion_laboral', opt.val === 'si')}
+                                                disabled={readOnly}
+                                                className="accent-slate-900 h-4 w-4"
+                                            />
+                                            {opt.label}
+                                        </label>
+                                    ))}
+                                </div>
                             </FormField>
 
                             <FormField label="Forma de Vinculación y/o Cesación">
