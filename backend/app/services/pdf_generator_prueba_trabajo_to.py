@@ -750,6 +750,11 @@ def generar_pdf_prueba_trabajo_to(
                 except Exception as e:
                     print(f"Error embedding image: {e}")
 
+        if hasattr(tarea, "observaciones_fotograficas") and tarea.observaciones_fotograficas:
+            foto_cell_parts.append(Spacer(1, 4))
+            foto_cell_parts.append(Paragraph("<b>Observaciones Fotográficas:</b>", styles["FieldLabel"]))
+            foto_cell_parts.append(Paragraph(tarea.observaciones_fotograficas, styles["LongText"]))
+
         # Stack images vertically in a sub-table for the left cell
         if foto_cell_parts:
             foto_inner_rows = [[item] for item in foto_cell_parts]

@@ -165,6 +165,7 @@ class TareaTO(SQLModel, table=True):
     subactividad: Optional[str] = None
     estandar_productividad: Optional[str] = None
     registro_fotografico: Optional[str] = None        # ruta del archivo o base64
+    observaciones_fotograficas: Optional[str] = None  # Alternativa de texto al registro fotográfico
     descripcion_biomecanica: Optional[str] = None
     apreciacion_trabajador: Optional[str] = None
     apreciacion_profesional: Optional[str] = None

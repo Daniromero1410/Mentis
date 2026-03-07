@@ -82,6 +82,7 @@ class TareaTOCreate(BaseModel):
     subactividad: Optional[str] = None
     estandar_productividad: Optional[str] = None
     registro_fotografico: Optional[str] = None
+    observaciones_fotograficas: Optional[str] = None
     descripcion_biomecanica: Optional[str] = None
     apreciacion_trabajador: Optional[str] = None
     apreciacion_profesional: Optional[str] = None

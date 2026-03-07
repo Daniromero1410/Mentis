@@ -34,7 +34,7 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
     // --- TAREAS LOGIC ---
     const emptyTarea = () => ({
         actividad: '', ciclo: '', subactividad: '', estandar_productividad: '',
-        registro_fotografico: '', descripcion_biomecanica: '', requerimientos_motrices: '',
+        registro_fotografico: '', observaciones_fotograficas: '', descripcion_biomecanica: '', requerimientos_motrices: '',
         apreciacion_trabajador: '', apreciacion_profesional: '',
         conclusion: '', descripcion_conclusion: '', orden: 0,
     });
@@ -219,6 +219,18 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                                 <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(idx, e)} />
                                             </div>
                                         )}
+                                    </div>
+
+                                    <div className="mt-4">
+                                        <Label className="text-sm font-semibold text-slate-700">OBSERVACIONES FOTOGRÁFICAS (Opcional)</Label>
+                                        <p className="text-xs text-slate-500 mb-2">Describa la imagen o justifique la ausencia de registro fotográfico.</p>
+                                        <FormTextarea
+                                            className="min-h-[60px]"
+                                            value={tarea.observaciones_fotograficas || ''}
+                                            onChange={(e) => updateTarea(idx, 'observaciones_fotograficas', e.target.value)}
+                                            disabled={readOnly}
+                                            placeholder="Ej: No se permite tomar fotografías en esta zona por políticas de la empresa..."
+                                        />
                                     </div>
                                 </div>
 

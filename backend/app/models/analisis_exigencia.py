@@ -146,6 +146,7 @@ class TareaAE(SQLModel, table=True):
     subactividad: Optional[str] = None
     estandar_productividad: Optional[str] = None
     registro_fotografico: Optional[str] = None
+    observaciones_fotograficas: Optional[str] = None  # Alternativa de texto al registro fotográfico
     descripcion_biomecanica: Optional[str] = None
     requerimientos_motrices: Optional[str] = None          # Campo nuevo vs Prueba Trabajo TO
     apreciacion_trabajador: Optional[str] = None

@@ -82,6 +82,7 @@ class TareaAECreate(BaseModel):
     subactividad: Optional[str] = None
     estandar_productividad: Optional[str] = None
     registro_fotografico: Optional[str] = None
+    observaciones_fotograficas: Optional[str] = None
     descripcion_biomecanica: Optional[str] = None
     requerimientos_motrices: Optional[str] = None
     apreciacion_trabajador: Optional[str] = None
