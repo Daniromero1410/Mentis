@@ -76,10 +76,10 @@ def generar_pdf_valoracion_ocupacional(
     # Estilos
     styles = getSampleStyleSheet()
 
-    # Colores profesionales
-    COLOR_HEADER = colors.HexColor('#4F46E5')     # Indigo 600
-    COLOR_LABEL_BG = colors.HexColor('#EEF2FF')   # Indigo 50
-    COLOR_BORDER = colors.HexColor('#A1A1AA')     # Zinc 400
+    # Colores profesionales (Theme Positiva S.A)
+    COLOR_HEADER = colors.HexColor('#E65100')     # Naranja oscuro
+    COLOR_LABEL_BG = colors.HexColor('#f5f5f5')   # Gris claro
+    COLOR_BORDER = colors.HexColor('#424242')     # Gris oscuro
     COLOR_TEXT = colors.black
 
     PAGE_WIDTH = 7.4 * inch
@@ -135,11 +135,37 @@ def generar_pdf_valoracion_ocupacional(
         t = Table([[Header(texto)]], colWidths=[PAGE_WIDTH])
         t.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, -1), COLOR_HEADER),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ('TOPPADDING', (0, 0), (-1, -1), 4),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-            ('BOX', (0, 0), (-1, -1), 1, COLOR_BORDER),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ]))
+        return t
+
+    def make_checkbox_drawing(checked, size=8):
+        from reportlab.graphics.shapes import Drawing, Rect, Line
+        d = Drawing(size, size)
+        d.add(Rect(0, 0, size, size,
+                   fillColor=COLOR_HEADER if checked else colors.white,
+                   strokeColor=COLOR_BORDER,
+                   strokeWidth=0.6))
+        if checked:
+            d.add(Line(2, 2, size - 2, size - 2, strokeColor=colors.white, strokeWidth=1))
+            d.add(Line(2, size - 2, size - 2, 2, strokeColor=colors.white, strokeWidth=1))
+        return d
+
+    def checkbox(checked, label_text):
+        cb = make_checkbox_drawing(checked)
+        lbl = Paragraph(label_text, style_small)
+        t = Table([[cb, lbl]], colWidths=[0.4 * cm, None])
+        t.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 1),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 1),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
         ]))
         return t
 
@@ -215,86 +241,162 @@ def generar_pdf_valoracion_ocupacional(
         story.append(t_obj)
         story.append(Spacer(1, 8))
 
-    # ===== DATOS DE IDENTIFICACIÓN Y GENERALES DEL TRABAJADOR =====
-    story.append(crear_seccion_header("II. DATOS DE IDENTIFICACIÓN Y GENERALES DEL TRABAJADOR"))
+    # ===== DATOS DE IDENTIFICACIÓN Y EMPRESA =====
+    story.append(crear_seccion_header("2. IDENTIFICACIÓN"))
     
-    col_label = 1.3 * inch
-    col_val = (PAGE_WIDTH - (col_label * 2)) / 2
-
-    ident_rows = [
-        [B("Identificación de siniestro:"), P(identificacion.identificacion_siniestro if identificacion else ""), 
-         B("Fecha valoración:"), P(fmt_fecha(identificacion.fecha_valoracion if identificacion else None))],
-        
-        [B("Nombres y apellidos:"), P(identificacion.nombre_trabajador if identificacion else ""), 
-         B("Documento de identidad:"), P(str(identificacion.numero_documento) if identificacion else "")],
-        
-        [B("Fecha de nacimiento:"), P(fmt_fecha(identificacion.fecha_nacimiento if identificacion else None)), 
-         B("Edad:"), P(calcular_edad(identificacion.fecha_nacimiento if identificacion else None))],
-        
-        [B("Dominancia:"), P(identificacion.dominancia if identificacion else ""), 
-         B("Estado civil:"), P(identificacion.estado_civil if identificacion else "")],
-        
-        [B("Nivel escolaridad:"), P(identificacion.nivel_educativo if identificacion else ""), 
-         B("Especifique formación:"), P(identificacion.especificar_formacion if identificacion else "")],
-        
-        [B("Dirección residencia:"), P(identificacion.direccion_residencia if identificacion else ""), 
-         B("Zona (Urbana/Rural):"), P(identificacion.zona_residencia if identificacion else "")],
-        
-        [B("Teléfono(s):"), P(identificacion.telefonos_trabajador if identificacion else ""), 
-         B("EPS / IPS / AFP:"), P(f"{identificacion.eps_ips or ''} / {identificacion.afp or ''}" if identificacion else "")],
-         
-        [B("Diagnóstico del ATEL y/o CIE10:"), P(identificacion.diagnosticos_atel if identificacion else ""), "", ""],
-        [B("Fechas Eventos ATEL:"), P(fmt_fecha(identificacion.fechas_eventos_atel if identificacion else None)), "", ""],
-    ]
-
-    t_ident = Table(ident_rows, colWidths=[col_label*1.1, col_val*0.9, col_label*1.1, col_val*0.9])
-    t_ident.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
-        ('BACKGROUND', (2, 0), (2, -1), COLOR_LABEL_BG),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 4),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-        ('SPAN', (1, 7), (3, 7)),
-        ('SPAN', (1, 8), (3, 8)),
-    ]))
-    story.append(t_ident)
-    story.append(Spacer(1, 8))
-
-    # ===== DATOS DE LA EMPRESA =====
-    empresa_rows = [
-        [B("Empresa donde labora:"), P(identificacion.empresa if identificacion else ""), 
-         B("NIT:"), P(identificacion.nit_empresa if identificacion else "")],
-        
-        [B("Vinculación laboral:"), P("SÍ" if identificacion and identificacion.vinculacion_laboral else "NO"),
-         B("Modalidad:"), P(identificacion.modalidad if identificacion else "")],
-         
-        [B("Forma vinculación/cesación:"), P(identificacion.forma_vinculacion if identificacion else ""),
-         B("Tiempo en modalidad:"), P(identificacion.tiempo_modalidad if identificacion else "")],
-
-        [B("Fecha ingreso a empresa:"), P(fmt_fecha(identificacion.fecha_ingreso_empresa if identificacion else None)),
-         B("Antigüedad:"), P(calcular_antiguedad(identificacion.fecha_ingreso_empresa if identificacion else None))],
-
-        [B("Contacto en empresa:"), P(identificacion.contacto_empresa if identificacion else ""),
-         B("Cargo del contacto:"), P("")],
-
-        [B("Teléfono de empresa:"), P(identificacion.telefonos_empresa if identificacion else ""),
-         B("Correos electrónicos:"), P(identificacion.correos_empresa if hasattr(identificacion, 'correos_empresa') else "")],
-    ]
-
-    t_empresa = Table(empresa_rows, colWidths=[col_label*1.1, col_val*0.9, col_label*1.1, col_val*0.9])
-    t_empresa.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
-        ('BACKGROUND', (2, 0), (2, -1), COLOR_LABEL_BG),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+    # Sub-header orange light
+    sub_h = [[B("(Datos trabajador, evento ATEL, Empresa)")]]
+    sub_ht = Table(sub_h, colWidths=[PAGE_WIDTH])
+    sub_ht.setStyle(TableStyle([
+        ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#FFF3E0")),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
         ('TOPPADDING', (0, 0), (-1, -1), 2),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
     ]))
-    story.append(t_empresa)
+    story.append(sub_ht)
+
+    lw = PAGE_WIDTH * 0.30
+    vw = PAGE_WIDTH * 0.70
+
+    i = identificacion
+    id_rows_1 = [
+        [B("Nombre del trabajador*"), P(i.nombre_trabajador if i else "")],
+        [B("Número de documento*"), P(str(i.numero_documento) if i else "")],
+        [B("Identificación del siniestro*"), P(i.identificacion_siniestro if i else "")],
+    ]
+    t_id_1 = Table(id_rows_1, colWidths=[lw, vw])
+    t_id_1.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    story.append(t_id_1)
+
+    nac_row = [[B("Fecha de nacimiento/edad*"), P(fmt_fecha(i.fecha_nacimiento if i else None)), B("edad"), P(calcular_edad(i.fecha_nacimiento if i else None))]]
+    nac_t = Table(nac_row, colWidths=[PAGE_WIDTH * 0.30, PAGE_WIDTH * 0.40, PAGE_WIDTH * 0.10, PAGE_WIDTH * 0.20])
+    nac_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+        ('BACKGROUND', (2, 0), (2, -1), COLOR_LABEL_BG),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    story.append(nac_t)
+
+    dom = i.dominancia.lower().strip() if i and i.dominancia else ""
+    dom_row = [[B("Dominancia*"), checkbox(dom == "derecha", "Derecha"), checkbox(dom == "izquierda", "Izquierda"), checkbox(dom == "ambidiestra", "Ambidiestra")]]
+    dom_t = Table(dom_row, colWidths=[PAGE_WIDTH * 0.30, PAGE_WIDTH * 0.23, PAGE_WIDTH * 0.23, PAGE_WIDTH * 0.24])
+    dom_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    story.append(dom_t)
+
+    ec_row = [[B("Estado civil*"), P(i.estado_civil if i else "")]]
+    ec_t = Table(ec_row, colWidths=[lw, vw])
+    ec_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    story.append(ec_t)
+
+    ne = i.nivel_educativo.lower().strip() if i and i.nivel_educativo else ""
+    ne_options = [
+        ("formacion_empirica", "Formación empírica"), ("basica_primaria", "Básica primaria"), ("bachillerato_vocacional", "Bachillerato vocacional 9º"),
+        ("bachillerato_modalidad", "Bachillerato: modalidad"), ("tecnico", "Técnico/ Tecnológico"), ("profesional", "Profesional"),
+        ("postgrado", "Especialización/ postgrado/ maestría"), ("formacion_informal", "Formación informal oficios"), ("analfabeta", "Analfabeta")
+    ]
+    ne_cells_r1 = [checkbox(ne == key or key in ne, lbl) for key, lbl in ne_options[:3]]
+    ne_cells_r2 = [checkbox(ne == key or key in ne, lbl) for key, lbl in ne_options[3:6]]
+    ne_cells_r3 = [checkbox(ne == key or key in ne, lbl) for key, lbl in ne_options[6:]]
+    ne_inner = Table([ne_cells_r1, ne_cells_r2, ne_cells_r3], colWidths=[PAGE_WIDTH * 0.233]*3)
+    ne_inner.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.3, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+    
+    ne_t = Table([[B("Nivel educativo*"), ne_inner]], colWidths=[PAGE_WIDTH * 0.30, PAGE_WIDTH * 0.70])
+    ne_t.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+        ('LEFTPADDING', (0, 0), (0, -1), 4),
+        ('LEFTPADDING', (1, 0), (1, -1), 0),
+        ('RIGHTPADDING', (1, 0), (1, -1), 0),
+        ('BOTTOMPADDING', (1, 0), (1, -1), 0),
+        ('TOPPADDING', (1, 0), (1, -1), 0),
+    ]))
+    story.append(ne_t)
+    
+    esp_t = Table([[B("Especificar formacion y oficios que conoce"), P(i.especificar_formacion if i else "")]], colWidths=[PAGE_WIDTH*0.4, PAGE_WIDTH*0.6])
+    esp_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(esp_t)
+
+    zr = i.zona_residencia.lower().strip() if i and i.zona_residencia else ""
+    dir_row = [
+        [B("Teléfonos trabajador*"), P(i.telefonos_trabajador if i else ""), "", ""],
+        [B("Dirección residencia y ciudad*"), P(i.direccion_residencia if i else ""), checkbox(zr == "urbano" or zr == "urbana", "Urbano"), checkbox(zr == "rural", "Rural")]
+    ]
+    dir_t = Table(dir_row, colWidths=[PAGE_WIDTH*0.30, PAGE_WIDTH*0.46, PAGE_WIDTH*0.12, PAGE_WIDTH*0.12])
+    dir_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('SPAN', (1, 0), (3, 0)), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(dir_t)
+
+    diag_t = Table([[B("Diagnóstico(s) clínico(s) por evento ATEL*"), P(i.diagnosticos_atel if i else "")], [B("Fecha(s) del evento(s) ATEL*"), P(i.fechas_eventos_atel if i else "")]], colWidths=[PAGE_WIDTH*0.35, PAGE_WIDTH*0.65])
+    diag_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(diag_t)
+
+    ev_inner_data = [[B("si"), B("No"), B("Fecha"), B("Diagnostico")]]
+    if eventos_no_laborales and len(eventos_no_laborales) > 0:
+        for ev in eventos_no_laborales:
+            si_no = ev.si_no.lower().strip() if ev.si_no else ""
+            ev_inner_data.append([checkbox(si_no == "si", "si"), checkbox(si_no == "no", "No"), P(ev.fecha), P(ev.diagnostico)])
+    else:
+        ev_inner_data.append([checkbox(False, "si"), checkbox(False, "No"), P(""), P("")])
+        
+    t_ev_inner = Table(ev_inner_data, colWidths=[PAGE_WIDTH*0.1, PAGE_WIDTH*0.1, PAGE_WIDTH*0.15, PAGE_WIDTH*0.4])
+    t_ev_inner.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+    
+    ev_t = Table([[B("Eventos No laborales"), t_ev_inner]], colWidths=[PAGE_WIDTH*0.25, PAGE_WIDTH*0.75])
+    ev_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4), ('LEFTPADDING', (1, 0), (1, -1), 0), ('RIGHTPADDING', (1, 0), (1, -1), 0), ('BOTTOMPADDING', (1, 0), (1, -1), 0), ('TOPPADDING', (1, 0), (1, -1), 0)]))
+    story.append(ev_t)
+
+    eps_t = Table([[B("EPS - IPS*"), P(i.eps_ips if i else "")], [B("AFP"), P(i.afp if i else "")]], colWidths=[lw, vw])
+    eps_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(eps_t)
+    
+    inc_t = Table([[B("Tiempo total de incapacidad"), P(i.tiempo_incapacidad_dias if i else ""), B("dias")]], colWidths=[PAGE_WIDTH*0.35, PAGE_WIDTH*0.55, PAGE_WIDTH*0.10])
+    inc_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(inc_t)
+    
+    vl = str(i.vinculacion_laboral).lower().strip() if i and i.vinculacion_laboral is not None else ""
+    es_vinc = "si" if vl in ["true", "si", "1"] else ("no" if vl in ["false", "no", "0"] else "")
+    mod = i.modalidad.lower().strip() if i and i.modalidad else ""
+
+    emp_vt = Table([
+        [B("Empresa donde labora*"), P(i.empresa if i else ""), "", ""],
+        [B("Vinculacion laboral:"), checkbox(es_vinc == "no", "NO"), checkbox(es_vinc == "si", "SI"), ""],
+        [B("Forma de vinculacion laboral"), P(i.forma_vinculacion if i else ""), "", ""],
+        [B("modalidad"), checkbox(mod == "presencial", "Presencial"), checkbox(mod == "teletrabajo", "teletrabajo"), checkbox(mod == "trabajo en casa", "trabajo en casa")],
+        [B("tiempo de la modalidad"), P(i.tiempo_modalidad if i else ""), "", ""],
+        [B("NIT de la Empresa"), P(i.nit_empresa if i else ""), "", ""]
+    ], colWidths=[PAGE_WIDTH*0.35, PAGE_WIDTH*0.25, PAGE_WIDTH*0.20, PAGE_WIDTH*0.20])
+    emp_vt.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('SPAN', (1, 0), (3, 0)), ('SPAN', (1, 2), (3, 2)), ('SPAN', (1, 4), (3, 4)), ('SPAN', (1, 5), (3, 5)), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(emp_vt)
+
+    f_ie_t = Table([[B("Fecha ingreso a la empresa / antigüedad en la empresa"), P(fmt_fecha(i.fecha_ingreso_empresa if i else None)), B("Tiempo"), P(f"{calcular_antiguedad(i.fecha_ingreso_empresa if i else None)}")]], colWidths=[PAGE_WIDTH*0.4, PAGE_WIDTH*0.3, PAGE_WIDTH*0.1, PAGE_WIDTH*0.2])
+    f_ie_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('BACKGROUND', (2, 0), (2, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(f_ie_t)
+    
+    lc_t = Table([
+        [B("Contacto en empresa/cargo*"), P(i.contacto_empresa if i else "")],
+        [B("Correo(s) electrónico(s)*"), P(i.correos_electronicos if hasattr(i, "correos_electronicos") else "")],
+        [B("Teléfonos de contacto empresa*"), P(i.telefonos_empresa if i else "")],
+    ], colWidths=[lw, vw])
+    lc_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(lc_t)
     story.append(Spacer(1, 10))
 
     # ===== HISTORIA OCUPACIONAL =====
