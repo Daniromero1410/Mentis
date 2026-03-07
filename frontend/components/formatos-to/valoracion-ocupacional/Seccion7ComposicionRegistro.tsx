@@ -53,7 +53,7 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                             <CardTitle className="text-sm font-bold text-slate-700">Conceptos Individuales</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 grid gap-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 gap-6">
                                 <FormField label="Concepto Ocupacional">
                                     <FormTextarea
                                         value={data?.registro?.concepto_ocupacional || data?.registro?.concepto_to || ''}
