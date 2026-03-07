@@ -65,6 +65,12 @@ class IdentificacionVO(SQLModel, table=True):
     diagnosticos_atel: Optional[str] = None
     fechas_eventos_atel: Optional[str] = None
     
+    # Eventos No laborales aplanados desde Identificacion (Frontend)
+    eventos_no_laborales: Optional[str] = None
+    eventos_no_laborales_fecha: Optional[str] = None
+    eventos_no_laborales_diagnostico: Optional[str] = None
+
+    
     eps_ips: Optional[str] = None
     afp: Optional[str] = None
     tiempo_incapacidad_dias: Optional[str] = None

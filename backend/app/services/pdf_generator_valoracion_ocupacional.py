@@ -403,12 +403,10 @@ def generar_pdf_valoracion_ocupacional(
     story.append(diag_t)
 
     ev_inner_data = [[B("si"), B("No"), B("Fecha"), B("Diagnostico")]]
-    if eventos_no_laborales and len(eventos_no_laborales) > 0:
-        for ev in eventos_no_laborales:
-            si_no = ev.si_no.lower().strip() if ev.si_no else ""
-            ev_inner_data.append([checkbox(si_no == "si", "si"), checkbox(si_no == "no", "No"), P(ev.fecha), P(ev.diagnostico)])
-    else:
-        ev_inner_data.append([checkbox(False, "si"), checkbox(False, "No"), P(""), P("")])
+    ev_sn = str(i.eventos_no_laborales).lower().strip() if i and i.eventos_no_laborales else ""
+    ev_f = i.eventos_no_laborales_fecha if i and i.eventos_no_laborales_fecha else ""
+    ev_d = i.eventos_no_laborales_diagnostico if i and i.eventos_no_laborales_diagnostico else ""
+    ev_inner_data.append([checkbox(ev_sn == "si" or ev_sn == "sí", "si"), checkbox(ev_sn == "no", "No"), P(ev_f), P(ev_d)])
         
     t_ev_inner = Table(ev_inner_data, colWidths=[PAGE_WIDTH*0.1, PAGE_WIDTH*0.1, PAGE_WIDTH*0.15, PAGE_WIDTH*0.4])
     t_ev_inner.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
@@ -477,28 +475,8 @@ def generar_pdf_valoracion_ocupacional(
     
     story.append(Spacer(1, 8))
 
-    # ===== ACT EXTRALABORAL Y EVENTOS =====
-    if eventos_no_laborales and len(eventos_no_laborales) > 0:
-        story.append(crear_seccion_header("IV. ACTIVIDAD EXTRALABORAL RELEVANTE Y EVENTOS MÉDICOS"))
-        
-        ev_headers = [B("SI/NO"), B("Fecha"), B("Diagnóstico")]
-        ev_data = [ev_headers]
-        
-        for ev in eventos_no_laborales:
-            ev_data.append([
-                P(ev.si_no),
-                P(ev.fecha),
-                P(ev.diagnostico)
-            ])
-            
-        t_ev = Table(ev_data, colWidths=[PAGE_WIDTH*0.2, PAGE_WIDTH*0.3, PAGE_WIDTH*0.5])
-        t_ev.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-            ('BACKGROUND', (0, 0), (-1, 0), COLOR_LABEL_BG),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ]))
-        story.append(t_ev)
-        story.append(Spacer(1, 10))
+    # Removed Section IV
+    story.append(Spacer(1, 10))
 
     # ===== ACTIVIDAD ACTUAL =====
     story.append(crear_seccion_header("V. ACTIVIDAD ACTUAL (A QUÉ SE DEDICA RECIENTEMENTE)"))
