@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -57,6 +58,7 @@ interface ValidationModalState {
 }
 
 export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: WizardProps) {
+    const { token } = useAuth();
     const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -195,7 +197,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
 
             const response = await fetch(endpoint, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
