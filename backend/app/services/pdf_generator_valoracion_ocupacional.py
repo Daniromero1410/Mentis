@@ -301,17 +301,17 @@ def generar_pdf_valoracion_ocupacional(
     story.append(crear_seccion_header("III. HISTORIA OCUPACIONAL"))
     
     if historia_ocupacional and len(historia_ocupacional) > 0:
-        hist_headers = [B("Empresas"), B("Cargo / Duración"), B("Exigencias (Bio/Psico/Cogn)"), B("Ocurrencia ATEL")]
+        hist_headers = [B("Empresa"), B("Cargo/Funciones"), B("Tiempo Duración"), B("Motivo Retiro")]
         hist_data = [hist_headers]
         for hist in historia_ocupacional:
             hist_data.append([
-                P(hist.empresas),
-                P(hist.cargo_duracion),
-                P(hist.exigencias),
-                P(hist.ocurrencia_atel)
+                P(hist.empresa),
+                P(hist.cargo_funciones),
+                P(hist.tiempo_duracion),
+                P(hist.motivo_retiro)
             ])
             
-        t_hist = Table(hist_data, colWidths=[PAGE_WIDTH*0.25, PAGE_WIDTH*0.2, PAGE_WIDTH*0.35, PAGE_WIDTH*0.2])
+        t_hist = Table(hist_data, colWidths=[PAGE_WIDTH*0.25, PAGE_WIDTH*0.25, PAGE_WIDTH*0.25, PAGE_WIDTH*0.25])
         t_hist.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
             ('BACKGROUND', (0, 0), (-1, 0), COLOR_LABEL_BG),
@@ -328,17 +328,17 @@ def generar_pdf_valoracion_ocupacional(
     if eventos_no_laborales and len(eventos_no_laborales) > 0:
         story.append(crear_seccion_header("IV. ACTIVIDAD EXTRALABORAL RELEVANTE Y EVENTOS MÉDICOS"))
         
-        ev_headers = [B("Actividad o Evento Médico"), B("Fecha/Tiempo"), B("Observaciones / Secuelas")]
+        ev_headers = [B("SI/NO"), B("Fecha"), B("Diagnóstico")]
         ev_data = [ev_headers]
         
         for ev in eventos_no_laborales:
             ev_data.append([
-                P(ev.evento),
-                P(ev.fecha_tiempo),
-                P(ev.observaciones)
+                P(ev.si_no),
+                P(ev.fecha),
+                P(ev.diagnostico)
             ])
             
-        t_ev = Table(ev_data, colWidths=[PAGE_WIDTH*0.35, PAGE_WIDTH*0.25, PAGE_WIDTH*0.4])
+        t_ev = Table(ev_data, colWidths=[PAGE_WIDTH*0.2, PAGE_WIDTH*0.3, PAGE_WIDTH*0.5])
         t_ev.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
             ('BACKGROUND', (0, 0), (-1, 0), COLOR_LABEL_BG),
@@ -352,11 +352,11 @@ def generar_pdf_valoracion_ocupacional(
     ActT = lambda text: text.replace("\n", "<br/>") if text else ""
     
     act_rows = [
-        [B("Trabaja actualmente / Cargo:"), P(actividad_actual.trabaja_actualmente if actividad_actual else "")],
-        [B("Herramientas, materiales y equipos:"), P(actividad_actual.herramientas_equipos if actividad_actual else "")],
-        [B("Otras actividades de trabajo:"), P(actividad_actual.otras_actividades if actividad_actual else "")],
-        [B("Qué se encontraba haciendo durante la ATEL:"), P(ActT(actividad_actual.haciendo_atel if actividad_actual else ""))],
-        [B("Relato del evento ATEL (del trabajador):"), P(ActT(actividad_actual.relato_evento if actividad_actual else ""))],
+        [B("Trabaja actualmente / Cargo:"), P(actividad_actual.nombre_cargo if actividad_actual else "")],
+        [B("Herramientas, materiales y equipos:"), P(actividad_actual.herramientas_trabajo if actividad_actual else "")],
+        [B("Otras actividades de trabajo:"), P(actividad_actual.tareas_descripcion if actividad_actual else "")],
+        [B("Qué se encontraba haciendo durante la ATEL:"), P("")],
+        [B("Relato del evento ATEL (del trabajador):"), P("")],
     ]
     t_act = Table(act_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
     t_act.setStyle(TableStyle([
@@ -372,9 +372,9 @@ def generar_pdf_valoracion_ocupacional(
     story.append(crear_seccion_header("VI. ROL LABORAL DENTRO DE LA EMPRESA (DE SU CARGO)"))
     
     rol_rows = [
-        [B("Biomecánicas y Posturales:"), P(ActT(rol_laboral.exigencias_biomecanicas if rol_laboral else ""))],
-        [B("Psicosociales, de Rol y Tarea:"), P(ActT(rol_laboral.exigencias_psicosociales if rol_laboral else ""))],
-        [B("Cognitivas y de Organización:"), P(ActT(rol_laboral.exigencias_cognitivas if rol_laboral else ""))],
+        [B("Tareas y Operaciones:"), P(ActT(rol_laboral.tareas_operaciones if rol_laboral else ""))],
+        [B("Componentes de Desempeño:"), P(ActT(rol_laboral.componentes_desempeno if rol_laboral else ""))],
+        [B("Forma de Integración:"), P(ActT(rol_laboral.forma_integracion if rol_laboral else ""))],
     ]
     t_rol = Table(rol_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
     t_rol.setStyle(TableStyle([
@@ -390,9 +390,8 @@ def generar_pdf_valoracion_ocupacional(
     story.append(crear_seccion_header("VII. INFORMACIÓN DEL EVENTO ATEL Y REHABILITACIÓN"))
     
     atel_rows = [
-        [B("Tratamientos e intervención recibida:"), P(ActT(evento_atel.tratamientos_intervencion if evento_atel else ""))],
-        [B("Prótesis, ortesis, apoyos:"), P(ActT(evento_atel.protesis_ortesis if evento_atel else ""))],
-        [B("Estado general respecto a ATEL:"), P(ActT(evento_atel.estado_general if evento_atel else ""))],
+        [B("Tratamientos e intervención recibida:"), P(ActT(evento_atel.tratamiento_rehabilitacion if evento_atel else ""))],
+        [B("Calificación PCL / Adaptaciones:"), P(str(evento_atel.calificacion_pcl_porcentaje) if evento_atel and evento_atel.calificacion_pcl_si else "No Calificado")],
     ]
     t_atel = Table(atel_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
     t_atel.setStyle(TableStyle([
@@ -409,8 +408,8 @@ def generar_pdf_valoracion_ocupacional(
     
     if composicion_familiar:
         cf_rows = [
-            [B("Estado civil/convivencia:"), P(composicion_familiar.estado_civil_dinamica), B("No. hijos / Cuidadores:"), P(composicion_familiar.num_hijos_cuidadores)],
-            [B("Observaciones de dinámica/apoyo:"), P(composicion_familiar.observaciones_dinamica), "", ""],
+            [B("Convivencia actual:"), P(composicion_familiar.convivencia_actual), B("Personas que sostienen el hogar:"), P(composicion_familiar.personas_sostienen_hogar)],
+            [B("Ingreso promedio:"), P(composicion_familiar.ingreso_promedio), "", ""],
         ]
         t_cf = Table(cf_rows, colWidths=[1.5*inch, 2.2*inch, 1.5*inch, 2.2*inch])
         t_cf.setStyle(TableStyle([
@@ -424,17 +423,15 @@ def generar_pdf_valoracion_ocupacional(
         story.append(Spacer(1, 5))
 
     if miembros_familiares and len(miembros_familiares) > 0:
-        fam_headers = [B("Parentezco / Nombre"), B("Edad"), B("Ocupación"), B("Convivencia / Aportes")]
+        fam_headers = [B("Composición Núcleo"), B("Fecha Nacimiento")]
         fam_data = [fam_headers]
         for m in miembros_familiares:
             fam_data.append([
-                P(m.parentezco_nombre),
-                P(str(m.edad)),
-                P(m.ocupacion),
-                P(m.convivencia_aportes)
+                P(m.composicion_nucleo),
+                P(m.fecha_nacimiento),
             ])
             
-        t_fam = Table(fam_data, colWidths=[PAGE_WIDTH*0.4, PAGE_WIDTH*0.1, PAGE_WIDTH*0.25, PAGE_WIDTH*0.25])
+        t_fam = Table(fam_data, colWidths=[PAGE_WIDTH*0.6, PAGE_WIDTH*0.4])
         t_fam.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
             ('BACKGROUND', (0, 0), (-1, 0), COLOR_LABEL_BG),
