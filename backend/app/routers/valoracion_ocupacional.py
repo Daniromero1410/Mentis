@@ -268,6 +268,31 @@ def _delete_children(vid: int, session: Session):
 
 
 # ═════════════════════════════════════════════════════════════════════
+# FINALIZAR
+# ═════════════════════════════════════════════════════════════════════
+@router.post("/{valoracion_id}/finalizar", response_model=ValoracionOcupacionalResponse)
+def finalizar_valoracion(
+    valoracion_id: int,
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user),
+):
+    valoracion = session.get(ValoracionOcupacional, valoracion_id)
+    if not valoracion:
+        raise HTTPException(404, "Valoración Ocupacional no encontrada")
+    _check_permission(valoracion, current_user)
+
+    valoracion.estado = EstadoValoracion.FINALIZADO
+    valoracion.fecha_actualizacion = datetime.utcnow()
+    valoracion.fecha_finalizacion = datetime.utcnow()
+
+    session.add(valoracion)
+    session.commit()
+    session.refresh(valoracion)
+
+    return _build_response(valoracion, session)
+
+
+# ═════════════════════════════════════════════════════════════════════
 # DESCARGAR PDF
 # ═════════════════════════════════════════════════════════════════════
 @router.get("/{valoracion_id}/descargar-pdf")
