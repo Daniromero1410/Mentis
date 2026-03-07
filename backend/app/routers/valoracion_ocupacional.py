@@ -281,7 +281,7 @@ def finalizar_valoracion(
         raise HTTPException(404, "Valoración Ocupacional no encontrada")
     _check_permission(valoracion, current_user)
 
-    valoracion.estado = EstadoValoracion.FINALIZADO
+    valoracion.estado = EstadoValoracion.COMPLETADA
     valoracion.fecha_actualizacion = datetime.utcnow()
     valoracion.fecha_finalizacion = datetime.utcnow()
 
