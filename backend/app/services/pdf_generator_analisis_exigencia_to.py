@@ -885,6 +885,55 @@ def generar_pdf_analisis_exigencia_to(
 
     # ── SECCIÓN NUEVA: PERFIL DE EXIGENCIAS ──────────────────────────────
     if perfil:
+        from reportlab.platypus import Flowable
+        class CircleBg(Flowable):
+            def __init__(self, text, is_active=False, size=16):
+                Flowable.__init__(self)
+                self.text = str(text)
+                self.is_active = is_active
+                self.size = size
+                self.width = size
+                self.height = size
+                
+            def draw(self):
+                c = self.canv
+                c.saveState()
+                if self.is_active:
+                    c.setFillColor(colors.HexColor("#2563EB"))  # Blue
+                    c.setStrokeColor(colors.HexColor("#2563EB"))
+                else:
+                    c.setFillColor(colors.HexColor("#F3F4F6"))  # Light grey
+                    c.setStrokeColor(colors.HexColor("#E5E7EB"))
+                c.circle(self.size/2.0, self.size/2.0, self.size/2.0, fill=1, stroke=1)
+                
+                if self.is_active:
+                    c.setFillColor(colors.white)
+                else:
+                    c.setFillColor(colors.HexColor("#4B5563"))
+                c.setFont("Helvetica-Bold" if self.is_active else "Helvetica", 9)
+                c.drawCentredString(self.size/2.0, self.size/2.0 - 3, self.text)
+                c.restoreState()
+
+        def build_rating_scale(val):
+            try:
+                val = int(val)
+            except:
+                val = -1
+            cells = []
+            for i in range(5):
+                cells.append(CircleBg(str(i), is_active=(i == val), size=16))
+            
+            t_scale = Table([cells], colWidths=[20]*5, rowHeights=[20])
+            t_scale.setStyle(TableStyle([
+                ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+                ('LEFTPADDING', (0,0), (-1,-1), 1),
+                ('RIGHTPADDING', (0,0), (-1,-1), 1),
+                ('TOPPADDING', (0,0), (-1,-1), 0),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ]))
+            return t_scale
+
         elements.append(section_title_table("8   PERFIL DE EXIGENCIAS"))
         elements.append(Spacer(1, 4))
         
@@ -892,21 +941,38 @@ def generar_pdf_analisis_exigencia_to(
             if not dic_data or not isinstance(dic_data, dict):
                 return
             elements.append(subsection_header(title))
-            p_rows = []
+            
+            # Tabla Header
+            h_data = [[
+                Paragraph("<b>FACTORES A EVALUAR</b>", styles["CellBold"]),
+                Paragraph("<b>CALIFICACIÓN (0-4)</b>", styles["CellBold"]),
+                Paragraph("<b>OBSERVACIONES</b>", styles["CellBold"])
+            ]]
+            p_rows = h_data
+            
             for k, v in dic_data.items():
-                # Formatear la llave (ej: "trabajo_equipo" -> "Trabajo Equipo")
                 k_formatted = k.replace("_", " ").title()
-                val_str = str(v.get('valor', v) if isinstance(v, dict) else v)
-                p_rows.append([bold(k_formatted), p(val_str)])
-            if p_rows:
-                p_t = Table(p_rows, colWidths=[page_width * 0.40, page_width * 0.60])
+                
+                if isinstance(v, dict):
+                    val = v.get('valor', '')
+                    obs = v.get('observaciones', v.get('observacion', ''))
+                else:
+                    val = v
+                    obs = ''
+                    
+                rating_tab = build_rating_scale(val)
+                p_rows.append([bold(k_formatted), rating_tab, p(str(obs))])
+                
+            if len(p_rows) > 1:
+                p_t = Table(p_rows, colWidths=[page_width * 0.35, page_width * 0.30, page_width * 0.35])
                 p_t.setStyle(TableStyle([
                     ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
                     ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-                    ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+                    ('BACKGROUND', (0, 0), (-1, 0), LIGHT_GRAY),
                     ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                    ('TOPPADDING', (0, 0), (-1, -1), 2),
-                    ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+                    ('TOPPADDING', (0, 0), (-1, -1), 4),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
                 ]))
                 elements.append(p_t)
                 elements.append(Spacer(1, 4))
