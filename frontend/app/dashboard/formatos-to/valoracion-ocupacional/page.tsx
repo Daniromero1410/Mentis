@@ -183,55 +183,48 @@ export default function ValoracionOcupacionalPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                            <FileText className="h-8 w-8 text-indigo-500" />
+                        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                            <FileText className="h-8 w-8 text-blue-600" />
                             Valoración Ocupacional
                         </h1>
-                        <p className="text-gray-500 dark:text-gray-400 mt-1">
+                        <p className="text-gray-500 mt-2">
                             Gestione las valoraciones de Terapia Ocupacional
                         </p>
                     </div>
-                    <Button onClick={handleCreateNuevo} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
+                    <Button onClick={handleCreateNuevo} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
                         <Plus className="h-4 w-4" />
                         Nueva Valoración
                     </Button>
                 </div>
 
                 {/* Filtros */}
-                <Card>
-                    <CardContent className="p-4">
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <div className="relative flex-1">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                <Input
-                                    placeholder="Buscar por nombre, documento o empresa..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-9"
-                                />
-                            </div>
-                            <div className="flex items-center gap-2 w-full sm:w-auto">
-                                <Filter className="h-4 w-4 text-gray-500" />
-                                <Select value={estadoFilter} onValueChange={setEstadoFilter}>
-                                    <SelectTrigger className="w-[180px]">
-                                        <SelectValue placeholder="Filtrar por estado" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="todos">Todos los estados</SelectItem>
-                                        <SelectItem value="borrador">Borrador</SelectItem>
-                                        <SelectItem value="completada">Completada</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                        <Input
+                            placeholder="Buscar por trabajador o documento..."
+                            className="pl-9"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    <Select value={estadoFilter} onValueChange={setEstadoFilter}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Estado" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="todos">Todos</SelectItem>
+                            <SelectItem value="borrador">Borrador</SelectItem>
+                            <SelectItem value="completada">Completada</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
 
                 {/* Tabla */}
-                <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333333] shadow-sm overflow-hidden">
+                <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
                     <Table>
                         <TableHeader>
-                            <TableRow className="bg-gray-50/50 dark:bg-[#111111] hover:bg-gray-50/50 dark:hover:bg-[#111111]">
+                            <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
                                 <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
                                 <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
                                 <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
@@ -244,15 +237,14 @@ export default function ValoracionOcupacionalPage() {
                             {loading ? (
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center py-12 text-gray-500">
-                                        <div className="flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div></div>
+                                        <div className="flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
                                     </TableCell>
                                 </TableRow>
                             ) : filteredValoraciones.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={6} className="text-center py-12 text-gray-500">
                                         <div className="flex flex-col items-center justify-center text-gray-500">
-                                            <FileText className="h-12 w-12 mb-4 text-gray-300 dark:text-gray-600" />
-                                            <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                            <p className="text-lg font-medium text-gray-900 mb-1">
                                                 No hay valoraciones
                                             </p>
                                             <p className="text-sm">
@@ -274,25 +266,25 @@ export default function ValoracionOcupacionalPage() {
                                     const nombre = item.trabajador_nombre || 'Sin nombre';
                                     const initial = nombre.charAt(0).toUpperCase();
                                     return (
-                                        <TableRow key={item.id} className="hover:bg-gray-50/50 dark:hover:bg-[#222222] transition-colors">
+                                        <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
                                             <TableCell className="py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm">
+                                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">
                                                         {initial}
                                                     </div>
-                                                    <span className="font-semibold text-gray-900 dark:text-white text-sm uppercase">{nombre}</span>
+                                                    <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                                            <TableCell className="text-sm text-gray-600">
                                                 {item.trabajador_documento || '-'}
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                                            <TableCell className="text-sm text-gray-600">
                                                 <div className="flex items-center gap-2">
                                                     <Briefcase className="h-3 w-3 text-gray-400" />
                                                     {item.empresa || '-'}
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-sm text-gray-500 dark:text-gray-400">
+                                            <TableCell className="text-sm text-gray-500">
                                                 {format(new Date(item.fecha_creacion), "d 'de' MMMM, yyyy", { locale: es })}
                                             </TableCell>
                                             <TableCell>
@@ -372,7 +364,7 @@ export default function ValoracionOcupacionalPage() {
                         >
                             Anterior
                         </Button>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                        <span className="text-sm text-gray-600">
                             Página {page} de {totalPages}
                         </span>
                         <Button

@@ -29,10 +29,10 @@ def generar_pdf_analisis_exigencia_to(
     peligros: list,
     recomendaciones,
     registro,
+    perfil=None,
     output_dir: str = "pdfs",
 ) -> str:
     # También requiere perfil_exigencias al final (opcional, pero hay que preverlo, lo agregamos después)
-    perfil = kwargs.get('perfil', None)
 
     """Genera el PDF de Análisis de Exigencias TO y retorna la ruta del archivo."""
     os.makedirs(output_dir, exist_ok=True)

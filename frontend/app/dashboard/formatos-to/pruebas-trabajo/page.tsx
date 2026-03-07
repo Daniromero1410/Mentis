@@ -214,16 +214,16 @@ export default function PruebasTrabajoTOPage() {
                     {/* Header */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                                <ClipboardList className="h-8 w-8 text-indigo-500" />
+                            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                                <ClipboardList className="h-8 w-8 text-blue-600" />
                                 Pruebas de Trabajo (TO)
                             </h1>
-                            <p className="text-gray-500 dark:text-gray-400 mt-1">
+                            <p className="text-gray-500 mt-2">
                                 Gestione las pruebas de trabajo de Terapia Ocupacional
                             </p>
                         </div>
                         <Link href="/dashboard/formatos-to/pruebas-trabajo/nueva">
-                            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25">
+                            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                                 <Plus className="mr-2 h-4 w-4" />
                                 Nueva Prueba TO
                             </Button>
@@ -269,12 +269,10 @@ export default function PruebasTrabajoTOPage() {
                         </CardContent>
                     </Card>
 
-                    {/* Table */}
-                    {/* Table */}
-                    <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333333] shadow-sm overflow-hidden">
+                    <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
                         <Table>
                             <TableHeader>
-                                <TableRow className="bg-gray-50/50 dark:bg-[#111111] hover:bg-gray-50/50 dark:hover:bg-[#111111]">
+                                <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
                                     <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
                                     <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
                                     <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
@@ -287,15 +285,14 @@ export default function PruebasTrabajoTOPage() {
                                 {loading ? (
                                     <TableRow>
                                         <TableCell colSpan={6} className="text-center py-12 text-gray-500">
-                                            <div className="flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div></div>
+                                            <div className="flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
                                         </TableCell>
                                     </TableRow>
                                 ) : pruebas.length === 0 ? (
                                     <TableRow>
                                         <TableCell colSpan={6} className="text-center py-12 text-gray-500">
                                             <div className="flex flex-col items-center justify-center text-gray-500">
-                                                <ClipboardList className="h-12 w-12 mb-4 text-gray-300 dark:text-gray-600" />
-                                                <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                                <p className="text-lg font-medium text-gray-900 mb-1">
                                                     No hay pruebas de trabajo TO
                                                 </p>
                                                 <p className="text-sm">
@@ -311,25 +308,23 @@ export default function PruebasTrabajoTOPage() {
                                         const nombre = prueba.trabajador_nombre || 'Sin nombre';
                                         const initial = nombre.charAt(0).toUpperCase();
                                         return (
-                                            <TableRow key={prueba.id} className="hover:bg-gray-50/50 dark:hover:bg-[#222222] transition-colors">
+                                            <TableRow key={prueba.id} className="hover:bg-gray-50/50 transition-colors">
                                                 <TableCell className="py-4">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm">
+                                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">
                                                             {initial}
                                                         </div>
-                                                        <span className="font-semibold text-gray-900 dark:text-white text-sm uppercase">{nombre}</span>
+                                                        <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                                                <TableCell className="text-sm text-gray-600">
                                                     {prueba.trabajador_documento || '-'}
                                                 </TableCell>
-                                                <TableCell className="text-sm text-gray-600 dark:text-gray-300">
-                                                    <div className="flex items-center gap-2">
-                                                        <FileText className="h-3 w-3 text-gray-400" />
-                                                        {prueba.empresa || '-'}
-                                                    </div>
+                                                <TableCell className="text-sm text-gray-600 flex items-center gap-2">
+                                                    <FileText className="h-3 w-3 text-gray-400" />
+                                                    {prueba.empresa || '-'}
                                                 </TableCell>
-                                                <TableCell className="text-sm text-gray-500 dark:text-gray-400">
+                                                <TableCell className="text-sm text-gray-500">
                                                     {formatDate(prueba.fecha_creacion)}
                                                 </TableCell>
                                                 <TableCell>
@@ -409,7 +404,7 @@ export default function PruebasTrabajoTOPage() {
                             >
                                 <ChevronLeft className="h-4 w-4" />
                             </Button>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                            <span className="text-sm text-gray-600">
                                 Página {page} de {totalPages}
                             </span>
                             <Button
