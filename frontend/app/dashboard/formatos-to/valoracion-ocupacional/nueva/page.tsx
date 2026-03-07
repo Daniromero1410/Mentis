@@ -14,9 +14,9 @@ function ValoracionFormContent() {
     const router = useRouter();
     const { user, isLoading } = useAuth();
 
-    // Si viene ID, es edición o vista. Si no, es nuevo.
     const idParam = searchParams.get('id');
     const valoracionId = idParam ? parseInt(idParam) : undefined;
+    const isViewOnly = searchParams.get('view') === 'true';
 
     useEffect(() => {
         if (!isLoading && user && !user.acceso_formatos_to && user.rol !== 'admin') {
@@ -60,7 +60,7 @@ function ValoracionFormContent() {
             </div>
 
             <div className="min-h-[600px] w-full">
-                <ValoracionOcupacionalWizard valoracionId={valoracionId} />
+                <ValoracionOcupacionalWizard valoracionId={valoracionId} readOnly={isViewOnly} />
             </div>
         </div>
     );

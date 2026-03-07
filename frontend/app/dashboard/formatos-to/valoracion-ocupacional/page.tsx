@@ -179,9 +179,9 @@ export default function ValoracionOcupacionalPage() {
 
     return (
         <DashboardLayout>
-            <div className="space-y-6">
+            <div className="p-6 space-y-6">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                             <FileText className="h-8 w-8 text-blue-600" />
@@ -191,8 +191,8 @@ export default function ValoracionOcupacionalPage() {
                             Gestione las valoraciones de Terapia Ocupacional
                         </p>
                     </div>
-                    <Button onClick={handleCreateNuevo} className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
-                        <Plus className="h-4 w-4" />
+                    <Button onClick={handleCreateNuevo} className="bg-blue-600 hover:bg-blue-700 text-white">
+                        <Plus className="mr-2 h-4 w-4" />
                         Nueva Valoración
                     </Button>
                 </div>
@@ -300,29 +300,27 @@ export default function ValoracionOcupacionalPage() {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex items-center justify-end gap-1">
-                                                    {item.estado === 'completada' ? (
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            onClick={() => handleEdit(item.id)}
-                                                            className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                                                            title="Ver Detalles"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                        </Button>
-                                                    ) : (
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            onClick={() => handleEdit(item.id)}
-                                                            className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
-                                                            title="Editar"
-                                                        >
-                                                            <Edit className="h-4 w-4" />
-                                                        </Button>
-                                                    )}
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => router.push(`/dashboard/formatos-to/valoracion-ocupacional/nueva?id=${item.id}&view=true`)}
+                                                        className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                                        title="Ver Detalles"
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                    </Button>
 
-                                                    {item.estado === 'completada' && (
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => handleEdit(item.id)}
+                                                        className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
+                                                        title="Editar"
+                                                    >
+                                                        <Edit className="h-4 w-4" />
+                                                    </Button>
+
+                                                    {item.estado.toLowerCase() === 'completada' && (
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
