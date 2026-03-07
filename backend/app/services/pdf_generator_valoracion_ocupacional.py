@@ -278,10 +278,10 @@ def generar_pdf_valoracion_ocupacional(
          B("Antigüedad:"), P(calcular_antiguedad(identificacion.fecha_ingreso_empresa if identificacion else None))],
 
         [B("Contacto en empresa:"), P(identificacion.contacto_empresa if identificacion else ""),
-         B("Cargo del contacto:"), P(identificacion.cargo_contacto_empresa if identificacion else "")],
+         B("Cargo del contacto:"), P("")],
 
         [B("Teléfono de empresa:"), P(identificacion.telefonos_empresa if identificacion else ""),
-         B("Correos electrónicos:"), P(identificacion.correos_empresa if identificacion else "")],
+         B("Correos electrónicos:"), P(identificacion.correos_empresa if hasattr(identificacion, 'correos_empresa') else "")],
     ]
 
     t_empresa = Table(empresa_rows, colWidths=[col_label*1.1, col_val*0.9, col_label*1.1, col_val*0.9])
