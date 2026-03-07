@@ -722,12 +722,12 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                             <p className="mb-6 text-gray-600">El Análisis de Exigencias se ha guardado y finalizado correctamente.</p>
                             <div className="flex flex-col sm:flex-row justify-center gap-3">
                                 <Button
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                                     onClick={() => generatePDF(analisisId!, 'download')}
                                 >
                                     <Download className="mr-2 h-4 w-4" /> Descargar PDF
                                 </Button>
-                                <Button variant="outline" className="w-full sm:w-auto" onClick={() => router.push('/dashboard/analisis-exigencia')}>
+                                <Button variant="outline" className="flex-1" onClick={() => router.push('/dashboard/formatos-to/analisis-exigencia')}>
                                     Volver al listado
                                 </Button>
                             </div>

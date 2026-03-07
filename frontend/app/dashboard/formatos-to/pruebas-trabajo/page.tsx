@@ -6,6 +6,15 @@ import { ModuleGuard } from '@/app/components/guards/ModuleGuard';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { api } from '@/app/services/api';
 import {
     Search,
@@ -205,12 +214,12 @@ export default function PruebasTrabajoTOPage() {
                     {/* Header */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-                                <ClipboardList className="w-8 h-8 text-blue-600" />
+                            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                                <ClipboardList className="h-8 w-8 text-indigo-500" />
                                 Pruebas de Trabajo (TO)
                             </h1>
                             <p className="text-gray-500 dark:text-gray-400 mt-1">
-                                Gestión de pruebas de trabajo de Terapia Ocupacional
+                                Gestione las pruebas de trabajo de Terapia Ocupacional
                             </p>
                         </div>
                         <Link href="/dashboard/formatos-to/pruebas-trabajo/nueva">
@@ -261,186 +270,158 @@ export default function PruebasTrabajoTOPage() {
                     </Card>
 
                     {/* Table */}
-                    <Card className="border-gray-200 dark:border-[#333333]">
-                        <CardContent className="p-0">
-                            {loading ? (
-                                <div className="flex items-center justify-center h-64">
-                                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                                </div>
-                            ) : pruebas.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
-                                    <ClipboardList className="h-16 w-16 mb-4 opacity-20" />
-                                    <p className="text-lg font-medium">No hay pruebas de trabajo TO</p>
-                                    <p className="text-sm">Crea una nueva prueba para comenzar</p>
-                                </div>
-                            ) : (
-                                <div className="overflow-x-auto">
-                                    <table className="w-full">
-                                        <thead className="bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-[#333333]">
-                                            <tr>
-                                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    Trabajador
-                                                </th>
-                                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    Tipo Doc
-                                                </th>
-                                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    Documento
-                                                </th>
-                                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    Empresa
-                                                </th>
-                                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    Fecha
-                                                </th>
-                                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    Estado
-                                                </th>
-                                                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                                    Acciones
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="bg-white dark:bg-[#2a2a2a] divide-y divide-gray-100 dark:divide-[#333333]">
-                                            {pruebas.map((prueba) => (
-                                                <tr
-                                                    key={prueba.id}
-                                                    className="hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-colors"
-                                                >
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                                                {prueba.trabajador_nombre
-                                                                    ? prueba.trabajador_nombre.charAt(0).toUpperCase()
-                                                                    : '?'}
-                                                            </div>
-                                                            <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                                                {prueba.trabajador_nombre || 'Sin nombre'}
-                                                            </span>
+                    {/* Table */}
+                    <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333333] shadow-sm overflow-hidden">
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="bg-gray-50/50 dark:bg-[#111111] hover:bg-gray-50/50 dark:hover:bg-[#111111]">
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">FECHA</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">ESTADO</TableHead>
+                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4 text-right">ACCIONES</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {loading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="text-center py-12 text-gray-500">
+                                            <div className="flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div></div>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : pruebas.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="text-center py-12 text-gray-500">
+                                            <div className="flex flex-col items-center justify-center text-gray-500">
+                                                <ClipboardList className="h-12 w-12 mb-4 text-gray-300 dark:text-gray-600" />
+                                                <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                                    No hay pruebas de trabajo TO
+                                                </p>
+                                                <p className="text-sm">
+                                                    {search || estadoFilter !== 'todos'
+                                                        ? 'No se encontraron resultados para tu búsqueda.'
+                                                        : 'Comienza creando una nueva prueba de trabajo TO.'}
+                                                </p>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    pruebas.map((prueba) => {
+                                        const nombre = prueba.trabajador_nombre || 'Sin nombre';
+                                        const initial = nombre.charAt(0).toUpperCase();
+                                        return (
+                                            <TableRow key={prueba.id} className="hover:bg-gray-50/50 dark:hover:bg-[#222222] transition-colors">
+                                                <TableCell className="py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm">
+                                                            {initial}
                                                         </div>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <span className="text-sm text-gray-600 dark:text-gray-300">
-                                                            {prueba.trabajador_tipo_documento || '-'}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <span className="text-sm text-gray-600 dark:text-gray-300">
-                                                            {prueba.trabajador_documento || 'Sin documento'}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                                            <FileText className="h-4 w-4 text-gray-400" />
-                                                            {prueba.empresa || 'Sin empresa'}
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <span className="text-sm text-gray-600 dark:text-gray-300">
-                                                            {formatDate(prueba.fecha_creacion)}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <span
-                                                            className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${estadoBadgeColor(
-                                                                prueba.estado
-                                                            )}`}
-                                                        >
-                                                            {prueba.estado.charAt(0).toUpperCase() + prueba.estado.slice(1)}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <div className="flex items-center justify-center gap-1">
-                                                            {/* Ver (siempre visible) */}
-                                                            <Link href={`/dashboard/formatos-to/pruebas-trabajo/${prueba.id}?mode=view`}>
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600"
-                                                                    title="Ver detalles"
-                                                                >
-                                                                    <Eye className="h-4 w-4" />
-                                                                </Button>
-                                                            </Link>
-
-                                                            {/* Editar (siempre visible) */}
-                                                            <Link href={`/dashboard/formatos-to/pruebas-trabajo/${prueba.id}?mode=edit`}>
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    className="h-8 w-8 p-0 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600"
-                                                                    title="Editar prueba"
-                                                                >
-                                                                    <Pencil className="h-4 w-4" />
-                                                                </Button>
-                                                            </Link>
-
-                                                            {/* Descargar PDF (solo para completadas) */}
-                                                            {prueba.estado.toLowerCase() === 'completada' && (
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="sm"
-                                                                    onClick={() => handleDownloadPDF(prueba)}
-                                                                    className="h-8 w-8 p-0 hover:bg-purple-100 dark:hover:bg-purple-900/30 text-purple-600"
-                                                                    title="Descargar PDF"
-                                                                >
-                                                                    <Download className="h-4 w-4" />
-                                                                </Button>
-                                                            )}
-
-                                                            {/* Eliminar */}
+                                                        <span className="font-semibold text-gray-900 dark:text-white text-sm uppercase">{nombre}</span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                                                    {prueba.trabajador_documento || '-'}
+                                                </TableCell>
+                                                <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                                                    <div className="flex items-center gap-2">
+                                                        <FileText className="h-3 w-3 text-gray-400" />
+                                                        {prueba.empresa || '-'}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="text-sm text-gray-500 dark:text-gray-400">
+                                                    {formatDate(prueba.fecha_creacion)}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className={`font-medium rounded-full px-3 py-0.5 ${prueba.estado.toLowerCase() === 'completada'
+                                                            ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                                                            : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
+                                                            }`}
+                                                    >
+                                                        {prueba.estado.toLowerCase() === 'completada' ? 'Completado' : 'Borrador'}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex items-center justify-end gap-1">
+                                                        <Link href={`/dashboard/formatos-to/pruebas-trabajo/${prueba.id}?mode=view`}>
                                                             <Button
                                                                 variant="ghost"
-                                                                size="sm"
-                                                                onClick={() => openDeleteDialog(prueba)}
-                                                                className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500"
-                                                                title="Eliminar"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                                                title="Ver detalles"
                                                             >
-                                                                <Trash2 className="h-4 w-4" />
+                                                                <Eye className="h-4 w-4" />
                                                             </Button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
+                                                        </Link>
 
-                            {/* Pagination */}
-                            {!loading && pruebas.length > 0 && (
-                                <div className="px-6 py-4 border-t border-gray-200 dark:border-[#333333] flex items-center justify-between">
-                                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                                        Mostrando {(page - 1) * limit + 1} a {Math.min(page * limit, total)} de {total}{' '}
-                                        resultados
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => setPage(page - 1)}
-                                            disabled={page === 1}
-                                            className="border-gray-200 dark:border-[#333333]"
-                                        >
-                                            <ChevronLeft className="h-4 w-4" />
-                                        </Button>
-                                        <div className="flex items-center gap-2 px-3 text-sm text-gray-700 dark:text-gray-300">
-                                            Página {page} de {totalPages || 1}
-                                        </div>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => setPage(page + 1)}
-                                            disabled={page >= totalPages}
-                                            className="border-gray-200 dark:border-[#333333]"
-                                        >
-                                            <ChevronRight className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
+                                                        <Link href={`/dashboard/formatos-to/pruebas-trabajo/${prueba.id}?mode=edit`}>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
+                                                                title="Editar prueba"
+                                                            >
+                                                                <Pencil className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+
+                                                        {prueba.estado.toLowerCase() === 'completada' && (
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => handleDownloadPDF(prueba)}
+                                                                className="h-8 w-8 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                                                                title="Descargar PDF"
+                                                            >
+                                                                <Download className="h-4 w-4" />
+                                                            </Button>
+                                                        )}
+
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => openDeleteDialog(prueba)}
+                                                            className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                            title="Eliminar"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+
+                    {/* Pagination */}
+                    {!loading && totalPages > 1 && (
+                        <div className="flex items-center justify-center gap-2 mt-4">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                                disabled={page === 1}
+                            >
+                                <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                                Página {page} de {totalPages}
+                            </span>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                disabled={page >= totalPages}
+                            >
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    )}
 
                     {/* Delete Confirmation Modal */}
                     <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
