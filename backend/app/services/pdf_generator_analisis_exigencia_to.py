@@ -331,7 +331,24 @@ def generar_pdf_analisis_exigencia_to(
 
     # Fecha de nacimiento/edad row
     nac_fecha = format_date(i.fecha_nacimiento if i else None)
-    edad_val = f"{i.edad or ''}" if i else ""
+
+    def calc_years(date_val):
+        if not date_val:
+            return ""
+        try:
+            if isinstance(date_val, str):
+                dt = datetime.strptime(date_val, "%Y-%m-%d")
+            else:
+                dt = date_val
+            today = datetime.today()
+            years = today.year - dt.year
+            if (today.month, today.day) < (dt.month, dt.day):
+                years -= 1
+            return str(years)
+        except Exception:
+            return ""
+
+    edad_val = calc_years(i.fecha_nacimiento if i else None) or (f"{i.edad}" if i and hasattr(i, "edad") and i.edad else "")
 
     nac_row = [
         [bold("Fecha de nacimiento/edad"), p(nac_fecha), bold("edad"), p(f"{edad_val}    años" if edad_val else "")]
@@ -524,23 +541,6 @@ def generar_pdf_analisis_exigencia_to(
 
     # Fecha ingreso cargo/antigüedad
     fic_fecha = format_date(i.fecha_ingreso_cargo if i else None)
-    # Calculate years from the date (matching frontend calculateAge logic)
-    def calc_years(date_val):
-        if not date_val:
-            return ""
-        try:
-            if isinstance(date_val, str):
-                dt = datetime.strptime(date_val, "%Y-%m-%d")
-            else:
-                dt = date_val
-            today = datetime.today()
-            years = today.year - dt.year
-            if (today.month, today.day) < (dt.month, dt.day):
-                years -= 1
-            return str(years)
-        except Exception:
-            return ""
-
     cargo_years = calc_years(i.fecha_ingreso_cargo if i else None)
     fic_row = [[
         bold("Fecha ingreso cargo/antigüedad en\nel cargo"),
@@ -648,18 +648,8 @@ def generar_pdf_analisis_exigencia_to(
     elements.append(bordered_text_block(secciones.descripcion_proceso_productivo if secciones else ""))
     elements.append(Spacer(1, 4))
 
-    # 3.2
-    elements.append(subsection_header("3.2  Apreciación del trabajador frente a su proceso productivo"))
-    elements.append(bordered_text_block(secciones.apreciacion_trabajador_proceso if secciones else ""))
-    elements.append(Spacer(1, 4))
-
-    # 3.3
-    elements.append(subsection_header("3.3  Estándares de productividad"))
-    elements.append(bordered_text_block(secciones.estandares_productividad if secciones else ""))
-    elements.append(Spacer(1, 4))
-
-    # 3.4 Desempeño Organizacional
-    elements.append(subsection_header("3.4  Requerimientos del desempeño organizacional"))
+    # 3.2 Desempeño Organizacional
+    elements.append(subsection_header("3.2  Requerimientos del desempeño organizacional"))
     if desempeno:
         d = desempeno
         do_data = [
@@ -906,7 +896,8 @@ def generar_pdf_analisis_exigencia_to(
             for k, v in dic_data.items():
                 # Formatear la llave (ej: "trabajo_equipo" -> "Trabajo Equipo")
                 k_formatted = k.replace("_", " ").title()
-                p_rows.append([bold(k_formatted), p(str(v))])
+                val_str = str(v.get('valor', v) if isinstance(v, dict) else v)
+                p_rows.append([bold(k_formatted), p(val_str)])
             if p_rows:
                 p_t = Table(p_rows, colWidths=[page_width * 0.40, page_width * 0.60])
                 p_t.setStyle(TableStyle([
