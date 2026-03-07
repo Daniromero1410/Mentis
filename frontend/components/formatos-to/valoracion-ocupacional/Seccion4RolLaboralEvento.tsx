@@ -24,13 +24,14 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
     // Adaptaciones / Limitaciones Checklist
     // Storing as a JSON string array in 'adaptaciones_recibidas'
     const adaptacionesOpciones = [
-        "Férulas",
+        "Bastón",
+        "Muletas",
+        "Caminador",
         "Prótesis",
-        "Ayudas de marcha",
-        "Lentes correctivos",
-        "Audífonos",
-        "Sillas de ruedas",
-        "Otras",
+        "Audífono",
+        "Gafas",
+        "Bastón guía",
+        "Otros",
     ];
 
     const getAdaptaciones = (): string[] => {

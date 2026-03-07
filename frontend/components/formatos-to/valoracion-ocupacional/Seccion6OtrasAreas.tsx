@@ -133,12 +133,17 @@ const vidaDomesticaItems = [
 export function Seccion6OtrasAreas({ data, updateData, readOnly = false }: Seccion5Props) {
     // The evaluacion_otras_areas now stores nested objects per category
     const getValues = (category: string) => {
-        return data?.evaluacion_otras_areas?.[category] || {};
+        const val = data?.evaluacion_otras_areas?.[category];
+        if (!val) return {};
+        if (typeof val === 'string') {
+            try { return JSON.parse(val); } catch { return {}; }
+        }
+        return val;
     };
 
     const handleChange = (category: string, item: string, field: 'valor' | 'observacion', value: any) => {
         // Get the current state of this category
-        const currentCategory = data?.evaluacion_otras_areas?.[category] || {};
+        const currentCategory = getValues(category);
         const updatedCategory = {
             ...currentCategory,
             [item]: {
@@ -146,7 +151,7 @@ export function Seccion6OtrasAreas({ data, updateData, readOnly = false }: Secci
                 [field]: value,
             },
         };
-        updateData('evaluacion_otras_areas', category, updatedCategory);
+        updateData('evaluacion_otras_areas', category, JSON.stringify(updatedCategory));
     };
 
     return (

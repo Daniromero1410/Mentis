@@ -144,9 +144,46 @@ def generar_pdf_valoracion_ocupacional(
         return t
 
     def fmt_fecha(f):
-        if f:
-            return f.strftime('%d/%m/%Y') if hasattr(f, 'strftime') else str(f)[:10]
-        return ""
+        if not f: return ""
+        if hasattr(f, 'strftime'): return f.strftime('%d/%m/%Y')
+        if isinstance(f, str):
+            try:
+                if 'T' in f: f = f.split('T')[0]
+                d = datetime.strptime(f, "%Y-%m-%d")
+                return d.strftime('%d/%m/%Y')
+            except:
+                return f[:10]
+        return str(f)[:10]
+
+    def calcular_edad(fecha_nac):
+        if not fecha_nac: return ""
+        if isinstance(fecha_nac, str):
+            try:
+                if 'T' in fecha_nac: fecha_nac = fecha_nac.split('T')[0]
+                fecha_nac = datetime.strptime(fecha_nac, "%Y-%m-%d").date()
+            except: return ""
+        elif hasattr(fecha_nac, 'date'): fecha_nac = fecha_nac.date()
+        elif isinstance(fecha_nac, datetime): fecha_nac = fecha_nac.date()
+        else: return ""
+        
+        today = datetime.now().date()
+        edad = today.year - fecha_nac.year - ((today.month, today.day) < (fecha_nac.month, fecha_nac.day))
+        return f"{edad} años"
+
+    def calcular_antiguedad(fecha_ingreso):
+        if not fecha_ingreso: return ""
+        if isinstance(fecha_ingreso, str):
+            try:
+                if 'T' in fecha_ingreso: fecha_ingreso = fecha_ingreso.split('T')[0]
+                fecha_ingreso = datetime.strptime(fecha_ingreso, "%Y-%m-%d").date()
+            except: return ""
+        elif hasattr(fecha_ingreso, 'date'): fecha_ingreso = fecha_ingreso.date()
+        elif isinstance(fecha_ingreso, datetime): fecha_ingreso = fecha_ingreso.date()
+        else: return ""
+        
+        today = datetime.now().date()
+        anios = today.year - fecha_ingreso.year - ((today.month, today.day) < (fecha_ingreso.month, fecha_ingreso.day))
+        return f"{anios} años" if anios > 0 else "Menos de 1 año"
 
     story = []
 
@@ -192,7 +229,7 @@ def generar_pdf_valoracion_ocupacional(
          B("Documento de identidad:"), P(str(identificacion.numero_documento) if identificacion else "")],
         
         [B("Fecha de nacimiento:"), P(fmt_fecha(identificacion.fecha_nacimiento if identificacion else None)), 
-         B("Edad:"), P(f"{identificacion.edad} años" if identificacion and identificacion.edad else "")],
+         B("Edad:"), P(calcular_edad(identificacion.fecha_nacimiento if identificacion else None))],
         
         [B("Dominancia:"), P(identificacion.dominancia if identificacion else ""), 
          B("Estado civil:"), P(identificacion.estado_civil if identificacion else "")],
@@ -207,7 +244,7 @@ def generar_pdf_valoracion_ocupacional(
          B("EPS / IPS / AFP:"), P(f"{identificacion.eps_ips or ''} / {identificacion.afp or ''}" if identificacion else "")],
          
         [B("Diagnóstico del ATEL y/o CIE10:"), P(identificacion.diagnosticos_atel if identificacion else ""), "", ""],
-        [B("Fechas Eventos ATEL:"), P(identificacion.fechas_eventos_atel if identificacion else ""), "", ""],
+        [B("Fechas Eventos ATEL:"), P(fmt_fecha(identificacion.fechas_eventos_atel if identificacion else None)), "", ""],
     ]
 
     t_ident = Table(ident_rows, colWidths=[col_label*1.1, col_val*0.9, col_label*1.1, col_val*0.9])
@@ -238,7 +275,7 @@ def generar_pdf_valoracion_ocupacional(
          B("Tiempo en modalidad:"), P(identificacion.tiempo_modalidad if identificacion else "")],
 
         [B("Fecha ingreso a empresa:"), P(fmt_fecha(identificacion.fecha_ingreso_empresa if identificacion else None)),
-         B("Antigüedad:"), P(str(identificacion.antiguedad_empresa) if identificacion else "")],
+         B("Antigüedad:"), P(calcular_antiguedad(identificacion.fecha_ingreso_empresa if identificacion else None))],
 
         [B("Contacto en empresa:"), P(identificacion.contacto_empresa if identificacion else ""),
          B("Cargo del contacto:"), P(identificacion.cargo_contacto_empresa if identificacion else "")],

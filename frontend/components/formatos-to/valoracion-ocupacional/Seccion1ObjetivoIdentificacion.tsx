@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FormSection, FormField, FormInput, FormTextarea } from '../prueba-trabajo/FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -15,6 +16,45 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
     const handleSeccionesTextoChange = (field: string, value: any) => {
         updateData('secciones_texto', field, value);
     };
+
+    // Auto-calcular Edad
+    const fechaNacimiento = data?.identificacion?.fecha_nacimiento;
+    useEffect(() => {
+        if (!fechaNacimiento || readOnly) return;
+        const fn = new Date(fechaNacimiento);
+        if (isNaN(fn.getTime())) return;
+
+        const today = new Date();
+        let edad = today.getFullYear() - fn.getFullYear();
+        const m = today.getMonth() - fn.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < fn.getDate())) {
+            edad--;
+        }
+
+        if (data?.identificacion?.edad !== edad) {
+            handleIdentificacionChange('edad', Math.max(0, edad));
+        }
+    }, [fechaNacimiento, readOnly]);
+
+    // Auto-calcular Antigüedad
+    const fechaIngreso = data?.identificacion?.fecha_ingreso_empresa;
+    useEffect(() => {
+        if (!fechaIngreso || readOnly) return;
+        const fi = new Date(fechaIngreso);
+        if (isNaN(fi.getTime())) return;
+
+        const today = new Date();
+        let anios = today.getFullYear() - fi.getFullYear();
+        const m = today.getMonth() - fi.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < fi.getDate())) {
+            anios--;
+        }
+
+        const strVal = anios > 0 ? `${anios}` : "Menos de 1 año";
+        if (data?.identificacion?.antiguedad_empresa !== strVal) {
+            handleIdentificacionChange('antiguedad_empresa', strVal);
+        }
+    }, [fechaIngreso, readOnly]);
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -74,7 +114,6 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                     value={data?.identificacion?.numero_documento || ''}
                                     onChange={(e) => handleIdentificacionChange('numero_documento', e.target.value)}
                                     disabled={readOnly}
-                                    type="number"
                                 />
                             </FormField>
 
