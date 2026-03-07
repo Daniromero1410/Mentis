@@ -187,6 +187,35 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
         }
     };
 
+    const handleDownloadCurrentPDF = async () => {
+        if (!downloadUrls?.pdf_url) return;
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
+            const endpoint = downloadUrls.pdf_url.startsWith('http') ? downloadUrls.pdf_url : `${apiUrl}${downloadUrls.pdf_url}`;
+
+            const response = await fetch(endpoint, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
+            if (!response.ok) throw new Error('Error al descargar PDF');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Valoracion_Ocupacional_${valoracionId || 'finalizado'}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            toast.error('Error al descargar el PDF.');
+            console.error(error);
+        }
+    };
+
     // ===== VALIDATION =====
     const validateStep = (step: number): boolean => {
         if (readOnly) return true;
@@ -390,15 +419,12 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                             <p className="mb-6 text-gray-600">La valoración se ha guardado y finalizado correctamente.</p>
                             <div className="flex flex-col sm:flex-row justify-center gap-3">
                                 {downloadUrls?.pdf_url && (
-                                    <a
-                                        href={downloadUrls.pdf_url.startsWith('http') ? downloadUrls.pdf_url : `${process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app'}${downloadUrls.pdf_url}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                    <Button
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                                        onClick={handleDownloadCurrentPDF}
                                     >
-                                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                                            <Download className="mr-2 h-4 w-4" /> Descargar PDF
-                                        </Button>
-                                    </a>
+                                        <Download className="mr-2 h-4 w-4" /> Descargar PDF
+                                    </Button>
                                 )}
                                 <Button variant="outline" onClick={() => router.push('/dashboard/formatos-to/valoracion-ocupacional')}>
                                     Volver al listado
