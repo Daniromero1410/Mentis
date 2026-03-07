@@ -233,21 +233,15 @@ def generar_pdf_analisis_exigencia_to(
     ]))
     elements.append(header_t)
 
-    # ── FECHA DE VALORACIÓN & ÚLTIMO DÍA INCAPACIDAD ────────────────
+    # ── FECHA DE VALORACIÓN ────────────────
     i = identificacion
     val_fecha = format_date(i.fecha_valoracion if i else None)
-    val_incap = format_date(i.ultimo_dia_incapacidad if i else None)
 
     date_rows = [
         [
             "",
             Paragraph("<b>FECHA DE VALORACIÓN:</b>", styles["LabelSmall"]),
             p(val_fecha),
-        ],
-        [
-            Paragraph("<b>ÚLTIMO DIA DE INCAPACIDAD RECONOCIDO POR LA ARL:</b>", styles["LabelSmall"]),
-            "",
-            p(val_incap),
         ]
     ]
 
@@ -255,7 +249,6 @@ def generar_pdf_analisis_exigencia_to(
     date_t.setStyle(TableStyle([
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('SPAN', (0, 1), (1, 1)),
         ('BACKGROUND', (0, 0), (-1, -1), LIGHT_ORANGE_BG),
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
         ('RIGHTPADDING', (0, 0), (-1, -1), 4),
@@ -887,7 +880,7 @@ def generar_pdf_analisis_exigencia_to(
     if perfil:
         from reportlab.platypus import Flowable
         class CircleBg(Flowable):
-            def __init__(self, text, is_active=False, size=16):
+            def __init__(self, text, is_active=False, size=14):
                 Flowable.__init__(self)
                 self.text = str(text)
                 self.is_active = is_active
@@ -899,8 +892,8 @@ def generar_pdf_analisis_exigencia_to(
                 c = self.canv
                 c.saveState()
                 if self.is_active:
-                    c.setFillColor(colors.HexColor("#2563EB"))  # Blue
-                    c.setStrokeColor(colors.HexColor("#2563EB"))
+                    c.setFillColor(colors.HexColor("#F97316"))  # Orange
+                    c.setStrokeColor(colors.HexColor("#F97316"))
                 else:
                     c.setFillColor(colors.HexColor("#F3F4F6"))  # Light grey
                     c.setStrokeColor(colors.HexColor("#E5E7EB"))
@@ -910,8 +903,8 @@ def generar_pdf_analisis_exigencia_to(
                     c.setFillColor(colors.white)
                 else:
                     c.setFillColor(colors.HexColor("#4B5563"))
-                c.setFont("Helvetica-Bold" if self.is_active else "Helvetica", 9)
-                c.drawCentredString(self.size/2.0, self.size/2.0 - 3, self.text)
+                c.setFont("Helvetica-Bold" if self.is_active else "Helvetica", 8)
+                c.drawCentredString(self.size/2.0, self.size/2.0 - 2.5, self.text)
                 c.restoreState()
 
         def build_rating_scale(val):
@@ -921,9 +914,9 @@ def generar_pdf_analisis_exigencia_to(
                 val = -1
             cells = []
             for i in range(5):
-                cells.append(CircleBg(str(i), is_active=(i == val), size=16))
+                cells.append(CircleBg(str(i), is_active=(i == val), size=14))
             
-            t_scale = Table([cells], colWidths=[20]*5, rowHeights=[20])
+            t_scale = Table([cells], colWidths=[18]*5, rowHeights=[18])
             t_scale.setStyle(TableStyle([
                 ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
                 ('ALIGN', (0,0), (-1,-1), 'CENTER'),
