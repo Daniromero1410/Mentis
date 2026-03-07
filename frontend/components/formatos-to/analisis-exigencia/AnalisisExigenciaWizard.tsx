@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { toast } from '../../ui/sileo-toast';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
     Save, ChevronLeft, ChevronRight, Loader2,
     FileText, User, Briefcase,
-    Activity, AlertTriangle
+    Activity, AlertTriangle, Download
 } from 'lucide-react';
 import { BlurValidationModal } from '../BlurValidationModal';
 
@@ -53,6 +55,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
     const [currentStep, setCurrentStep] = useState(1);
     const [analisisId, setAnalisisId] = useState<number | null>(id || null);
     const [saving, setSaving] = useState(false);
+    const [showDownloadModal, setShowDownloadModal] = useState(false);
 
     const [perfilExigencias, setPerfilExigencias] = useState<any>({});
 
@@ -494,20 +497,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             if (!analisisId && d.id) setAnalisisId(d.id);
 
             if (finalizar) {
-                // Descargar PDF logic moved to success modal button
-                // await downloadPDF(d.id); 
-
-                setValidationModal({
-                    isOpen: true,
-                    title: 'Finalizado',
-                    message: 'Análisis finalizado correctamente. Se abrirá el PDF para descargar.',
-                    errors: [],
-                    type: 'success',
-                    action: {
-                        label: 'Ver Documento (PDF)',
-                        onClick: () => generatePDF(d.id, 'preview')
-                    }
-                });
+                setShowDownloadModal(true);
             } else {
                 setValidationModal({
                     isOpen: true,
@@ -718,6 +708,33 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 type={validationModal.type}
                 action={validationModal.action}
             />
+
+            {showDownloadModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
+                        <div className="text-center">
+                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <h2 className="text-xl font-bold mb-2 text-gray-900">Análisis Finalizado</h2>
+                            <p className="mb-6 text-gray-600">El Análisis de Exigencias se ha guardado y finalizado correctamente.</p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-3">
+                                <Button
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                                    onClick={() => generatePDF(analisisId!, 'download')}
+                                >
+                                    <Download className="mr-2 h-4 w-4" /> Descargar PDF
+                                </Button>
+                                <Button variant="outline" className="w-full sm:w-auto" onClick={() => router.push('/dashboard/analisis-exigencia')}>
+                                    Volver al listado
+                                </Button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            )}
 
         </div>
     );

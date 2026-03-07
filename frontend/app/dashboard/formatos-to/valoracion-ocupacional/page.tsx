@@ -228,106 +228,114 @@ export default function ValoracionOcupacionalPage() {
                 </Card>
 
                 {/* Tabla */}
-                <Card className="border-none shadow-md overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <Table>
-                            <TableHeader className="bg-gray-50/50 dark:bg-gray-800/50">
+                <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333333] shadow-sm overflow-hidden">
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="bg-gray-50/50 dark:bg-[#111111] hover:bg-gray-50/50 dark:hover:bg-[#111111]">
+                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
+                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
+                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
+                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">FECHA</TableHead>
+                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">ESTADO</TableHead>
+                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4 text-right">ACCIONES</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {loading ? (
                                 <TableRow>
-                                    <TableHead className="font-semibold px-6 py-4">Información del Trabajador</TableHead>
-                                    <TableHead className="font-semibold py-4">Empresa</TableHead>
-                                    <TableHead className="font-semibold py-4">Fecha</TableHead>
-                                    <TableHead className="font-semibold py-4">Estado</TableHead>
-                                    <TableHead className="text-right font-semibold px-6 py-4">Acciones</TableHead>
+                                    <TableCell colSpan={6} className="text-center py-12 text-gray-500">
+                                        <div className="flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div></div>
+                                    </TableCell>
                                 </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {loading ? (
-                                    <TableRow>
-                                        <TableCell colSpan={5} className="h-48 text-center">
-                                            <div className="flex flex-col items-center justify-center text-gray-500">
-                                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mb-4"></div>
-                                                Cargando valoraciones...
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ) : filteredValoraciones.length === 0 ? (
-                                    <TableRow>
-                                        <TableCell colSpan={5} className="h-48 text-center">
-                                            <div className="flex flex-col items-center justify-center text-gray-500">
-                                                <FileText className="h-12 w-12 mb-4 text-gray-300 dark:text-gray-600" />
-                                                <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">
-                                                    No hay valoraciones
-                                                </p>
-                                                <p className="text-sm">
-                                                    {searchTerm || estadoFilter !== 'todos'
-                                                        ? 'No se encontraron resultados para tu búsqueda.'
-                                                        : 'Comienza creando una nueva valoración ocupacional.'}
-                                                </p>
-                                                {!(searchTerm || estadoFilter !== 'todos') && (
-                                                    <Button onClick={handleCreateNuevo} variant="outline" className="mt-4">
-                                                        <Plus className="h-4 w-4 mr-2" />
-                                                        Crear la primera
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ) : (
-                                    filteredValoraciones.map((item) => (
-                                        <TableRow key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                            <TableCell className="px-6 py-4">
-                                                <div className="font-medium text-gray-900 dark:text-gray-100">
-                                                    {item.trabajador_nombre || 'Sin nombre'}
-                                                </div>
-                                                <div className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                                                    <span className="text-xs px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded font-medium">CC</span>
-                                                    {item.trabajador_documento || '---'}
-                                                </div>
-                                            </TableCell>
+                            ) : filteredValoraciones.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="text-center py-12 text-gray-500">
+                                        <div className="flex flex-col items-center justify-center text-gray-500">
+                                            <FileText className="h-12 w-12 mb-4 text-gray-300 dark:text-gray-600" />
+                                            <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                                No hay valoraciones
+                                            </p>
+                                            <p className="text-sm">
+                                                {searchTerm || estadoFilter !== 'todos'
+                                                    ? 'No se encontraron resultados para tu búsqueda.'
+                                                    : 'Comienza creando una nueva valoración ocupacional.'}
+                                            </p>
+                                            {!(searchTerm || estadoFilter !== 'todos') && (
+                                                <Button onClick={handleCreateNuevo} variant="outline" className="mt-4">
+                                                    <Plus className="h-4 w-4 mr-2" />
+                                                    Crear la primera
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                filteredValoraciones.map((item) => {
+                                    const nombre = item.trabajador_nombre || 'Sin nombre';
+                                    const initial = nombre.charAt(0).toUpperCase();
+                                    return (
+                                        <TableRow key={item.id} className="hover:bg-gray-50/50 dark:hover:bg-[#222222] transition-colors">
                                             <TableCell className="py-4">
-                                                <div className="flex items-center gap-2">
-                                                    <Briefcase className="h-4 w-4 text-gray-400" />
-                                                    <span className="text-gray-700 dark:text-gray-300">
-                                                        {item.empresa || 'No registrada'}
-                                                    </span>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm">
+                                                        {initial}
+                                                    </div>
+                                                    <span className="font-semibold text-gray-900 dark:text-white text-sm uppercase">{nombre}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="py-4 text-gray-600 dark:text-gray-400">
+                                            <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                                                {item.trabajador_documento || '-'}
+                                            </TableCell>
+                                            <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                                                <div className="flex items-center gap-2">
+                                                    <Briefcase className="h-3 w-3 text-gray-400" />
+                                                    {item.empresa || '-'}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-sm text-gray-500 dark:text-gray-400">
                                                 {format(new Date(item.fecha_creacion), "d 'de' MMMM, yyyy", { locale: es })}
                                             </TableCell>
-                                            <TableCell className="py-4">
+                                            <TableCell>
                                                 <Badge
-                                                    variant={item.estado === 'completada' ? 'default' : 'secondary'}
-                                                    className={`capitalize flex items-center gap-1.5 w-fit ${item.estado === 'completada'
-                                                        ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/40 dark:text-green-400'
-                                                        : 'bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-400'
+                                                    variant="secondary"
+                                                    className={`font-medium rounded-full px-3 py-0.5 ${item.estado.toLowerCase() === 'completada'
+                                                        ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                                                        : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
                                                         }`}
                                                 >
-                                                    {item.estado === 'completada' ? <CheckCircle className="h-3.5 w-3.5" /> : <Clock className="h-3.5 w-3.5" />}
-                                                    {item.estado}
+                                                    {item.estado.toLowerCase() === 'completada' ? 'Completada' : 'Borrador'}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="px-6 py-4 text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleEdit(item.id)}
-                                                        className="h-8 shadow-sm border border-gray-200 dark:border-gray-700 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-400"
-                                                    >
-                                                        {item.estado === 'completada' ? (
-                                                            <><Eye className="h-4 w-4 mr-1.5" /> Ver</>
-                                                        ) : (
-                                                            <><Edit className="h-4 w-4 mr-1.5" /> Editar</>
-                                                        )}
-                                                    </Button>
+                                            <TableCell className="text-right">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    {item.estado === 'completada' ? (
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleEdit(item.id)}
+                                                            className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                                            title="Ver Detalles"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    ) : (
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleEdit(item.id)}
+                                                            className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
+                                                            title="Editar"
+                                                        >
+                                                            <Edit className="h-4 w-4" />
+                                                        </Button>
+                                                    )}
 
                                                     {item.estado === 'completada' && (
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
                                                             onClick={() => handleDownloadPDF(item.id)}
-                                                            className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/30"
+                                                            className="h-8 w-8 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
                                                             title="Descargar PDF"
                                                         >
                                                             <Download className="h-4 w-4" />
@@ -338,7 +346,7 @@ export default function ValoracionOcupacionalPage() {
                                                         variant="ghost"
                                                         size="icon"
                                                         onClick={() => confirmDelete(item.id)}
-                                                        className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30"
+                                                        className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
                                                         title="Eliminar valoración"
                                                     >
                                                         <Trash2 className="h-4 w-4" />
@@ -346,39 +354,37 @@ export default function ValoracionOcupacionalPage() {
                                                 </div>
                                             </TableCell>
                                         </TableRow>
-                                    ))
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
+                                    );
+                                })
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
 
-                    {/* Pagination */}
-                    {!loading && totalPages > 1 && (
-                        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/30">
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                                Mostrando {(page - 1) * limit + 1} a {Math.min(page * limit, totalItems)} de {totalItems} resultados
-                            </span>
-                            <div className="flex gap-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => setPage(p => Math.max(1, p - 1))}
-                                    disabled={page === 1}
-                                >
-                                    Anterior
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                    disabled={page === totalPages}
-                                >
-                                    Siguiente
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-                </Card>
+                {/* Pagination */}
+                {!loading && totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-2 mt-4">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                            disabled={page === 1}
+                        >
+                            Anterior
+                        </Button>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                            Página {page} de {totalPages}
+                        </span>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                            disabled={page === totalPages}
+                        >
+                            Siguiente
+                        </Button>
+                    </div>
+                )}
             </div>
 
             {/* Delete Modal */}

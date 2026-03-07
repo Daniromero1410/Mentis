@@ -21,7 +21,8 @@ from app.schemas.analisis_exigencia import (
     AnalisisExigenciaListResponse
 )
 from app.services.auth import get_current_user
-from app.services.pdf_generator_ae import generar_pdf_analisis_exigencia
+from app.services.concepto_ai_generator import generar_concepto_ai
+from app.services.pdf_generator_analisis_exigencia_to import generar_pdf_analisis_exigencia_to
 
 router = APIRouter(
     prefix="/formatos-to/analisis-exigencia",
@@ -229,7 +230,7 @@ def generar_pdf_ae(
 
     # Generate PDF
     try:
-        pdf_path = generar_pdf_analisis_exigencia(
+        pdf_path = generar_pdf_analisis_exigencia_to(
             analisis=analisis,
             identificacion=identificacion,
             secciones=secciones,
