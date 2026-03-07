@@ -228,7 +228,7 @@ def generar_pdf_valoracion_ocupacional(
         "<para align=center><b>POSITIVA S.A</b><br/>"
         "Compañía de Seguros / ARL<br/>"
         "-Gestión Documental-<br/>"
-        "<b>VALORACIÓN OCUPACIONAL</b></para>",
+        "<b>VALORACIÓN<br/>DEL DESEMPEÑO OCUPACIONAL FINAL DE USUARIO</b></para>",
         style_normal
     )
 
@@ -328,7 +328,7 @@ def generar_pdf_valoracion_ocupacional(
     ]))
     story.append(t_id_1)
 
-    nac_row = [[B("Fecha de nacimiento/edad*"), P(fmt_fecha(i.fecha_nacimiento if i else None)), B("edad"), P(calcular_edad(i.fecha_nacimiento if i else None))]]
+    nac_row = [[B("Fecha de nacimiento/edad*"), P(fmt_fecha(i.fecha_nacimiento if i else None)), B("edad"), P(str(i.edad) + " años" if i and i.edad else calcular_edad(i.fecha_nacimiento if i else None))]]
     nac_t = Table(nac_row, colWidths=[PAGE_WIDTH * 0.30, PAGE_WIDTH * 0.40, PAGE_WIDTH * 0.10, PAGE_WIDTH * 0.20])
     nac_t.setStyle(TableStyle([
         ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -421,9 +421,6 @@ def generar_pdf_valoracion_ocupacional(
     eps_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
     story.append(eps_t)
     
-    inc_t = Table([[B("Tiempo total de incapacidad"), P(i.tiempo_incapacidad_dias if i else ""), B("dias")]], colWidths=[PAGE_WIDTH*0.35, PAGE_WIDTH*0.55, PAGE_WIDTH*0.10])
-    inc_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
-    story.append(inc_t)
     
     vl = str(i.vinculacion_laboral).lower().strip() if i and i.vinculacion_laboral is not None else ""
     es_vinc = "si" if vl in ["true", "si", "1"] else ("no" if vl in ["false", "no", "0"] else "")
@@ -446,7 +443,7 @@ def generar_pdf_valoracion_ocupacional(
     
     lc_t = Table([
         [B("Contacto en empresa/cargo*"), P(i.contacto_empresa if i else "")],
-        [B("Correo(s) electrónico(s)*"), P(i.correos_electronicos if hasattr(i, "correos_electronicos") else "")],
+        [B("Correo(s) electrónico(s)*"), P(i.correos_empresa if hasattr(i, "correos_empresa") else "")],
         [B("Teléfonos de contacto empresa*"), P(i.telefonos_empresa if i else "")],
     ], colWidths=[lw, vw])
     lc_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
@@ -625,13 +622,7 @@ def generar_pdf_valoracion_ocupacional(
     orientacion = getattr(registro, 'orientacion_ocupacional', None) or ""
 
     # 9. CONCEPTO OCUPACIONAL
-    story.append(Table([[B("9.    CONCEPTO OCUPACIONAL")]], colWidths=[PAGE_WIDTH], style=[
-        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#FFF3E0")),
-        ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-        ('LEFTPADDING', (0, 0), (-1, -1), 6),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-    ]))
+    story.append(crear_seccion_header("9. CONCEPTO OCUPACIONAL"))
     t_conc = Table([[P(ActT(concepto))]], colWidths=[PAGE_WIDTH], minRowHeights=[40])
     t_conc.setStyle(TableStyle([
         ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -642,13 +633,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(t_conc)
 
     # 10. ORIENTACION OCUPACIONAL
-    story.append(Table([[B("10.   ORIENTACION OCUPACIONAL *")]], colWidths=[PAGE_WIDTH], style=[
-        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#FFF3E0")),
-        ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-        ('LEFTPADDING', (0, 0), (-1, -1), 6),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-    ]))
+    story.append(crear_seccion_header("10. ORIENTACION OCUPACIONAL *"))
     t_ori = Table([[P(ActT(orientacion))]], colWidths=[PAGE_WIDTH], minRowHeights=[40])
     t_ori.setStyle(TableStyle([
         ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -659,13 +644,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(t_ori)
 
     # 11. REGISTRO (FIRMAS)
-    story.append(Table([[B("11.   REGISTRO")]], colWidths=[PAGE_WIDTH], style=[
-        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#FFF3E0")),
-        ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-        ('LEFTPADDING', (0, 0), (-1, -1), 6),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-    ]))
+    story.append(crear_seccion_header("11. REGISTRO"))
 
     firma_eval = Spacer(1, 30)
     if evaluador and hasattr(evaluador, 'firma_path') and evaluador.firma_path and os.path.exists(evaluador.firma_path):
