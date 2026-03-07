@@ -135,14 +135,10 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                     />
                                 </FormField>
                                 <FormField label="Edad">
-                                    <div className="flex items-center gap-2">
-                                        <FormInput
-                                            value={data?.identificacion?.edad || ''}
-                                            onChange={(e) => handleIdentificacionChange('edad', parseInt(e.target.value))}
-                                            disabled={readOnly}
-                                            type="number"
-                                        />
-                                        <span className="text-sm text-slate-500">años</span>
+                                    <div className="h-10 flex items-center px-3 bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
+                                        {data?.identificacion?.edad !== undefined && data?.identificacion?.edad !== ''
+                                            ? `${data.identificacion.edad} años`
+                                            : '---'}
                                     </div>
                                 </FormField>
                             </div>
@@ -422,13 +418,8 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                             </FormField>
 
                             <FormField label="Antigüedad en la Empresa">
-                                <div className="flex gap-2 items-center">
-                                    <FormInput
-                                        value={data?.identificacion?.antiguedad_empresa || ''}
-                                        onChange={(e) => handleIdentificacionChange('antiguedad_empresa', e.target.value)}
-                                        disabled={readOnly}
-                                    />
-                                    <span className="text-sm text-slate-500">años</span>
+                                <div className="h-10 flex items-center px-3 bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
+                                    {data?.identificacion?.antiguedad_empresa || '---'} {data?.identificacion?.antiguedad_empresa && data?.identificacion?.antiguedad_empresa !== 'Menos de 1 año' ? 'años' : ''}
                                 </div>
                             </FormField>
 
