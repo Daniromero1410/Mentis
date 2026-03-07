@@ -596,7 +596,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
     try {
       let requestPayload: any = {};
       if (aeId) {
-        requestPayload = { ae_id: aeId };
+        requestPayload = { AE_id: aeId };
       } else {
         const condicionesRiesgo: any[] = [];
         Object.entries(factoresRiesgo).forEach(([key, categoria]) => {

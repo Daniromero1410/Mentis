@@ -66,8 +66,8 @@ const RatingTable = ({
                                                 disabled={readOnly}
                                                 onClick={() => onChange(item, 'valor', r)}
                                                 className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${values[item]?.valor === r
-                                                        ? 'bg-blue-600 text-white shadow-md scale-110'
-                                                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                                                    ? 'bg-blue-600 text-white shadow-md scale-110'
+                                                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                                                     }`}
                                             >
                                                 {r}
@@ -130,7 +130,7 @@ const vidaDomesticaItems = [
     'Cuidado de los animales',
 ];
 
-export function Seccion5OtrasAreas({ data, updateData, readOnly = false }: Seccion5Props) {
+export function Seccion6OtrasAreas({ data, updateData, readOnly = false }: Seccion5Props) {
     // The evaluacion_otras_areas now stores nested objects per category
     const getValues = (category: string) => {
         return data?.evaluacion_otras_areas?.[category] || {};

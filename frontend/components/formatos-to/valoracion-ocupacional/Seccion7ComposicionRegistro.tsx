@@ -11,7 +11,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Plus, Trash2, Upload } from 'lucide-react';
+import { Trash2, Upload } from 'lucide-react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @next/next/no-img-element */
 
 interface Seccion6Props {
     data: any;
@@ -19,7 +23,7 @@ interface Seccion6Props {
     readOnly?: boolean;
 }
 
-export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false }: Seccion6Props) {
+export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false }: Seccion6Props) {
 
     // Helper functions
     const handleComposicionChange = (field: string, value: any) => {
@@ -67,17 +71,9 @@ export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* COMPOSICIÓN FAMILIAR */}
-            <FormSection title="11. Composición Familiar">
+            <FormSection title="9. Concepto Ocupacional">
                 <div className="space-y-6">
-                    <Card className="border-slate-200 shadow-sm overflow-hidden">
-                        <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3 flex flex-row items-center justify-between space-y-0">
-                            <CardTitle className="text-sm font-bold text-slate-700">Miembros del Núcleo Familiar (Edades)</CardTitle>
-                            {!readOnly && (
-                                <Button type="button" onClick={handleAddMiembro} variant="outline" size="sm" className="gap-2">
-                                    <Plus className="h-4 w-4" /> Agregar Familiar
-                                </Button>
-                            )}
-                        </CardHeader>
+                    <Card>
                         <CardContent className="p-0">
                             <Table>
                                 <TableHeader className="bg-gray-50 dark:bg-gray-900/50">
@@ -174,10 +170,10 @@ export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false
                         </CardContent>
                     </Card>
                 </div>
-            </FormSection>
+            </FormSection >
 
             {/* CONCEPTO Y ORIENTACIÓN */}
-            <FormSection title="12. Impresiones Generales y Concepto">
+            <FormSection title="10. Orientación Ocupacional">
                 <div className="space-y-6">
                     <Card className="border-slate-200 shadow-sm">
                         <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
@@ -228,7 +224,7 @@ export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false
                         </CardContent>
                     </Card>
                 </div>
-            </FormSection >
+            </FormSection>
 
             {/* REGISTRO Y FIRMAS */}
             <FormSection title="11. Registro">
@@ -355,6 +351,6 @@ export function Seccion6ComposicionRegistro({ data, updateData, readOnly = false
                     </div>
                 </div>
             </FormSection>
-        </div >
+        </div>
     );
 }

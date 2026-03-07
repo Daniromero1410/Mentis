@@ -18,6 +18,7 @@ import {
     Heart,
     PenTool
 } from 'lucide-react';
+
 import { toast } from '@/components/ui/sileo-toast';
 import { api } from '@/app/services/api';
 
@@ -25,8 +26,9 @@ import { Seccion1ObjetivoIdentificacion } from './Seccion1ObjetivoIdentificacion
 import { Seccion2HistoriaOcupacional } from './Seccion2HistoriaOcupacional';
 import { Seccion3ActividadActual } from './Seccion3ActividadActual';
 import { Seccion4RolLaboralEvento } from './Seccion4RolLaboralEvento';
-import { Seccion5OtrasAreas } from './Seccion5OtrasAreas';
-import { Seccion6ComposicionRegistro } from './Seccion6ComposicionRegistro';
+import { Seccion5ComposicionFamiliar } from './Seccion5ComposicionFamiliar';
+import { Seccion6OtrasAreas } from './Seccion6OtrasAreas';
+import { Seccion7ComposicionRegistro } from './Seccion7ComposicionRegistro';
 import { BlurValidationModal } from '../BlurValidationModal';
 
 interface WizardProps {
@@ -39,8 +41,9 @@ const STEPS = [
     { title: '2. Historial y Eventos', icon: ClipboardList },
     { title: '3. Actividad Actual', icon: Activity },
     { title: '4. Rol Laboral y Evento', icon: Briefcase },
-    { title: '5. Otras Áreas', icon: Heart },
-    { title: '6. Composición y Registro', icon: PenTool }
+    { title: '5. Composición Familiar', icon: User },
+    { title: '6. Otras Áreas', icon: Heart },
+    { title: '7. Composición y Registro', icon: PenTool }
 ];
 
 interface ValidationModalState {
@@ -211,9 +214,11 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                 if (!formData.rol_laboral?.tareas_operaciones) errors.push('Tareas / Operaciones exigidas por el cargo');
                 if (!formData.evento_atel?.tratamiento_rehabilitacion) errors.push('Tratamiento o Manejos (Rehabilitación)');
                 break;
-            case 4: // Otras Áreas - sección informativa, sin validación obligatoria
+            case 4: // Composición Familiar (sin validacion por ahora)
                 break;
-            case 5: // Composición y Registro
+            case 5: // Otras Áreas - sección informativa, sin validación obligatoria
+                break;
+            case 6: // Composición y Registro
                 if (!formData.registro?.nombre_elaboro) errors.push('Nombre completo del Profesional (Elaboró)');
                 if (!formData.registro?.firma_elaboro) errors.push('Firma del Profesional (Elaboró)');
                 break;
@@ -249,8 +254,9 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
         <Seccion2HistoriaOcupacional key="s2" data={formData} updateData={updateData} readOnly={readOnly} />,
         <Seccion3ActividadActual key="s3" data={formData} updateData={updateData} readOnly={readOnly} />,
         <Seccion4RolLaboralEvento key="s4" data={formData} updateData={updateData} readOnly={readOnly} />,
-        <Seccion5OtrasAreas key="s5" data={formData} updateData={updateData} readOnly={readOnly} />,
-        <Seccion6ComposicionRegistro key="s6" data={formData} updateData={updateData} readOnly={readOnly} />
+        <Seccion5ComposicionFamiliar key="s5" data={formData} updateData={updateData} readOnly={readOnly} />,
+        <Seccion6OtrasAreas key="s6" data={formData} updateData={updateData} readOnly={readOnly} />,
+        <Seccion7ComposicionRegistro key="s7" data={formData} updateData={updateData} readOnly={readOnly} />
     ];
 
     if (loading) {
