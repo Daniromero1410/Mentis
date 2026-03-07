@@ -98,16 +98,31 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                     <div className="grid grid-cols-1 md:grid-cols-3 bg-white">
                         {/* Column 1: ELABORÓ */}
                         <div className="border-b md:border-b-0 md:border-r border-slate-200 p-6 flex flex-col justify-between min-h-[300px]">
-                            <div className="flex-1 flex flex-col gap-6">
+                            <div className="flex-1 flex flex-col gap-4">
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-bold text-slate-500 uppercase">Nombre y Apellido</Label>
+                                    <Input
+                                        value={data?.registro?.nombre_elaboro || ''}
+                                        onChange={(e) => handleRegistroChange('nombre_elaboro', e.target.value)}
+                                        disabled={readOnly}
+                                        className="h-9 bg-slate-50/50"
+                                    />
+                                </div>
                                 <div className="space-y-2 flex-1 flex flex-col">
+                                    <Label className="text-xs font-bold text-slate-500 uppercase">Firma</Label>
                                     <div className="flex-1 min-h-[120px]">
                                         {data?.registro?.firma_elaboro ? (
-                                            <div className="border rounded p-2 bg-white flex justify-center flex-col items-center h-full">
+                                            <div className="border rounded p-2 bg-white flex justify-center flex-col items-center h-full relative">
                                                 <img src={data.registro.firma_elaboro} alt="Firma Elaboro" className="max-h-24 object-contain" />
                                                 {!readOnly && (
-                                                    <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_elaboro', '')} className="text-red-500 mt-2 h-7">
-                                                        Eliminar firma
-                                                    </Button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRegistroChange('firma_elaboro', '')}
+                                                        className="absolute top-2 right-2 flex items-center justify-center p-1 bg-red-100 hover:bg-red-200 text-red-600 rounded-full transition-colors"
+                                                        title="Eliminar Firma"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                    </button>
                                                 )}
                                             </div>
                                         ) : (
@@ -120,15 +135,6 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                                             )
                                         )}
                                     </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label className="text-xs font-bold text-slate-500 uppercase">Nombre y Apellido</Label>
-                                    <Input
-                                        value={data?.registro?.nombre_elaboro || ''}
-                                        onChange={(e) => handleRegistroChange('nombre_elaboro', e.target.value)}
-                                        disabled={readOnly}
-                                        className="h-9 bg-slate-50/50"
-                                    />
                                 </div>
                                 <div className="space-y-2">
                                     <Label className="text-xs font-bold text-slate-500 uppercase">Licencia S.O No.</Label>
@@ -147,16 +153,31 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
 
                         {/* Column 2: REVISIÓN PROVEEDOR */}
                         <div className="border-b md:border-b-0 md:border-r border-slate-200 p-6 flex flex-col justify-between min-h-[300px]">
-                            <div className="flex-1 flex flex-col gap-6">
+                            <div className="flex-1 flex flex-col gap-4">
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-bold text-slate-500 uppercase">Nombre y Apellido</Label>
+                                    <Input
+                                        value={data?.registro?.nombre_proveedor || ''}
+                                        onChange={(e) => handleRegistroChange('nombre_proveedor', e.target.value)}
+                                        disabled={readOnly}
+                                        className="h-9 bg-slate-50/50"
+                                    />
+                                </div>
                                 <div className="space-y-2 flex-1 flex flex-col">
+                                    <Label className="text-xs font-bold text-slate-500 uppercase">Firma</Label>
                                     <div className="flex-1 min-h-[120px]">
                                         {data?.registro?.firma_proveedor ? (
-                                            <div className="border rounded p-2 bg-white flex justify-center flex-col items-center h-full">
+                                            <div className="border rounded p-2 bg-white flex justify-center flex-col items-center h-full relative">
                                                 <img src={data.registro.firma_proveedor} alt="Firma Proveedor" className="max-h-24 object-contain" />
                                                 {!readOnly && (
-                                                    <Button type="button" variant="ghost" size="sm" onClick={() => handleRegistroChange('firma_proveedor', '')} className="text-red-500 mt-2 h-7">
-                                                        Eliminar firma
-                                                    </Button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRegistroChange('firma_proveedor', '')}
+                                                        className="absolute top-2 right-2 flex items-center justify-center p-1 bg-red-100 hover:bg-red-200 text-red-600 rounded-full transition-colors"
+                                                        title="Eliminar Firma"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                    </button>
                                                 )}
                                             </div>
                                         ) : (
@@ -170,15 +191,7 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                                         )}
                                     </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className="text-xs font-bold text-slate-500 uppercase">Nombre y Apellido</Label>
-                                    <Input
-                                        value={data?.registro?.nombre_proveedor || ''}
-                                        onChange={(e) => handleRegistroChange('nombre_proveedor', e.target.value)}
-                                        disabled={readOnly}
-                                        className="h-9 bg-slate-50/50"
-                                    />
-                                </div>
+                                {/* Placeholder for visual alignment if Licencia SO was added here in the future - currently omitted for proveedor */}
                             </div>
                             <div className="mt-4 pt-4 border-t border-slate-100 text-center">
                                 <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wide">Profesional que revisa la valoración</p>
