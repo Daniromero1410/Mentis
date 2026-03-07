@@ -270,7 +270,7 @@ def _delete_children(vid: int, session: Session):
 # ═════════════════════════════════════════════════════════════════════
 # FINALIZAR
 # ═════════════════════════════════════════════════════════════════════
-@router.post("/{valoracion_id}/finalizar", response_model=ValoracionOcupacionalResponse)
+@router.post("/{valoracion_id}/finalizar")
 def finalizar_valoracion(
     valoracion_id: int,
     session: Session = Depends(get_session),
@@ -289,7 +289,11 @@ def finalizar_valoracion(
     session.commit()
     session.refresh(valoracion)
 
-    return _build_response(valoracion, session)
+    base_response = _build_response(valoracion, session)
+    return {
+        **base_response.model_dump(),
+        "pdf_url": f"/formatos-to/valoracion-ocupacional/{valoracion_id}/descargar-pdf"
+    }
 
 
 # ═════════════════════════════════════════════════════════════════════
