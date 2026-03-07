@@ -34,10 +34,8 @@ export function Seccion5ComposicionFamiliar({ data, updateData, readOnly = false
     const handleAddMiembro = () => {
         const arr = Array.isArray(data.miembros_familiares) ? [...data.miembros_familiares] : [];
         const nuevoMiembro = {
-            nombre_familiar: '',
-            parentesco: '',
-            edad_fecha_nacimiento: '',
-            ocupacion: ''
+            composicion_nucleo: '',
+            fecha_nacimiento: '',
         };
         updateData('miembros_familiares', '', [...arr, nuevoMiembro]);
     };
@@ -84,8 +82,8 @@ export function Seccion5ComposicionFamiliar({ data, updateData, readOnly = false
                                             <TableRow key={index} className="hover:bg-slate-50/50">
                                                 <TableCell className="p-2 align-top">
                                                     <Input
-                                                        value={miembro.nombre_familiar || ''}
-                                                        onChange={(e) => handleMiembroChange(index, 'nombre_familiar', e.target.value)}
+                                                        value={miembro.composicion_nucleo || ''}
+                                                        onChange={(e) => handleMiembroChange(index, 'composicion_nucleo', e.target.value)}
                                                         disabled={readOnly}
                                                         className="h-9 w-full"
                                                         placeholder="Nombre y Parentesco..."
@@ -93,8 +91,8 @@ export function Seccion5ComposicionFamiliar({ data, updateData, readOnly = false
                                                 </TableCell>
                                                 <TableCell className="p-2 align-top">
                                                     <Input
-                                                        value={miembro.edad_fecha_nacimiento || ''}
-                                                        onChange={(e) => handleMiembroChange(index, 'edad_fecha_nacimiento', e.target.value)}
+                                                        value={miembro.fecha_nacimiento || ''}
+                                                        onChange={(e) => handleMiembroChange(index, 'fecha_nacimiento', e.target.value)}
                                                         disabled={readOnly}
                                                         className="h-9 w-full"
                                                         placeholder="dd/mm/año"
@@ -125,8 +123,8 @@ export function Seccion5ComposicionFamiliar({ data, updateData, readOnly = false
                         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                             <FormField label="Persona(s) que sostiene económicamente el hogar:" className="md:col-span-2">
                                 <Input
-                                    value={data.composicion_familiar?.sosten_economico || ''}
-                                    onChange={(e) => handleComposicionChange('sosten_economico', e.target.value)}
+                                    value={data.composicion_familiar?.personas_sostienen_hogar || ''}
+                                    onChange={(e) => handleComposicionChange('personas_sostienen_hogar', e.target.value)}
                                     disabled={readOnly}
                                 />
                             </FormField>
