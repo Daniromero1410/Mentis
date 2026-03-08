@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { api } from '@/app/services/api';
@@ -35,8 +36,10 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
   const [loadingResolve, setLoadingResolve] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Solo fetching si el usuario es admin
     if (user?.rol === 'admin') {
       const fetchPendingRequests = async () => {
@@ -215,10 +218,10 @@ export function Header({ onToggleSidebar }: HeaderProps) {
       </div>
 
       {/* Modal de Cerrar Sesión - Premium */}
-      {showLogoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {showLogoutModal && mounted && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
           {/* Backdrop blur */}
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowLogoutModal(false)} />
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-all duration-300" onClick={() => setShowLogoutModal(false)} />
 
           {/* Modal card */}
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -256,7 +259,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 </Button>
                 <Button
                   onClick={handleLogout}
-                  className="flex-1 h-11 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium shadow-sm"
+                  className="flex-1 h-11 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium shadow-sm transition-colors"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Cerrar Sesión
@@ -264,7 +267,8 @@ export function Header({ onToggleSidebar }: HeaderProps) {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </header>
