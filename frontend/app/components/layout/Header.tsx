@@ -223,12 +223,12 @@ export function Header({ onToggleSidebar }: HeaderProps) {
           {/* Modal card */}
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Top accent gradient */}
-            <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700" />
+            <div className="h-1.5 bg-blue-600" />
 
             <div className="p-6">
               {/* Avatar + info */}
               <div className="flex flex-col items-center text-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold mb-3 shadow-lg shadow-blue-500/25">
+                <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-bold mb-3 shadow-lg shadow-blue-500/25">
                   {user ? getInitials(user.nombre, user.apellido) : 'U'}
                 </div>
                 <h3 className="text-lg font-bold text-gray-900">{user?.nombre} {user?.apellido}</h3>

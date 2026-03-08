@@ -170,8 +170,8 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
             <button
               onClick={() => toggleExpand(item.title)}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all duration-200 ${active
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600'
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600'
                 } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
               style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
             >
@@ -196,8 +196,8 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
             href={item.href}
             onClick={closeMobileSidebar}
             className={`flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all duration-200 ${active
-                ? 'bg-blue-50 text-blue-600'
-                : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600'
+              ? 'bg-blue-50 text-blue-600'
+              : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600'
               } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
             style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
           >
@@ -262,7 +262,7 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
       {!collapsed && (
         <div className="p-3 border-t border-gray-100 shrink-0">
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50/50">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
               {user?.nombre?.charAt(0)}{user?.apellido?.charAt(0)}
             </div>
             <div className="min-w-0 flex-1">

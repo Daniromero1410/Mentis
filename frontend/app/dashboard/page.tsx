@@ -213,7 +213,7 @@ export default function DashboardPage() {
 
             {/* Welcome — no Card wrapper, manual rounded container */}
             <div className="rounded-xl border border-gray-200 overflow-hidden shadow-sm anim-fade-in-up bg-white">
-              <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 px-5 pt-6 pb-6">
+              <div className="bg-blue-600 px-5 pt-6 pb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                     <TrendingUp className="h-4 w-4 text-white" />
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                     return (
                       <Link key={mod.key} href={mod.newHref}>
                         <div className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 bg-white hover:border-blue-300 hover:bg-blue-50 hover:shadow-md cursor-pointer group opacity-0 anim-fade-in-up delay-${idx + 1}`} style={{ animationFillMode: 'forwards' }}>
-                          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-transform duration-200">
+                          <div className="p-2 rounded-lg bg-blue-600 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-transform duration-200">
                             <Icon className="h-4 w-4 text-white" />
                           </div>
                           <span className="text-[10px] font-semibold text-gray-500 group-hover:text-blue-600 text-center leading-tight line-clamp-2 transition-colors duration-200">{mod.shortLabel}</span>
@@ -390,7 +390,7 @@ export default function DashboardPage() {
                           style={{ animationFillMode: 'forwards' }}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
+                            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
                               {initials}
                             </div>
                             <div className="min-w-0">
@@ -444,7 +444,7 @@ export default function DashboardPage() {
 
           <div className={`relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden transition-all duration-200 ${modalVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'}`}>
             {/* Gradient header */}
-            <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 px-6 pt-5 pb-6 relative">
+            <div className="bg-blue-600 px-6 pt-5 pb-6 relative">
               <button onClick={closeModal} className="absolute top-4 right-4 p-1.5 hover:bg-white/20 rounded-lg transition-colors duration-200">
                 <X className="h-4 w-4 text-white/80" />
               </button>

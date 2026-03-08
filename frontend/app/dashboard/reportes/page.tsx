@@ -115,7 +115,7 @@ export default function ReportesPage() {
                 style={{ animationFillMode: 'forwards' }}
               >
                 {/* Card header with gradient */}
-                <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 px-5 py-5">
+                <div className="bg-blue-600 px-5 py-5">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-white/20 rounded-xl backdrop-blur-sm">
                       <Icon className="h-6 w-6 text-white" />
