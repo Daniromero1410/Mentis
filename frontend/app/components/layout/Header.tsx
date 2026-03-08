@@ -214,35 +214,58 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         </div>
       </div>
 
-      {/* Modal de Cerrar Sesión */}
-      <Modal
-        isOpen={showLogoutModal}
-        onClose={() => setShowLogoutModal(false)}
-        title="Cerrar Sesión"
-        size="sm"
-        footer={
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowLogoutModal(false)}
-            >
-              Cancelar
-            </Button>
-            <Button
-              onClick={handleLogout}
-              className="bg-[#ff4444] hover:bg-red-600"
-            >
-              Cerrar Sesión
-            </Button>
+      {/* Modal de Cerrar Sesión - Premium */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop blur */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowLogoutModal(false)} />
+
+          {/* Modal card */}
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Top accent gradient */}
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700" />
+
+            <div className="p-6">
+              {/* Avatar + info */}
+              <div className="flex flex-col items-center text-center mb-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold mb-3 shadow-lg shadow-blue-500/25">
+                  {user ? getInitials(user.nombre, user.apellido) : 'U'}
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">{user?.nombre} {user?.apellido}</h3>
+                <p className="text-sm text-gray-500 mt-0.5">{user?.email}</p>
+                <span className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-600 border border-blue-200 capitalize">
+                  {user?.rol}
+                </span>
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-gray-100 pt-4 mb-4">
+                <p className="text-sm text-gray-600 text-center">
+                  ¿Estás seguro que deseas cerrar sesión?
+                </p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowLogoutModal(false)}
+                  className="flex-1 h-11 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50 font-medium"
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  onClick={handleLogout}
+                  className="flex-1 h-11 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium shadow-sm"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Cerrar Sesión
+                </Button>
+              </div>
+            </div>
           </div>
-        }
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600">
-            ¿Estás seguro que deseas cerrar sesión?
-          </p>
         </div>
-      </Modal>
+      )}
 
     </header>
   );

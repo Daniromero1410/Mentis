@@ -20,6 +20,12 @@ import {
   Brain,
   ExternalLink,
   TrendingUp,
+  Eye,
+  Pencil,
+  Trash2,
+  Download,
+  X,
+  User,
 } from 'lucide-react';
 import Link from 'next/link';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -119,6 +125,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('');
+  const [selectedRecord, setSelectedRecord] = useState<RecordItem | null>(null);
 
   const availableModules = MODULES.filter(m => m.permissionCheck(user));
 
@@ -189,10 +196,19 @@ export default function DashboardPage() {
     }
   };
 
+  const getFormattedDate = (item: RecordItem) => {
+    const dateStr = item.fecha_creacion || item.created_at || item.fecha_valoracion || '';
+    if (!dateStr) return '—';
+    try {
+      return format(new Date(dateStr), "d 'de' MMMM, yyyy", { locale: es });
+    } catch {
+      return '—';
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        {/* ── Two-column layout ──────────────────────────────────── */}
         <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
 
           {/* ─── Left Panel ───────────────────────────────────────── */}
@@ -215,17 +231,19 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              <CardContent className="p-4 bg-white space-y-2">
-                <div className="grid grid-cols-2 gap-2">
-                  {availableModules.slice(0, 2).map((mod) => {
+              {/* All modules as quick create buttons */}
+              <CardContent className="p-4 bg-white">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Crear Nuevo</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {availableModules.map((mod) => {
                     const Icon = mod.icon;
                     return (
                       <Link key={mod.key} href={mod.newHref}>
-                        <div className="flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-100 bg-white hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all cursor-pointer group">
-                          <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-sm group-hover:scale-105 transition-transform">
-                            <Icon className="h-5 w-5 text-white" />
+                        <div className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border border-gray-100 bg-white hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all cursor-pointer group">
+                          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-sm group-hover:scale-105 transition-transform">
+                            <Icon className="h-4 w-4 text-white" />
                           </div>
-                          <span className="text-[11px] font-semibold text-gray-600 text-center leading-tight">{mod.shortLabel} nueva</span>
+                          <span className="text-[10px] font-semibold text-gray-500 text-center leading-tight line-clamp-2">{mod.shortLabel}</span>
                         </div>
                       </Link>
                     );
@@ -275,7 +293,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            {/* Modules Quick Access */}
+            {/* Modules List */}
             <Card className="bg-white border-gray-200 shadow-sm">
               <CardContent className="p-4 bg-white">
                 <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Módulos Disponibles</h3>
@@ -349,7 +367,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Table */}
+            {/* Table Content */}
             <div className="bg-white">
               {loading ? (
                 <div className="p-6 space-y-4">
@@ -402,9 +420,9 @@ export default function DashboardPage() {
                       return (
                         <div
                           key={item.id}
-                          className="grid grid-cols-[1fr_auto_auto_auto] gap-4 items-center px-6 py-3.5 hover:bg-blue-50/40 transition-colors"
+                          onClick={() => setSelectedRecord(item)}
+                          className="grid grid-cols-[1fr_auto_auto_auto] gap-4 items-center px-6 py-3.5 hover:bg-blue-50/40 transition-colors cursor-pointer"
                         >
-                          {/* Name + Doc */}
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
                               {initials}
@@ -414,24 +432,19 @@ export default function DashboardPage() {
                               <p className="text-xs text-gray-400 truncate">ID: {doc}</p>
                             </div>
                           </div>
-
-                          {/* Estado */}
-                          <div className="min-w-[100px]">
-                            {getEstadoBadge(item.estado)}
-                          </div>
-
-                          {/* Date */}
+                          <div className="min-w-[100px]">{getEstadoBadge(item.estado)}</div>
                           <div className="min-w-[120px] hidden sm:block">
                             <span className="text-xs text-gray-500">{getRecordDate(item)}</span>
                           </div>
-
-                          {/* Action */}
                           <div className="min-w-[60px] text-right">
-                            <Link href={`${activeModule?.href}/${item.id}`}>
-                              <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50">
-                                <ExternalLink className="h-4 w-4" />
-                              </Button>
-                            </Link>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                              onClick={(e) => { e.stopPropagation(); setSelectedRecord(item); }}
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
                       );
@@ -455,6 +468,102 @@ export default function DashboardPage() {
           </Card>
         </div>
       </div>
+
+
+      {/* ─── Record Detail Modal ──────────────────────────────────── */}
+      {selectedRecord && activeModule && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSelectedRecord(null)} />
+
+          {/* Modal */}
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Top gradient accent */}
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700" />
+
+            {/* Header with close */}
+            <div className="px-6 pt-5 pb-0 flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold shadow-md shadow-blue-500/20">
+                  {(selectedRecord.trabajador_nombre || 'SN').split(' ').map(n => n.charAt(0)).slice(0, 2).join('').toUpperCase()}
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-gray-900">
+                    {selectedRecord.trabajador_nombre || 'Sin nombre'}
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    {selectedRecord.trabajador_documento || selectedRecord.trabajador_identificacion || '—'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedRecord(null)}
+                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="h-4 w-4 text-gray-400" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 py-5 space-y-4">
+              {/* Info grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Módulo</p>
+                  <p className="text-sm font-semibold text-gray-800">{activeModule.label}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Estado</p>
+                  {getEstadoBadge(selectedRecord.estado)}
+                </div>
+                {selectedRecord.empresa && (
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Empresa</p>
+                    <p className="text-sm text-gray-700">{selectedRecord.empresa}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Fecha</p>
+                  <p className="text-sm text-gray-700">{getFormattedDate(selectedRecord)}</p>
+                </div>
+              </div>
+
+              {/* Stats row */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="text-center p-3 rounded-xl bg-blue-50/60 border border-blue-100">
+                  <p className="text-lg font-bold text-blue-600">#{selectedRecord.id}</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Registro</p>
+                </div>
+                <div className="text-center p-3 rounded-xl bg-blue-50/60 border border-blue-100">
+                  <p className="text-lg font-bold text-blue-600">{getRecordDate(selectedRecord)}</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Creado</p>
+                </div>
+                <div className="text-center p-3 rounded-xl bg-blue-50/60 border border-blue-100">
+                  <p className="text-lg font-bold text-blue-600 capitalize">{selectedRecord.estado}</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Estado</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div className="px-6 pb-5 flex gap-2">
+              <Link href={`${activeModule.href}?id=${selectedRecord.id}&view=true`} className="flex-1">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-10 text-sm font-medium shadow-sm">
+                  <Eye className="h-4 w-4 mr-2" />
+                  Ver Registro
+                </Button>
+              </Link>
+              <Link href={`${activeModule.newHref}?id=${selectedRecord.id}`} className="flex-1">
+                <Button variant="outline" className="w-full rounded-xl h-10 text-sm font-medium border-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200">
+                  <Pencil className="h-4 w-4 mr-2" />
+                  Editar
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
     </DashboardLayout>
   );
 }
