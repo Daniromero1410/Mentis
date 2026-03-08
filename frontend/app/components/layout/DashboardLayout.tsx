@@ -11,6 +11,44 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+// Sub-componente aislado: monta con active=false (scale-0),
+// luego activa la transición en el siguiente frame de animación.
+// Así replicamos el mismo efecto "círculo → pantalla completa" del login.
+function LogoutOverlay() {
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setActive(true));
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  return (
+    <div
+      className={`fixed inset-0 bg-red-600 z-[9999] flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        active ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'
+      }`}
+    >
+      <div
+        className={`flex flex-col items-center justify-center text-white transition-all duration-500 delay-300 ${
+          active ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+        }`}
+      >
+        <div className="relative">
+          <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
+          <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white" />
+        </div>
+        <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Hasta Pronto!</h2>
+        <p className="text-red-100 text-lg flex items-center gap-2">
+          <Loader2 className="h-5 w-5 animate-spin" />
+          Cerrando sesión...
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -26,9 +64,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       }
     };
 
-    // Set initial state
     handleResize();
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -62,11 +98,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       inactivityTimer = setTimeout(logoutUser, INACTIVITY_LIMIT);
     };
 
-    // Events to track activity
     const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
     events.forEach(event => window.addEventListener(event, resetTimer));
-
-    // Initial start
     resetTimer();
 
     return () => {
@@ -95,22 +128,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
-      {/* Logout animation overlay — conditional render prevents flash on page reload */}
-      {isLoggingOut && (
-        <div className="fixed inset-0 bg-red-600 z-[9999] flex flex-col items-center justify-center animate-in zoom-in-0 fade-in duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
-          <div className="flex flex-col items-center justify-center text-white animate-in fade-in zoom-in-95 duration-500 delay-300">
-            <div className="relative">
-              <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-              <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white" />
-            </div>
-            <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Hasta Pronto!</h2>
-            <p className="text-red-100 text-lg flex items-center gap-2">
-              <Loader2 className="h-5 w-5 animate-spin" />
-              Cerrando sesión...
-            </p>
-          </div>
-        </div>
-      )}
+      {/* Logout overlay: monta con scale-0 y activa la transición en el siguiente frame */}
+      {isLoggingOut && <LogoutOverlay />}
 
       <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 
