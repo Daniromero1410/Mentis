@@ -116,7 +116,7 @@ export default function UsuariosPage() {
             nombre: usuario.nombre,
             apellido: usuario.apellido,
             rol: usuario.rol,
-            password: '', // No mostramos la contraseÃ±a
+            password: '', // No mostramos la contraseña
             acceso_valoraciones: usuario.acceso_valoraciones ?? false,
             acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo ?? false,
             acceso_formatos_to: usuario.acceso_formatos_to ?? false,
@@ -142,7 +142,7 @@ export default function UsuariosPage() {
             return;
         }
         if (!selectedUsuario && !formData.password.trim()) {
-            toast.error('La contraseÃ±a es requerida para nuevos usuarios');
+            toast.error('La contraseña es requerida para nuevos usuarios');
             return;
         }
 
@@ -211,7 +211,7 @@ export default function UsuariosPage() {
         const badges = {
             admin: { label: 'Administrador', icon: Shield, color: 'bg-purple-100 text-purple-700' },
             supervisor: { label: 'Supervisor', icon: ShieldCheck, color: 'bg-blue-100 text-blue-700' },
-            psicologo: { label: 'PsicÃ³logo', icon: User, color: 'bg-green-100 text-green-700' },
+            psicologo: { label: 'Psicólogo', icon: User, color: 'bg-green-100 text-green-700' },
             terapeuta_ocupacional: { label: 'Terapeuta Ocupacional', icon: Briefcase, color: 'bg-teal-100 text-teal-700' },
         };
         const badge = badges[rol as keyof typeof badges] || badges.psicologo;
@@ -232,7 +232,7 @@ export default function UsuariosPage() {
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                             <Users className="h-8 w-8 text-indigo-500" />
-                            GestiÃ³n de Usuarios
+                            Gestión de Usuarios
                         </h1>
                         <p className="text-gray-600 mt-1">
                             Administre los usuarios y sus permisos de acceso
@@ -293,7 +293,7 @@ export default function UsuariosPage() {
                                                 Rol
                                             </th>
                                             <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
-                                                Acceso a MÃ³dulos
+                                                Acceso a Módulos
                                             </th>
                                             <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
                                                 Estado
@@ -328,7 +328,7 @@ export default function UsuariosPage() {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center justify-center gap-4">
-                                                        <div className="flex items-center gap-2" title="Valoraciones PsicolÃ³gicas">
+                                                        <div className="flex items-center gap-2" title="Valoraciones Psicológicas">
                                                             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_valoraciones
                                                                 ? 'bg-green-100 text-green-700'
                                                                 : 'bg-gray-100 text-gray-400'
@@ -420,7 +420,7 @@ export default function UsuariosPage() {
                         </DialogTitle>
                         <DialogDescription>
                             {selectedUsuario
-                                ? 'Modifique los datos del usuario. Deje la contraseÃ±a vacÃ­a para mantener la actual.'
+                                ? 'Modifique los datos del usuario. Deje la contraseña vacía para mantener la actual.'
                                 : 'Complete los datos para crear un nuevo usuario.'}
                         </DialogDescription>
                     </DialogHeader>
@@ -467,18 +467,18 @@ export default function UsuariosPage() {
                             )}
                         </div>
 
-                        {/* ContraseÃ±a */}
+                        {/* Contraseña */}
                         <div className="space-y-2">
                             <Label htmlFor="password" className="flex items-center gap-2">
                                 <Lock className="h-4 w-4" />
-                                ContraseÃ±a {selectedUsuario && '(dejar vacÃ­o para mantener)'}
+                                Contraseña {selectedUsuario && '(dejar vacío para mantener)'}
                             </Label>
                             <Input
                                 id="password"
                                 type="password"
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                placeholder={selectedUsuario ? 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢' : 'ContraseÃ±a'}
+                                placeholder={selectedUsuario ? '••••••••' : 'Contraseña'}
                             />
                         </div>
 
@@ -496,7 +496,7 @@ export default function UsuariosPage() {
                                 >
                                     <User className={`h-5 w-5 ${formData.rol === 'psicologo' ? 'text-green-600' : 'text-gray-400'}`} />
                                     <span className={`text-xs font-medium ${formData.rol === 'psicologo' ? 'text-green-700' : 'text-gray-600'}`}>
-                                        PsicÃ³logo
+                                        Psicólogo
                                     </span>
                                 </button>
                                 <button
@@ -541,9 +541,9 @@ export default function UsuariosPage() {
                             </div>
                         </div>
 
-                        {/* Acceso a MÃ³dulos */}
+                        {/* Acceso a Módulos */}
                         <div className="space-y-3">
-                            <Label>Acceso a MÃ³dulos</Label>
+                            <Label>Acceso a Módulos</Label>
                             <div className="space-y-2 rounded-lg border p-3">
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
@@ -555,7 +555,7 @@ export default function UsuariosPage() {
                                     />
                                     <label htmlFor="acceso_valoraciones" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <ClipboardList className="h-4 w-4 text-green-600" />
-                                        Valoraciones PsicolÃ³gicas
+                                        Valoraciones Psicológicas
                                     </label>
                                 </div>
                                 <div className="flex items-center space-x-2">
@@ -594,7 +594,7 @@ export default function UsuariosPage() {
                                     />
                                     <label htmlFor="acceso_analisis_exigencias_mental" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <Activity className="h-4 w-4 text-yellow-600" />
-                                        AnÃ¡lisis Exigencias Mental
+                                        Análisis Exigencias Mental
                                     </label>
                                 </div>
                             </div>
@@ -641,11 +641,11 @@ export default function UsuariosPage() {
                             Eliminar Usuario
                         </DialogTitle>
                         <DialogDescription>
-                            Â¿EstÃ¡ seguro que desea eliminar el usuario{' '}
+                            ¿Está seguro que desea eliminar el usuario{' '}
                             <strong>
                                 {selectedUsuario?.nombre} {selectedUsuario?.apellido}
                             </strong>
-                            ? Esta acciÃ³n no se puede deshacer.
+                            ? Esta acción no se puede deshacer.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

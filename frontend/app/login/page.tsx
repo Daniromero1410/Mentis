@@ -42,7 +42,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      toast.success('Â¡Bienvenido al sistema!');
+      toast.success('¡Bienvenido al sistema!');
     } catch (error: any) {
       toast.error(error.message || 'Credenciales incorrectas');
     } finally {
@@ -53,7 +53,7 @@ export default function LoginPage() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resetEmail) {
-      toast.error('Por favor ingresa tu correo electrÃ³nico');
+      toast.error('Por favor ingresa tu correo electrónico');
       return;
     }
 
@@ -63,7 +63,7 @@ export default function LoginPage() {
       await api.post('/auth/password-reset-request', { email: resetEmail });
 
       toast.success('Solicitud enviada correctamente', {
-        description: 'Se ha notificado al administrador para gestionar el restablecimiento de tu contraseÃ±a.',
+        description: 'Se ha notificado al administrador para gestionar el restablecimiento de tu contraseña.',
         icon: <CheckCircle2 className="h-5 w-5 text-green-500" />,
         duration: 5000,
       });
@@ -106,7 +106,7 @@ export default function LoginPage() {
               <div className="relative w-64 h-24">
                 <Image
                   src="/images/mentis-logo.svg"
-                  alt="Mentis - Sistema Integral de PsicologÃ­a Ocupacional"
+                  alt="Mentis - Sistema Integral de Psicología Ocupacional"
                   fill
                   className="object-contain scale-[1.8]"
                   priority
@@ -121,7 +121,7 @@ export default function LoginPage() {
               {/* Email Input */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                  Correo ElectrÃ³nico
+                  Correo Electrónico
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -139,7 +139,7 @@ export default function LoginPage() {
               {/* Password Input */}
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                  ContraseÃ±a
+                  Contraseña
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -147,7 +147,7 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                    placeholder="••••••••"
                     required
                     className="w-full pl-12 pr-12 py-3.5 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                   />
@@ -177,7 +177,7 @@ export default function LoginPage() {
                     <span>Ingresando...</span>
                   </>
                 ) : (
-                  <span>Iniciar SesiÃ³n</span>
+                  <span>Iniciar Sesión</span>
                 )}
               </button>
             </form>
@@ -189,7 +189,7 @@ export default function LoginPage() {
                 onClick={() => setResetModalOpen(true)}
                 className="text-sm text-gray-600 hover:text-indigo-600 font-medium transition-colors"
               >
-                Â¿Olvidaste tu contraseÃ±a?
+                ¿Olvidaste tu contraseña?
               </button>
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-200">
             <p className="text-center text-xs text-gray-500">
-              Â© 2026 Mentis. Sistema Integral de PsicologÃ­a Ocupacional
+              © 2026 Mentis. Sistema Integral de Psicología Ocupacional
             </p>
           </div>
         </div>
@@ -209,16 +209,16 @@ export default function LoginPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-indigo-600">
               <AlertCircle className="h-5 w-5" />
-              Restablecer ContraseÃ±a
+              Restablecer Contraseña
             </DialogTitle>
             <DialogDescription>
-              Ingresa tu correo electrÃ³nico y notificaremos al administrador el sistema para que te ayude a restablecer tu acceso.
+              Ingresa tu correo electrónico y notificaremos al administrador el sistema para que te ayude a restablecer tu acceso.
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleResetPassword} className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="reset-email">Correo ElectrÃ³nico</Label>
+              <Label htmlFor="reset-email">Correo Electrónico</Label>
               <Input
                 id="reset-email"
                 type="email"

@@ -19,8 +19,8 @@ import { Step4MaterialesPeligros, CATEGORIAS_PELIGRO } from './prueba-trabajo/St
 import { Step5ConceptoRegistro } from './prueba-trabajo/Step5ConceptoRegistro';
 
 const STEPS = [
-    { id: 1, title: 'IdentificaciÃ³n', icon: User },
-    { id: 2, title: 'MetodologÃ­a', icon: Briefcase },
+    { id: 1, title: 'Identificación', icon: User },
+    { id: 2, title: 'Metodología', icon: Briefcase },
     { id: 3, title: 'Tareas', icon: Activity },
     { id: 4, title: 'Peligros', icon: AlertTriangle },
     { id: 5, title: 'Concepto', icon: FileText }
@@ -311,21 +311,21 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
         switch (step) {
             case 1:
-                if (!formData.fecha_valoracion) errors.push('Fecha de ValoraciÃ³n');
+                if (!formData.fecha_valoracion) errors.push('Fecha de Valoración');
                 if (!formData.nombre_trabajador) errors.push('Nombre del Trabajador');
                 if (!formData.tipo_documento) errors.push('Tipo de Documento');
-                if (!formData.numero_documento) errors.push('NÃºmero de Documento');
+                if (!formData.numero_documento) errors.push('Número de Documento');
                 if (!formData.id_siniestro) errors.push('ID Siniestro');
                 break;
             case 2:
-                if (!formData.metodologia) errors.push('MetodologÃ­a');
-                if (!formData.descripcion_proceso_productivo) errors.push('DescripciÃ³n del Proceso Productivo');
+                if (!formData.metodologia) errors.push('Metodología');
+                if (!formData.descripcion_proceso_productivo) errors.push('Descripción del Proceso Productivo');
                 break;
             case 3:
                 const validTareas = tareas.filter(t => t.actividad.trim() !== '');
                 if (validTareas.length === 0) errors.push('Debe registrar al menos una tarea con actividad');
                 const invalidTareas = tareas.some(t => !t.actividad || !t.ciclo || !t.subactividad || !t.estandar_productividad);
-                if (invalidTareas) errors.push('Complete todos los campos obligatorios de las tareas (Actividad, Ciclo, Subactividad, EstÃ¡ndar)');
+                if (invalidTareas) errors.push('Complete todos los campos obligatorios de las tareas (Actividad, Ciclo, Subactividad, Estándar)');
                 break;
             case 4:
                 // No strict validation for materials/peligros unless specified
@@ -360,8 +360,8 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         if (!API_URL) {
             setValidationModal({
                 isOpen: true,
-                title: 'Error de ConfiguraciÃ³n',
-                message: 'La URL de la API no estÃ¡ definida. Por favor verifique las variables de entorno.',
+                title: 'Error de Configuración',
+                message: 'La URL de la API no está definida. Por favor verifique las variables de entorno.',
                 errors: [],
                 type: 'error'
             });
@@ -444,7 +444,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 const parsed = JSON.parse(errorMessage);
                 if (parsed.detail && Array.isArray(parsed.detail)) {
                     // Pydantic validation error list
-                    errorMessage = 'Datos invÃ¡lidos/faltantes';
+                    errorMessage = 'Datos inválidos/faltantes';
                     errorDetails = parsed.detail.map((err: any) =>
                         `${err.loc ? err.loc[err.loc.length - 1] + ': ' : ''}${err.msg}`
                     ).join('\n');
@@ -472,7 +472,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 <h1 className="text-3xl font-bold text-slate-900">
                     {mode === 'create' ? 'Nueva Prueba de Trabajo' : 'Editar Prueba de Trabajo'}
                 </h1>
-                <p className="text-slate-600 mt-2">Complete el formulario de evaluaciÃ³n paso a paso</p>
+                <p className="text-slate-600 mt-2">Complete el formulario de evaluación paso a paso</p>
             </div>
 
             {/* Stepper (Orange Theme) */}
@@ -561,7 +561,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 )}
             </div>
 
-            {/* â”€â”€ Navigation bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+            {/* ── Navigation bar ─────────────────────────────────────────── */}
             <div className="flex items-center justify-between mt-6">
                 <button
                     onClick={() => setCurrentStep(prev => Math.max(1, prev - 1))}

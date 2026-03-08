@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 
 const steps = [
-  { id: 1, title: 'IdentificaciÃ³n', icon: User },
+  { id: 1, title: 'Identificación', icon: User },
   { id: 2, title: 'Info Laboral', icon: Briefcase },
   { id: 3, title: 'Historia Ocupacional', icon: History },
   { id: 4, title: 'Actividad Laboral', icon: Activity },
@@ -39,12 +39,12 @@ const steps = [
   { id: 6, title: 'Concepto Final', icon: FileText },
 ];
 
-// Factores de riesgo segÃºn la plantilla Excel
+// Factores de riesgo según la plantilla Excel
 const factoresRiesgo = {
   demandas_cuantitativas: {
     titulo: 'DEMANDAS CUANTITATIVAS DEL TRABAJO',
     items: [
-      'Ritmo de trabajo acelerado o bajo presiÃ³n de tiempo',
+      'Ritmo de trabajo acelerado o bajo presión de tiempo',
       'Imposibilidad de hacer pausas dentro de la jornada',
       'Tiempo adicional para cumplir con el trabajo asignado',
       'Volumen de carga laboral',
@@ -53,70 +53,70 @@ const factoresRiesgo = {
   demandas_carga_mental: {
     titulo: 'Demandas de Carga Mental',
     items: [
-      'Exigencia de memoria, atenciÃ³n y concentraciÃ³n',
-      'Exigencia de altos niveles de detalle o precisiÃ³n',
-      'Elevada cantidad de InformaciÃ³n que se usa bajo presiÃ³n de tiempo',
-      'Elevada cantidad de informaciÃ³n que se usa de forma simultÃ¡nea',
-      'La informaciÃ³n necesaria para realizar el trabajo es compleja',
-      'EjecuciÃ³n de tareas de alta carga cognitiva',
-      'Cantidad de tareas que exigen realizaciÃ³n bajo presiÃ³n de tiempo',
-      'PercepciÃ³n de agotamiento al final de la jornada',
+      'Exigencia de memoria, atención y concentración',
+      'Exigencia de altos niveles de detalle o precisión',
+      'Elevada cantidad de Información que se usa bajo presión de tiempo',
+      'Elevada cantidad de información que se usa de forma simultánea',
+      'La información necesaria para realizar el trabajo es compleja',
+      'Ejecución de tareas de alta carga cognitiva',
+      'Cantidad de tareas que exigen realización bajo presión de tiempo',
+      'Percepción de agotamiento al final de la jornada',
     ]
   },
   demandas_emocionales: {
     titulo: 'Demandas Emocionales',
     items: [
-      'ExposiciÃ³n a sentimientos, emociones y trato negativo de usuarios o clientes',
-      'ExposiciÃ³n a situaciones emocionalmente devastadoras',
-      'Impacto emocional de la tarea en el Ã¡mbito extralaboral',
-      'Posibilidad de cometer errores dentro de la realizaciÃ³n de la tarea que afecten el resultado de los procesos',
-      'Grado de tensiÃ³n sobre la realizaciÃ³n de la tarea',
-      'PercepciÃ³n de monotonÃ­a o actividad repetitiva de la tarea',
+      'Exposición a sentimientos, emociones y trato negativo de usuarios o clientes',
+      'Exposición a situaciones emocionalmente devastadoras',
+      'Impacto emocional de la tarea en el ámbito extralaboral',
+      'Posibilidad de cometer errores dentro de la realización de la tarea que afecten el resultado de los procesos',
+      'Grado de tensión sobre la realización de la tarea',
+      'Percepción de monotonía o actividad repetitiva de la tarea',
     ]
   },
   exigencias_responsabilidad: {
     titulo: 'Exigencias de Responsabilidad del Cargo',
     items: [
       'Responsabilidad directa por la vida, salud o seguridad de otras personas',
-      'Responsabilidad directa por supervisiÃ³n de personal',
-      'Responsabilidad directa por resultados del Ã¡rea de trabajo',
-      'Responsabilidad directa por bienes de elevada cuantÃ­a',
-      'Responsabilidad directa por dinero de la organizaciÃ³n',
-      'Responsabilidad directa por informaciÃ³n confidencial',
+      'Responsabilidad directa por supervisión de personal',
+      'Responsabilidad directa por resultados del área de trabajo',
+      'Responsabilidad directa por bienes de elevada cuantía',
+      'Responsabilidad directa por dinero de la organización',
+      'Responsabilidad directa por información confidencial',
     ]
   },
   consistencia_rol: {
     titulo: 'Consistencia de Rol',
     items: [
       'Falta de recursos, personas o herramientas necesarias para desarrollar el trabajo',
-      'Ã“rdenes contradictorias provenientes de una o varias personas',
+      'Órdenes contradictorias provenientes de una o varias personas',
       'Solicitudes o requerimientos innecesarios en el trabajo',
-      'Solicitudes o requerimientos que van en contra de principios Ã©ticos, tÃ©cnicos, de seguridad o de calidad o servicio del producto',
-      'VariaciÃ³n eventual o continua de la tarea asignada',
-      'RealizaciÃ³n de tareas simultÃ¡neas',
-      'Las tareas exigen actualizaciÃ³n de conocimientos de manera constante',
+      'Solicitudes o requerimientos que van en contra de principios éticos, técnicos, de seguridad o de calidad o servicio del producto',
+      'Variación eventual o continua de la tarea asignada',
+      'Realización de tareas simultáneas',
+      'Las tareas exigen actualización de conocimientos de manera constante',
     ]
   },
   demandas_ambientales: {
-    titulo: 'Demandas Ambientales y de Esfuerzo FÃ­sico',
+    titulo: 'Demandas Ambientales y de Esfuerzo Físico',
     items: [
       'Ruido que afecta negativamente la calidad de la tarea',
-      'IluminaciÃ³n que afecta negativamente la calidad de la tarea',
+      'Iluminación que afecta negativamente la calidad de la tarea',
       'Temperatura que afecta negativamente',
-      'Condiciones de VentilaciÃ³n que afecten negativamente la calidad de la tarea',
-      'DistribuciÃ³n y caracterÃ­sticas del puesto, equipos o herramientas que afectan negativamente la calidad de la tarea',
+      'Condiciones de Ventilación que afecten negativamente la calidad de la tarea',
+      'Distribución y características del puesto, equipos o herramientas que afectan negativamente la calidad de la tarea',
       'Condiciones de orden y aseo que afecten negativamente la calidad de la tarea',
-      'PreocupaciÃ³n por exposiciÃ³n a agentes biolÃ³gicos',
-      'PreocupaciÃ³n por exposiciÃ³n a agentes quÃ­micos',
-      'Exigencias de esfuerzo fÃ­sico que afectan negativamente la calidad de la tarea',
-      'PreocupaciÃ³n ante la posibilidad de sufrir un accidente de trabajo',
+      'Preocupación por exposición a agentes biológicos',
+      'Preocupación por exposición a agentes químicos',
+      'Exigencias de esfuerzo físico que afectan negativamente la calidad de la tarea',
+      'Preocupación ante la posibilidad de sufrir un accidente de trabajo',
     ]
   },
   demandas_jornada: {
     titulo: 'Demandas de la Jornada de Trabajo',
     items: [
       'Trabajo en horario nocturno',
-      'DÃ­as de trabajo consecutivo sin descanso',
+      'Días de trabajo consecutivo sin descanso',
     ]
   },
 };
@@ -139,12 +139,12 @@ export default function NuevaValoracionPage() {
 
   // Form data - Exactamente como la plantilla Excel
   const [formData, setFormData] = useState({
-    // FECHA DE VALORACIÃ“N
+    // FECHA DE VALORACIÓN
     fecha_valoracion_dia: '',
     fecha_valoracion_mes: '',
     fecha_valoracion_ano: '',
 
-    // IDENTIFICACIÃ“N
+    // IDENTIFICACIÓN
     nombre_trabajador: '',
     tipo_documento: '', // CC, TI, CE, PEP, PPT
     numero_documento: '',
@@ -255,7 +255,7 @@ export default function NuevaValoracionPage() {
       }
     }));
 
-    // Verificar alertas cuando se actualiza la calificaciÃ³n
+    // Verificar alertas cuando se actualiza la calificación
     if (field === 'calificacion') {
       verificarAlertasRiesgo();
     }
@@ -264,11 +264,11 @@ export default function NuevaValoracionPage() {
   const verificarAlertasRiesgo = () => {
     const alertas: string[] = [];
 
-    // Analizar cada categorÃ­a de factores de riesgo
+    // Analizar cada categoría de factores de riesgo
     Object.entries(factoresRiesgo).forEach(([_key, categoria]) => {
       const calificaciones = categoria.items
         .map(item => formData.factores_riesgo[item]?.calificacion)
-        .filter(cal => cal && cal !== 'na'); // Excluir N/A y vacÃ­os
+        .filter(cal => cal && cal !== 'na'); // Excluir N/A y vacíos
 
       if (calificaciones.length === 0) return; // Si no hay calificaciones, saltar
 
@@ -289,7 +289,7 @@ export default function NuevaValoracionPage() {
     setAlertasRiesgo(alertas);
   };
 
-  // Cargar valoraciÃ³n existente si viene ID en la URL
+  // Cargar valoración existente si viene ID en la URL
   useEffect(() => {
     const id = searchParams.get('id');
     const modo = searchParams.get('modo');
@@ -308,7 +308,7 @@ export default function NuevaValoracionPage() {
     try {
       const data = await api.get<any>(`/valoraciones/${id}`);
 
-      // Mapear fecha de valoraciÃ³n
+      // Mapear fecha de valoración
       if (data.fecha_valoracion) {
         // Parsear directamente la cadena ISO para evitar problemas de zona horaria
         const fechaParts = data.fecha_valoracion.split('-');
@@ -324,7 +324,7 @@ export default function NuevaValoracionPage() {
         const t = data.trabajador;
         updateField('nombre_trabajador', t.nombre || '');
 
-        // Separar tipo de documento y nÃºmero
+        // Separar tipo de documento y número
         if (t.documento) {
           const docParts = t.documento.split(' ');
           if (docParts.length >= 2) {
@@ -350,14 +350,14 @@ export default function NuevaValoracionPage() {
         // Nivel educativo - parsear string a checkboxes
         if (t.nivel_educativo) {
           const niveles = t.nivel_educativo.toLowerCase();
-          updateField('nivel_formacion_empirica', niveles.includes('formaciÃ³n empÃ­rica'));
-          updateField('nivel_basica_primaria', niveles.includes('bÃ¡sica primaria'));
+          updateField('nivel_formacion_empirica', niveles.includes('formación empírica'));
+          updateField('nivel_basica_primaria', niveles.includes('básica primaria'));
           updateField('nivel_bachillerato_vocacional', niveles.includes('bachillerato vocacional'));
           updateField('nivel_bachillerato_modalidad', niveles.includes('bachillerato modalidad'));
-          updateField('nivel_tecnico_tecnologico', niveles.includes('tÃ©cnico') || niveles.includes('tecnolÃ³gico'));
+          updateField('nivel_tecnico_tecnologico', niveles.includes('técnico') || niveles.includes('tecnológico'));
           updateField('nivel_universitario', niveles.includes('universitario'));
-          updateField('nivel_especializacion', niveles.includes('especializaciÃ³n') || niveles.includes('postgrado') || niveles.includes('maestrÃ­a'));
-          updateField('nivel_formacion_informal', niveles.includes('formaciÃ³n informal'));
+          updateField('nivel_especializacion', niveles.includes('especialización') || niveles.includes('postgrado') || niveles.includes('maestría'));
+          updateField('nivel_formacion_informal', niveles.includes('formación informal'));
           updateField('nivel_analfabeta', niveles.includes('analfabeta'));
         }
 
@@ -435,7 +435,7 @@ export default function NuevaValoracionPage() {
       if (data.evaluaciones_riesgo && data.evaluaciones_riesgo.length > 0) {
         const factoresInit: Record<string, { calificacion: string; observaciones: string }> = {};
 
-        // Primero inicializar todos con valores vacÃ­os
+        // Primero inicializar todos con valores vacíos
         Object.values(factoresRiesgo).forEach(categoria => {
           categoria.items.forEach(item => {
             factoresInit[item] = { calificacion: '', observaciones: '' };
@@ -483,10 +483,10 @@ export default function NuevaValoracionPage() {
       // Guardar el ID para posteriores actualizaciones
       setValoracionId(id);
 
-      toast.success('ValoraciÃ³n cargada exitosamente');
+      toast.success('Valoración cargada exitosamente');
     } catch (error: any) {
-      console.error('Error al cargar valoraciÃ³n:', error);
-      toast.error(error.message || 'Error al cargar la valoraciÃ³n');
+      console.error('Error al cargar valoración:', error);
+      toast.error(error.message || 'Error al cargar la valoración');
       router.push('/dashboard/valoraciones');
     } finally {
       setCargando(false);
@@ -497,7 +497,7 @@ export default function NuevaValoracionPage() {
     const errores: string[] = [];
 
     switch (currentStep) {
-      case 1: // IdentificaciÃ³n
+      case 1: // Identificación
         if (!formData.nombre_trabajador.trim()) {
           errores.push('El nombre del trabajador es requerido');
         }
@@ -505,7 +505,7 @@ export default function NuevaValoracionPage() {
           errores.push('El tipo de documento es requerido');
         }
         if (!formData.numero_documento.trim()) {
-          errores.push('El nÃºmero de documento es requerido');
+          errores.push('El número de documento es requerido');
         }
         break;
       case 2: // Info Laboral
@@ -523,10 +523,10 @@ export default function NuevaValoracionPage() {
         break;
       case 6: // Concepto Final
         if (!formData.concepto_psicologico_final.trim()) {
-          errores.push('El concepto psicolÃ³gico final es requerido');
+          errores.push('El concepto psicológico final es requerido');
         }
         if (!formData.elaboro_nombre.trim()) {
-          errores.push('El nombre de quien elaborÃ³ es requerido');
+          errores.push('El nombre de quien elaboró es requerido');
         }
         break;
     }
@@ -574,21 +574,21 @@ export default function NuevaValoracionPage() {
   const handleSave = async (estado: 'borrador' | 'completada', redirectAfter = true) => {
     setSaving(true);
     try {
-      // Construir fecha de valoraciÃ³n
+      // Construir fecha de valoración
       const fechaValoracion = formData.fecha_valoracion_ano && formData.fecha_valoracion_mes && formData.fecha_valoracion_dia
         ? `${formData.fecha_valoracion_ano}-${formData.fecha_valoracion_mes.padStart(2, '0')}-${formData.fecha_valoracion_dia.padStart(2, '0')}`
         : new Date().toISOString().split('T')[0];
 
       // Construir nivel educativo string
       const nivelEducativo = [
-        formData.nivel_formacion_empirica && 'FormaciÃ³n empÃ­rica',
-        formData.nivel_basica_primaria && 'BÃ¡sica primaria',
-        formData.nivel_bachillerato_vocacional && 'Bachillerato vocacional 9Â°',
+        formData.nivel_formacion_empirica && 'Formación empírica',
+        formData.nivel_basica_primaria && 'Básica primaria',
+        formData.nivel_bachillerato_vocacional && 'Bachillerato vocacional 9°',
         formData.nivel_bachillerato_modalidad && 'Bachillerato modalidad',
-        formData.nivel_tecnico_tecnologico && 'TÃ©cnico/TecnolÃ³gico',
+        formData.nivel_tecnico_tecnologico && 'Técnico/Tecnológico',
         formData.nivel_universitario && 'Universitario',
-        formData.nivel_especializacion && 'EspecializaciÃ³n/Postgrado/MaestrÃ­a',
-        formData.nivel_formacion_informal && 'FormaciÃ³n informal oficios',
+        formData.nivel_especializacion && 'Especialización/Postgrado/Maestría',
+        formData.nivel_formacion_informal && 'Formación informal oficios',
         formData.nivel_analfabeta && 'Analfabeta',
       ].filter(Boolean).join(', ');
 
@@ -666,15 +666,15 @@ export default function NuevaValoracionPage() {
 
       let result: any;
       if (valoracionId) {
-        // Actualizar valoraciÃ³n existente
+        // Actualizar valoración existente
         result = await api.put(`/valoraciones/${valoracionId}`, payload);
       } else {
-        // Crear nueva valoraciÃ³n
+        // Crear nueva valoración
         result = await api.post('/valoraciones/', payload);
         setValoracionId(result.id);
       }
 
-      toast.success(estado === 'borrador' ? 'Borrador guardado' : 'ValoraciÃ³n creada exitosamente');
+      toast.success(estado === 'borrador' ? 'Borrador guardado' : 'Valoración creada exitosamente');
 
       if (redirectAfter) {
         router.push('/dashboard/valoraciones');
@@ -682,7 +682,7 @@ export default function NuevaValoracionPage() {
 
       return result;
     } catch (error: any) {
-      console.error('Error al guardar valoraciÃ³n:', error);
+      console.error('Error al guardar valoración:', error);
       toast.error(error.message || 'Error al guardar');
       return null;
     } finally {
@@ -695,27 +695,27 @@ export default function NuevaValoracionPage() {
     try {
       // Validaciones previas
       if (!formData.concepto_psicologico_final.trim()) {
-        toast.error('Debe generar o escribir el concepto psicolÃ³gico final antes de finalizar');
+        toast.error('Debe generar o escribir el concepto psicológico final antes de finalizar');
         return;
       }
 
       if (!formData.elaboro_nombre.trim()) {
-        toast.error('Debe ingresar el nombre de quien elaborÃ³ la valoraciÃ³n');
+        toast.error('Debe ingresar el nombre de quien elaboró la valoración');
         return;
       }
 
       if (!formData.reviso_nombre.trim()) {
-        toast.error('Debe ingresar el nombre de quien revisÃ³ la valoraciÃ³n');
+        toast.error('Debe ingresar el nombre de quien revisó la valoración');
         return;
       }
 
       // Si no hay valoracionId, guardar primero como borrador
       let currentValoracionId = valoracionId;
       if (!currentValoracionId) {
-        toast.info('Guardando valoraciÃ³n...');
+        toast.info('Guardando valoración...');
         const result: any = await handleSave('borrador', false);
         if (!result || !result.id) {
-          toast.error('No se pudo guardar la valoraciÃ³n');
+          toast.error('No se pudo guardar la valoración');
           return;
         }
         currentValoracionId = result.id;
@@ -728,7 +728,7 @@ export default function NuevaValoracionPage() {
       toast.info('Generando archivo PDF...');
       const response: any = await api.post(`/valoraciones/${currentValoracionId}/finalizar`, {});
 
-      toast.success('ValoraciÃ³n finalizada exitosamente');
+      toast.success('Valoración finalizada exitosamente');
 
       // Guardar las URLs para el modal de descarga
       setDownloadUrls({
@@ -742,7 +742,7 @@ export default function NuevaValoracionPage() {
       setShowDownloadModal(true);
 
     } catch (error: any) {
-      toast.error(error.message || 'Error al finalizar la valoraciÃ³n');
+      toast.error(error.message || 'Error al finalizar la valoración');
     } finally {
       setFinalizando(false);
     }
@@ -754,7 +754,7 @@ export default function NuevaValoracionPage() {
       // Verificar que haya evaluaciones de riesgo
       const evaluaciones = mapearEvaluacionesRiesgo();
       if (evaluaciones.length === 0) {
-        toast.error('Debe completar la evaluaciÃ³n de factores de riesgo antes de generar el concepto');
+        toast.error('Debe completar la evaluación de factores de riesgo antes de generar el concepto');
         return;
       }
 
@@ -764,7 +764,7 @@ export default function NuevaValoracionPage() {
         return;
       }
 
-      // Verificar si tiene diagnÃ³stico mental
+      // Verificar si tiene diagnóstico mental
       const tieneDiagnostico = Boolean(formData.diagnostico_esfera_mental && formData.diagnostico_esfera_mental.trim() !== '');
 
       // Llamar al endpoint de generar concepto enviando las evaluaciones directamente
@@ -775,7 +775,7 @@ export default function NuevaValoracionPage() {
         tiene_diagnostico_mental: tieneDiagnostico
       });
 
-      console.log('Respuesta generaciÃ³n concepto:', response);
+      console.log('Respuesta generación concepto:', response);
 
       let conceptoTexto = '';
 
@@ -788,7 +788,7 @@ export default function NuevaValoracionPage() {
           if (response.concepto.concepto) {
             conceptoTexto = response.concepto.concepto;
           } else {
-            // Si no, convertir a string para ver quÃ© es
+            // Si no, convertir a string para ver qué es
             console.warn('Concepto recibido como objeto:', response.concepto);
             conceptoTexto = JSON.stringify(response.concepto, null, 2);
           }
@@ -818,7 +818,7 @@ export default function NuevaValoracionPage() {
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-indigo-500 mx-auto mb-4" />
-            <p className="text-gray-600">Cargando valoraciÃ³n...</p>
+            <p className="text-gray-600">Cargando valoración...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -830,14 +830,14 @@ export default function NuevaValoracionPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">
-          {modoVista ? 'VER VALORACIÃ“N' : valoracionId ? 'EDITAR VALORACIÃ“N' : 'NUEVA VALORACIÃ“N'} DE PSICOLOGÃA PARA RECOMENDACIONES LABORALES
+          {modoVista ? 'VER VALORACIÓN' : valoracionId ? 'EDITAR VALORACIÓN' : 'NUEVA VALORACIÓN'} DE PSICOLOGÍA PARA RECOMENDACIONES LABORALES
         </h1>
         <p className="text-sm text-gray-600 mt-2">
           {modoVista
-            ? 'VisualizaciÃ³n de la valoraciÃ³n psicolÃ³gica. No se pueden realizar modificaciones.'
+            ? 'Visualización de la valoración psicológica. No se pueden realizar modificaciones.'
             : valoracionId
               ? 'Edite los campos necesarios y guarde los cambios.'
-              : 'Complete todos los pasos del formulario. Al finalizar se generarÃ¡ automÃ¡ticamente el archivo PDF.'}
+              : 'Complete todos los pasos del formulario. Al finalizar se generará automáticamente el archivo PDF.'}
         </p>
       </div>
 
@@ -880,15 +880,15 @@ export default function NuevaValoracionPage() {
         </CardHeader>
         <CardContent className="p-6">
 
-          {/* ============ PASO 1: IDENTIFICACIÃ“N ============ */}
+          {/* ============ PASO 1: IDENTIFICACIÓN ============ */}
           {currentStep === 1 && (
             <div className="space-y-6">
-              {/* Fecha de ValoraciÃ³n */}
+              {/* Fecha de Valoración */}
               <div className="p-4 bg-gray-50 rounded-lg">
-                <Label className="text-sm font-semibold mb-3 block">FECHA DE VALORACIÃ“N:</Label>
+                <Label className="text-sm font-semibold mb-3 block">FECHA DE VALORACIÓN:</Label>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs">dÃ­a</Label>
+                    <Label className="text-xs">día</Label>
                     <Input
                       className="w-16 text-center"
                       value={formData.fecha_valoracion_dia}
@@ -908,7 +908,7 @@ export default function NuevaValoracionPage() {
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs">aÃ±o</Label>
+                    <Label className="text-xs">año</Label>
                     <Input
                       className="w-20 text-center"
                       value={formData.fecha_valoracion_ano}
@@ -957,7 +957,7 @@ export default function NuevaValoracionPage() {
                     </RadioGroup>
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <Label>NÃºmero de documento <span className="text-red-500">*</span></Label>
+                    <Label>Número de documento <span className="text-red-500">*</span></Label>
                     <Input
                       value={formData.numero_documento}
                       onChange={(e) => updateField('numero_documento', e.target.value)}
@@ -967,7 +967,7 @@ export default function NuevaValoracionPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>IdentificaciÃ³n del siniestro</Label>
+                  <Label>Identificación del siniestro</Label>
                   <Input
                     value={formData.identificacion_siniestro}
                     onChange={(e) => updateField('identificacion_siniestro', e.target.value)}
@@ -981,7 +981,7 @@ export default function NuevaValoracionPage() {
                 <Label>Fecha de nacimiento/edad</Label>
                 <div className="flex items-center gap-4 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs">dÃ­a</Label>
+                    <Label className="text-xs">día</Label>
                     <Input
                       className="w-16 text-center"
                       value={formData.fecha_nacimiento_dia}
@@ -1001,7 +1001,7 @@ export default function NuevaValoracionPage() {
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs">aÃ±o</Label>
+                    <Label className="text-xs">año</Label>
                     <Input
                       className="w-20 text-center"
                       value={formData.fecha_nacimiento_ano}
@@ -1018,7 +1018,7 @@ export default function NuevaValoracionPage() {
                       onChange={(e) => updateField('edad', e.target.value)}
                       disabled={modoVista}
                     />
-                    <span className="text-xs text-gray-500">aÃ±os</span>
+                    <span className="text-xs text-gray-500">años</span>
                   </div>
                 </div>
               </div>
@@ -1035,7 +1035,7 @@ export default function NuevaValoracionPage() {
                   {[
                     { value: 'casado', label: 'Casado' },
                     { value: 'soltero', label: 'Soltero' },
-                    { value: 'union_libre', label: 'UniÃ³n libre' },
+                    { value: 'union_libre', label: 'Unión libre' },
                     { value: 'separado', label: 'Separado' },
                     { value: 'viudo', label: 'Viudo' },
                   ].map((option) => (
@@ -1054,14 +1054,14 @@ export default function NuevaValoracionPage() {
                 <Label>Nivel educativo</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {[
-                    { field: 'nivel_formacion_empirica', label: 'FormaciÃ³n empÃ­rica' },
-                    { field: 'nivel_basica_primaria', label: 'BÃ¡sica primaria' },
-                    { field: 'nivel_bachillerato_vocacional', label: 'Bachillerato: vocacional 9Â°' },
+                    { field: 'nivel_formacion_empirica', label: 'Formación empírica' },
+                    { field: 'nivel_basica_primaria', label: 'Básica primaria' },
+                    { field: 'nivel_bachillerato_vocacional', label: 'Bachillerato: vocacional 9°' },
                     { field: 'nivel_bachillerato_modalidad', label: 'Bachillerato: modalidad' },
-                    { field: 'nivel_tecnico_tecnologico', label: 'TÃ©cnico/TecnolÃ³gico' },
+                    { field: 'nivel_tecnico_tecnologico', label: 'Técnico/Tecnológico' },
                     { field: 'nivel_universitario', label: 'Universitario' },
-                    { field: 'nivel_especializacion', label: 'EspecializaciÃ³n/postgrado/maestrÃ­a' },
-                    { field: 'nivel_formacion_informal', label: 'FormaciÃ³n informal oficios' },
+                    { field: 'nivel_especializacion', label: 'Especialización/postgrado/maestría' },
+                    { field: 'nivel_formacion_informal', label: 'Formación informal oficios' },
                     { field: 'nivel_analfabeta', label: 'Analfabeta' },
                   ].map((item) => (
                     <div key={item.field} className="flex items-center space-x-2">
@@ -1078,7 +1078,7 @@ export default function NuevaValoracionPage() {
                   ))}
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm">Especificar formaciÃ³n y oficios que conoce</Label>
+                  <Label className="text-sm">Especificar formación y oficios que conoce</Label>
                   <Textarea
                     value={formData.especificar_formacion_oficios}
                     onChange={(e) => updateField('especificar_formacion_oficios', e.target.value)}
@@ -1090,7 +1090,7 @@ export default function NuevaValoracionPage() {
 
               {/* Contacto */}
               <div className="space-y-2">
-                <Label>TelÃ©fonos trabajador</Label>
+                <Label>Teléfonos trabajador</Label>
                 <Input
                   value={formData.telefonos_trabajador}
                   onChange={(e) => updateField('telefonos_trabajador', e.target.value)}
@@ -1100,7 +1100,7 @@ export default function NuevaValoracionPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2 space-y-2">
-                  <Label>DirecciÃ³n residencia y ciudad</Label>
+                  <Label>Dirección residencia y ciudad</Label>
                   <Input
                     value={formData.direccion_residencia_ciudad}
                     onChange={(e) => updateField('direccion_residencia_ciudad', e.target.value)}
@@ -1128,7 +1128,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>DiagnÃ³stico de esfera mental reconocidos</Label>
+                <Label>Diagnóstico de esfera mental reconocidos</Label>
                 <Textarea
                   value={formData.diagnostico_esfera_mental}
                   onChange={(e) => updateField('diagnostico_esfera_mental', e.target.value)}
@@ -1165,7 +1165,7 @@ export default function NuevaValoracionPage() {
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="si" id="eventos_si" />
-                      <Label htmlFor="eventos_si" className="text-sm font-normal">SÃ­</Label>
+                      <Label htmlFor="eventos_si" className="text-sm font-normal">Sí</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="eventos_no" />
@@ -1183,7 +1183,7 @@ export default function NuevaValoracionPage() {
                   />
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <Label>DiagnÃ³stico</Label>
+                  <Label>Diagnóstico</Label>
                   <Input
                     value={formData.eventos_no_laborales_diagnostico}
                     onChange={(e) => updateField('eventos_no_laborales_diagnostico', e.target.value)}
@@ -1202,7 +1202,7 @@ export default function NuevaValoracionPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Fondo de PensiÃ³n</Label>
+                  <Label>Fondo de Pensión</Label>
                   <Input
                     value={formData.fondo_pension}
                     onChange={(e) => updateField('fondo_pension', e.target.value)}
@@ -1212,7 +1212,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Tiempo total de incapacidad (dÃ­as)</Label>
+                <Label>Tiempo total de incapacidad (días)</Label>
                 <Input
                   type="number"
                   value={formData.tiempo_total_incapacidad_dias}
@@ -1233,7 +1233,7 @@ export default function NuevaValoracionPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>VinculaciÃ³n laboral</Label>
+                  <Label>Vinculación laboral</Label>
                   <RadioGroup
                     value={formData.vinculacion_laboral}
                     onValueChange={(v) => updateField('vinculacion_laboral', v)}
@@ -1251,7 +1251,7 @@ export default function NuevaValoracionPage() {
                   </RadioGroup>
                 </div>
                 <div className="space-y-2">
-                  <Label>Tipo de vinculaciÃ³n laboral</Label>
+                  <Label>Tipo de vinculación laboral</Label>
                   <Input
                     value={formData.tipo_vinculacion_laboral}
                     onChange={(e) => updateField('tipo_vinculacion_laboral', e.target.value)}
@@ -1303,10 +1303,10 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Fecha ingreso a la empresa/antigÃ¼edad en la empresa</Label>
+                <Label>Fecha ingreso a la empresa/antigüedad en la empresa</Label>
                 <div className="flex items-center gap-4 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs">dÃ­a</Label>
+                    <Label className="text-xs">día</Label>
                     <Input
                       className="w-16 text-center"
                       value={formData.fecha_ingreso_dia}
@@ -1326,7 +1326,7 @@ export default function NuevaValoracionPage() {
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs">aÃ±o</Label>
+                    <Label className="text-xs">año</Label>
                     <Input
                       className="w-20 text-center"
                       value={formData.fecha_ingreso_ano}
@@ -1343,7 +1343,7 @@ export default function NuevaValoracionPage() {
                       onChange={(e) => updateField('antiguedad_empresa_anos', e.target.value)}
                       disabled={modoVista}
                     />
-                    <span className="text-xs">aÃ±os</span>
+                    <span className="text-xs">años</span>
                     <Input
                       className="w-16 text-center"
                       value={formData.antiguedad_empresa_meses}
@@ -1356,7 +1356,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>AntigÃ¼edad en el cargo</Label>
+                <Label>Antigüedad en el cargo</Label>
                 <div className="flex items-center gap-2">
                   <Input
                     className="w-16 text-center"
@@ -1364,7 +1364,7 @@ export default function NuevaValoracionPage() {
                     onChange={(e) => updateField('antiguedad_cargo_anos', e.target.value)}
                     disabled={modoVista}
                   />
-                  <span className="text-xs">aÃ±os</span>
+                  <span className="text-xs">años</span>
                   <Input
                     className="w-16 text-center"
                     value={formData.antiguedad_cargo_meses}
@@ -1385,7 +1385,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Correo(s) electrÃ³nico(s)</Label>
+                <Label>Correo(s) electrónico(s)</Label>
                 <Input
                   value={formData.correos_electronicos}
                   onChange={(e) => updateField('correos_electronicos', e.target.value)}
@@ -1394,7 +1394,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>TelÃ©fonos de contacto empresa</Label>
+                <Label>Teléfonos de contacto empresa</Label>
                 <Input
                   value={formData.telefonos_contacto_empresa}
                   onChange={(e) => updateField('telefonos_contacto_empresa', e.target.value)}
@@ -1408,7 +1408,7 @@ export default function NuevaValoracionPage() {
           {currentStep === 3 && (
             <div className="space-y-6">
               <p className="text-sm text-gray-600 italic">
-                (Trabajos desempeÃ±ados, comenzando por el primero de su historia laboral)
+                (Trabajos desempeñados, comenzando por el primero de su historia laboral)
               </p>
 
               {/* Tabla de historia ocupacional */}
@@ -1418,7 +1418,7 @@ export default function NuevaValoracionPage() {
                     <tr className="bg-gray-100">
                       <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Empresa</th>
                       <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Cargo - funciones / tareas</th>
-                      <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Tiempo/duraciÃ³n</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Tiempo/duración</th>
                       <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Motivo de retiro</th>
                     </tr>
                   </thead>
@@ -1464,7 +1464,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Otros Oficios desempeÃ±ados:</Label>
+                <Label>Otros Oficios desempeñados:</Label>
                 <Textarea
                   value={formData.otros_oficios_desempenados}
                   onChange={(e) => updateField('otros_oficios_desempenados', e.target.value)}
@@ -1474,7 +1474,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Oficios de interÃ©s:</Label>
+                <Label>Oficios de interés:</Label>
                 <Textarea
                   value={formData.oficios_interes}
                   onChange={(e) => updateField('oficios_interes', e.target.value)}
@@ -1489,7 +1489,7 @@ export default function NuevaValoracionPage() {
           {currentStep === 4 && (
             <div className="space-y-6">
               <p className="text-sm text-gray-600 italic mb-4">
-                DESCRIPCIÃ“N ACTIVIDAD LABORAL ACTUAL * (antes del evento)
+                DESCRIPCIÓN ACTIVIDAD LABORAL ACTUAL * (antes del evento)
               </p>
 
               <div className="space-y-2">
@@ -1503,7 +1503,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Tareas (nombre y descripciÃ³n):</Label>
+                <Label>Tareas (nombre y descripción):</Label>
                 <Textarea
                   value={formData.tareas_nombre_descripcion}
                   onChange={(e) => updateField('tareas_nombre_descripcion', e.target.value)}
@@ -1532,7 +1532,7 @@ export default function NuevaValoracionPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Elementos de ProtecciÃ³n Personal:</Label>
+                <Label>Elementos de Protección Personal:</Label>
                 <Textarea
                   value={formData.elementos_proteccion_personal}
                   onChange={(e) => updateField('elementos_proteccion_personal', e.target.value)}
@@ -1547,7 +1547,7 @@ export default function NuevaValoracionPage() {
           {currentStep === 5 && (
             <div className="space-y-6">
               <p className="text-sm text-gray-600 mb-4">
-                FACTORES DE RIESGO PSICOSOCIALES - Califique cada factor segÃºn corresponda
+                FACTORES DE RIESGO PSICOSOCIALES - Califique cada factor según corresponda
               </p>
 
               {/* Alertas de Riesgo */}
@@ -1557,7 +1557,7 @@ export default function NuevaValoracionPage() {
                     <AlertTriangle className="h-6 w-6 text-red-600 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <h4 className="font-semibold text-red-800 mb-2">
-                        âš ï¸ Alertas de Riesgo Detectadas
+                        ⚠️ Alertas de Riesgo Detectadas
                       </h4>
                       <ul className="list-disc list-inside space-y-1">
                         {alertasRiesgo.map((alerta, idx) => (
@@ -1637,7 +1637,7 @@ export default function NuevaValoracionPage() {
             <div className="space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center justify-between mb-2">
-                  <Label className="text-base font-semibold">CONCEPTO PSICOLÃ“GICO FINAL <span className="text-red-500">*</span></Label>
+                  <Label className="text-base font-semibold">CONCEPTO PSICOLÓGICO FINAL <span className="text-red-500">*</span></Label>
                   {!modoVista && (
                     <Button
                       type="button"
@@ -1653,7 +1653,7 @@ export default function NuevaValoracionPage() {
                       ) : (
                         <>
                           <FileText className="h-4 w-4 mr-2" />
-                          {formData.concepto_psicologico_final ? 'Regenerar Concepto' : 'Generar Concepto AutomÃ¡ticamente'}
+                          {formData.concepto_psicologico_final ? 'Regenerar Concepto' : 'Generar Concepto Automáticamente'}
                         </>
                       )}
                     </Button>
@@ -1661,21 +1661,21 @@ export default function NuevaValoracionPage() {
                 </div>
                 {!modoVista && formData.concepto_psicologico_final && (
                   <div className="text-sm text-blue-600 bg-blue-50 p-3 rounded-md mb-2">
-                    <strong>Nota:</strong> Si modificÃ³ los factores de riesgo, puede regenerar el concepto haciendo clic en el botÃ³n de arriba.
+                    <strong>Nota:</strong> Si modificó los factores de riesgo, puede regenerar el concepto haciendo clic en el botón de arriba.
                   </div>
                 )}
                 <Textarea
                   value={formData.concepto_psicologico_final}
                   onChange={(e) => updateField('concepto_psicologico_final', e.target.value)}
                   rows={12}
-                  placeholder="Escriba el concepto psicolÃ³gico final de la valoraciÃ³n o genÃ©relo automÃ¡ticamente usando el botÃ³n de arriba..."
+                  placeholder="Escriba el concepto psicológico final de la valoración o genérelo automáticamente usando el botón de arriba..."
                   required
                   disabled={modoVista}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-base font-semibold">ORIENTACIÃ“N PSICOLÃ“GICA PARA REINTEGRO LABORAL</Label>
+                <Label className="text-base font-semibold">ORIENTACIÓN PSICOLÓGICA PARA REINTEGRO LABORAL</Label>
                 <Textarea
                   value={formData.orientacion_psicologica_reintegro}
                   onChange={(e) => updateField('orientacion_psicologica_reintegro', e.target.value)}
@@ -1688,11 +1688,11 @@ export default function NuevaValoracionPage() {
               {/* Firmas */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 pt-6 border-t border-gray-200">
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-700">ElaborÃ³</h4>
+                  <h4 className="font-semibold text-gray-700">Elaboró</h4>
                   <FileUpload
                     value={formData.elaboro_firma}
                     onChange={(url) => updateField('elaboro_firma', url)}
-                    label="Subir firma (ElaborÃ³)"
+                    label="Subir firma (Elaboró)"
                     accept="image/*,.pdf"
                     maxSize={5}
                     preview={true}
@@ -1702,7 +1702,7 @@ export default function NuevaValoracionPage() {
                     <Input
                       value={formData.elaboro_nombre}
                       onChange={(e) => updateField('elaboro_nombre', e.target.value)}
-                      placeholder="Profesionales que realizan la valoraciÃ³n"
+                      placeholder="Profesionales que realizan la valoración"
                       required
                       disabled={modoVista}
                     />
@@ -1710,11 +1710,11 @@ export default function NuevaValoracionPage() {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-700">RevisiÃ³n por Proveedor</h4>
+                  <h4 className="font-semibold text-gray-700">Revisión por Proveedor</h4>
                   <FileUpload
                     value={formData.reviso_firma}
                     onChange={(url) => updateField('reviso_firma', url)}
-                    label="Subir firma (RevisÃ³)"
+                    label="Subir firma (Revisó)"
                     accept="image/*,.pdf"
                     maxSize={5}
                     preview={true}
@@ -1724,7 +1724,7 @@ export default function NuevaValoracionPage() {
                     <Input
                       value={formData.reviso_nombre}
                       onChange={(e) => updateField('reviso_nombre', e.target.value)}
-                      placeholder="Profesional que revisa la valoraciÃ³n"
+                      placeholder="Profesional que revisa la valoración"
                       disabled={modoVista}
                     />
                   </div>
@@ -1747,7 +1747,7 @@ export default function NuevaValoracionPage() {
 
             <div className="flex gap-2">
               {modoVista ? (
-                // Modo Vista: Solo botÃ³n de volver
+                // Modo Vista: Solo botón de volver
                 <Button
                   variant="outline"
                   onClick={() => router.push('/dashboard/valoraciones')}
@@ -1756,7 +1756,7 @@ export default function NuevaValoracionPage() {
                   Volver al Listado
                 </Button>
               ) : (
-                // Modo EdiciÃ³n/CreaciÃ³n: Mostrar botones de guardar y finalizar
+                // Modo Edición/Creación: Mostrar botones de guardar y finalizar
                 <>
                   <Button
                     variant="outline"
@@ -1799,7 +1799,7 @@ export default function NuevaValoracionPage() {
         </CardContent>
       </Card>
 
-      {/* Modal de ValidaciÃ³n */}
+      {/* Modal de Validación */}
       <Modal
         isOpen={showValidationModal}
         onClose={() => setShowValidationModal(false)}
@@ -1842,7 +1842,7 @@ export default function NuevaValoracionPage() {
           setShowDownloadModal(false);
           router.push('/dashboard/valoraciones');
         }}
-        title="ValoraciÃ³n Finalizada Exitosamente"
+        title="Valoración Finalizada Exitosamente"
         size="xl"
         footer={
           <div className="flex flex-col sm:flex-row justify-between gap-3 w-full">
@@ -1862,7 +1862,7 @@ export default function NuevaValoracionPage() {
                   if (downloadUrls) {
                     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
                     window.open(`${apiUrl}${downloadUrls.pdf_url}`, '_blank');
-                    toast.success('Abriendo PDF en nueva pestaÃ±a');
+                    toast.success('Abriendo PDF en nueva pestaña');
                   }
                 }}
                 className="gap-2 bg-indigo-500 hover:bg-indigo-600 text-white"
@@ -1898,10 +1898,10 @@ export default function NuevaValoracionPage() {
               </div>
               <div className="text-center max-w-md">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Â¡ValoraciÃ³n Completada!
+                  ¡Valoración Completada!
                 </h3>
                 <p className="text-gray-600">
-                  El archivo de la valoraciÃ³n ha sido generado exitosamente
+                  El archivo de la valoración ha sido generado exitosamente
                 </p>
               </div>
             </div>

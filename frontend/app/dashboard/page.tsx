@@ -29,7 +29,7 @@ import Link from 'next/link';
 import { format, formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-// â”€â”€â”€ Module definitions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Module definitions ──────────────────────────────────────
 interface ModuleDefinition {
   key: string;
   label: string;
@@ -44,7 +44,7 @@ interface ModuleDefinition {
 const MODULES: ModuleDefinition[] = [
   {
     key: 'valoraciones',
-    label: 'Valoraciones PsicolÃ³gicas',
+    label: 'Valoraciones Psicológicas',
     shortLabel: 'Valoraciones',
     icon: ClipboardList,
     href: '/dashboard/valoraciones',
@@ -74,8 +74,8 @@ const MODULES: ModuleDefinition[] = [
   },
   {
     key: 'formatos-to-analisis',
-    label: 'Formato TO - AnÃ¡lisis de Exigencia',
-    shortLabel: 'TO AnÃ¡lisis',
+    label: 'Formato TO - Análisis de Exigencia',
+    shortLabel: 'TO Análisis',
     icon: Activity,
     href: '/dashboard/formatos-to/analisis-exigencia',
     newHref: '/dashboard/formatos-to/analisis-exigencia/nueva',
@@ -84,8 +84,8 @@ const MODULES: ModuleDefinition[] = [
   },
   {
     key: 'formatos-to-valoracion',
-    label: 'Formato TO - ValoraciÃ³n Ocupacional',
-    shortLabel: 'TO ValoraciÃ³n',
+    label: 'Formato TO - Valoración Ocupacional',
+    shortLabel: 'TO Valoración',
     icon: Heart,
     href: '/dashboard/formatos-to/valoracion-ocupacional',
     newHref: '/dashboard/formatos-to/valoracion-ocupacional/nueva',
@@ -94,7 +94,7 @@ const MODULES: ModuleDefinition[] = [
   },
   {
     key: 'analisis-exigencias-mental',
-    label: 'AnÃ¡lisis de Exigencias Mental',
+    label: 'Análisis de Exigencias Mental',
     shortLabel: 'Exig. Mental',
     icon: Brain,
     href: '/dashboard/analisis-exigencias-mental',
@@ -193,14 +193,14 @@ export default function DashboardPage() {
 
   const getRecordDate = (item: RecordItem) => {
     const d = item.fecha_creacion || item.created_at || item.fecha_valoracion || '';
-    if (!d) return 'â€”';
-    try { return formatDistanceToNow(new Date(d), { addSuffix: true, locale: es }); } catch { return 'â€”'; }
+    if (!d) return '—';
+    try { return formatDistanceToNow(new Date(d), { addSuffix: true, locale: es }); } catch { return '—'; }
   };
 
   const getFormattedDate = (item: RecordItem) => {
     const d = item.fecha_creacion || item.created_at || item.fecha_valoracion || '';
-    if (!d) return 'â€”';
-    try { return format(new Date(d), "d 'de' MMMM, yyyy", { locale: es }); } catch { return 'â€”'; }
+    if (!d) return '—';
+    try { return format(new Date(d), "d 'de' MMMM, yyyy", { locale: es }); } catch { return '—'; }
   };
 
   return (
@@ -208,17 +208,17 @@ export default function DashboardPage() {
       <div className="space-y-6 anim-fade-in">
         <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
 
-          {/* â”€â”€â”€ Left Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ─── Left Panel ───────────────────────────────────── */}
           <div className="space-y-5">
 
-            {/* Welcome â€” no Card wrapper, manual rounded container */}
+            {/* Welcome — no Card wrapper, manual rounded container */}
             <div className="rounded-xl border border-gray-200 overflow-hidden shadow-sm anim-fade-in-up bg-white">
               <div className="bg-blue-600 px-5 pt-6 pb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                     <TrendingUp className="h-4 w-4 text-white" />
                   </div>
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-white/70">Foco del dÃ­a</span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-white/70">Foco del día</span>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-1">Hola, {user?.nombre}</h2>
                 <p className="text-sm text-blue-100 capitalize flex items-center gap-1.5">
@@ -275,7 +275,7 @@ export default function DashboardPage() {
 
             {/* Modules List */}
             <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4 opacity-0 anim-fade-in-up delay-3" style={{ animationFillMode: 'forwards' }}>
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">MÃ³dulos Disponibles</h3>
+              <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Módulos Disponibles</h3>
               <div className="space-y-0.5">
                 {availableModules.map((mod) => {
                   const Icon = mod.icon;
@@ -297,7 +297,7 @@ export default function DashboardPage() {
           </div>
 
 
-          {/* â”€â”€â”€ Right Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* ─── Right Panel ──────────────────────────────────── */}
           <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden opacity-0 anim-slide-right delay-1" style={{ animationFillMode: 'forwards' }}>
             {/* Header */}
             <div className="px-6 py-4 border-b border-gray-100 bg-white flex items-center justify-between">
@@ -357,7 +357,7 @@ export default function DashboardPage() {
                         {(() => { const Icon = activeModule.icon; return <Icon className="h-7 w-7" />; })()}
                       </div>
                       <p className="text-sm font-medium text-gray-900 mb-1">No hay registros</p>
-                      <p className="text-xs text-gray-500 mb-4">AÃºn no se han creado registros en {activeModule.label}</p>
+                      <p className="text-xs text-gray-500 mb-4">Aún no se han creado registros en {activeModule.label}</p>
                       <Link href={activeModule.newHref}>
                         <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                           <Plus className="h-3.5 w-3.5 mr-1" />
@@ -380,7 +380,7 @@ export default function DashboardPage() {
                     {activeData.items.slice(0, 8).map((item, idx) => {
                       const name = item.trabajador_nombre || 'Sin nombre';
                       const initials = name.split(' ').map(n => n.charAt(0)).slice(0, 2).join('').toUpperCase();
-                      const doc = item.trabajador_documento || item.trabajador_identificacion || 'â€”';
+                      const doc = item.trabajador_documento || item.trabajador_identificacion || '—';
 
                       return (
                         <div
@@ -434,7 +434,7 @@ export default function DashboardPage() {
       </div>
 
 
-      {/* â”€â”€â”€ Record Detail Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ─── Record Detail Modal ──────────────────────────────── */}
       {selectedRecord && activeModule && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
@@ -454,7 +454,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">{selectedRecord.trabajador_nombre || 'Sin nombre'}</h3>
-                  <p className="text-sm text-blue-100">{selectedRecord.trabajador_documento || selectedRecord.trabajador_identificacion || 'â€”'}</p>
+                  <p className="text-sm text-blue-100">{selectedRecord.trabajador_documento || selectedRecord.trabajador_identificacion || '—'}</p>
                 </div>
               </div>
             </div>
@@ -479,7 +479,7 @@ export default function DashboardPage() {
                 <div>
                   <div className="flex items-center gap-1.5 mb-1">
                     <ClipboardList className="h-3 w-3 text-blue-400" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">MÃ³dulo</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Módulo</p>
                   </div>
                   <p className="text-sm text-gray-700">{activeModule.label}</p>
                 </div>
