@@ -17,6 +17,7 @@ import {
   Briefcase,
   FileText,
   Activity,
+  X,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -62,7 +63,7 @@ const menuItems = [
       {
         title: 'Formatos TO',
         icon: FileText,
-        href: '#', // No href for parent
+        href: '#',
         requiresAccess: 'formatos_to' as const,
         children: [
           {
@@ -100,11 +101,7 @@ const menuItems = [
   {
     title: 'REPORTES',
     items: [
-      {
-        title: 'Descargas',
-        icon: Download,
-        href: '/dashboard/reportes',
-      },
+      { title: 'Descargas', icon: Download, href: '/dashboard/reportes' },
     ],
   },
   {
@@ -116,27 +113,22 @@ const menuItems = [
   },
 ];
 
-// ... (keep helper functions same)
-
-// Función para verificar si el usuario tiene acceso a un módulo
 const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental' | 'valoracion_ocupacional') => {
-  if (!accessType) return true; // Sin restricción
+  if (!accessType) return true;
   if (!user) return false;
-  if (user.rol === 'admin') return true; // Admin tiene acceso a todo
-
+  if (user.rol === 'admin') return true;
   if (accessType === 'valoraciones') return user.acceso_valoraciones !== false;
   if (accessType === 'pruebas_trabajo') return user.acceso_pruebas_trabajo !== false;
   if (accessType === 'formatos_to') return user.acceso_formatos_to !== false;
   if (accessType === 'analisis_exigencias_mental') return user.acceso_analisis_exigencias_mental !== false;
   if (accessType === 'valoracion_ocupacional') return user.acceso_formatos_to !== false;
-
   return true;
 };
 
 export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuth();
-  const [expandedItems, setExpandedItems] = useState<string[]>(['Valoraciones', 'Formatos TO']); // Auto-expand Formatos TO
+  const [expandedItems, setExpandedItems] = useState<string[]>(['Valoraciones', 'Formatos TO']);
 
   const toggleExpand = (title: string) => {
     setExpandedItems((prev) =>
@@ -151,18 +143,19 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
     return pathname === href || pathname.startsWith(href + '/');
   };
 
-  // Helper for 3rd level rendering
-  const renderMenuItem = (item: any, depth = 0) => {
-    // Verificar permisos de admin
-    if (item.adminOnly && user?.rol !== 'admin') return null;
+  const closeMobileSidebar = () => {
+    if (window.innerWidth < 768 && setCollapsed) {
+      setCollapsed(true);
+    }
+  };
 
-    // Verificar permisos de acceso a módulos
+  const renderMenuItem = (item: any, depth = 0) => {
+    if (item.adminOnly && user?.rol !== 'admin') return null;
     if (item.requiresAccess && !hasModuleAccess(user, item.requiresAccess)) return null;
 
     const Icon = item.icon;
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.includes(item.title);
-    // For parent items without href, check if any child is active
     const active = item.href && item.href !== '#'
       ? isActive(item.href, item.exact)
       : item.children?.some((child: any) => isActive(child.href, child.exact) || child.children?.some((grandChild: any) => isActive(grandChild.href, grandChild.exact)));
@@ -176,37 +169,43 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
           <>
             <button
               onClick={() => toggleExpand(item.title)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 font-medium transition-all duration-200 ${active
-                ? 'bg-indigo-500/10 text-indigo-600 shadow-sm'
-                : 'text-gray-600 hover:bg-gray-100'
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all duration-200 ${active
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600'
                 } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
               style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
             >
-              <Icon className={`${isNested ? 'h-4 w-4' : 'h-5 w-5'} flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
+              <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
               {!collapsed && (
                 <>
-                  <span className="flex-1 text-left">{item.title}</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                  <span className="flex-1 text-left truncate">{item.title}</span>
+                  <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                 </>
               )}
             </button>
-            {!collapsed && isExpanded && (
-              <ul className="mt-1 space-y-1 border-l-2 border-gray-200 ml-4 mb-2">
-                {item.children.map((child: any) => renderMenuItem(child, depth + 1))}
-              </ul>
+            {!collapsed && (
+              <div className={`overflow-hidden transition-all duration-200 ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <ul className="mt-0.5 space-y-0.5 ml-3 border-l-2 border-blue-100 pl-0">
+                  {item.children.map((child: any) => renderMenuItem(child, depth + 1))}
+                </ul>
+              </div>
             )}
           </>
         ) : (
           <Link
             href={item.href}
-            className={`flex items-center gap-3 rounded-lg px-3 py-2.5 font-medium transition-all duration-200 ${active
-              ? 'bg-indigo-500/10 text-indigo-600 shadow-sm'
-              : 'text-gray-600 hover:bg-gray-100'
+            onClick={closeMobileSidebar}
+            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all duration-200 ${active
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600'
               } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
             style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
           >
-            <Icon className={`${isNested ? 'h-4 w-4' : 'h-5 w-5'} flex-shrink-0 ${active ? 'text-indigo-600' : ''}`} />
-            {!collapsed && <span>{item.title}</span>}
+            <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
+            {!collapsed && <span className="truncate">{item.title}</span>}
+            {!collapsed && active && (
+              <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />
+            )}
           </Link>
         )}
       </li>
@@ -215,13 +214,13 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-40 h-screen bg-white border-r border-gray-200 transition-all duration-300
-        ${collapsed ? '-translate-x-full md:translate-x-0 md:w-20' : 'translate-x-0 w-64'}
+      className={`fixed left-0 top-0 z-40 h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 
+        ${collapsed ? '-translate-x-full md:translate-x-0 md:w-20' : 'translate-x-0 w-[280px] md:w-64'}
       `}
     >
-      {/* Logo Section (Keep existing) */}
-      <div className="flex h-16 items-center border-b border-gray-200 px-4">
-        <Link href="/dashboard" className="flex items-center gap-3 w-full">
+      {/* Logo + Mobile Close */}
+      <div className="flex h-16 items-center border-b border-gray-100 px-4 shrink-0">
+        <Link href="/dashboard" className="flex items-center gap-3 flex-1 min-w-0" onClick={closeMobileSidebar}>
           <div className={`relative ${collapsed ? 'w-10 h-10' : 'w-52 h-14'} transition-all duration-300 flex items-center justify-center overflow-hidden`}>
             {collapsed ? (
               <div className="relative w-8 h-8">
@@ -232,23 +231,47 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
             )}
           </div>
         </Link>
+        {/* Mobile close button */}
+        {!collapsed && (
+          <button
+            onClick={() => setCollapsed?.(true)}
+            className="md:hidden p-2 -mr-1 rounded-lg hover:bg-gray-100 text-gray-400 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto p-3">
+      <nav className="flex-1 overflow-y-auto p-3 space-y-1">
         {menuItems.map((section, sectionIndex) => (
-          <div key={section.title} className={sectionIndex > 0 ? 'mt-6' : ''}>
+          <div key={section.title} className={sectionIndex > 0 ? 'mt-5' : ''}>
             {!collapsed && (
-              <h3 className="mb-2 px-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+              <h3 className="mb-2 px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                 {section.title}
               </h3>
             )}
-            <ul className="space-y-1">
+            <ul className="space-y-0.5">
               {section.items.map((item) => renderMenuItem(item))}
             </ul>
           </div>
         ))}
       </nav>
+
+      {/* Bottom section - User info */}
+      {!collapsed && (
+        <div className="p-3 border-t border-gray-100 shrink-0">
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50/50">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+              {user?.nombre?.charAt(0)}{user?.apellido?.charAt(0)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold text-gray-900 truncate">{user?.nombre} {user?.apellido}</p>
+              <p className="text-[10px] text-gray-500 truncate capitalize">{user?.rol}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

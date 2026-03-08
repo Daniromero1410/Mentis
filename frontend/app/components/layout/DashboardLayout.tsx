@@ -79,8 +79,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="flex h-screen items-center justify-center bg-[var(--background)]">
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
-            <div className="w-16 h-16 rounded-full border-4 border-indigo-500/20"></div>
-            <div className="absolute top-0 left-0 w-16 h-16 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
+            <div className="w-16 h-16 rounded-full border-4 border-blue-500/20"></div>
+            <div className="absolute top-0 left-0 w-16 h-16 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
           </div>
           <p className="text-sm text-gray-500 animate-pulse">Cargando...</p>
         </div>
@@ -99,14 +99,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Overlay for mobile when sidebar is open */}
       {!sidebarCollapsed && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden anim-backdrop-in"
           onClick={() => setSidebarCollapsed(true)}
         />
       )}
 
       <div className={`sidebar-transition ml-0 ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
         <Header onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
-        <main className="p-4 md:p-6">{children}</main>
+        <main className="p-3 sm:p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

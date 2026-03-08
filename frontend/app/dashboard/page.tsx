@@ -229,7 +229,7 @@ export default function DashboardPage() {
 
               <div className="p-4 bg-white">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Crear Nuevo</p>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {availableModules.map((mod, idx) => {
                     const Icon = mod.icon;
                     return (
@@ -317,15 +317,15 @@ export default function DashboardPage() {
             </div>
 
             {/* Module Tabs */}
-            <div className="px-6 py-2.5 border-b border-gray-100 bg-white overflow-x-auto">
+            <div className="px-3 sm:px-6 py-2.5 border-b border-gray-100 bg-white overflow-x-auto scrollbar-none">
               <div className="flex gap-1">
                 {availableModules.map((mod) => (
                   <button
                     key={mod.key}
                     onClick={() => setActiveTab(mod.key)}
                     className={`px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap tab-transition ${activeTab === mod.key
-                        ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25'
-                        : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'
+                      ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25'
+                      : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'
                       }`}
                   >
                     {mod.shortLabel}
@@ -369,11 +369,11 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 px-6 py-3 border-b border-gray-100 bg-gray-50/60">
+                  <div className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_auto_auto_auto] gap-3 sm:gap-4 px-4 sm:px-6 py-3 border-b border-gray-100 bg-gray-50/60">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Trabajador / ID</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[100px]">Estado</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[120px] hidden sm:block">Fecha</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[60px] text-right">Acción</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[80px] sm:min-w-[100px] hidden sm:block">Estado</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[100px] hidden md:block">Fecha</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 text-right">Estado</span>
                   </div>
 
                   <div className="divide-y divide-gray-50 bg-white">
@@ -386,7 +386,7 @@ export default function DashboardPage() {
                         <div
                           key={item.id}
                           onClick={() => openModal(item)}
-                          className={`grid grid-cols-[1fr_auto_auto_auto] gap-4 items-center px-6 py-3.5 hover:bg-blue-50/40 row-hover cursor-pointer opacity-0 anim-fade-in-up delay-${idx + 1}`}
+                          className={`grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_auto_auto_auto] gap-3 sm:gap-4 items-center px-4 sm:px-6 py-3 sm:py-3.5 hover:bg-blue-50/40 row-hover cursor-pointer opacity-0 anim-fade-in-up delay-${idx + 1}`}
                           style={{ animationFillMode: 'forwards' }}
                         >
                           <div className="flex items-center gap-3 min-w-0">
@@ -398,13 +398,14 @@ export default function DashboardPage() {
                               <p className="text-xs text-gray-400 truncate">ID: {doc}</p>
                             </div>
                           </div>
-                          <div className="min-w-[100px]">{getEstadoBadge(item.estado)}</div>
-                          <div className="min-w-[120px] hidden sm:block">
+                          <div className="hidden sm:block min-w-[80px]">{getEstadoBadge(item.estado)}</div>
+                          <div className="min-w-[100px] hidden md:block">
                             <span className="text-xs text-gray-500">{getRecordDate(item)}</span>
                           </div>
-                          <div className="min-w-[60px] text-right">
+                          <div className="text-right flex items-center gap-1 justify-end">
+                            <span className="sm:hidden">{getEstadoBadge(item.estado)}</span>
                             <button
-                              className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                              className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 hidden sm:block"
                               onClick={(e) => { e.stopPropagation(); openModal(item); }}
                             >
                               <Eye className="h-4 w-4" />
