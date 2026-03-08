@@ -73,7 +73,7 @@ export function PromediosFactoresRiesgo({
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
             <FileText className="h-5 w-5 text-indigo-500" />
-            Resumen de Evaluación de Riesgos
+            Resumen de EvaluaciÃ³n de Riesgos
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -99,10 +99,10 @@ export function PromediosFactoresRiesgo({
         </CardContent>
       </Card>
 
-      {/* Promedios por Categoría */}
+      {/* Promedios por CategorÃ­a */}
       <Card className="border-2 border-gray-200">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg">Promedios por Categoría</CardTitle>
+          <CardTitle className="text-lg">Promedios por CategorÃ­a</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -140,11 +140,11 @@ export function PromediosFactoresRiesgo({
         </CardContent>
       </Card>
 
-      {/* Categorías por Nivel de Riesgo */}
+      {/* CategorÃ­as por Nivel de Riesgo */}
       {riesgoGeneral.nivel && (
         <Card className="border-2 border-gray-200">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Categorización por Nivel de Riesgo</CardTitle>
+            <CardTitle className="text-lg">CategorizaciÃ³n por Nivel de Riesgo</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {riesgoGeneral.categorias_alto_riesgo.length > 0 && (
@@ -155,7 +155,7 @@ export function PromediosFactoresRiesgo({
                 </div>
                 <ul className="space-y-1 ml-6">
                   {riesgoGeneral.categorias_alto_riesgo.map((cat, idx) => (
-                    <li key={idx} className="text-sm text-gray-700">• {cat}</li>
+                    <li key={idx} className="text-sm text-gray-700">â€¢ {cat}</li>
                   ))}
                 </ul>
               </div>
@@ -169,7 +169,7 @@ export function PromediosFactoresRiesgo({
                 </div>
                 <ul className="space-y-1 ml-6">
                   {riesgoGeneral.categorias_riesgo_medio.map((cat, idx) => (
-                    <li key={idx} className="text-sm text-gray-700">• {cat}</li>
+                    <li key={idx} className="text-sm text-gray-700">â€¢ {cat}</li>
                   ))}
                 </ul>
               </div>
@@ -183,7 +183,7 @@ export function PromediosFactoresRiesgo({
                 </div>
                 <ul className="space-y-1 ml-6">
                   {riesgoGeneral.categorias_bajo_riesgo.map((cat, idx) => (
-                    <li key={idx} className="text-sm text-gray-700">• {cat}</li>
+                    <li key={idx} className="text-sm text-gray-700">â€¢ {cat}</li>
                   ))}
                 </ul>
               </div>
@@ -192,7 +192,7 @@ export function PromediosFactoresRiesgo({
         </Card>
       )}
 
-      {/* Botón de generar concepto */}
+      {/* BotÃ³n de generar concepto */}
       {mostrarBotonGenerar && riesgoGeneral.nivel && onGenerarConcepto && (
         <div className="flex justify-center">
           <Button
@@ -201,7 +201,7 @@ export function PromediosFactoresRiesgo({
             size="lg"
           >
             <Sparkles className="h-5 w-5" />
-            Generar Concepto Psicológico Automático
+            Generar Concepto PsicolÃ³gico AutomÃ¡tico
           </Button>
         </div>
       )}

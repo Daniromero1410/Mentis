@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { AnalisisExigenciaMentalWizard } from '@/components/analisis-exigencias-mental/AnalisisExigenciaMentalWizard';
 import { ModuleGuard } from '@/app/components/guards/ModuleGuard';

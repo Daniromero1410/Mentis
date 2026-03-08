@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-// DefiniciÛn de las dimensiones de riesgo y sus condiciones
+// Definici√≥n de las dimensiones de riesgo y sus condiciones
 const DIMENSIONES_RIESGO = {
   demandas_cuantitativas: {
     nombre: 'Demandas Cuantitativas de Trabajo',
@@ -34,29 +34,29 @@ const DIMENSIONES_RIESGO = {
   demandas_carga_mental: {
     nombre: 'Demandas de Carga Mental',
     items: [
-      { numero: 1, texto: 'Necesidad de atenciÛn sostenida' },
+      { numero: 1, texto: 'Necesidad de atenci√≥n sostenida' },
       { numero: 2, texto: 'Complejidad de las tareas' },
-      { numero: 3, texto: 'Cantidad de informaciÛn a procesar' },
+      { numero: 3, texto: 'Cantidad de informaci√≥n a procesar' },
       { numero: 4, texto: 'Necesidad de tomar decisiones complejas' },
-      { numero: 5, texto: 'ConcentraciÛn requerida' },
+      { numero: 5, texto: 'Concentraci√≥n requerida' },
     ],
   },
   demandas_emocionales: {
     nombre: 'Demandas Emocionales',
     items: [
-      { numero: 1, texto: 'Manejo de situaciones emocionalmente difÌciles' },
-      { numero: 2, texto: 'Contacto con p˙blico o usuarios' },
+      { numero: 1, texto: 'Manejo de situaciones emocionalmente dif√≠ciles' },
+      { numero: 2, texto: 'Contacto con p√∫blico o usuarios' },
       { numero: 3, texto: 'Control de emociones ante situaciones laborales' },
     ],
   },
   exigencias_responsabilidad: {
     nombre: 'Exigencias de Responsabilidad del Cargo',
     items: [
-      { numero: 1, texto: 'Responsabilidad sobre resultados crÌticos' },
-      { numero: 2, texto: 'SupervisiÛn de otros trabajadores' },
+      { numero: 1, texto: 'Responsabilidad sobre resultados cr√≠ticos' },
+      { numero: 2, texto: 'Supervisi√≥n de otros trabajadores' },
       { numero: 3, texto: 'Manejo de recursos importantes' },
       { numero: 4, texto: 'Toma de decisiones importantes' },
-      { numero: 5, texto: 'Impacto de errores en la organizaciÛn' },
+      { numero: 5, texto: 'Impacto de errores en la organizaci√≥n' },
       { numero: 6, texto: 'Responsabilidad sobre la seguridad de otros' },
     ],
   },
@@ -65,21 +65,21 @@ const DIMENSIONES_RIESGO = {
     items: [
       { numero: 1, texto: 'Claridad de las funciones del puesto' },
       { numero: 2, texto: 'Instrucciones claras y consistentes' },
-      { numero: 3, texto: 'DefiniciÛn de objetivos' },
+      { numero: 3, texto: 'Definici√≥n de objetivos' },
       { numero: 4, texto: 'Demandas contradictorias' },
     ],
   },
   demandas_ambientales: {
-    nombre: 'Demandas Ambientales y de Esfuerzo FÌsico',
+    nombre: 'Demandas Ambientales y de Esfuerzo F√≠sico',
     items: [
       { numero: 1, texto: 'Ruido en el ambiente laboral' },
-      { numero: 2, texto: 'IluminaciÛn inadecuada' },
+      { numero: 2, texto: 'Iluminaci√≥n inadecuada' },
       { numero: 3, texto: 'Temperatura extrema' },
-      { numero: 4, texto: 'ExposiciÛn a agentes quÌmicos' },
-      { numero: 5, texto: 'Esfuerzo fÌsico intenso' },
+      { numero: 4, texto: 'Exposici√≥n a agentes qu√≠micos' },
+      { numero: 5, texto: 'Esfuerzo f√≠sico intenso' },
       { numero: 6, texto: 'Posturas forzadas' },
       { numero: 7, texto: 'Movimientos repetitivos' },
-      { numero: 8, texto: 'ManipulaciÛn de cargas' },
+      { numero: 8, texto: 'Manipulaci√≥n de cargas' },
       { numero: 9, texto: 'Espacios de trabajo reducidos' },
       { numero: 10, texto: 'Vibraciones' },
     ],
@@ -127,7 +127,7 @@ const getRiskColor = (risk: string) => {
 };
 
 interface StepData {
-  // Paso 1: MetodologÌa y Participantes
+  // Paso 1: Metodolog√≠a y Participantes
   metodologia: string;
   participante_trabajador: string;
   participante_jefe: string;
@@ -136,7 +136,7 @@ interface StepData {
   fuente_jefe_fecha: string;
   fuente_par_fecha: string;
 
-  // Paso 2: RevisiÛn Documental y DescripciÛn
+  // Paso 2: Revisi√≥n Documental y Descripci√≥n
   revision_documental: string;
   descripcion_puesto: string;
   condicion_actual: string;
@@ -272,7 +272,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al cargar los datos de la evaluaciÛn');
+      toast.error('Error al cargar los datos de la evaluaci√≥n');
     } finally {
       setLoading(false);
     }
@@ -339,11 +339,11 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
           ...prev,
           conclusiones_finales: response.analisis_generado || '',
           recomendaciones: response.recomendaciones_generadas || '',
-          // Actualizar tambiÈn la conclusiÛn breve si est· vacÌa
+          // Actualizar tambi√©n la conclusi√≥n breve si est√° vac√≠a
           conclusion_evaluacion: prev.conclusion_evaluacion || (response.concepto ? response.concepto.substring(0, 500) + '...' : '')
         }));
 
-        // Guardar autom·ticamente para persistir los cambios
+        // Guardar autom√°ticamente para persistir los cambios
         await api.post(`/analisis-exigencias-mental/${params.id}/concepto-final`, {
           ...formData,
           conclusiones_finales: response.analisis_generado || '',
@@ -394,7 +394,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
 
   const handleFinish = async () => {
     await handleSave();
-    toast.success('EvaluaciÛn completada');
+    toast.success('Evaluaci√≥n completada');
     router.push(`/dashboard/analisis-exigencias-mental/${params.id}`);
   };
 
@@ -519,7 +519,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Briefcase className="w-8 h-8 text-violet-500" />
-              Completar EvaluaciÛn
+              Completar Evaluaci√≥n
             </h1>
             <p className="text-gray-500 mt-1">
               Paso {currentStep} de {totalSteps}
@@ -595,7 +595,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
                   className="bg-green-600 hover:bg-green-700 text-white"
                 >
                   <CheckCircle2 className="mr-2 h-4 w-4" />
-                  Finalizar EvaluaciÛn
+                  Finalizar Evaluaci√≥n
                 </Button>
               )
             )}
@@ -621,20 +621,20 @@ function Step1Metodologia({
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          MetodologÌa y Participantes
+          Metodolog√≠a y Participantes
         </h2>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="metodologia">MetodologÌa</Label>
+          <Label htmlFor="metodologia">Metodolog√≠a</Label>
           <Textarea
             id="metodologia"
             rows={4}
             value={formData.metodologia}
             onChange={(e) => setFormData({ ...formData, metodologia: e.target.value })}
             className="bg-white border-gray-200"
-            placeholder="Describa la metodologÌa utilizada para la evaluaciÛn..."
+            placeholder="Describa la metodolog√≠a utilizada para la evaluaci√≥n..."
             disabled={readOnly}
           />
         </div>
@@ -678,7 +678,7 @@ function Step1Metodologia({
 
         <div>
           <h3 className="text-lg font-medium text-gray-900 mb-3">
-            Fuentes de RecolecciÛn de InformaciÛn
+            Fuentes de Recolecci√≥n de Informaci√≥n
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -736,26 +736,26 @@ function Step2RevisionDocumental({
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          RevisiÛn Documental y DescripciÛn
+          Revisi√≥n Documental y Descripci√≥n
         </h2>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="revision_documental">RevisiÛn Documental</Label>
+          <Label htmlFor="revision_documental">Revisi√≥n Documental</Label>
           <Textarea
             id="revision_documental"
             rows={5}
             value={formData.revision_documental}
             onChange={(e) => setFormData({ ...formData, revision_documental: e.target.value })}
             className="bg-white border-gray-200"
-            placeholder="Documente la revisiÛn de documentos relevantes..."
+            placeholder="Documente la revisi√≥n de documentos relevantes..."
             disabled={readOnly}
           />
         </div>
 
         <div>
-          <Label htmlFor="descripcion_puesto">DescripciÛn del Puesto</Label>
+          <Label htmlFor="descripcion_puesto">Descripci√≥n del Puesto</Label>
           <Textarea
             id="descripcion_puesto"
             rows={5}
@@ -768,14 +768,14 @@ function Step2RevisionDocumental({
         </div>
 
         <div>
-          <Label htmlFor="condicion_actual">CondiciÛn Actual del Trabajador</Label>
+          <Label htmlFor="condicion_actual">Condici√≥n Actual del Trabajador</Label>
           <Textarea
             id="condicion_actual"
             rows={5}
             value={formData.condicion_actual}
             onChange={(e) => setFormData({ ...formData, condicion_actual: e.target.value })}
             className="bg-white border-gray-200"
-            placeholder="Describa la condiciÛn actual del trabajador..."
+            placeholder="Describa la condici√≥n actual del trabajador..."
             disabled={readOnly}
           />
         </div>
@@ -814,7 +814,7 @@ function Step3AspectosOcupacionales({
             />
           </div>
           <div>
-            <Label htmlFor="area_puesto">¸Årea</Label>
+            <Label htmlFor="area_puesto">√º¬Årea</Label>
             <Input
               id="area_puesto"
               value={formData.area_puesto}
@@ -824,27 +824,27 @@ function Step3AspectosOcupacionales({
             />
           </div>
           <div>
-            <Label htmlFor="antiguedad_cargo_ocupacional">Antig¸edad en el Cargo</Label>
+            <Label htmlFor="antiguedad_cargo_ocupacional">Antig√ºedad en el Cargo</Label>
             <Input
               id="antiguedad_cargo_ocupacional"
               value={formData.antiguedad_cargo_ocupacional}
               onChange={(e) =>
                 setFormData({ ...formData, antiguedad_cargo_ocupacional: e.target.value })
               }
-              placeholder="Ej: 2 aÒos 3 meses"
+              placeholder="Ej: 2 a√±os 3 meses"
               className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
           <div>
-            <Label htmlFor="antiguedad_empresa_ocupacional">Antig¸edad en la Empresa</Label>
+            <Label htmlFor="antiguedad_empresa_ocupacional">Antig√ºedad en la Empresa</Label>
             <Input
               id="antiguedad_empresa_ocupacional"
               value={formData.antiguedad_empresa_ocupacional}
               onChange={(e) =>
                 setFormData({ ...formData, antiguedad_empresa_ocupacional: e.target.value })
               }
-              placeholder="Ej: 5 aÒos 1 mes"
+              placeholder="Ej: 5 a√±os 1 mes"
               className="bg-white border-gray-200"
               disabled={readOnly}
             />
@@ -897,7 +897,7 @@ function Step3AspectosOcupacionales({
         </div>
 
         <div>
-          <Label htmlFor="descripcion_funciones">DescripciÛn de Funciones</Label>
+          <Label htmlFor="descripcion_funciones">Descripci√≥n de Funciones</Label>
           <Textarea
             id="descripcion_funciones"
             rows={6}
@@ -955,7 +955,7 @@ function StepCondicionesRiesgo({
         exposicion: found.exposicion ?? 0,
         intensidad: found.intensidad ?? 0,
         total_condicion: found.total_condicion ?? 0,
-        // Default text for Fuentes de InformaciÛn if empty
+        // Default text for Fuentes de Informaci√≥n if empty
         fuentes_informacion: found.fuentes_informacion || 'Entrevista con el trabajador y jefe inmediato',
       };
     }
@@ -1034,11 +1034,11 @@ function StepCondicionesRiesgo({
     try {
       setSaving(true);
 
-      // Guardar todas las condiciones de esta dimensiÛn
+      // Guardar todas las condiciones de esta dimensi√≥n
       for (const item of dimensionData.items) {
         const condicionData = getCondicionData(item.numero);
 
-        // Guardamos si tiene alg˙n dato relevante
+        // Guardamos si tiene alg√∫n dato relevante
         if (condicionData.descripcion_detallada || condicionData.total_condicion > 0 || condicionData.frecuencia !== undefined) {
           // Asegurarnos de guardar incluso si es 0 pero ha sido editado, 
           // para este caso asumimos que si existe el objeto en el estado local, lo guardamos.
@@ -1097,12 +1097,12 @@ function StepCondicionesRiesgo({
               </th>
             </tr>
             <tr className="bg-gray-100 text-gray-700 font-semibold border-b border-gray-200">
-              <th className="px-4 py-3 w-[30%]">CondiciÛn</th>
+              <th className="px-4 py-3 w-[30%]">Condici√≥n</th>
               <th className="px-2 py-3 text-center w-[10%]">Frecuencia<br />(0-7)</th>
-              <th className="px-2 py-3 text-center w-[10%]">ExposiciÛn<br />(0-7)</th>
+              <th className="px-2 py-3 text-center w-[10%]">Exposici√≥n<br />(0-7)</th>
               <th className="px-2 py-3 text-center w-[10%]">Intensidad<br />(0-7)</th>
               <th className="px-2 py-3 text-center w-[8%]">Total (Suma)</th>
-              <th className="px-4 py-3 w-[32%]">Fuentes de InformaciÛn</th>
+              <th className="px-4 py-3 w-[32%]">Fuentes de Informaci√≥n</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
@@ -1165,7 +1165,7 @@ function StepCondicionesRiesgo({
             <tr className="bg-gray-50 font-bold border-t-2 border-gray-200">
               <td className="px-4 py-3 text-right text-gray-700">TOTAL DEMANDA:</td>
               <td colSpan={3} className="px-2 py-3">
-                {/* VisualizaciÛn del Nivel de Riesgo en el Footer */}
+                {/* Visualizaci√≥n del Nivel de Riesgo en el Footer */}
                 {(() => {
                   const { nivel, color } = getNivelRiesgo(dimension, totalDimension);
                   return (
@@ -1305,8 +1305,8 @@ function StepResumenFactores({
       </div>
 
       <p className="text-sm text-gray-600">
-        Compare la valoraciÛn subjetiva del trabajador con su valoraciÛn como experto para cada
-        dimensiÛn de riesgo.
+        Compare la valoraci√≥n subjetiva del trabajador con su valoraci√≥n como experto para cada
+        dimensi√≥n de riesgo.
       </p>
 
       <div className="space-y-6">
@@ -1441,40 +1441,40 @@ function StepConceptoFinal({
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="conclusion_evaluacion">ConclusiÛn de la EvaluaciÛn</Label>
+          <Label htmlFor="conclusion_evaluacion">Conclusi√≥n de la Evaluaci√≥n</Label>
           <Textarea
             id="conclusion_evaluacion"
             rows={4}
             value={formData.conclusion_evaluacion}
             onChange={(e) => setFormData({ ...formData, conclusion_evaluacion: e.target.value })}
             className="bg-white border-gray-200"
-            placeholder="Resuma la conclusiÛn general de la evaluaciÛn..."
+            placeholder="Resuma la conclusi√≥n general de la evaluaci√≥n..."
             disabled={readOnly}
           />
         </div>
 
         <div>
-          <Label htmlFor="concordancia_items">¸çtems con Concordancia</Label>
+          <Label htmlFor="concordancia_items">√º¬çtems con Concordancia</Label>
           <Textarea
             id="concordancia_items"
             rows={3}
             value={formData.concordancia_items}
             onChange={(e) => setFormData({ ...formData, concordancia_items: e.target.value })}
             className="bg-white border-gray-200"
-            placeholder="Liste los Ìtems donde hay concordancia entre trabajador y experto..."
+            placeholder="Liste los √≠tems donde hay concordancia entre trabajador y experto..."
             disabled={readOnly}
           />
         </div>
 
         <div>
-          <Label htmlFor="no_concordancia_items">¸çtems sin Concordancia</Label>
+          <Label htmlFor="no_concordancia_items">√º¬çtems sin Concordancia</Label>
           <Textarea
             id="no_concordancia_items"
             rows={3}
             value={formData.no_concordancia_items}
             onChange={(e) => setFormData({ ...formData, no_concordancia_items: e.target.value })}
             className="bg-white border-gray-200"
-            placeholder="Liste los Ìtems donde NO hay concordancia..."
+            placeholder="Liste los √≠tems donde NO hay concordancia..."
             disabled={readOnly}
           />
         </div>
@@ -1512,7 +1512,7 @@ function StepConceptoFinal({
           disabled={readOnly}
         />
         <p className="text-xs text-gray-500 mt-1">
-          Este campo puede ser generado autom·ticamente por el modelo de ML en el futuro
+          Este campo puede ser generado autom√°ticamente por el modelo de ML en el futuro
         </p>
       </div>
 

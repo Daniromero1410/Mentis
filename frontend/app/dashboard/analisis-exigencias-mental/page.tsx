@@ -80,7 +80,7 @@ export default function AnalisisExigenciaMentalPage() {
       setTotal(response.total || 0);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al cargar An·lisis de Exigencias Mental');
+      toast.error('Error al cargar An√°lisis de Exigencias Mental');
     } finally {
       setLoading(false);
     }
@@ -113,10 +113,10 @@ export default function AnalisisExigenciaMentalPage() {
       setDeleteDialogOpen(false);
       setaeToDelete(null);
       await fetchaes();
-      toast.success('An·lisis eliminado correctamente');
+      toast.success('An√°lisis eliminado correctamente');
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al eliminar el an·lisis');
+      toast.error('Error al eliminar el an√°lisis');
     } finally {
       setDeleting(false);
     }
@@ -135,7 +135,7 @@ export default function AnalisisExigenciaMentalPage() {
       );
 
       if (!response.ok) {
-        // Obtener el mensaje de error especÌfico del servidor
+        // Obtener el mensaje de error espec√≠fico del servidor
         const errorData = await response.json().catch(() => ({}));
         const errorMessage = errorData.detail || 'Error al descargar PDF';
         throw new Error(errorMessage);
@@ -145,7 +145,7 @@ export default function AnalisisExigenciaMentalPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      // Usar nombre del trabajador si est· disponible
+      // Usar nombre del trabajador si est√° disponible
       const nombreArchivo = ae.trabajador_nombre
         ? `Analisis_Exigencia_Mental_${ae.trabajador_nombre.replace(/\s+/g, '_')}.pdf`
         : `Analisis_Exigencia_Mental_${ae.id}.pdf`;
@@ -194,16 +194,16 @@ export default function AnalisisExigenciaMentalPage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                 <Briefcase className="w-8 h-8 text-violet-500" />
-                An·lisis de Exigencias Mental
+                An√°lisis de Exigencias Mental
               </h1>
               <p className="text-gray-500 mt-1">
-                Gestiona los an·lisis de exigencias mental y evaluaciones de riesgos psicosociales
+                Gestiona los an√°lisis de exigencias mental y evaluaciones de riesgos psicosociales
               </p>
             </div>
             <Link href="/dashboard/analisis-exigencias-mental/nueva">
               <Button className="bg-violet-500 hover:bg-violet-600 text-white shadow-lg shadow-violet-500/25">
                 <Plus className="mr-2 h-4 w-4" />
-                Nuevo An·lisis
+                Nuevo An√°lisis
               </Button>
             </Link>
           </div>
@@ -216,7 +216,7 @@ export default function AnalisisExigenciaMentalPage() {
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                     <Input
-                      placeholder="Buscar por nombre, identificaciÛn o empresa..."
+                      placeholder="Buscar por nombre, identificaci√≥n o empresa..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       onKeyPress={handleKeyPress}
@@ -405,7 +405,7 @@ export default function AnalisisExigenciaMentalPage() {
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
                     <div className="flex items-center gap-2 px-3 text-sm text-gray-700">
-                      P·gina {page} de {totalPages || 1}
+                      P√°gina {page} de {totalPages || 1}
                     </div>
                     <Button
                       variant="outline"
@@ -433,18 +433,18 @@ export default function AnalisisExigenciaMentalPage() {
                   <div>
                     <DialogTitle>Eliminar ae de Trabajo</DialogTitle>
                     <DialogDescription>
-                      Esta acciÛn no se puede deshacer
+                      Esta acci√≥n no se puede deshacer
                     </DialogDescription>
                   </div>
                 </div>
               </DialogHeader>
               <div className="py-4">
                 <p className="text-sm text-gray-600">
-                  øEst·s seguro de que deseas eliminar la ae de trabajo de{' '}
+                  ¬øEst√°s seguro de que deseas eliminar la ae de trabajo de{' '}
                   <span className="font-semibold text-gray-900">
                     {aeToDelete?.trabajador_nombre || 'Sin nombre'}
                   </span>
-                  ? Se eliminar·n todos los datos asociados incluyendo el trabajador, empresa y evaluaciÛn.
+                  ? Se eliminar√°n todos los datos asociados incluyendo el trabajador, empresa y evaluaci√≥n.
                 </p>
               </div>
               <DialogFooter className="gap-2 sm:gap-0">
