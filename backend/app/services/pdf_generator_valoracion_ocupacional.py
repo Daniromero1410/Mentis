@@ -9,7 +9,7 @@ from reportlab.lib.units import inch, cm
 from reportlab.lib import colors
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
-    Spacer, KeepTogether, Image as ReportLabImage
+    Spacer, KeepTogether, Image as ReportLabImage, Flowable
 )
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
 from datetime import datetime
