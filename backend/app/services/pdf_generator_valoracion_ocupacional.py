@@ -720,34 +720,47 @@ def generar_pdf_valoracion_ocupacional(
     # 11. REGISTRO (FIRMAS)
     story.append(crear_seccion_header("11. REGISTRO"))
 
-    firma_eval = Spacer(1, 30)
-    if evaluador and hasattr(evaluador, 'firma_path') and evaluador.firma_path and os.path.exists(evaluador.firma_path):
-        try: firma_eval = ReportLabImage(evaluador.firma_path, width=1.4*inch, height=0.5*inch)
+    # --- Firma images ---
+    firma_elaboro_img = Spacer(1, 30)
+    firma_elaboro_path = getattr(registro, 'firma_elaboro', None) if registro else None
+    if firma_elaboro_path and os.path.exists(str(firma_elaboro_path)):
+        try: firma_elaboro_img = ReportLabImage(str(firma_elaboro_path), width=1.4*inch, height=0.5*inch)
         except: pass
 
     firma_prov_img = Spacer(1, 30)
-    if registro and getattr(registro, 'firma_proveedor', None) and os.path.exists(registro.firma_proveedor):
-        try: firma_prov_img = ReportLabImage(registro.firma_proveedor, width=1.4*inch, height=0.5*inch)
+    firma_prov_path = getattr(registro, 'firma_proveedor', None) if registro else None
+    if firma_prov_path and os.path.exists(str(firma_prov_path)):
+        try: firma_prov_img = ReportLabImage(str(firma_prov_path), width=1.4*inch, height=0.5*inch)
         except: pass
-        
-    firma_rhb_img = Spacer(1, 30)
-    if registro and getattr(registro, 'firma_equipo_rhb', None) and os.path.exists(registro.firma_equipo_rhb):
-        try: firma_rhb_img = ReportLabImage(registro.firma_equipo_rhb, width=1.4*inch, height=0.5*inch)
-        except: pass
+
+    # --- Field values ---
+    nombre_elaboro = getattr(registro, 'nombre_elaboro', '') or ''
+    licencia_so = getattr(registro, 'licencia_so_elaboro', '') or ''
+    nombre_prov = getattr(registro, 'nombre_proveedor', '') or ''
+    nombre_rhb = getattr(registro, 'nombre_equipo_rhb', '') or ''
 
     col_w = PAGE_WIDTH / 3.0
     
     firmas_data = [
+        # Row 1: headers
         [Paragraph("<para align=center><b>Elaboró</b></para>", style_small), 
          Paragraph("<para align=center><b>Revisión por Proveedor</b></para>", style_small), 
          Paragraph("<para align=center><b>Equipo de<br/>Rehabilitación Integral</b></para>", style_small)],
          
-        [firma_eval, firma_prov_img, firma_rhb_img],
+        # Row 2: nombre
+        [Paragraph(f"<para align=center><b>Nombre:</b> {nombre_elaboro}</para>", style_small),
+         Paragraph(f"<para align=center><b>Nombre:</b> {nombre_prov}</para>", style_small),
+         Paragraph(f"<para align=center><font color='#0284c7'><b>{nombre_rhb}</b></font></para>", style_small)],
+
+        # Row 3: firma
+        [firma_elaboro_img, firma_prov_img, Spacer(1, 30)],
         
-        [Paragraph(f"<para align=center><b>{getattr(registro, 'nombre_elaboro', evaluador.nombre if evaluador else '')}</b></para>", style_small),
-         Paragraph(f"<para align=center><b>{getattr(registro, 'nombre_proveedor', '')}</b></para>", style_small),
-         Paragraph(f"<para align=center><font color='#0284c7'>{getattr(registro, 'nombre_equipo_rhb', 'Nombre Proveedor')}</font></para>", style_small)],
-         
+        # Row 4: licencia SO (only col 1)
+        [Paragraph(f"<para align=center><b>Licencia S.O No.:</b> {licencia_so}</para>", style_small),
+         Paragraph("", style_small),
+         Paragraph("", style_small)],
+
+        # Row 5: footer labels
         [Paragraph("<para align=center><b>Profesionales que realizan la valoración</b></para>", style_small),
          Paragraph("<para align=center><b>Profesional que revisa la valoración</b></para>", style_small),
          Paragraph("<para align=center><b>Gerencia Médica</b></para>", style_small)]
