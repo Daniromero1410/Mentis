@@ -86,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setTimeout(() => {
+      setIsLoggingOut(false);
       router.push('/login');
     }, 1500);
   };
