@@ -707,7 +707,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(t_conc)
 
     # 10. ORIENTACION OCUPACIONAL
-    story.append(crear_seccion_header("10. ORIENTACION OCUPACIONAL *"))
+    ori_header = crear_seccion_header("10. ORIENTACION OCUPACIONAL *")
     t_ori = Table([[P(ActT(orientacion))]], colWidths=[PAGE_WIDTH], minRowHeights=[40])
     t_ori.setStyle(TableStyle([
         ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -715,10 +715,9 @@ def generar_pdf_valoracion_ocupacional(
         ('LEFTPADDING', (0, 0), (-1, -1), 6),
         ('TOPPADDING', (0, 0), (-1, -1), 6),
     ]))
-    story.append(t_ori)
 
-    # 11. REGISTRO (FIRMAS)
-    story.append(crear_seccion_header("11. REGISTRO"))
+    # 11. REGISTRO (FIRMAS) - must stay together with Orientación for security
+    reg_header = crear_seccion_header("11. REGISTRO")
 
     # --- Helper to resolve firma (base64 or file path) ---
     import tempfile, base64 as b64mod
@@ -792,7 +791,8 @@ def generar_pdf_valoracion_ocupacional(
         ('TOPPADDING', (0, 0), (-1, -1), 3),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
     ]))
-    story.append(KeepTogether([t_firmas]))
+    # Keep Orientación + Registro together on the same page (security: firmas can't be alone)
+    story.append(KeepTogether([ori_header, t_ori, Spacer(1, 4), reg_header, t_firmas]))
 
     doc.build(story)
     return str(pdf_path)

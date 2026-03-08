@@ -275,7 +275,7 @@ export default function ValoracionOcupacionalPage() {
                                         <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
                                             <TableCell className="py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">
+                                                    <div className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white font-bold text-xs shrink-0">
                                                         {initial}
                                                     </div>
                                                     <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
