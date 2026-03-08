@@ -8,8 +8,8 @@ import { ThemeProvider } from '@/app/context/ThemeContext';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Mentis - Sistema Integral de Psicología Ocupacional',
-  description: 'Sistema Integral de Psicología Ocupacional y Pruebas de Trabajo',
+  title: 'Mentis - Sistema Integral de Gestión de Reintegro Laboral Efectivo',
+  description: 'Sistema Integral de Gestión de Reintegro Laboral Efectivo',
   icons: {
     icon: '/images/mentis-mini.svg',
     shortcut: '/images/mentis-mini.svg',

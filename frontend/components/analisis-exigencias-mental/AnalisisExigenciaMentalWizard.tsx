@@ -364,7 +364,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
     turnos: '',
     descripcion_funciones: '',
     // Factores de riesgo
-    factores_riesgo: {} as Record<string, { fr: string; exp: string; int: string; total: string; fuentes: string; observaciones: string }>,
+    factores_riesgo: {} as Record<string, { fr: string; fr1: string; fr2: string; exp: string; exp1: string; exp2: string; int: string; total: string; fuentes: string; observaciones: string }>,
     // Resumen
     resumen_factores: {} as Record<string, { nivel_trabajador: string; nivel_experto: string; factores_trabajador: string; factores_experto: string; observaciones: string }>,
     // Concepto final
@@ -382,7 +382,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
     Object.entries(factoresRiesgo).forEach(([, categoria]) => {
       categoria.items.forEach(item => {
         factoresInit[item.nombre] = {
-          fr: '', exp: '', int: '', total: '',
+          fr: '', fr1: '', fr2: '', exp: '', exp1: '', exp2: '', int: '', total: '',
           fuentes: 'Entrevista con funcionario y jefe inmediato',
           observaciones: item.descripcion
         };
@@ -432,16 +432,43 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
 
   const updateFactorRiesgo = (itemNombre: string, field: string, value: string) => {
     setFormData(prev => {
-      const currentFactor = prev.factores_riesgo[itemNombre] || { fr: '', exp: '', int: '', total: '', fuentes: '', observaciones: '' };
+      const currentFactor = prev.factores_riesgo[itemNombre] || { fr: '', fr1: '', fr2: '', exp: '', exp1: '', exp2: '', int: '', total: '', fuentes: '', observaciones: '' };
       const updatedFactor = { ...currentFactor, [field]: value };
-      if (['fr', 'exp', 'int'].includes(field)) {
-        if (updatedFactor.fr !== '' && updatedFactor.exp !== '' && updatedFactor.int !== '') {
-          const fr = parseInt(updatedFactor.fr) || 0;
-          const exp = parseInt(updatedFactor.exp) || 0;
-          const intVal = parseInt(updatedFactor.int) || 0;
-          updatedFactor.total = (fr + exp + intVal).toString();
+
+      // Auto-average FR sub-inputs
+      if (field === 'fr1' || field === 'fr2') {
+        const has1 = updatedFactor.fr1 !== '';
+        const has2 = updatedFactor.fr2 !== '';
+        if (has1 && has2) {
+          const avg = (parseFloat(updatedFactor.fr1) + parseFloat(updatedFactor.fr2)) / 2;
+          updatedFactor.fr = String(Math.round(avg * 10) / 10);
+        } else {
+          updatedFactor.fr = has1 ? updatedFactor.fr1 : has2 ? updatedFactor.fr2 : '';
         }
       }
+
+      // Auto-average EXP sub-inputs
+      if (field === 'exp1' || field === 'exp2') {
+        const has1 = updatedFactor.exp1 !== '';
+        const has2 = updatedFactor.exp2 !== '';
+        if (has1 && has2) {
+          const avg = (parseFloat(updatedFactor.exp1) + parseFloat(updatedFactor.exp2)) / 2;
+          updatedFactor.exp = String(Math.round(avg * 10) / 10);
+        } else {
+          updatedFactor.exp = has1 ? updatedFactor.exp1 : has2 ? updatedFactor.exp2 : '';
+        }
+      }
+
+      // Recalculate total
+      if (['fr', 'fr1', 'fr2', 'exp', 'exp1', 'exp2', 'int'].includes(field)) {
+        if (updatedFactor.fr !== '' && updatedFactor.exp !== '' && updatedFactor.int !== '') {
+          const fr = parseFloat(updatedFactor.fr) || 0;
+          const exp = parseFloat(updatedFactor.exp) || 0;
+          const intVal = parseInt(updatedFactor.int) || 0;
+          updatedFactor.total = String(Math.round((fr + exp + intVal) * 10) / 10);
+        }
+      }
+
       return { ...prev, factores_riesgo: { ...prev.factores_riesgo, [itemNombre]: updatedFactor } };
     });
   };
@@ -534,7 +561,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
           Object.entries(factoresRiesgo).forEach(([, categoria]) => {
             categoria.items.forEach(item => {
               factoresMapa[item.nombre] = {
-                fr: '', exp: '', int: '', total: '',
+                fr: '', fr1: '', fr2: '', exp: '', exp1: '', exp2: '', int: '', total: '',
                 fuentes: 'Entrevista con funcionario y jefe inmediato',
                 observaciones: item.descripcion
               };
@@ -543,9 +570,11 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
           if (data.condiciones_riesgo) {
             data.condiciones_riesgo.forEach((cond: any) => {
               if (factoresMapa[cond.condicion_texto]) {
+                const loadedFr = cond.frecuencia?.toString() || '';
+                const loadedExp = cond.exposicion?.toString() || '';
                 factoresMapa[cond.condicion_texto] = {
-                  fr: cond.frecuencia?.toString() || '',
-                  exp: cond.exposicion?.toString() || '',
+                  fr: loadedFr, fr1: loadedFr, fr2: '',
+                  exp: loadedExp, exp1: loadedExp, exp2: '',
                   int: cond.intensidad?.toString() || '',
                   total: cond.total_condicion?.toString() || '',
                   fuentes: cond.fuentes_informacion || '',
@@ -1213,8 +1242,8 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                           <tr className="bg-gray-50 border-b-2 border-gray-200">
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[180px]">Condición</th>
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 min-w-[250px]">Descripción</th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 w-[75px]">FR</th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 w-[75px]">EXP</th>
+                            <th className="text-center px-2 py-3 font-bold text-sm text-orange-600 w-[110px]">FR <span className="text-[10px] font-normal text-orange-400">(1 · 2 · prom)</span></th>
+                            <th className="text-center px-2 py-3 font-bold text-sm text-orange-600 w-[110px]">EXP <span className="text-[10px] font-normal text-orange-400">(1 · 2 · prom)</span></th>
                             <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 w-[75px]">INT</th>
                             <th className="text-center px-3 py-3 font-bold text-sm text-gray-800 w-[75px]">Total</th>
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[160px]">Fuentes</th>
@@ -1248,25 +1277,63 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                                   onChange={e => updateFactorRiesgo(item.nombre, 'observaciones', e.target.value)}
                                 />
                               </td>
-                              <td className="px-3 py-2 text-center align-middle">
-                                <Input
-                                  disabled={readOnly}
-                                  type="number"
-                                  className="h-11 w-14 text-center text-base font-bold bg-white border-gray-200 mx-auto"
-                                  min={0} max={7}
-                                  value={formData.factores_riesgo[item.nombre]?.fr || ''}
-                                  onChange={e => updateFactorRiesgo(item.nombre, 'fr', e.target.value)}
-                                />
+                              <td className="px-2 py-2 text-center align-middle">
+                                <div className="flex flex-col items-center gap-1">
+                                  <div className="flex gap-1">
+                                    <Input
+                                      disabled={readOnly}
+                                      type="number"
+                                      className="h-9 w-10 text-center text-sm font-bold bg-white border-gray-200 px-1"
+                                      min={0} max={7}
+                                      placeholder="1"
+                                      value={formData.factores_riesgo[item.nombre]?.fr1 || ''}
+                                      onChange={e => updateFactorRiesgo(item.nombre, 'fr1', e.target.value)}
+                                    />
+                                    <Input
+                                      disabled={readOnly}
+                                      type="number"
+                                      className="h-9 w-10 text-center text-sm font-bold bg-white border-gray-200 px-1"
+                                      min={0} max={7}
+                                      placeholder="2"
+                                      value={formData.factores_riesgo[item.nombre]?.fr2 || ''}
+                                      onChange={e => updateFactorRiesgo(item.nombre, 'fr2', e.target.value)}
+                                    />
+                                  </div>
+                                  {formData.factores_riesgo[item.nombre]?.fr !== '' && (
+                                    <span className="text-[11px] font-bold text-orange-600 bg-orange-50 border border-orange-200 rounded px-1.5 py-0.5">
+                                      ≈ {formData.factores_riesgo[item.nombre]?.fr}
+                                    </span>
+                                  )}
+                                </div>
                               </td>
-                              <td className="px-3 py-2 text-center align-middle">
-                                <Input
-                                  disabled={readOnly}
-                                  type="number"
-                                  className="h-11 w-14 text-center text-base font-bold bg-white border-gray-200 mx-auto"
-                                  min={0} max={7}
-                                  value={formData.factores_riesgo[item.nombre]?.exp || ''}
-                                  onChange={e => updateFactorRiesgo(item.nombre, 'exp', e.target.value)}
-                                />
+                              <td className="px-2 py-2 text-center align-middle">
+                                <div className="flex flex-col items-center gap-1">
+                                  <div className="flex gap-1">
+                                    <Input
+                                      disabled={readOnly}
+                                      type="number"
+                                      className="h-9 w-10 text-center text-sm font-bold bg-white border-gray-200 px-1"
+                                      min={0} max={7}
+                                      placeholder="1"
+                                      value={formData.factores_riesgo[item.nombre]?.exp1 || ''}
+                                      onChange={e => updateFactorRiesgo(item.nombre, 'exp1', e.target.value)}
+                                    />
+                                    <Input
+                                      disabled={readOnly}
+                                      type="number"
+                                      className="h-9 w-10 text-center text-sm font-bold bg-white border-gray-200 px-1"
+                                      min={0} max={7}
+                                      placeholder="2"
+                                      value={formData.factores_riesgo[item.nombre]?.exp2 || ''}
+                                      onChange={e => updateFactorRiesgo(item.nombre, 'exp2', e.target.value)}
+                                    />
+                                  </div>
+                                  {formData.factores_riesgo[item.nombre]?.exp !== '' && (
+                                    <span className="text-[11px] font-bold text-orange-600 bg-orange-50 border border-orange-200 rounded px-1.5 py-0.5">
+                                      ≈ {formData.factores_riesgo[item.nombre]?.exp}
+                                    </span>
+                                  )}
+                                </div>
                               </td>
                               <td className="px-3 py-2 text-center align-middle">
                                 <Input

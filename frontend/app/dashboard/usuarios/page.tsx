@@ -413,187 +413,189 @@ export default function UsuariosPage() {
 
             {/* Modal Crear/Editar Usuario */}
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-                <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2">
-                            {selectedUsuario ? <Pencil className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
-                            {selectedUsuario ? 'Editar Usuario' : 'Nuevo Usuario'}
-                        </DialogTitle>
-                        <DialogDescription>
-                            {selectedUsuario
-                                ? 'Modifique los datos del usuario. Deje la contraseña vacía para mantener la actual.'
-                                : 'Complete los datos para crear un nuevo usuario.'}
-                        </DialogDescription>
-                    </DialogHeader>
-
-                    <div className="space-y-4 py-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="nombre">Nombre</Label>
-                                <Input
-                                    id="nombre"
-                                    value={formData.nombre}
-                                    onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                                    placeholder="Nombre"
-                                />
+                <DialogContent className="p-0 gap-0 w-full max-w-lg sm:max-w-[540px] max-h-[95dvh] flex flex-col overflow-hidden rounded-2xl">
+                    {/* Gradient header */}
+                    <div className="bg-blue-600 px-5 pt-5 pb-6 shrink-0">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30 shrink-0">
+                                {selectedUsuario ? (
+                                    <Pencil className="h-6 w-6 text-white" />
+                                ) : (
+                                    <Plus className="h-6 w-6 text-white" />
+                                )}
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="apellido">Apellido</Label>
-                                <Input
-                                    id="apellido"
-                                    value={formData.apellido}
-                                    onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
-                                    placeholder="Apellido"
-                                />
+                            <div>
+                                <DialogTitle className="text-lg font-bold text-white">
+                                    {selectedUsuario ? 'Editar Usuario' : 'Nuevo Usuario'}
+                                </DialogTitle>
+                                <DialogDescription className="text-sm text-blue-100 mt-0.5">
+                                    {selectedUsuario
+                                        ? 'Modifica los datos y permisos del usuario'
+                                        : 'Completa los datos para crear un nuevo acceso'}
+                                </DialogDescription>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="email" className="flex items-center gap-2">
-                                <Mail className="h-4 w-4" />
-                                Email
-                            </Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                placeholder="correo@ejemplo.com"
-                                disabled={!!selectedUsuario}
-                            />
-                            {selectedUsuario && (
-                                <p className="text-xs text-gray-500">El email no se puede modificar</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="password" className="flex items-center gap-2">
-                                <Lock className="h-4 w-4" />
-                                Contraseña {selectedUsuario && '(dejar vacío para mantener)'}
-                            </Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                placeholder={selectedUsuario ? '••••••••' : 'Contraseña'}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label>Rol</Label>
-                            <div className="grid grid-cols-4 gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setFormData({ ...formData, rol: 'psicologo' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'psicologo' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'}`}
-                                >
-                                    <User className={`h-5 w-5 ${formData.rol === 'psicologo' ? 'text-green-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'psicologo' ? 'text-green-700' : 'text-gray-600'}`}>Psicólogo</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setFormData({ ...formData, rol: 'terapeuta_ocupacional' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'terapeuta_ocupacional' ? 'border-teal-500 bg-teal-50' : 'border-gray-200 hover:border-gray-300'}`}
-                                >
-                                    <Briefcase className={`h-5 w-5 ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-700' : 'text-gray-600'}`}>T. Ocupacional</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setFormData({ ...formData, rol: 'supervisor' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'supervisor' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
-                                >
-                                    <ShieldCheck className={`h-5 w-5 ${formData.rol === 'supervisor' ? 'text-blue-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'supervisor' ? 'text-blue-700' : 'text-gray-600'}`}>Supervisor</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setFormData({ ...formData, rol: 'admin' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'admin' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'}`}
-                                >
-                                    <Shield className={`h-5 w-5 ${formData.rol === 'admin' ? 'text-purple-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'admin' ? 'text-purple-700' : 'text-gray-600'}`}>Admin</span>
-                                </button>
-                            </div>
-                        </div>
-
+                    {/* Scrollable form body */}
+                    <div className="overflow-y-auto flex-1 px-5 py-5 space-y-5">
+                        {/* Nombre & Apellido */}
                         <div className="space-y-3">
-                            <Label>Acceso a Módulos</Label>
-                            <div className="space-y-2 rounded-xl border border-gray-200 p-3">
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id="acceso_valoraciones"
-                                        checked={formData.acceso_valoraciones}
-                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_valoraciones: !!checked })}
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Información Personal</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="nombre" className="text-xs font-semibold text-gray-600">Nombre</Label>
+                                    <Input
+                                        id="nombre"
+                                        value={formData.nombre}
+                                        onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                                        placeholder="Nombre"
+                                        className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-blue-500"
                                     />
-                                    <label htmlFor="acceso_valoraciones" className="flex items-center gap-2 text-sm cursor-pointer">
-                                        <ClipboardList className="h-4 w-4 text-green-600" />
-                                        Valoraciones Psicológicas
-                                    </label>
                                 </div>
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id="acceso_pruebas_trabajo"
-                                        checked={formData.acceso_pruebas_trabajo}
-                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_pruebas_trabajo: !!checked })}
+                                <div className="space-y-1.5">
+                                    <Label htmlFor="apellido" className="text-xs font-semibold text-gray-600">Apellido</Label>
+                                    <Input
+                                        id="apellido"
+                                        value={formData.apellido}
+                                        onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
+                                        placeholder="Apellido"
+                                        className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-blue-500"
                                     />
-                                    <label htmlFor="acceso_pruebas_trabajo" className="flex items-center gap-2 text-sm cursor-pointer">
-                                        <Briefcase className="h-4 w-4 text-blue-600" />
-                                        Pruebas de Trabajo
-                                    </label>
                                 </div>
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id="acceso_formatos_to"
-                                        checked={formData.acceso_formatos_to}
-                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_formatos_to: !!checked })}
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="email" className="text-xs font-semibold text-gray-600 flex items-center gap-1.5">
+                                    <Mail className="h-3.5 w-3.5 text-blue-500" />
+                                    Correo Electrónico
+                                </Label>
+                                <div className="relative">
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        placeholder="correo@ejemplo.com"
+                                        disabled={!!selectedUsuario}
+                                        className={`h-10 rounded-xl border-gray-200 ${selectedUsuario ? 'bg-gray-100 text-gray-500 border-dashed pr-10' : 'bg-gray-50/50 focus:border-blue-500'}`}
                                     />
-                                    <label htmlFor="acceso_formatos_to" className="flex items-center gap-2 text-sm cursor-pointer">
-                                        <FileText className="h-4 w-4 text-teal-600" />
-                                        Formatos TO
-                                    </label>
+                                    {selectedUsuario && <Shield className="absolute right-3 top-3 h-4 w-4 text-gray-400" />}
                                 </div>
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                        id="acceso_analisis_exigencias_mental"
-                                        checked={formData.acceso_analisis_exigencias_mental}
-                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_analisis_exigencias_mental: !!checked })}
-                                    />
-                                    <label htmlFor="acceso_analisis_exigencias_mental" className="flex items-center gap-2 text-sm cursor-pointer">
-                                        <Activity className="h-4 w-4 text-yellow-600" />
-                                        Análisis Exigencias Mental
-                                    </label>
-                                </div>
+                                {selectedUsuario && (
+                                    <p className="text-[11px] text-gray-400 flex items-center gap-1 px-1">
+                                        <Shield className="h-3 w-3" /> El email no se puede modificar
+                                    </p>
+                                )}
+                            </div>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="password" className="text-xs font-semibold text-gray-600 flex items-center gap-1.5">
+                                    <Lock className="h-3.5 w-3.5 text-blue-500" />
+                                    Contraseña {selectedUsuario && <span className="font-normal text-gray-400">(vacío = sin cambios)</span>}
+                                </Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    placeholder={selectedUsuario ? '••••••••' : 'Mínimo 6 caracteres'}
+                                    className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-blue-500"
+                                />
                             </div>
                         </div>
 
+                        {/* Rol */}
+                        <div className="space-y-3">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Rol del Usuario</p>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                {([
+                                    { value: 'psicologo', label: 'Psicólogo', icon: User, color: 'green' },
+                                    { value: 'terapeuta_ocupacional', label: 'T. Ocup.', icon: Briefcase, color: 'teal' },
+                                    { value: 'supervisor', label: 'Supervisor', icon: ShieldCheck, color: 'blue' },
+                                    { value: 'admin', label: 'Admin', icon: Shield, color: 'purple' },
+                                ] as const).map((r) => {
+                                    const RIcon = r.icon;
+                                    const active = formData.rol === r.value;
+                                    const colors: Record<string, string> = {
+                                        green: active ? 'border-green-500 bg-green-50 text-green-700' : 'border-gray-200 text-gray-500 hover:border-green-300',
+                                        teal: active ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-gray-200 text-gray-500 hover:border-teal-300',
+                                        blue: active ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-500 hover:border-blue-300',
+                                        purple: active ? 'border-purple-500 bg-purple-50 text-purple-700' : 'border-gray-200 text-gray-500 hover:border-purple-300',
+                                    };
+                                    return (
+                                        <button
+                                            key={r.value}
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, rol: r.value })}
+                                            className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all ${colors[r.color]}`}
+                                        >
+                                            <RIcon className="h-5 w-5" />
+                                            <span className="text-xs font-semibold leading-tight text-center">{r.label}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Módulos */}
+                        <div className="space-y-3">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Acceso a Módulos</p>
+                            <div className="rounded-xl border border-gray-200 divide-y divide-gray-100 overflow-hidden">
+                                {([
+                                    { id: 'acceso_valoraciones', key: 'acceso_valoraciones', label: 'Valoraciones Psicológicas', icon: ClipboardList, color: 'text-green-600 bg-green-50' },
+                                    { id: 'acceso_pruebas_trabajo', key: 'acceso_pruebas_trabajo', label: 'Pruebas de Trabajo', icon: Briefcase, color: 'text-blue-600 bg-blue-50' },
+                                    { id: 'acceso_formatos_to', key: 'acceso_formatos_to', label: 'Formatos TO', icon: FileText, color: 'text-teal-600 bg-teal-50' },
+                                    { id: 'acceso_analisis_exigencias_mental', key: 'acceso_analisis_exigencias_mental', label: 'Análisis Exigencias Mental', icon: Activity, color: 'text-yellow-600 bg-yellow-50' },
+                                ] as const).map((mod) => {
+                                    const MIcon = mod.icon;
+                                    const checked = formData[mod.key as keyof UsuarioForm] as boolean;
+                                    return (
+                                        <label key={mod.id} htmlFor={mod.id} className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors">
+                                            <div className={`p-1.5 rounded-lg ${mod.color}`}>
+                                                <MIcon className="h-3.5 w-3.5" />
+                                            </div>
+                                            <span className="flex-1 text-sm text-gray-700">{mod.label}</span>
+                                            <Checkbox
+                                                id={mod.id}
+                                                checked={checked}
+                                                onCheckedChange={(v) => setFormData({ ...formData, [mod.key]: !!v })}
+                                            />
+                                        </label>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Estado (solo edición) */}
                         {selectedUsuario && (
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="activo"
-                                    checked={formData.activo}
-                                    onCheckedChange={(checked) => setFormData({ ...formData, activo: !!checked })}
-                                />
-                                <label htmlFor="activo" className="text-sm cursor-pointer">
-                                    Usuario activo
+                            <div className="rounded-xl border border-gray-200 overflow-hidden">
+                                <label htmlFor="activo" className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors">
+                                    <div className={`p-1.5 rounded-lg ${formData.activo ? 'text-green-600 bg-green-50' : 'text-red-500 bg-red-50'}`}>
+                                        {formData.activo ? <CheckCircle className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
+                                    </div>
+                                    <span className="flex-1 text-sm text-gray-700">Usuario activo</span>
+                                    <Checkbox
+                                        id="activo"
+                                        checked={formData.activo}
+                                        onCheckedChange={(v) => setFormData({ ...formData, activo: !!v })}
+                                    />
                                 </label>
                             </div>
                         )}
                     </div>
 
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setModalOpen(false)} className="rounded-xl border-gray-200">
+                    {/* Footer */}
+                    <div className="px-5 pb-5 pt-3 border-t border-gray-100 flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 shrink-0">
+                        <Button variant="outline" onClick={() => setModalOpen(false)} className="flex-1 sm:flex-none rounded-xl border-gray-200 h-11">
                             Cancelar
                         </Button>
                         <Button
                             onClick={handleSave}
                             disabled={saving}
-                            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+                            className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 shadow-md shadow-blue-500/20"
                         >
                             {saving ? 'Guardando...' : selectedUsuario ? 'Guardar Cambios' : 'Crear Usuario'}
                         </Button>
-                    </DialogFooter>
+                    </div>
                 </DialogContent>
             </Dialog>
 

@@ -131,7 +131,7 @@ export default function LoginPage() {
               <div className="relative w-64 h-24">
                 <Image
                   src="/images/mentis-logo.svg"
-                  alt="Mentis - Sistema Integral de Psicología Ocupacional"
+                  alt="Mentis - Sistema Integral de Gestión de Reintegro Laboral Efectivo"
                   fill
                   className="object-contain scale-[1.8]"
                   priority
@@ -222,7 +222,7 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-200">
             <p className="text-center text-xs text-gray-500">
-              © 2026 Mentis. Sistema Integral de Psicología Ocupacional
+              © 2026 Mentis. Sistema Integral de Gestión de Reintegro Laboral Efectivo
             </p>
           </div>
         </div>

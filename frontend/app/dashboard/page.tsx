@@ -39,6 +39,8 @@ interface ModuleDefinition {
   newHref: string;
   apiEndpoint: string;
   permissionCheck: (user: any) => boolean;
+  getViewUrl: (id: number) => string;
+  getEditUrl: (id: number) => string;
 }
 
 const MODULES: ModuleDefinition[] = [
@@ -51,6 +53,8 @@ const MODULES: ModuleDefinition[] = [
     newHref: '/dashboard/valoraciones/nueva',
     apiEndpoint: '/valoraciones/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_valoraciones !== false,
+    getViewUrl: (id) => `/dashboard/valoraciones/nueva?id=${id}&modo=ver`,
+    getEditUrl: (id) => `/dashboard/valoraciones/nueva?id=${id}&modo=editar`,
   },
   {
     key: 'pruebas-trabajo',
@@ -61,6 +65,8 @@ const MODULES: ModuleDefinition[] = [
     newHref: '/dashboard/pruebas-trabajo/nueva',
     apiEndpoint: '/pruebas-trabajo/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_pruebas_trabajo !== false,
+    getViewUrl: (id) => `/dashboard/pruebas-trabajo/${id}`,
+    getEditUrl: (id) => `/dashboard/pruebas-trabajo/${id}/evaluar`,
   },
   {
     key: 'formatos-to-pruebas',
@@ -71,6 +77,8 @@ const MODULES: ModuleDefinition[] = [
     newHref: '/dashboard/formatos-to/pruebas-trabajo/nueva',
     apiEndpoint: '/formatos-to/pruebas-trabajo/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_formatos_to !== false,
+    getViewUrl: (id) => `/dashboard/formatos-to/pruebas-trabajo/${id}?mode=view`,
+    getEditUrl: (id) => `/dashboard/formatos-to/pruebas-trabajo/${id}?mode=edit`,
   },
   {
     key: 'formatos-to-analisis',
@@ -81,6 +89,8 @@ const MODULES: ModuleDefinition[] = [
     newHref: '/dashboard/formatos-to/analisis-exigencia/nueva',
     apiEndpoint: '/formatos-to/analisis-exigencia/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_formatos_to !== false,
+    getViewUrl: (id) => `/dashboard/formatos-to/analisis-exigencia/${id}`,
+    getEditUrl: (id) => `/dashboard/formatos-to/analisis-exigencia/${id}/editar`,
   },
   {
     key: 'formatos-to-valoracion',
@@ -91,6 +101,8 @@ const MODULES: ModuleDefinition[] = [
     newHref: '/dashboard/formatos-to/valoracion-ocupacional/nueva',
     apiEndpoint: '/formatos-to/valoracion-ocupacional/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_formatos_to !== false,
+    getViewUrl: (id) => `/dashboard/formatos-to/valoracion-ocupacional/nueva?id=${id}&view=true`,
+    getEditUrl: (id) => `/dashboard/formatos-to/valoracion-ocupacional/nueva?id=${id}`,
   },
   {
     key: 'analisis-exigencias-mental',
@@ -101,6 +113,8 @@ const MODULES: ModuleDefinition[] = [
     newHref: '/dashboard/analisis-exigencias-mental/nueva',
     apiEndpoint: '/analisis-exigencias-mental/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_analisis_exigencias_mental !== false,
+    getViewUrl: (id) => `/dashboard/analisis-exigencias-mental/${id}`,
+    getEditUrl: (id) => `/dashboard/analisis-exigencias-mental/${id}/evaluar`,
   },
 ];
 
@@ -511,13 +525,13 @@ export default function DashboardPage() {
 
             {/* Action buttons */}
             <div className="px-6 pb-5 flex gap-3">
-              <Link href={`${activeModule.newHref}?id=${selectedRecord.id}&modo=ver`} className="flex-1">
+              <Link href={activeModule.getViewUrl(selectedRecord.id)} className="flex-1">
                 <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 text-sm font-medium shadow-sm hover:shadow-md">
                   <Eye className="h-4 w-4 mr-2" />
                   Ver Registro
                 </Button>
               </Link>
-              <Link href={`${activeModule.newHref}?id=${selectedRecord.id}&modo=editar`} className="flex-1">
+              <Link href={activeModule.getEditUrl(selectedRecord.id)} className="flex-1">
                 <Button variant="outline" className="w-full rounded-xl h-11 text-sm font-medium border-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200">
                   <Pencil className="h-4 w-4 mr-2" />
                   Editar
