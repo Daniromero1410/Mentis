@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import {
   ClipboardList,
   FileCheck,
-  Clock,
   FileEdit,
   RefreshCcw,
   Calendar,
@@ -21,9 +20,6 @@ import {
   Brain,
   ExternalLink,
   TrendingUp,
-  Zap,
-  Eye,
-  AlertTriangle,
 } from 'lucide-react';
 import Link from 'next/link';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -34,14 +30,9 @@ interface ModuleDefinition {
   key: string;
   label: string;
   shortLabel: string;
-  description: string;
   icon: any;
   href: string;
   newHref: string;
-  gradient: string;
-  iconBg: string;
-  textColor: string;
-  badgeColor: string;
   apiEndpoint: string;
   permissionCheck: (user: any) => boolean;
 }
@@ -51,14 +42,9 @@ const MODULES: ModuleDefinition[] = [
     key: 'valoraciones',
     label: 'Valoraciones Psicológicas',
     shortLabel: 'Valoraciones',
-    description: 'Evaluación del estado mental y aptitud laboral',
     icon: ClipboardList,
     href: '/dashboard/valoraciones',
     newHref: '/dashboard/valoraciones/nueva',
-    gradient: 'from-indigo-500 to-indigo-600',
-    iconBg: 'bg-indigo-100 text-indigo-600',
-    textColor: 'text-indigo-600',
-    badgeColor: 'bg-indigo-500',
     apiEndpoint: '/valoraciones/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_valoraciones !== false,
   },
@@ -66,14 +52,9 @@ const MODULES: ModuleDefinition[] = [
     key: 'pruebas-trabajo',
     label: 'Pruebas de Trabajo',
     shortLabel: 'Pruebas',
-    description: 'Evaluación de factores de riesgo psicosocial',
     icon: Briefcase,
     href: '/dashboard/pruebas-trabajo',
     newHref: '/dashboard/pruebas-trabajo/nueva',
-    gradient: 'from-violet-500 to-violet-600',
-    iconBg: 'bg-violet-100 text-violet-600',
-    textColor: 'text-violet-600',
-    badgeColor: 'bg-violet-500',
     apiEndpoint: '/pruebas-trabajo/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_pruebas_trabajo !== false,
   },
@@ -81,14 +62,9 @@ const MODULES: ModuleDefinition[] = [
     key: 'formatos-to-pruebas',
     label: 'Formato TO - Prueba de Trabajo',
     shortLabel: 'TO Pruebas',
-    description: 'Formato de Terapia Ocupacional para pruebas',
     icon: FileCheck,
     href: '/dashboard/formatos-to/pruebas-trabajo',
     newHref: '/dashboard/formatos-to/pruebas-trabajo/nueva',
-    gradient: 'from-emerald-500 to-emerald-600',
-    iconBg: 'bg-emerald-100 text-emerald-600',
-    textColor: 'text-emerald-600',
-    badgeColor: 'bg-emerald-500',
     apiEndpoint: '/formatos-to/pruebas-trabajo/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_formatos_to !== false,
   },
@@ -96,14 +72,9 @@ const MODULES: ModuleDefinition[] = [
     key: 'formatos-to-analisis',
     label: 'Formato TO - Análisis de Exigencia',
     shortLabel: 'TO Análisis',
-    description: 'Análisis de exigencias del puesto de trabajo',
     icon: Activity,
     href: '/dashboard/formatos-to/analisis-exigencia',
     newHref: '/dashboard/formatos-to/analisis-exigencia/nueva',
-    gradient: 'from-amber-500 to-amber-600',
-    iconBg: 'bg-amber-100 text-amber-600',
-    textColor: 'text-amber-600',
-    badgeColor: 'bg-amber-500',
     apiEndpoint: '/formatos-to/analisis-exigencia/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_formatos_to !== false,
   },
@@ -111,14 +82,9 @@ const MODULES: ModuleDefinition[] = [
     key: 'formatos-to-valoracion',
     label: 'Formato TO - Valoración Ocupacional',
     shortLabel: 'TO Valoración',
-    description: 'Valoración del desempeño ocupacional',
     icon: Heart,
     href: '/dashboard/formatos-to/valoracion-ocupacional',
     newHref: '/dashboard/formatos-to/valoracion-ocupacional/nueva',
-    gradient: 'from-rose-500 to-rose-600',
-    iconBg: 'bg-rose-100 text-rose-600',
-    textColor: 'text-rose-600',
-    badgeColor: 'bg-rose-500',
     apiEndpoint: '/formatos-to/valoracion-ocupacional/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_formatos_to !== false,
   },
@@ -126,14 +92,9 @@ const MODULES: ModuleDefinition[] = [
     key: 'analisis-exigencias-mental',
     label: 'Análisis de Exigencias Mental',
     shortLabel: 'Exig. Mental',
-    description: 'Evaluación de carga y exigencia mental',
     icon: Brain,
     href: '/dashboard/analisis-exigencias-mental',
     newHref: '/dashboard/analisis-exigencias-mental/nueva',
-    gradient: 'from-cyan-500 to-cyan-600',
-    iconBg: 'bg-cyan-100 text-cyan-600',
-    textColor: 'text-cyan-600',
-    badgeColor: 'bg-cyan-500',
     apiEndpoint: '/analisis-exigencias-mental/?skip=0&limit=10',
     permissionCheck: (u: any) => u?.rol === 'admin' || u?.acceso_analisis_exigencias_mental !== false,
   },
@@ -161,7 +122,6 @@ export default function DashboardPage() {
 
   const availableModules = MODULES.filter(m => m.permissionCheck(user));
 
-  // Set initial active tab
   useEffect(() => {
     if (availableModules.length > 0 && !activeTab) {
       setActiveTab(availableModules[0].key);
@@ -171,7 +131,6 @@ export default function DashboardPage() {
   const fetchData = async () => {
     try {
       const data: Record<string, { items: RecordItem[], total: number }> = {};
-
       const promises = availableModules.map(async (mod) => {
         try {
           const res = await api.get<{ items: RecordItem[], total: number }>(mod.apiEndpoint);
@@ -180,7 +139,6 @@ export default function DashboardPage() {
           data[mod.key] = { items: [], total: 0 };
         }
       });
-
       await Promise.all(promises);
       setModuleData(data);
     } catch (error) {
@@ -200,15 +158,11 @@ export default function DashboardPage() {
     fetchData();
   };
 
-  // Summary stats
   const totalRegistros = Object.values(moduleData).reduce((a, d) => a + d.total, 0);
   const totalCompletadas = Object.values(moduleData).reduce((a, d) => a + d.items.filter(i => i.estado === 'completada').length, 0);
   const totalBorradores = Object.values(moduleData).reduce((a, d) => a + d.items.filter(i => i.estado !== 'completada').length, 0);
 
-  const today = new Date();
-  const formattedDate = format(today, "EEEE, d 'de' MMMM", { locale: es });
-  const dayName = format(today, 'EEEE', { locale: es });
-  const dayMonth = format(today, "d MMMM", { locale: es });
+  const formattedDate = format(new Date(), "EEEE, d 'de' MMMM", { locale: es });
 
   const activeModule = availableModules.find(m => m.key === activeTab);
   const activeData = moduleData[activeTab] || { items: [], total: 0 };
@@ -221,7 +175,7 @@ export default function DashboardPage() {
       case 'en_proceso':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 border border-amber-200">EN PROCESO</span>;
       default:
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">BORRADOR</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700 border border-blue-200">BORRADOR</span>;
     }
   };
 
@@ -235,27 +189,17 @@ export default function DashboardPage() {
     }
   };
 
-  const getRecordName = (item: RecordItem) => {
-    return item.trabajador_nombre || 'Sin nombre';
-  };
-
-  const getRecordDoc = (item: RecordItem) => {
-    return item.trabajador_documento || item.trabajador_identificacion || '—';
-  };
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
-
         {/* ── Two-column layout ──────────────────────────────────── */}
         <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
 
-          {/* ─── Left Panel: Foco del Día ────────────────────────── */}
+          {/* ─── Left Panel ───────────────────────────────────────── */}
           <div className="space-y-5">
-
             {/* Welcome Card */}
-            <Card className="border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-br from-indigo-500 via-indigo-600 to-violet-600 px-5 py-5">
+            <Card className="bg-white border-gray-200 overflow-hidden shadow-sm">
+              <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 px-5 py-5">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                     <TrendingUp className="h-4 w-4 text-white" />
@@ -265,21 +209,20 @@ export default function DashboardPage() {
                 <h2 className="text-xl font-bold text-white mb-0.5">
                   Hola, {user?.nombre}
                 </h2>
-                <p className="text-sm text-indigo-100 capitalize flex items-center gap-1.5">
+                <p className="text-sm text-blue-100 capitalize flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5" />
                   {formattedDate}
                 </p>
               </div>
 
-              <CardContent className="p-4 space-y-2">
-                {/* Quick action buttons */}
+              <CardContent className="p-4 bg-white space-y-2">
                 <div className="grid grid-cols-2 gap-2">
                   {availableModules.slice(0, 2).map((mod) => {
                     const Icon = mod.icon;
                     return (
                       <Link key={mod.key} href={mod.newHref}>
-                        <div className="flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all cursor-pointer group">
-                          <div className={`p-2.5 rounded-xl bg-gradient-to-br ${mod.gradient} shadow-sm group-hover:scale-105 transition-transform`}>
+                        <div className="flex flex-col items-center gap-2 p-3 rounded-xl border border-gray-100 bg-white hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all cursor-pointer group">
+                          <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-sm group-hover:scale-105 transition-transform">
                             <Icon className="h-5 w-5 text-white" />
                           </div>
                           <span className="text-[11px] font-semibold text-gray-600 text-center leading-tight">{mod.shortLabel} nueva</span>
@@ -292,12 +235,12 @@ export default function DashboardPage() {
             </Card>
 
             {/* Stats Card */}
-            <Card className="border-gray-200">
-              <CardContent className="p-0">
+            <Card className="bg-white border-gray-200 shadow-sm">
+              <CardContent className="p-0 bg-white">
                 <div className="divide-y divide-gray-100">
                   <div className="flex items-center justify-between px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <ClipboardList className="h-4 w-4 text-indigo-500" />
+                      <ClipboardList className="h-4 w-4 text-blue-500" />
                       <span className="text-sm font-medium text-gray-700">Total Registros</span>
                     </div>
                     {loading ? (
@@ -308,24 +251,24 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex items-center justify-between px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <FileCheck className="h-4 w-4 text-emerald-500" />
+                      <FileCheck className="h-4 w-4 text-blue-500" />
                       <span className="text-sm font-medium text-gray-700">Completados</span>
                     </div>
                     {loading ? (
                       <div className="h-6 w-8 rounded bg-gray-100 animate-pulse" />
                     ) : (
-                      <span className="text-lg font-bold text-emerald-600">{totalCompletadas}</span>
+                      <span className="text-lg font-bold text-blue-600">{totalCompletadas}</span>
                     )}
                   </div>
                   <div className="flex items-center justify-between px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <FileEdit className="h-4 w-4 text-amber-500" />
+                      <FileEdit className="h-4 w-4 text-blue-500" />
                       <span className="text-sm font-medium text-gray-700">Pendientes</span>
                     </div>
                     {loading ? (
                       <div className="h-6 w-8 rounded bg-gray-100 animate-pulse" />
                     ) : (
-                      <span className="text-lg font-bold text-amber-600">{totalBorradores}</span>
+                      <span className="text-lg font-bold text-blue-600">{totalBorradores}</span>
                     )}
                   </div>
                 </div>
@@ -333,38 +276,40 @@ export default function DashboardPage() {
             </Card>
 
             {/* Modules Quick Access */}
-            <div>
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 px-1 mb-3">Módulos Disponibles</h3>
-              <div className="space-y-1.5">
-                {availableModules.map((mod) => {
-                  const Icon = mod.icon;
-                  const data = moduleData[mod.key];
-                  const count = data?.total || 0;
-                  return (
-                    <Link key={mod.key} href={mod.href}>
-                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
-                        <div className={`p-1.5 rounded-lg ${mod.iconBg}`}>
-                          <Icon className="h-3.5 w-3.5" />
+            <Card className="bg-white border-gray-200 shadow-sm">
+              <CardContent className="p-4 bg-white">
+                <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Módulos Disponibles</h3>
+                <div className="space-y-1">
+                  {availableModules.map((mod) => {
+                    const Icon = mod.icon;
+                    const data = moduleData[mod.key];
+                    const count = data?.total || 0;
+                    return (
+                      <Link key={mod.key} href={mod.href}>
+                        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-blue-50/60 transition-colors cursor-pointer group">
+                          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600">
+                            <Icon className="h-3.5 w-3.5" />
+                          </div>
+                          <span className="flex-1 text-sm font-medium text-gray-700 group-hover:text-blue-600 truncate transition-colors">{mod.label}</span>
+                          {!loading && (
+                            <span className="text-xs font-semibold text-gray-400">{count}</span>
+                          )}
                         </div>
-                        <span className="flex-1 text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate">{mod.label}</span>
-                        {!loading && (
-                          <span className="text-xs font-semibold text-gray-400">{count}</span>
-                        )}
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
 
           {/* ─── Right Panel: Centro de Actividad ────────────────── */}
-          <Card className="border-gray-200 overflow-hidden">
+          <Card className="bg-white border-gray-200 overflow-hidden shadow-sm">
             {/* Header */}
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-gray-100 bg-white flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+                <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
                   <TrendingUp className="h-5 w-5" />
                 </div>
                 <h2 className="text-lg font-bold text-gray-900">Centro de Actividad</h2>
@@ -372,16 +317,16 @@ export default function DashboardPage() {
               <Button
                 onClick={handleRefresh}
                 variant="ghost"
-                size="sm"
+                size="icon"
                 disabled={refreshing}
-                className="text-gray-500 hover:text-gray-700"
+                className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
               >
                 <RefreshCcw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
               </Button>
             </div>
 
             {/* Module Tabs */}
-            <div className="px-6 py-2 border-b border-gray-100 overflow-x-auto">
+            <div className="px-6 py-2.5 border-b border-gray-100 bg-white overflow-x-auto">
               <div className="flex gap-1">
                 {availableModules.map((mod) => {
                   const isActive = activeTab === mod.key;
@@ -390,10 +335,10 @@ export default function DashboardPage() {
                       key={mod.key}
                       onClick={() => setActiveTab(mod.key)}
                       className={`
-                        px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all
+                        px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all
                         ${isActive
-                          ? `bg-gradient-to-r ${mod.gradient} text-white shadow-sm`
-                          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'
                         }
                       `}
                     >
@@ -405,7 +350,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto">
+            <div className="bg-white">
               {loading ? (
                 <div className="p-6 space-y-4">
                   {[1, 2, 3, 4].map(i => (
@@ -420,16 +365,16 @@ export default function DashboardPage() {
                   ))}
                 </div>
               ) : activeData.items.length === 0 ? (
-                <div className="p-12 text-center">
+                <div className="p-12 text-center bg-white">
                   {activeModule && (
                     <>
-                      <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl ${activeModule.iconBg} flex items-center justify-center`}>
+                      <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center">
                         {(() => { const Icon = activeModule.icon; return <Icon className="h-7 w-7" />; })()}
                       </div>
                       <p className="text-sm font-medium text-gray-900 mb-1">No hay registros</p>
                       <p className="text-xs text-gray-500 mb-4">Aún no se han creado registros en {activeModule.label}</p>
                       <Link href={activeModule.newHref}>
-                        <Button size="sm" className={`bg-gradient-to-r ${activeModule.gradient} text-white`}>
+                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                           <Plus className="h-3.5 w-3.5 mr-1" />
                           Crear primero
                         </Button>
@@ -440,28 +385,28 @@ export default function DashboardPage() {
               ) : (
                 <>
                   {/* Table header */}
-                  <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 px-6 py-3 border-b border-gray-100 bg-gray-50/50">
+                  <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 px-6 py-3 border-b border-gray-100 bg-gray-50/60">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Trabajador / ID</span>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[100px]">Estado</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[100px] hidden sm:block">Fecha</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[120px] hidden sm:block">Fecha</span>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 min-w-[60px] text-right">Acción</span>
                   </div>
 
                   {/* Table body */}
-                  <div className="divide-y divide-gray-50">
+                  <div className="divide-y divide-gray-50 bg-white">
                     {activeData.items.slice(0, 8).map((item) => {
-                      const name = getRecordName(item);
+                      const name = item.trabajador_nombre || 'Sin nombre';
                       const initials = name.split(' ').map(n => n.charAt(0)).slice(0, 2).join('').toUpperCase();
-                      const doc = getRecordDoc(item);
+                      const doc = item.trabajador_documento || item.trabajador_identificacion || '—';
 
                       return (
                         <div
                           key={item.id}
-                          className="grid grid-cols-[1fr_auto_auto_auto] gap-4 items-center px-6 py-3.5 hover:bg-gray-50/80 transition-colors"
+                          className="grid grid-cols-[1fr_auto_auto_auto] gap-4 items-center px-6 py-3.5 hover:bg-blue-50/40 transition-colors"
                         >
                           {/* Name + Doc */}
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${activeModule?.gradient || 'from-indigo-500 to-indigo-600'} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
+                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
                               {initials}
                             </div>
                             <div className="min-w-0">
@@ -476,14 +421,14 @@ export default function DashboardPage() {
                           </div>
 
                           {/* Date */}
-                          <div className="min-w-[100px] hidden sm:block">
+                          <div className="min-w-[120px] hidden sm:block">
                             <span className="text-xs text-gray-500">{getRecordDate(item)}</span>
                           </div>
 
                           {/* Action */}
                           <div className="min-w-[60px] text-right">
                             <Link href={`${activeModule?.href}/${item.id}`}>
-                              <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-indigo-600">
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50">
                                 <ExternalLink className="h-4 w-4" />
                               </Button>
                             </Link>
@@ -495,9 +440,9 @@ export default function DashboardPage() {
 
                   {/* Footer */}
                   {activeModule && (
-                    <div className="px-6 py-3 border-t border-gray-100 bg-gray-50/30">
+                    <div className="px-6 py-3 border-t border-gray-100 bg-white">
                       <Link href={activeModule.href}>
-                        <button className="w-full text-center text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-indigo-600 transition-colors flex items-center justify-center gap-1.5 py-1">
+                        <button className="w-full text-center text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-blue-600 transition-colors flex items-center justify-center gap-1.5 py-1">
                           Ver historial completo
                           <ArrowRight className="h-3.5 w-3.5" />
                         </button>
@@ -509,7 +454,6 @@ export default function DashboardPage() {
             </div>
           </Card>
         </div>
-
       </div>
     </DashboardLayout>
   );
