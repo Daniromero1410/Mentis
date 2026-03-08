@@ -83,32 +83,32 @@ export default function ConfiguracionPage() {
 
     return (
         <DashboardLayout>
-            <div className="max-w-3xl mx-auto space-y-8">
+            <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
                 {/* Header */}
-                <div className="flex items-center gap-4 anim-fade-in-up">
+                <div className="flex items-center gap-3 sm:gap-4 anim-fade-in-up">
                     <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
                         <Settings className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Configuración</h1>
-                        <p className="text-sm text-gray-500 mt-0.5">Administra tu información personal y seguridad de cuenta</p>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Configuración</h1>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Administra tu información personal y seguridad de cuenta</p>
                     </div>
                 </div>
 
                 {/* Perfil Card */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-1">
-                    <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-4 bg-gray-50/60">
-                        <div className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
-                            <User className="h-5 w-5 text-blue-600" />
+                    <div className="px-4 py-4 sm:px-6 sm:py-5 border-b border-gray-100 flex items-center gap-3 sm:gap-4 bg-gray-50/60">
+                        <div className="p-2 sm:p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
+                            <User className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                         </div>
                         <div>
-                            <h2 className="text-base font-semibold text-gray-900">Información Personal</h2>
+                            <h2 className="text-sm sm:text-base font-semibold text-gray-900">Información Personal</h2>
                             <p className="text-xs text-gray-500 mt-0.5">Actualiza tus datos de identificación básicos.</p>
                         </div>
                     </div>
-                    <div className="p-6">
-                        <form onSubmit={handleProfileUpdate} className="space-y-5">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="p-4 sm:p-6">
+                        <form onSubmit={handleProfileUpdate} className="space-y-4 sm:space-y-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                 <div className="space-y-2">
                                     <Label htmlFor="nombre" className="text-gray-700 font-medium">Nombre</Label>
                                     <Input
@@ -147,7 +147,7 @@ export default function ConfiguracionPage() {
                                 <Button
                                     type="submit"
                                     disabled={savingProfile}
-                                    className="h-11 px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl"
+                                    className="h-11 px-6 sm:px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl w-full sm:w-auto"
                                 >
                                     {savingProfile ? (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -163,17 +163,17 @@ export default function ConfiguracionPage() {
 
                 {/* Seguridad Card */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-2">
-                    <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-4 bg-gray-50/60">
-                        <div className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
-                            <Lock className="h-5 w-5 text-blue-600" />
+                    <div className="px-4 py-4 sm:px-6 sm:py-5 border-b border-gray-100 flex items-center gap-3 sm:gap-4 bg-gray-50/60">
+                        <div className="p-2 sm:p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
+                            <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                         </div>
                         <div>
-                            <h2 className="text-base font-semibold text-gray-900">Seguridad</h2>
+                            <h2 className="text-sm sm:text-base font-semibold text-gray-900">Seguridad</h2>
                             <p className="text-xs text-gray-500 mt-0.5">Gestiona tu contraseña y acceso.</p>
                         </div>
                     </div>
-                    <div className="p-6">
-                        <form onSubmit={handlePasswordUpdate} className="space-y-5">
+                    <div className="p-4 sm:p-6">
+                        <form onSubmit={handlePasswordUpdate} className="space-y-4 sm:space-y-5">
                             <div className="space-y-2">
                                 <Label htmlFor="new-password" className="text-gray-700 font-medium">Nueva Contraseña</Label>
                                 <Input
@@ -200,7 +200,7 @@ export default function ConfiguracionPage() {
                                 <Button
                                     type="submit"
                                     disabled={savingPassword || !passwordData.newPassword}
-                                    className="h-11 px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl"
+                                    className="h-11 px-6 sm:px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl w-full sm:w-auto"
                                 >
                                     {savingPassword ? (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -108,18 +108,18 @@ export default function AnalisisExigenciaPage() {
             <DashboardLayout>
                 <div className="space-y-6">
                     {/* Header */}
-                    <div className="flex items-start justify-between anim-fade-in-up">
-                        <div className="flex items-center gap-4">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
+                        <div className="flex items-center gap-3 sm:gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
                                 <Activity className="h-6 w-6 text-white" />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-900">Análisis de Exigencia TO</h1>
-                                <p className="text-sm text-gray-500 mt-0.5">Gestión de análisis de puestos de trabajo y exigencias</p>
+                                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Análisis de Exigencia TO</h1>
+                                <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Gestión de análisis de puestos de trabajo y exigencias</p>
                             </div>
                         </div>
-                        <Link href="/dashboard/formatos-to/analisis-exigencia/nueva">
-                            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2">
+                        <Link href="/dashboard/formatos-to/analisis-exigencia/nueva" className="w-full sm:w-auto">
+                            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center">
                                 <Plus className="h-4 w-4" />
                                 Nuevo Análisis
                             </Button>
@@ -127,32 +127,32 @@ export default function AnalisisExigenciaPage() {
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-3 gap-4 anim-fade-in-up delay-1">
-                        <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                                <ListFilter className="h-5 w-5 text-blue-600" />
+                    <div className="grid grid-cols-3 gap-2 sm:gap-4 anim-fade-in-up delay-1">
+                        <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                                <ListFilter className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900">{totalItems}</p>
-                                <p className="text-xs text-gray-500">Total</p>
+                                <p className="text-lg sm:text-2xl font-bold text-gray-900">{totalItems}</p>
+                                <p className="text-[10px] sm:text-xs text-gray-500">Total</p>
                             </div>
                         </div>
-                        <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
-                                <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                                <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900">{completadas}</p>
-                                <p className="text-xs text-gray-500">Completados</p>
+                                <p className="text-lg sm:text-2xl font-bold text-gray-900">{completadas}</p>
+                                <p className="text-[10px] sm:text-xs text-gray-500">Completados</p>
                             </div>
                         </div>
-                        <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
-                                <Clock className="h-5 w-5 text-gray-500" />
+                        <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900">{borradores}</p>
-                                <p className="text-xs text-gray-500">Borradores</p>
+                                <p className="text-lg sm:text-2xl font-bold text-gray-900">{borradores}</p>
+                                <p className="text-[10px] sm:text-xs text-gray-500">Borradores</p>
                             </div>
                         </div>
                     </div>
@@ -213,13 +213,12 @@ export default function AnalisisExigenciaPage() {
                                 <table className="w-full">
                                     <thead className="bg-gray-50/80 border-b border-gray-100">
                                         <tr>
-                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Trabajador</th>
-                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tipo Doc</th>
-                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Documento</th>
-                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Empresa</th>
-                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
-                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
-                                            <th className="px-6 py-3.5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
+                                            <th className="px-3 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Trabajador</th>
+                                            <th className="hidden sm:table-cell px-3 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Documento</th>
+                                            <th className="hidden sm:table-cell px-3 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Empresa</th>
+                                            <th className="hidden md:table-cell px-3 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
+                                            <th className="px-3 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
+                                            <th className="px-3 py-3 sm:px-6 sm:py-3.5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-100">
@@ -228,30 +227,32 @@ export default function AnalisisExigenciaPage() {
                                             const initial = nombre.charAt(0).toUpperCase();
                                             return (
                                                 <tr key={item.id} className="hover:bg-blue-50/30 transition-colors">
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <div className="flex items-center gap-3">
+                                                    <td className="px-3 py-3 sm:px-6 sm:py-4">
+                                                        <div className="flex items-center gap-2 sm:gap-3">
                                                             <div className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0">
                                                                 {initial}
                                                             </div>
-                                                            <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
+                                                            <div className="min-w-0">
+                                                                <span className="font-semibold text-gray-900 text-sm uppercase block truncate">{nombre}</span>
+                                                                <span className="sm:hidden text-xs text-gray-400 truncate block">
+                                                                    {item.trabajador_documento || '-'} · {item.empresa || '-'}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                        {item.trabajador_tipo_documento || '-'}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                    <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                                         {item.trabajador_documento || '-'}
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
                                                         <div className="flex items-center gap-2 text-sm text-gray-600">
                                                             <FileText className="h-3.5 w-3.5 text-gray-400" />
                                                             {item.empresa || '-'}
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                         {item.identificacion?.fecha_valoracion?.split('T')[0] || item.fecha_creacion?.split('T')[0] || '-'}
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
                                                         <Badge
                                                             variant="secondary"
                                                             className={`font-medium rounded-full px-2.5 py-0.5 ${item.estado === 'completada'
@@ -262,7 +263,7 @@ export default function AnalisisExigenciaPage() {
                                                             {item.estado === 'completada' ? 'Completado' : 'Borrador'}
                                                         </Badge>
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                    <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
                                                         <div className="flex items-center justify-end gap-1">
                                                             <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}`}>
                                                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
@@ -298,9 +299,12 @@ export default function AnalisisExigenciaPage() {
 
                         {/* Pagination */}
                         {!loading && analisis.length > 0 && totalPages > 1 && (
-                            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                                <div className="text-sm text-gray-500">
+                            <div className="px-3 py-3 sm:px-6 sm:py-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                                <div className="hidden sm:block text-sm text-gray-500">
                                     Página {currentPage} de {totalPages}
+                                </div>
+                                <div className="text-xs text-gray-500 sm:hidden">
+                                    {currentPage} / {totalPages}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Button
@@ -312,7 +316,7 @@ export default function AnalisisExigenciaPage() {
                                     >
                                         <ChevronLeft className="h-4 w-4" />
                                     </Button>
-                                    <span className="text-sm text-gray-700 px-2">
+                                    <span className="text-sm text-gray-700 px-1 sm:px-2">
                                         {currentPage} / {totalPages}
                                     </span>
                                     <Button

@@ -208,7 +208,7 @@ export default function UsuariosPage() {
             admin: { label: 'Administrador', icon: Shield, color: 'bg-purple-100 text-purple-700' },
             supervisor: { label: 'Supervisor', icon: ShieldCheck, color: 'bg-blue-100 text-blue-700' },
             psicologo: { label: 'Psicólogo', icon: User, color: 'bg-green-100 text-green-700' },
-            terapeuta_ocupacional: { label: 'Terapeuta Ocupacional', icon: Briefcase, color: 'bg-teal-100 text-teal-700' },
+            terapeuta_ocupacional: { label: 'T. Ocupacional', icon: Briefcase, color: 'bg-teal-100 text-teal-700' },
         };
         const badge = badges[rol as keyof typeof badges] || badges.psicologo;
         const Icon = badge.icon;
@@ -227,19 +227,19 @@ export default function UsuariosPage() {
         <DashboardLayout>
             <div className="space-y-6">
                 {/* Header */}
-                <div className="flex items-start justify-between anim-fade-in-up">
-                    <div className="flex items-center gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
+                    <div className="flex items-center gap-3 sm:gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
                             <Users className="h-6 w-6 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900">Gestión de Usuarios</h1>
-                            <p className="text-sm text-gray-500 mt-0.5">Administra los usuarios y sus permisos de acceso</p>
+                            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Gestión de Usuarios</h1>
+                            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Administra los usuarios y sus permisos de acceso</p>
                         </div>
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2"
+                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center"
                     >
                         <Plus className="h-4 w-4" />
                         Nuevo Usuario
@@ -247,39 +247,39 @@ export default function UsuariosPage() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-4 anim-fade-in-up delay-1">
-                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                            <Users className="h-5 w-5 text-blue-600" />
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 anim-fade-in-up delay-1">
+                    <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-gray-900">{usuarios.length}</p>
-                            <p className="text-xs text-gray-500">Total Usuarios</p>
+                            <p className="text-lg sm:text-2xl font-bold text-gray-900">{usuarios.length}</p>
+                            <p className="text-[10px] sm:text-xs text-gray-500">Total</p>
                         </div>
                     </div>
-                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
-                            <CheckCircle className="h-5 w-5 text-green-600" />
+                    <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                            <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-gray-900">{activos}</p>
-                            <p className="text-xs text-gray-500">Activos</p>
+                            <p className="text-lg sm:text-2xl font-bold text-gray-900">{activos}</p>
+                            <p className="text-[10px] sm:text-xs text-gray-500">Activos</p>
                         </div>
                     </div>
-                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
-                            <XCircle className="h-5 w-5 text-red-500" />
+                    <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+                            <XCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-500" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-gray-900">{inactivos}</p>
-                            <p className="text-xs text-gray-500">Inactivos</p>
+                            <p className="text-lg sm:text-2xl font-bold text-gray-900">{inactivos}</p>
+                            <p className="text-[10px] sm:text-xs text-gray-500">Inactivos</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Search */}
                 <div className="anim-fade-in-up delay-2">
-                    <form onSubmit={(e) => e.preventDefault()} autoComplete="off" className="relative max-w-md">
+                    <form onSubmit={(e) => e.preventDefault()} autoComplete="off" className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input
                             id="search_query_safe"
@@ -296,7 +296,7 @@ export default function UsuariosPage() {
 
                 {/* Users Table */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-3">
-                    <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-100 flex items-center gap-2">
                         <Users className="h-4 w-4 text-gray-500" />
                         <span className="text-sm font-semibold text-gray-700">Usuarios ({filteredUsuarios.length})</span>
                     </div>
@@ -322,68 +322,71 @@ export default function UsuariosPage() {
                             <table className="w-full border-collapse">
                                 <thead>
                                     <tr className="bg-gray-50/80 border-b border-gray-100">
-                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Usuario</th>
-                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Rol</th>
-                                        <th className="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Acceso a Módulos</th>
-                                        <th className="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
-                                        <th className="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
+                                        <th className="px-3 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Usuario</th>
+                                        <th className="hidden sm:table-cell px-3 py-3 sm:px-6 sm:py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Rol</th>
+                                        <th className="hidden md:table-cell px-3 py-3 sm:px-6 sm:py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Módulos</th>
+                                        <th className="px-3 py-3 sm:px-6 sm:py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
+                                        <th className="px-3 py-3 sm:px-6 sm:py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
                                     {filteredUsuarios.map((usuario) => (
                                         <tr key={usuario.id} className="hover:bg-blue-50/30 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+                                            <td className="px-3 py-3 sm:px-6 sm:py-4">
+                                                <div className="flex items-center gap-2 sm:gap-3">
+                                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
                                                         {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
                                                     </div>
-                                                    <div>
-                                                        <p className="font-semibold text-gray-900 text-sm">
+                                                    <div className="min-w-0">
+                                                        <p className="font-semibold text-gray-900 text-sm truncate">
                                                             {usuario.nombre} {usuario.apellido}
                                                         </p>
-                                                        <p className="text-xs text-gray-500">{usuario.email}</p>
+                                                        <p className="text-xs text-gray-500 truncate">{usuario.email}</p>
+                                                        <div className="sm:hidden mt-1">
+                                                            {getRolBadge(usuario.rol)}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="hidden sm:table-cell px-6 py-4">
                                                 {getRolBadge(usuario.rol)}
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center justify-center gap-3">
-                                                    <div title="Valoraciones Psicológicas" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_valoraciones ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
+                                            <td className="hidden md:table-cell px-6 py-4">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <div title="Valoraciones Psicológicas" className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${usuario.acceso_valoraciones ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
                                                         <ClipboardList className="h-3.5 w-3.5" />
-                                                        <span className="hidden sm:inline">Val.</span>
+                                                        <span>Val.</span>
                                                     </div>
-                                                    <div title="Pruebas de Trabajo" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_pruebas_trabajo ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                    <div title="Pruebas de Trabajo" className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${usuario.acceso_pruebas_trabajo ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400'}`}>
                                                         <Briefcase className="h-3.5 w-3.5" />
-                                                        <span className="hidden sm:inline">P.T.</span>
+                                                        <span>P.T.</span>
                                                     </div>
-                                                    <div title="Formatos TO" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_formatos_to ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                    <div title="Formatos TO" className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${usuario.acceso_formatos_to ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-400'}`}>
                                                         <FileText className="h-3.5 w-3.5" />
-                                                        <span className="hidden sm:inline">F.TO</span>
+                                                        <span>F.TO</span>
                                                     </div>
-                                                    <div title="Análisis Exigencias Mental" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_analisis_exigencias_mental ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                    <div title="Análisis Exigencias Mental" className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${usuario.acceso_analisis_exigencias_mental ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-400'}`}>
                                                         <Activity className="h-3.5 w-3.5" />
-                                                        <span className="hidden sm:inline">A.E.M</span>
+                                                        <span>A.E.M</span>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${usuario.activo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                            <td className="px-3 py-3 sm:px-6 sm:py-4 text-center">
+                                                <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${usuario.activo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                                                     {usuario.activo ? (
-                                                        <><CheckCircle className="h-3.5 w-3.5" /> Activo</>
+                                                        <><CheckCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> <span className="hidden sm:inline">Activo</span></>
                                                     ) : (
-                                                        <><XCircle className="h-3.5 w-3.5" /> Inactivo</>
+                                                        <><XCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> <span className="hidden sm:inline">Inactivo</span></>
                                                     )}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-3 py-3 sm:px-6 sm:py-4">
                                                 <div className="flex items-center justify-center gap-1">
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() => handleOpenEdit(usuario)}
-                                                        className="h-9 w-9 p-0 rounded-lg hover:bg-blue-100 text-blue-600"
+                                                        className="h-8 w-8 p-0 rounded-lg hover:bg-blue-100 text-blue-600"
                                                         title="Editar usuario"
                                                     >
                                                         <Pencil className="h-4 w-4" />
@@ -392,7 +395,7 @@ export default function UsuariosPage() {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() => handleOpenDelete(usuario)}
-                                                        className="h-9 w-9 p-0 rounded-lg hover:bg-red-100 text-red-600"
+                                                        className="h-8 w-8 p-0 rounded-lg hover:bg-red-100 text-red-600"
                                                         title="Eliminar usuario"
                                                     >
                                                         <Trash2 className="h-4 w-4" />
