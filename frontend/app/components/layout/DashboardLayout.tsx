@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { LogOut, Loader2 } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isLoggingOut } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -37,10 +38,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }, []);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && !isAuthenticated && !isLoggingOut) {
       router.push('/login');
     }
-  }, [isLoading, isAuthenticated, router]);
+  }, [isLoading, isAuthenticated, isLoggingOut, router]);
 
   // Inactivity Logout Logic
   useEffect(() => {
@@ -88,12 +89,29 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isLoggingOut) {
     return null;
   }
 
   return (
     <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+      {/* Logout animation overlay */}
+      <div
+        className={`fixed inset-0 bg-red-600 z-[9999] flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isLoggingOut ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'}`}
+      >
+        <div className={`flex flex-col items-center justify-center text-white transition-all duration-500 delay-300 ${isLoggingOut ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+          <div className="relative">
+            <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
+            <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white" />
+          </div>
+          <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Hasta Pronto!</h2>
+          <p className="text-red-100 text-lg flex items-center gap-2">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            Cerrando sesión...
+          </p>
+        </div>
+      </div>
+
       <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 
       {/* Overlay for mobile when sidebar is open */}
@@ -111,4 +129,3 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     </div>
   );
 }
-

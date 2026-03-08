@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { api } from '@/app/services/api';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -20,8 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from '@/components/ui/input';
-import { Modal } from '@/components/ui/modal';
-import { Menu, Search, Bell, Settings, LogOut, UserCircle, Check, X, Loader2 } from 'lucide-react';
+import { Menu, Search, Bell, Settings, LogOut, UserCircle, Check, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from '@/components/ui/sileo-toast';
 import { formatDistanceToNow } from 'date-fns';
@@ -34,12 +31,10 @@ interface HeaderProps {
 export function Header({ onToggleSidebar }: HeaderProps) {
 
   const { user, logout } = useAuth();
-  const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
   const [loadingResolve, setLoadingResolve] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -47,9 +42,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
     if (user?.rol === 'admin') {
       const fetchPendingRequests = async () => {
         try {
-          // console.log("Fetching pending requests...");
           const response = await api.get('/auth/password-reset-requests?pending_only=true') as any[];
-          // console.log("Pending requests response:", response);
           setPendingRequests(response);
         } catch (error) {
           console.error("Error fetching requests", error);
@@ -83,9 +76,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
 
   const handleLogout = () => {
     setShowLogoutModal(false);
-    setIsLoggingOut(true);
-    logout(false);
-    setTimeout(() => router.push('/login'), 1500);
+    logout();
   };
 
   return (
@@ -184,7 +175,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="gap-3 h-10 px-3 hover:bg-gray-100 rounded-lg">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-sm font-semibold">
+                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-sm font-semibold">
                     {user ? getInitials(user.nombre, user.apellido) : 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -253,7 +244,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         </div>
       </div>
 
-      {/* Modal de Cerrar Sesión - Premium */}
+      {/* Modal de Cerrar Sesión */}
       {showLogoutModal && mounted && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           {/* Backdrop blur */}
@@ -261,7 +252,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
 
           {/* Modal card */}
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            {/* Top accent gradient */}
+            {/* Top accent */}
             <div className="h-1.5 bg-blue-600" />
 
             <div className="p-6">
@@ -306,27 +297,6 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         </div>,
         document.body
       )}
-
-      {/* Full Screen Logout Animation (Red overlay) - always in DOM when mounted, transitions via CSS */}
-      {mounted && createPortal(
-        <div
-          className={`fixed inset-0 bg-red-600 z-[200] flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isLoggingOut ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'}`}
-        >
-          <div className={`flex flex-col items-center justify-center text-white transition-all duration-500 delay-300 ${isLoggingOut ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-            <div className="relative">
-              <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-              <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white" />
-            </div>
-            <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Hasta Pronto!</h2>
-            <p className="text-red-100 text-lg flex items-center gap-2">
-              <Loader2 className="h-5 w-5 animate-spin" />
-              Cerrando sesión...
-            </p>
-          </div>
-        </div>,
-        document.body
-      )}
-
     </header>
   );
 }

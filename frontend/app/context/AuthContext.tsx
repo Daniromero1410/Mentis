@@ -20,9 +20,10 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (email: string, password: string, redirect?: boolean) => Promise<void>;
-  logout: (redirect?: boolean) => void;
+  logout: () => void;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isLoggingOut: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,6 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -77,18 +79,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = (redirect = true) => {
+  const logout = () => {
+    setIsLoggingOut(true);
     setToken(null);
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    if (redirect) {
+    setTimeout(() => {
       router.push('/login');
-    }
+    }, 1500);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading, isAuthenticated: !!token }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading, isAuthenticated: !!token, isLoggingOut }}>
       {children}
     </AuthContext.Provider>
   );
