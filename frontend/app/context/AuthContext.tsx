@@ -20,7 +20,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (email: string, password: string, redirect?: boolean) => Promise<void>;
-  logout: () => void;
+  logout: (redirect?: boolean) => void;
   isLoading: boolean;
   isAuthenticated: boolean;
 }
@@ -77,12 +77,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = (redirect = true) => {
     setToken(null);
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    router.push('/login');
+    if (redirect) {
+      router.push('/login');
+    }
   };
 
   return (

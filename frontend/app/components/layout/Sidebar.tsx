@@ -266,8 +266,16 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
               {user?.nombre?.charAt(0)}{user?.apellido?.charAt(0)}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-gray-900 truncate">{user?.nombre} {user?.apellido}</p>
-              <p className="text-[10px] text-gray-500 truncate capitalize">{user?.rol}</p>
+              {user?.rol && (
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${{
+                  admin: 'bg-blue-100 text-blue-700',
+                  psicologo: 'bg-green-100 text-green-700',
+                  terapeuta_ocupacional: 'bg-violet-100 text-violet-700',
+                  supervisor: 'bg-amber-100 text-amber-700',
+                }[user.rol] ?? 'bg-gray-100 text-gray-600'}`}>
+                  {{ admin: 'Administrador', psicologo: 'Psicólogo', terapeuta_ocupacional: 'Ter. Ocupacional', supervisor: 'Supervisor' }[user.rol] ?? user.rol}
+                </span>
+              )}
             </div>
           </div>
         </div>

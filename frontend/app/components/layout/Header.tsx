@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { api } from '@/app/services/api';
 import { Button } from '@/components/ui/button';
@@ -33,10 +34,12 @@ interface HeaderProps {
 export function Header({ onToggleSidebar }: HeaderProps) {
 
   const { user, logout } = useAuth();
+  const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
   const [loadingResolve, setLoadingResolve] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -79,8 +82,10 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   };
 
   const handleLogout = () => {
-    logout();
     setShowLogoutModal(false);
+    setIsLoggingOut(true);
+    logout(false);
+    setTimeout(() => router.push('/login'), 1500);
   };
 
   return (
@@ -188,26 +193,57 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200">
-              <div className="px-3 py-3 border-b border-gray-100">
-                <p className="font-semibold text-gray-900">{user?.nombre} {user?.apellido}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{user?.email}</p>
+            <DropdownMenuContent align="end" className="w-64 bg-[#1e293b] border-none shadow-2xl p-2 rounded-2xl text-slate-100">
+              {/* Profile Header */}
+              <div className="flex items-center gap-3 px-3 py-3 mb-2 rounded-xl bg-slate-800/50">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold shadow-inner">
+                  {user ? getInitials(user.nombre, user.apellido) : 'U'}
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <h4 className="text-sm font-semibold text-white truncate">{user?.nombre} {user?.apellido}</h4>
+                  <p className="text-[11px] text-slate-400 truncate mt-0.5">{user?.email}</p>
+                </div>
               </div>
-              <div className="py-1">
+
+              {/* Navigation Links */}
+              <div className="space-y-1 mb-2">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-indigo-400 group-hover:text-indigo-300 group-hover:bg-slate-700 transition-colors">
+                      <Menu className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Inicio</p>
+                      <p className="text-[10px] text-slate-500">Panel principal</p>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/configuracion"
-                    className="gap-2 cursor-pointer text-gray-700 hover:bg-gray-100 w-full flex items-center"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
                   >
-                    <Settings className="h-4 w-4" />
-                    Configuración
+                    <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-emerald-400 group-hover:text-emerald-300 group-hover:bg-slate-700 transition-colors">
+                      <Settings className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Configuración</p>
+                      <p className="text-[10px] text-slate-500">Ajustes de cuenta</p>
+                    </div>
                   </Link>
                 </DropdownMenuItem>
               </div>
-              <DropdownMenuSeparator className="bg-gray-100" />
+
+              <div className="h-px bg-slate-800 my-2 mx-1" />
+
+              {/* Logout Button */}
               <DropdownMenuItem
                 onClick={() => setShowLogoutModal(true)}
-                className="gap-2 text-red-600 cursor-pointer hover:bg-red-50"
+                className="w-full flex items-center justify-center gap-2 mt-1 px-4 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 cursor-pointer font-medium transition-colors"
               >
                 <LogOut className="h-4 w-4" />
                 Cerrar Sesión
@@ -266,6 +302,26 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 </Button>
               </div>
             </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Full Screen Logout Animation (Red overlay) */}
+      {isLoggingOut && mounted && createPortal(
+        <div
+          className="fixed inset-0 bg-red-600 z-[200] flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] opacity-100 scale-100 rounded-none"
+        >
+          <div className="flex flex-col items-center justify-center text-white transition-all duration-500 delay-100 opacity-100 scale-110">
+            <div className="relative">
+              <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
+              <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white/90" />
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">Hasta Pronto</h2>
+            <p className="text-red-100 text-lg flex items-center gap-2">
+              <Loader2 className="h-5 w-5 animate-spin" />
+              Cerrando sesión...
+            </p>
           </div>
         </div>,
         document.body
