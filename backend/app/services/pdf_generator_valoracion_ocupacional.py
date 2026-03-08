@@ -720,18 +720,37 @@ def generar_pdf_valoracion_ocupacional(
     # 11. REGISTRO (FIRMAS)
     story.append(crear_seccion_header("11. REGISTRO"))
 
-    # --- Firma images ---
-    firma_elaboro_img = Spacer(1, 30)
-    firma_elaboro_path = getattr(registro, 'firma_elaboro', None) if registro else None
-    if firma_elaboro_path and os.path.exists(str(firma_elaboro_path)):
-        try: firma_elaboro_img = ReportLabImage(str(firma_elaboro_path), width=1.4*inch, height=0.5*inch)
-        except: pass
+    # --- Helper to resolve firma (base64 or file path) ---
+    import tempfile, base64 as b64mod
+    def resolve_firma(firma_data):
+        """Return a ReportLabImage from a base64 data-URI or a file path, or Spacer if not available."""
+        if not firma_data:
+            return Spacer(1, 30)
+        firma_str = str(firma_data)
+        # Case 1: base64 data URI
+        if firma_str.startswith('data:image'):
+            try:
+                header, encoded = firma_str.split(',', 1)
+                ext = 'png'
+                if 'jpeg' in header or 'jpg' in header:
+                    ext = 'jpg'
+                img_bytes = b64mod.b64decode(encoded)
+                tmp = tempfile.NamedTemporaryFile(delete=False, suffix=f'.{ext}')
+                tmp.write(img_bytes)
+                tmp.close()
+                return ReportLabImage(tmp.name, width=1.4*inch, height=0.5*inch)
+            except Exception:
+                return Spacer(1, 30)
+        # Case 2: file path
+        if os.path.exists(firma_str):
+            try:
+                return ReportLabImage(firma_str, width=1.4*inch, height=0.5*inch)
+            except Exception:
+                pass
+        return Spacer(1, 30)
 
-    firma_prov_img = Spacer(1, 30)
-    firma_prov_path = getattr(registro, 'firma_proveedor', None) if registro else None
-    if firma_prov_path and os.path.exists(str(firma_prov_path)):
-        try: firma_prov_img = ReportLabImage(str(firma_prov_path), width=1.4*inch, height=0.5*inch)
-        except: pass
+    firma_elaboro_img = resolve_firma(getattr(registro, 'firma_elaboro', None) if registro else None)
+    firma_prov_img = resolve_firma(getattr(registro, 'firma_proveedor', None) if registro else None)
 
     # --- Field values ---
     nombre_elaboro = getattr(registro, 'nombre_elaboro', '') or ''

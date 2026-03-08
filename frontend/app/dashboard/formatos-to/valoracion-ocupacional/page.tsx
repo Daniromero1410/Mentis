@@ -147,11 +147,17 @@ export default function ValoracionOcupacionalPage() {
     const handleDownloadPDF = async (id: number) => {
         try {
             toast.success('Generando PDF...');
-            // Por ahora, es un endpoint falso o placeholder si no hemos hecho el PDF en el backend todavía
-            // The custom api wrapper might not support responseType directly in get()
-            const response = await api.get(`/formatos-to/valoracion-ocupacional/${id}/descargar-pdf`);
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${apiUrl}/formatos-to/valoracion-ocupacional/${id}/descargar-pdf`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-            const blob = new Blob([response as any], { type: 'application/pdf' });
+            if (!response.ok) throw new Error('Error al descargar PDF');
+
+            const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { Button } from '@/components/ui/button';
+import { BlurSuccessModal } from '../BlurSuccessModal';
 import { Card, CardContent } from '@/components/ui/card';
 import {
     ChevronRight,
@@ -307,6 +308,14 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
     return (
         <div className="max-w-6xl mx-auto">
 
+            {/* Header */}
+            <div className="text-left mb-8">
+                <h1 className="text-3xl font-bold text-slate-900">
+                    {readOnly ? 'Ver Valoración Ocupacional' : (valoracionId ? 'Editar Valoración Ocupacional' : 'Nueva Valoración Ocupacional')}
+                </h1>
+                <p className="text-slate-600 mt-2">Complete el formulario de evaluación paso a paso</p>
+            </div>
+
             {/* PROGRESS BAR (Refactored Stepper) */}
             <div className="flex items-start justify-between relative mb-12 px-4">
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
@@ -405,37 +414,17 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                 errors={validationModal.errors}
                 type={validationModal.type}
             />
-            {/* ----------------------------------------------------------- */}
-            {/* Download Modal                                             */}
-            {/* ----------------------------------------------------------- */}
-            {showDownloadModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                    <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <h2 className="text-xl font-bold mb-2 text-gray-900">Valoración Finalizada</h2>
-                            <p className="mb-6 text-gray-600">La valoración se ha guardado y finalizado correctamente.</p>
-                            <div className="flex flex-col sm:flex-row justify-center gap-3">
-                                {downloadUrls?.pdf_url && (
-                                    <Button
-                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                                        onClick={handleDownloadCurrentPDF}
-                                    >
-                                        <Download className="mr-2 h-4 w-4" /> Descargar PDF
-                                    </Button>
-                                )}
-                                <Button variant="outline" onClick={() => router.push('/dashboard/formatos-to/valoracion-ocupacional')}>
-                                    Volver al listado
-                                </Button>
-                            </div>
-                        </div>
-                    </Card>
-                </div>
-            )}
+            {/* Download modal */}
+            <BlurSuccessModal
+                isOpen={showDownloadModal}
+                downloadUrl={downloadUrls?.pdf_url || ''}
+                onClose={() => {
+                    setShowDownloadModal(false);
+                    router.push('/dashboard/formatos-to/valoracion-ocupacional');
+                }}
+                title="¡Valoración Finalizada!"
+                message="La valoración se ha guardado y finalizado. El PDF ha sido generado exitosamente."
+            />
         </div>
     );
 }
