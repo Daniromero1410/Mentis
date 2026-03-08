@@ -400,9 +400,9 @@ export default function ValoracionOcupacionalPage() {
                             Cancelar
                         </Button>
                         <Button
-                            variant="destructive"
                             onClick={handleDelete}
                             disabled={isDeleting}
+                            className="bg-red-600 hover:bg-red-700 text-white"
                         >
                             {isDeleting ? 'Eliminando...' : 'Eliminar Valoración'}
                         </Button>
