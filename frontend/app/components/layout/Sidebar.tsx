@@ -258,25 +258,20 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         ))}
       </nav>
 
-      {/* Bottom section - User info */}
+      {/* Bottom section - Role badge only */}
       {!collapsed && (
         <div className="p-3 border-t border-gray-100 shrink-0">
-          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50/50">
-            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
-              {user?.nombre?.charAt(0)}{user?.apellido?.charAt(0)}
-            </div>
-            <div className="min-w-0 flex-1">
-              {user?.rol && (
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${{
-                  admin: 'bg-blue-100 text-blue-700',
-                  psicologo: 'bg-green-100 text-green-700',
-                  terapeuta_ocupacional: 'bg-violet-100 text-violet-700',
-                  supervisor: 'bg-amber-100 text-amber-700',
-                }[user.rol] ?? 'bg-gray-100 text-gray-600'}`}>
-                  {{ admin: 'Administrador', psicologo: 'Psicólogo', terapeuta_ocupacional: 'Ter. Ocupacional', supervisor: 'Supervisor' }[user.rol] ?? user.rol}
-                </span>
-              )}
-            </div>
+          <div className="flex items-center justify-center px-3 py-2.5 rounded-xl bg-blue-50/50">
+            {user?.rol && (
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold ${{
+                admin: 'bg-blue-100 text-blue-700',
+                psicologo: 'bg-green-100 text-green-700',
+                terapeuta_ocupacional: 'bg-violet-100 text-violet-700',
+                supervisor: 'bg-amber-100 text-amber-700',
+              }[user.rol] ?? 'bg-gray-100 text-gray-600'}`}>
+                {{ admin: 'Administrador', psicologo: 'Psicólogo', terapeuta_ocupacional: 'Ter. Ocupacional', supervisor: 'Supervisor' }[user.rol] ?? user.rol}
+              </span>
+            )}
           </div>
         </div>
       )}
