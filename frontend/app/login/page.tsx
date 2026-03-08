@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { api } from '@/app/services/api';
 import Image from 'next/image';
@@ -23,7 +24,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   // Password Reset State
   const [resetModalOpen, setResetModalOpen] = useState(false);
@@ -41,12 +44,16 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      await login(email, password);
+      await login(email, password, false);
+      setLoginSuccess(true);
       toast.success('¡Bienvenido al sistema!');
+
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1500); // Wait for animations to finish
     } catch (error: any) {
       toast.error(error.message || 'Credenciales incorrectas');
-    } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); // Only reset on error
     }
   };
 
@@ -95,6 +102,24 @@ export default function LoginPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-fuchsia-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2.5s' }}></div>
+      </div>
+
+      {/* Success Overlay Animation */}
+      <div
+        className={`fixed inset-0 bg-blue-600 z-50 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${loginSuccess ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'
+          }`}
+      >
+        <div className={`flex flex-col items-center justify-center text-white transition-all duration-500 delay-300 ${loginSuccess ? 'opacity-100 scale-110' : 'opacity-0 scale-90'}`}>
+          <div className="relative">
+            <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
+            <CheckCircle2 className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white" />
+          </div>
+          <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Bienvenido!</h2>
+          <p className="text-blue-100 text-lg flex items-center gap-2">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            Preparando tu entorno...
+          </p>
+        </div>
       </div>
 
       {/* Login Card */}
