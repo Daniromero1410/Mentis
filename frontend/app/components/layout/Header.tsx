@@ -33,7 +33,6 @@ export function Header({ onToggleSidebar }: HeaderProps) {
 
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
   const [loadingResolve, setLoadingResolve] = useState<number | null>(null);
 
@@ -192,14 +191,6 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 <p className="text-xs text-gray-500 mt-0.5">{user?.email}</p>
               </div>
               <div className="py-1">
-                <DropdownMenuItem
-                  onClick={() => setShowProfileModal(true)}
-                  className="gap-2 cursor-pointer text-gray-700 hover:bg-gray-100"
-                >
-                  <UserCircle className="h-4 w-4" />
-                  Mi Perfil
-                </DropdownMenuItem>
-
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/configuracion"
@@ -253,46 +244,6 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         </div>
       </Modal>
 
-      {/* Modal de Mi Perfil (Antes Configuración) */}
-      <Modal
-        isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
-        title="Mi Perfil"
-        size="md"
-        footer={
-          <div className="flex justify-end gap-2">
-            <Button
-              onClick={() => setShowProfileModal(false)}
-              className="bg-indigo-500 hover:bg-indigo-600"
-            >
-              Cerrar
-            </Button>
-          </div>
-        }
-      >
-        <div className="space-y-6">
-          {/* Usuario */}
-          <div className="space-y-2">
-            <h4 className="font-semibold text-gray-900">Información del Usuario</h4>
-            <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
-              <div className="space-y-2">
-                <div>
-                  <p className="text-sm text-gray-500">Nombre</p>
-                  <p className="font-medium text-gray-900">{user?.nombre} {user?.apellido}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-medium text-gray-900">{user?.email}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Rol</p>
-                  <p className="font-medium text-gray-900 capitalize">{user?.rol}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Modal>
     </header>
   );
 }
