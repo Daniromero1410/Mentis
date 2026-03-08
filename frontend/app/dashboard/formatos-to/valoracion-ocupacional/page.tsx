@@ -3,17 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import {
     FileText,
@@ -23,10 +14,13 @@ import {
     Trash2,
     Download,
     Eye,
-    CheckCircle,
+    CheckCircle2,
     Clock,
-    Filter,
-    Briefcase
+    ListFilter,
+    AlertTriangle,
+    ChevronLeft,
+    ChevronRight,
+    Briefcase,
 } from 'lucide-react';
 import { api } from '@/app/services/api';
 import { toast } from '@/components/ui/sileo-toast';
@@ -72,18 +66,15 @@ export default function ValoracionOcupacionalPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [estadoFilter, setEstadoFilter] = useState('todos');
 
-    // Paginación
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const limit = 10;
 
-    // Modal de eliminación
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<number | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        // Verificar permisos
         if (user && !user.acceso_formatos_to && user.rol !== 'admin') {
             router.push('/dashboard');
             toast.error('No tienes permisos para acceder a este módulo');
@@ -183,226 +174,273 @@ export default function ValoracionOcupacionalPage() {
 
     const totalPages = Math.ceil(totalItems / limit);
 
+    const completadas = valoraciones.filter(v => v.estado.toLowerCase() === 'completada').length;
+    const borradores = valoraciones.filter(v => v.estado.toLowerCase() === 'borrador').length;
+
     return (
         <DashboardLayout>
-            <div className="p-6 space-y-6">
+            <div className="space-y-6">
                 {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                            <FileText className="h-8 w-8 text-blue-600" />
-                            Valoración Ocupacional
-                        </h1>
-                        <p className="text-gray-500 mt-2">
-                            Gestione las valoraciones de Terapia Ocupacional
-                        </p>
+                <div className="flex items-start justify-between anim-fade-in-up">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                            <FileText className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900">Valoración Ocupacional</h1>
+                            <p className="text-sm text-gray-500 mt-0.5">Gestione las valoraciones de Terapia Ocupacional</p>
+                        </div>
                     </div>
-                    <Button onClick={handleCreateNuevo} className="bg-blue-600 hover:bg-blue-700 text-white">
-                        <Plus className="mr-2 h-4 w-4" />
+                    <Button onClick={handleCreateNuevo} className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2">
+                        <Plus className="h-4 w-4" />
                         Nueva Valoración
                     </Button>
                 </div>
 
-                {/* Filtros */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                        <Input
-                            placeholder="Buscar por trabajador o documento..."
-                            className="pl-9"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-4 anim-fade-in-up delay-1">
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                            <ListFilter className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold text-gray-900">{totalItems}</p>
+                            <p className="text-xs text-gray-500">Total</p>
+                        </div>
                     </div>
-                    <Select value={estadoFilter} onValueChange={setEstadoFilter}>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Estado" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="todos">Todos</SelectItem>
-                            <SelectItem value="borrador">Borrador</SelectItem>
-                            <SelectItem value="completada">Completada</SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold text-gray-900">{completadas}</p>
+                            <p className="text-xs text-gray-500">Completadas</p>
+                        </div>
+                    </div>
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                            <Clock className="h-5 w-5 text-gray-500" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold text-gray-900">{borradores}</p>
+                            <p className="text-xs text-gray-500">Borradores</p>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Tabla */}
-                <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-                    <Table>
-                        <TableHeader>
-                            <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
-                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
-                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
-                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
-                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">FECHA</TableHead>
-                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">ESTADO</TableHead>
-                                <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4 text-right">ACCIONES</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {loading ? (
-                                <TableRow>
-                                    <TableCell colSpan={6} className="text-center py-12 text-gray-500">
-                                        <div className="flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
-                                    </TableCell>
-                                </TableRow>
-                            ) : filteredValoraciones.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={6} className="text-center py-12 text-gray-500">
-                                        <div className="flex flex-col items-center justify-center text-gray-500">
-                                            <p className="text-lg font-medium text-gray-900 mb-1">
-                                                No hay valoraciones
-                                            </p>
-                                            <p className="text-sm">
-                                                {searchTerm || estadoFilter !== 'todos'
-                                                    ? 'No se encontraron resultados para tu búsqueda.'
-                                                    : 'Comienza creando una nueva valoración ocupacional.'}
-                                            </p>
-                                            {!(searchTerm || estadoFilter !== 'todos') && (
-                                                <Button onClick={handleCreateNuevo} variant="outline" className="mt-4">
-                                                    <Plus className="h-4 w-4 mr-2" />
-                                                    Crear la primera
-                                                </Button>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ) : (
-                                filteredValoraciones.map((item) => {
-                                    const nombre = item.trabajador_nombre || 'Sin nombre';
-                                    const initial = nombre.charAt(0).toUpperCase();
-                                    return (
-                                        <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
-                                            <TableCell className="py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white font-bold text-xs shrink-0">
-                                                        {initial}
+                {/* Filters */}
+                <div className="bg-white rounded-2xl border border-gray-200 p-4 anim-fade-in-up delay-2">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="relative flex-1">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <Input
+                                placeholder="Buscar por trabajador o documento..."
+                                className="pl-10 bg-gray-50 border-gray-200 rounded-xl"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                        <Select value={estadoFilter} onValueChange={setEstadoFilter}>
+                            <SelectTrigger className="w-full sm:w-44 bg-gray-50 border-gray-200 rounded-xl">
+                                <SelectValue placeholder="Estado" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="todos">Todos</SelectItem>
+                                <SelectItem value="borrador">Borrador</SelectItem>
+                                <SelectItem value="completada">Completada</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+
+                {/* Table */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-3">
+                    {loading ? (
+                        <div className="flex items-center justify-center h-64">
+                            <div className="flex flex-col items-center gap-3">
+                                <div className="relative w-12 h-12">
+                                    <div className="w-12 h-12 rounded-full border-4 border-blue-500/20"></div>
+                                    <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                                </div>
+                                <p className="text-sm text-gray-500 animate-pulse">Cargando valoraciones...</p>
+                            </div>
+                        </div>
+                    ) : filteredValoraciones.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-64">
+                            <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
+                                <FileText className="h-8 w-8 text-blue-300" />
+                            </div>
+                            <p className="text-base font-semibold text-gray-700">No hay valoraciones ocupacionales</p>
+                            <p className="text-sm text-gray-400 mt-1 mb-4">
+                                {searchTerm || estadoFilter !== 'todos'
+                                    ? 'No se encontraron resultados para tu búsqueda.'
+                                    : 'Comienza creando una nueva valoración ocupacional.'}
+                            </p>
+                            {!(searchTerm || estadoFilter !== 'todos') && (
+                                <Button onClick={handleCreateNuevo} variant="outline" className="rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50 gap-2">
+                                    <Plus className="h-4 w-4" />
+                                    Crear la primera
+                                </Button>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50/80 border-b border-gray-100">
+                                    <tr>
+                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Trabajador</th>
+                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Documento</th>
+                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Empresa</th>
+                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
+                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
+                                        <th className="px-6 py-3.5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100">
+                                    {filteredValoraciones.map((item) => {
+                                        const nombre = item.trabajador_nombre || 'Sin nombre';
+                                        const initial = nombre.charAt(0).toUpperCase();
+                                        return (
+                                            <tr key={item.id} className="hover:bg-blue-50/30 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0">
+                                                            {initial}
+                                                        </div>
+                                                        <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
                                                     </div>
-                                                    <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                {item.trabajador_documento || '-'}
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-600">
-                                                <div className="flex items-center gap-2">
-                                                    <Briefcase className="h-3 w-3 text-gray-400" />
-                                                    {item.empresa || '-'}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="text-sm text-gray-500">
-                                                {format(new Date(item.fecha_creacion), "d 'de' MMMM, yyyy", { locale: es })}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    variant="secondary"
-                                                    className={`font-medium rounded-full px-3 py-0.5 ${item.estado.toLowerCase() === 'completada'
-                                                        ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                                                        : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
-                                                        }`}
-                                                >
-                                                    {item.estado.toLowerCase() === 'completada' ? 'Completada' : 'Borrador'}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex items-center justify-end gap-1">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        onClick={() => router.push(`/dashboard/formatos-to/valoracion-ocupacional/nueva?id=${item.id}&view=true`)}
-                                                        className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                                                        title="Ver Detalles"
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                    {item.trabajador_documento || '-'}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                        <Briefcase className="h-3.5 w-3.5 text-gray-400" />
+                                                        {item.empresa || '-'}
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {format(new Date(item.fecha_creacion), "d 'de' MMMM, yyyy", { locale: es })}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <Badge
+                                                        variant="secondary"
+                                                        className={`font-medium rounded-full px-2.5 py-0.5 ${item.estado.toLowerCase() === 'completada'
+                                                            ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
+                                                            }`}
                                                     >
-                                                        <Eye className="h-4 w-4" />
-                                                    </Button>
-
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        onClick={() => handleEdit(item.id)}
-                                                        className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
-                                                        title="Editar"
-                                                    >
-                                                        <Edit className="h-4 w-4" />
-                                                    </Button>
-
-                                                    {item.estado.toLowerCase() === 'completada' && (
+                                                        {item.estado.toLowerCase() === 'completada' ? 'Completada' : 'Borrador'}
+                                                    </Badge>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="flex items-center justify-end gap-1">
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            onClick={() => handleDownloadPDF(item.id)}
-                                                            className="h-8 w-8 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
-                                                            title="Descargar PDF"
+                                                            onClick={() => router.push(`/dashboard/formatos-to/valoracion-ocupacional/nueva?id=${item.id}&view=true`)}
+                                                            className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg"
+                                                            title="Ver Detalles"
                                                         >
-                                                            <Download className="h-4 w-4" />
+                                                            <Eye className="h-4 w-4" />
                                                         </Button>
-                                                    )}
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleEdit(item.id)}
+                                                            className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg"
+                                                            title="Editar"
+                                                        >
+                                                            <Edit className="h-4 w-4" />
+                                                        </Button>
+                                                        {item.estado.toLowerCase() === 'completada' && (
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => handleDownloadPDF(item.id)}
+                                                                className="h-8 w-8 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg"
+                                                                title="Descargar PDF"
+                                                            >
+                                                                <Download className="h-4 w-4" />
+                                                            </Button>
+                                                        )}
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => confirmDelete(item.id)}
+                                                            className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg"
+                                                            title="Eliminar valoración"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
 
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        onClick={() => confirmDelete(item.id)}
-                                                        className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                                        title="Eliminar valoración"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })
-                            )}
-                        </TableBody>
-                    </Table>
+                    {/* Pagination */}
+                    {!loading && valoraciones.length > 0 && totalPages > 1 && (
+                        <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                            <div className="text-sm text-gray-500">
+                                Página {page} de {totalPages}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                                    disabled={page === 1}
+                                    className="border-gray-200 rounded-lg"
+                                >
+                                    <ChevronLeft className="h-4 w-4" />
+                                </Button>
+                                <span className="text-sm text-gray-700 px-2">
+                                    {page} / {totalPages}
+                                </span>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={page === totalPages}
+                                    className="border-gray-200 rounded-lg"
+                                >
+                                    <ChevronRight className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </div>
-
-                {/* Pagination */}
-                {!loading && totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-4">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setPage(p => Math.max(1, p - 1))}
-                            disabled={page === 1}
-                        >
-                            Anterior
-                        </Button>
-                        <span className="text-sm text-gray-600">
-                            Página {page} de {totalPages}
-                        </span>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                            disabled={page === totalPages}
-                        >
-                            Siguiente
-                        </Button>
-                    </div>
-                )}
             </div>
 
             {/* Delete Modal */}
             <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle className="text-red-600 flex items-center gap-2">
-                            <Trash2 className="h-5 w-5" />
-                            Eliminar Valoración
-                        </DialogTitle>
-                        <DialogDescription>
-                            ¿Estás seguro que deseas eliminar esta valoración ocupacional? Esta acción no se puede deshacer.
-                        </DialogDescription>
+                        <div className="flex items-center gap-3">
+                            <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+                                <AlertTriangle className="h-6 w-6 text-red-600" />
+                            </div>
+                            <div>
+                                <DialogTitle>Eliminar Valoración</DialogTitle>
+                                <DialogDescription>
+                                    ¿Estás seguro que deseas eliminar esta valoración ocupacional? Esta acción no se puede deshacer.
+                                </DialogDescription>
+                            </div>
+                        </div>
                     </DialogHeader>
-                    <DialogFooter className="mt-4">
-                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
+                    <DialogFooter className="mt-4 gap-2 sm:gap-0">
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)} className="rounded-xl border-gray-200">
                             Cancelar
                         </Button>
                         <Button
                             onClick={handleDelete}
                             disabled={isDeleting}
-                            className="bg-red-600 hover:bg-red-700 text-white"
+                            className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
                         >
                             {isDeleting ? 'Eliminando...' : 'Eliminar Valoración'}
                         </Button>

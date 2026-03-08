@@ -6,8 +6,6 @@ import { api } from '@/app/services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/sileo-toast';
 import { Loader2, User, Lock, Save, Shield, Settings } from 'lucide-react';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
@@ -17,14 +15,12 @@ export default function ConfiguracionPage() {
     const [savingProfile, setSavingProfile] = useState(false);
     const [savingPassword, setSavingPassword] = useState(false);
 
-    // Estados del perfil
     const [profileData, setProfileData] = useState({
         nombre: '',
         apellido: '',
         email: ''
     });
 
-    // Estados de contraseña
     const [passwordData, setPasswordData] = useState({
         newPassword: '',
         confirmPassword: ''
@@ -87,145 +83,135 @@ export default function ConfiguracionPage() {
 
     return (
         <DashboardLayout>
-            <div className="space-y-8 max-w-4xl mx-auto py-6">
-                {/* Header Centrado */}
-                <div className="text-center space-y-2 mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-3">
-                        <Settings className="h-8 w-8 text-indigo-500" />
-                        Configuración
-                    </h1>
-                    <p className="text-gray-600 max-w-lg mx-auto">
-                        Administra tu información personal y fortalece la seguridad de tu cuenta desde este panel centralizado.
-                    </p>
+            <div className="max-w-3xl mx-auto space-y-8">
+                {/* Header */}
+                <div className="flex items-center gap-4 anim-fade-in-up">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                        <Settings className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900">Configuración</h1>
+                        <p className="text-sm text-gray-500 mt-0.5">Administra tu información personal y seguridad de cuenta</p>
+                    </div>
                 </div>
 
-                <div className="space-y-8">
-                    {/* Perfil Card */}
-                    <Card className="border shadow-md bg-white overflow-hidden">
-                        <CardHeader className="bg-gray-50/80 border-b border-gray-100 pb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                                    <User className="h-6 w-6 text-indigo-500" />
+                {/* Perfil Card */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-1">
+                    <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-4 bg-gray-50/60">
+                        <div className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
+                            <User className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div>
+                            <h2 className="text-base font-semibold text-gray-900">Información Personal</h2>
+                            <p className="text-xs text-gray-500 mt-0.5">Actualiza tus datos de identificación básicos.</p>
+                        </div>
+                    </div>
+                    <div className="p-6">
+                        <form onSubmit={handleProfileUpdate} className="space-y-5">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <Label htmlFor="nombre" className="text-gray-700 font-medium">Nombre</Label>
+                                    <Input
+                                        id="nombre"
+                                        value={profileData.nombre}
+                                        onChange={(e) => setProfileData({ ...profileData, nombre: e.target.value })}
+                                        className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                    />
                                 </div>
-                                <div>
-                                    <CardTitle className="text-xl">Información Personal</CardTitle>
-                                    <CardDescription className="mt-1">
-                                        Actualiza tus datos de identificación básicos.
-                                    </CardDescription>
+                                <div className="space-y-2">
+                                    <Label htmlFor="apellido" className="text-gray-700 font-medium">Apellido</Label>
+                                    <Input
+                                        id="apellido"
+                                        value={profileData.apellido}
+                                        onChange={(e) => setProfileData({ ...profileData, apellido: e.target.value })}
+                                        className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                    />
                                 </div>
                             </div>
-                        </CardHeader>
-                        <CardContent className="pt-8">
-                            <form onSubmit={handleProfileUpdate} className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2.5">
-                                        <Label htmlFor="nombre" className="text-gray-700">Nombre</Label>
-                                        <Input
-                                            id="nombre"
-                                            value={profileData.nombre}
-                                            onChange={(e) => setProfileData({ ...profileData, nombre: e.target.value })}
-                                            className="h-11 bg-gray-50/50 border-gray-200 focus:border-indigo-500 transition-colors"
-                                        />
-                                    </div>
-                                    <div className="space-y-2.5">
-                                        <Label htmlFor="apellido" className="text-gray-700">Apellido</Label>
-                                        <Input
-                                            id="apellido"
-                                            value={profileData.apellido}
-                                            onChange={(e) => setProfileData({ ...profileData, apellido: e.target.value })}
-                                            className="h-11 bg-gray-50/50 border-gray-200 focus:border-indigo-500 transition-colors"
-                                        />
-                                    </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email" className="text-gray-700 font-medium">Correo Electrónico</Label>
+                                <div className="relative">
+                                    <Input
+                                        id="email"
+                                        value={profileData.email}
+                                        disabled
+                                        className="h-11 bg-gray-100 text-gray-500 border-dashed rounded-xl pr-10"
+                                    />
+                                    <Shield className="absolute right-3.5 top-3.5 h-4 w-4 text-gray-400" />
                                 </div>
-                                <div className="space-y-2.5">
-                                    <Label htmlFor="email" className="text-gray-700">Correo Electrónico</Label>
-                                    <div className="relative">
-                                        <Input
-                                            id="email"
-                                            value={profileData.email}
-                                            disabled
-                                            className="h-11 bg-gray-100 text-gray-500 border-dashed"
-                                        />
-                                        <Shield className="absolute right-4 top-3.5 h-4 w-4 text-gray-400" />
-                                    </div>
-                                    <p className="text-xs text-muted-foreground flex items-center gap-1.5 px-1">
-                                        <Shield className="h-3 w-3" /> Este campo no se puede modificar por seguridad.
-                                    </p>
-                                </div>
-                                <div className="pt-4 flex justify-end">
-                                    <Button
-                                        type="submit"
-                                        disabled={savingProfile}
-                                        className="h-11 px-8 bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20"
-                                    >
-                                        {savingProfile ? (
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        ) : (
-                                            <Save className="mr-2 h-4 w-4" />
-                                        )}
-                                        Guardar Cambios
-                                    </Button>
-                                </div>
-                            </form>
-                        </CardContent>
-                    </Card>
+                                <p className="text-xs text-gray-400 flex items-center gap-1.5 px-1">
+                                    <Shield className="h-3 w-3" /> Este campo no se puede modificar por seguridad.
+                                </p>
+                            </div>
+                            <div className="flex justify-end pt-2">
+                                <Button
+                                    type="submit"
+                                    disabled={savingProfile}
+                                    className="h-11 px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl"
+                                >
+                                    {savingProfile ? (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    ) : (
+                                        <Save className="mr-2 h-4 w-4" />
+                                    )}
+                                    Guardar Cambios
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-                    {/* Seguridad Card */}
-                    <Card className="border shadow-md bg-white overflow-hidden">
-                        <CardHeader className="bg-gray-50/80 border-b border-gray-100 pb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
-                                    <Lock className="h-6 w-6 text-orange-500" />
-                                </div>
-                                <div>
-                                    <CardTitle className="text-xl">Seguridad</CardTitle>
-                                    <CardDescription className="mt-1">
-                                        Gestiona tu contraseña y acceso.
-                                    </CardDescription>
-                                </div>
+                {/* Seguridad Card */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-2">
+                    <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-4 bg-gray-50/60">
+                        <div className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
+                            <Lock className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div>
+                            <h2 className="text-base font-semibold text-gray-900">Seguridad</h2>
+                            <p className="text-xs text-gray-500 mt-0.5">Gestiona tu contraseña y acceso.</p>
+                        </div>
+                    </div>
+                    <div className="p-6">
+                        <form onSubmit={handlePasswordUpdate} className="space-y-5">
+                            <div className="space-y-2">
+                                <Label htmlFor="new-password" className="text-gray-700 font-medium">Nueva Contraseña</Label>
+                                <Input
+                                    id="new-password"
+                                    type="password"
+                                    value={passwordData.newPassword}
+                                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                    placeholder="Mínimo 6 caracteres"
+                                    className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                />
                             </div>
-                        </CardHeader>
-                        <CardContent className="pt-8">
-                            <form onSubmit={handlePasswordUpdate} className="space-y-6">
-                                <div className="space-y-2.5">
-                                    <Label htmlFor="new-password">Nueva Contraseña</Label>
-                                    <Input
-                                        id="new-password"
-                                        type="password"
-                                        value={passwordData.newPassword}
-                                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                                        placeholder="Mínimo 6 caracteres"
-                                        className="h-11 bg-gray-50/50 border-gray-200 focus:border-orange-500 transition-colors"
-                                    />
-                                </div>
-                                <div className="space-y-2.5">
-                                    <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
-                                    <Input
-                                        id="confirm-password"
-                                        type="password"
-                                        value={passwordData.confirmPassword}
-                                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                                        placeholder="Repetir contraseña"
-                                        className="h-11 bg-gray-50/50 border-gray-200 focus:border-orange-500 transition-colors"
-                                    />
-                                </div>
-                                <div className="pt-4 flex justify-end">
-                                    <Button
-                                        type="submit"
-                                        disabled={savingPassword || !passwordData.newPassword}
-                                        className="h-11 px-8 bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20"
-                                    >
-                                        {savingPassword ? (
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        ) : (
-                                            <Lock className="mr-2 h-4 w-4" />
-                                        )}
-                                        Actualizar Contraseña
-                                    </Button>
-                                </div>
-                            </form>
-                        </CardContent>
-                    </Card>
+                            <div className="space-y-2">
+                                <Label htmlFor="confirm-password" className="text-gray-700 font-medium">Confirmar Contraseña</Label>
+                                <Input
+                                    id="confirm-password"
+                                    type="password"
+                                    value={passwordData.confirmPassword}
+                                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                                    placeholder="Repetir contraseña"
+                                    className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                />
+                            </div>
+                            <div className="flex justify-end pt-2">
+                                <Button
+                                    type="submit"
+                                    disabled={savingPassword || !passwordData.newPassword}
+                                    className="h-11 px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl"
+                                >
+                                    {savingPassword ? (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    ) : (
+                                        <Lock className="mr-2 h-4 w-4" />
+                                    )}
+                                    Actualizar Contraseña
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </DashboardLayout>

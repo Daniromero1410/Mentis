@@ -3,16 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/context/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ModuleGuard } from '@/app/components/guards/ModuleGuard';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
 import {
-    Plus, Search, FileText, Calendar, User,
-    Eye, Edit, Trash2, ChevronLeft, ChevronRight, Activity, X
+    Plus, Search, FileText,
+    Eye, Edit, Trash2, ChevronLeft, ChevronRight, Activity,
+    CheckCircle2, Clock, ListFilter, AlertTriangle,
 } from 'lucide-react';
-import {
-    Table, TableBody, TableCell, TableHead, TableHeader, TableRow
-} from '@/components/ui/table';
 import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter
 } from '@/components/ui/dialog';
@@ -57,7 +54,6 @@ export default function AnalisisExigenciaPage() {
             const data = await res.json();
             let items = data.items || [];
 
-            // Client-side search filtering (backend usually handles specific search, but here we do simple filtering if backend doesn't support generic search param yet)
             if (searchTerm) {
                 const term = searchTerm.toLowerCase();
                 items = items.filter((a: any) =>
@@ -104,197 +100,259 @@ export default function AnalisisExigenciaPage() {
 
     const isAdminOrSupervisor = user?.rol === 'admin' || user?.rol === 'supervisor';
 
+    const completadas = analisis.filter(a => a.estado === 'completada').length;
+    const borradores = analisis.filter(a => a.estado !== 'completada').length;
+
     return (
         <ModuleGuard requiredModule="formatos_to">
             <DashboardLayout>
-                <div className="p-6 space-y-6">
+                <div className="space-y-6">
                     {/* Header */}
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                                <Activity className="w-8 h-8 text-blue-600" />
-                                Análisis de Exigencia TO
-                            </h1>
-                            <p className="text-gray-500 mt-2">Gestión de análisis de puestos de trabajo y exigencias.</p>
+                    <div className="flex items-start justify-between anim-fade-in-up">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                                <Activity className="h-6 w-6 text-white" />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-bold text-gray-900">Análisis de Exigencia TO</h1>
+                                <p className="text-sm text-gray-500 mt-0.5">Gestión de análisis de puestos de trabajo y exigencias</p>
+                            </div>
                         </div>
                         <Link href="/dashboard/formatos-to/analisis-exigencia/nueva">
-                            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                                <Plus className="mr-2 h-4 w-4" />
+                            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2">
+                                <Plus className="h-4 w-4" />
                                 Nuevo Análisis
                             </Button>
                         </Link>
                     </div>
 
-                    {/* Filters */}
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <div className="relative flex-1">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                            <Input
-                                placeholder="Buscar por trabajador o documento..."
-                                className="pl-9"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-4 anim-fade-in-up delay-1">
+                        <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                                <ListFilter className="h-5 w-5 text-blue-600" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900">{totalItems}</p>
+                                <p className="text-xs text-gray-500">Total</p>
+                            </div>
                         </div>
-                        <Select value={statusFilter} onValueChange={setStatusFilter}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Estado" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="todos">Todos</SelectItem>
-                                <SelectItem value="borrador">Borrador</SelectItem>
-                                <SelectItem value="completada">Completada</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                                <CheckCircle2 className="h-5 w-5 text-green-600" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900">{completadas}</p>
+                                <p className="text-xs text-gray-500">Completados</p>
+                            </div>
+                        </div>
+                        <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                                <Clock className="h-5 w-5 text-gray-500" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900">{borradores}</p>
+                                <p className="text-xs text-gray-500">Borradores</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Filters */}
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 anim-fade-in-up delay-2">
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <div className="relative flex-1">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                <Input
+                                    placeholder="Buscar por trabajador o documento..."
+                                    className="pl-10 bg-gray-50 border-gray-200 rounded-xl"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                <SelectTrigger className="w-full sm:w-44 bg-gray-50 border-gray-200 rounded-xl">
+                                    <SelectValue placeholder="Estado" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="todos">Todos</SelectItem>
+                                    <SelectItem value="borrador">Borrador</SelectItem>
+                                    <SelectItem value="completada">Completada</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
 
                     {/* Table */}
-                    <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
-                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
-                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TIPO DOC</TableHead>
-                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
-                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
-                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">FECHA</TableHead>
-                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">ESTADO</TableHead>
-                                    <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4 text-right">ACCIONES</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {loading ? (
-                                    <TableRow>
-                                        <TableCell colSpan={7} className="text-center py-12 text-gray-500">
-                                            Cargando análisis...
-                                        </TableCell>
-                                    </TableRow>
-                                ) : analisis.length === 0 ? (
-                                    <TableRow>
-                                        <TableCell colSpan={7} className="text-center py-12 text-gray-500">
-                                            No se encontraron análisis de exigencia.
-                                        </TableCell>
-                                    </TableRow>
-                                ) : (
-                                    analisis.map((item) => {
-                                        const nombre = item.trabajador_nombre || 'Sin nombre';
-                                        const initial = nombre.charAt(0).toUpperCase();
-                                        return (
-                                            <TableRow key={item.id} className="hover:bg-gray-50/50 transition-colors">
-                                                <TableCell className="py-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">
-                                                            {initial}
+                    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-3">
+                        {loading ? (
+                            <div className="flex items-center justify-center h-64">
+                                <div className="flex flex-col items-center gap-3">
+                                    <div className="relative w-12 h-12">
+                                        <div className="w-12 h-12 rounded-full border-4 border-blue-500/20"></div>
+                                        <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                                    </div>
+                                    <p className="text-sm text-gray-500 animate-pulse">Cargando análisis...</p>
+                                </div>
+                            </div>
+                        ) : analisis.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center h-64">
+                                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
+                                    <Activity className="h-8 w-8 text-blue-300" />
+                                </div>
+                                <p className="text-base font-semibold text-gray-700">No se encontraron análisis de exigencia</p>
+                                <p className="text-sm text-gray-400 mt-1 mb-4">Crea un nuevo análisis para comenzar</p>
+                                <Link href="/dashboard/formatos-to/analisis-exigencia/nueva">
+                                    <Button variant="outline" className="rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50 gap-2">
+                                        <Plus className="h-4 w-4" />
+                                        Nuevo Análisis
+                                    </Button>
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead className="bg-gray-50/80 border-b border-gray-100">
+                                        <tr>
+                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Trabajador</th>
+                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tipo Doc</th>
+                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Documento</th>
+                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Empresa</th>
+                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
+                                            <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
+                                            <th className="px-6 py-3.5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100">
+                                        {analisis.map((item) => {
+                                            const nombre = item.trabajador_nombre || 'Sin nombre';
+                                            const initial = nombre.charAt(0).toUpperCase();
+                                            return (
+                                                <tr key={item.id} className="hover:bg-blue-50/30 transition-colors">
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0">
+                                                                {initial}
+                                                            </div>
+                                                            <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
                                                         </div>
-                                                        <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="text-sm text-gray-600">
-                                                    {item.trabajador_tipo_documento || '-'}
-                                                </TableCell>
-                                                <TableCell className="text-sm text-gray-600">
-                                                    {item.trabajador_documento || '-'}
-                                                </TableCell>
-                                                <TableCell className="text-sm text-gray-600 flex items-center gap-2">
-                                                    <FileText className="h-3 w-3 text-gray-400" />
-                                                    {item.empresa || '-'}
-                                                </TableCell>
-                                                <TableCell className="text-sm text-gray-500">
-                                                    {item.identificacion?.fecha_valoracion?.split('T')[0] || item.fecha_creacion?.split('T')[0] || '-'}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Badge
-                                                        variant="secondary"
-                                                        className={`font-medium rounded-full px-3 py-0.5 ${item.estado === 'completada'
-                                                            ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                                                            : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
-                                                            }`}
-                                                    >
-                                                        {item.estado === 'completada' ? 'Completado' : 'Borrador'}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <div className="flex items-center justify-end gap-1">
-                                                        <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}`}>
-                                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
-                                                                <Eye className="h-4 w-4" />
-                                                            </Button>
-                                                        </Link>
-                                                        {(isAdminOrSupervisor || item.created_by === user?.id) && (
-                                                            <>
-                                                                <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}/editar`}>
-                                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50">
-                                                                        <Edit className="h-4 w-4" />
-                                                                    </Button>
-                                                                </Link>
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    size="icon"
-                                                                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                                                    onClick={() => setDeleteModal({ isOpen: true, id: item.id })}
-                                                                >
-                                                                    <Trash2 className="h-4 w-4" />
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                        {item.trabajador_tipo_documento || '-'}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                                        {item.trabajador_documento || '-'}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                            <FileText className="h-3.5 w-3.5 text-gray-400" />
+                                                            {item.empresa || '-'}
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {item.identificacion?.fecha_valoracion?.split('T')[0] || item.fecha_creacion?.split('T')[0] || '-'}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className={`font-medium rounded-full px-2.5 py-0.5 ${item.estado === 'completada'
+                                                                ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
+                                                                }`}
+                                                        >
+                                                            {item.estado === 'completada' ? 'Completado' : 'Borrador'}
+                                                        </Badge>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <div className="flex items-center justify-end gap-1">
+                                                            <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}`}>
+                                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
+                                                                    <Eye className="h-4 w-4" />
                                                                 </Button>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })
-                                )}
-                            </TableBody>
-                        </Table>
+                                                            </Link>
+                                                            {(isAdminOrSupervisor || item.created_by === user?.id) && (
+                                                                <>
+                                                                    <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}/editar`}>
+                                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg">
+                                                                            <Edit className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </Link>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg"
+                                                                        onClick={() => setDeleteModal({ isOpen: true, id: item.id })}
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Pagination */}
+                        {!loading && analisis.length > 0 && totalPages > 1 && (
+                            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                                <div className="text-sm text-gray-500">
+                                    Página {currentPage} de {totalPages}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                        className="border-gray-200 rounded-lg"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                    </Button>
+                                    <span className="text-sm text-gray-700 px-2">
+                                        {currentPage} / {totalPages}
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages}
+                                        className="border-gray-200 rounded-lg"
+                                    >
+                                        <ChevronRight className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Pagination - Keep existing logic but maybe style it a bit? Logic is fine */}
-                    {totalPages > 1 && (
-                        <div className="flex items-center justify-center gap-2 mt-4">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                                disabled={currentPage === 1}
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <span className="text-sm text-gray-600">
-                                Página {currentPage} de {totalPages}
-                            </span>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                                disabled={currentPage === totalPages}
-                            >
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    )}
-
-                    {/* Delete Confirmation Modal - Force Portal if needed or check Dialog structure */}
+                    {/* Delete Confirmation Modal */}
                     <Dialog open={deleteModal.isOpen} onOpenChange={(open) => !open && setDeleteModal({ isOpen: false, id: null })}>
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle className="flex items-center gap-2 text-red-600">
-                                    <Activity className="h-5 w-5" />
-                                    ¿Eliminar análisis?
-                                </DialogTitle>
-                                <DialogDescription>
-                                    Esta acción no se puede deshacer. Se eliminarán permanentemente todos los datos asociados a este análisis.
-                                </DialogDescription>
+                                <div className="flex items-center gap-3">
+                                    <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+                                        <AlertTriangle className="h-6 w-6 text-red-600" />
+                                    </div>
+                                    <div>
+                                        <DialogTitle>¿Eliminar análisis?</DialogTitle>
+                                        <DialogDescription>
+                                            Esta acción no se puede deshacer. Se eliminarán permanentemente todos los datos asociados.
+                                        </DialogDescription>
+                                    </div>
+                                </div>
                             </DialogHeader>
-                            <div className="flex justify-end gap-3 mt-6">
-                                <Button variant="outline" onClick={() => setDeleteModal({ isOpen: false, id: null })}>
+                            <DialogFooter className="gap-2 sm:gap-0 mt-2">
+                                <Button variant="outline" onClick={() => setDeleteModal({ isOpen: false, id: null })} className="rounded-xl border-gray-200">
                                     Cancelar
                                 </Button>
-                                <Button
-                                    className="bg-red-600 hover:bg-red-700 text-white"
-                                    onClick={handleDelete}
-                                >
+                                <Button className="bg-red-600 hover:bg-red-700 text-white rounded-xl" onClick={handleDelete}>
                                     Eliminar
                                 </Button>
-                            </div>
+                            </DialogFooter>
                         </DialogContent>
                     </Dialog>
                 </div>

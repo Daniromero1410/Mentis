@@ -20,6 +20,9 @@ import {
   ClipboardList,
   FileText,
   AlertTriangle,
+  CheckCircle2,
+  Clock,
+  ListFilter,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -173,242 +176,247 @@ export default function ValoracionesPage() {
 
   const totalPages = Math.ceil(total / limit);
 
+  const completadas = valoraciones.filter(v => v.estado.toLowerCase() === 'completada').length;
+  const borradores = valoraciones.filter(v => v.estado.toLowerCase() === 'borrador').length;
+
   return (
     <ModuleGuard requiredModule="valoraciones">
       <DashboardLayout>
-        <div className="p-6 space-y-6">
+        <div className="space-y-6">
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <ClipboardList className="w-8 h-8 text-indigo-500" />
-                Valoraciones Psicológicas
-              </h1>
-              <p className="text-gray-500 mt-1">
-                Gestiona las valoraciones psicológicas de los trabajadores
-              </p>
+          <div className="flex items-start justify-between anim-fade-in-up">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                <ClipboardList className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Valoraciones Psicológicas</h1>
+                <p className="text-sm text-gray-500 mt-0.5">Gestiona las valoraciones psicológicas de los trabajadores</p>
+              </div>
             </div>
             <Link href="/dashboard/valoraciones/nueva">
-              <Button className="bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/25">
-                <Plus className="mr-2 h-4 w-4" />
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2">
+                <Plus className="h-4 w-4" />
                 Nueva Valoración
               </Button>
             </Link>
           </div>
 
-          {/* Filters */}
-          <Card className="border-gray-200">
-            <CardContent className="p-4">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                    <Input
-                      placeholder="Buscar por nombre, identificación o empresa..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      className="pl-10 bg-white border-gray-200"
-                    />
-                  </div>
-                </div>
-                <div className="w-full md:w-48">
-                  <Select value={estadoFilter} onValueChange={(value) => { setEstadoFilter(value); setPage(1); }}>
-                    <SelectTrigger className="bg-white border-gray-200">
-                      <Filter className="mr-2 h-4 w-4" />
-                      <SelectValue placeholder="Todos" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="todos">Todos</SelectItem>
-                      <SelectItem value="borrador">Borrador</SelectItem>
-                      <SelectItem value="completada">Completada</SelectItem>
-                      <SelectItem value="revisada">En Revisión</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button
-                  onClick={handleSearch}
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white"
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 anim-fade-in-up delay-1">
+            <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                <ListFilter className="h-5 w-5 text-blue-600" />
               </div>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{total}</p>
+                <p className="text-xs text-gray-500">Total</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{completadas}</p>
+                <p className="text-xs text-gray-500">Completadas</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                <Clock className="h-5 w-5 text-gray-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">{borradores}</p>
+                <p className="text-xs text-gray-500">Borradores</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-4 anim-fade-in-up delay-2">
+            <div className="flex flex-col md:flex-row gap-3">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Buscar por nombre, identificación o empresa..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="pl-10 bg-gray-50 border-gray-200 rounded-xl"
+                />
+              </div>
+              <div className="w-full md:w-44">
+                <Select value={estadoFilter} onValueChange={(value) => { setEstadoFilter(value); setPage(1); }}>
+                  <SelectTrigger className="bg-gray-50 border-gray-200 rounded-xl">
+                    <Filter className="mr-2 h-4 w-4 text-gray-400" />
+                    <SelectValue placeholder="Estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="borrador">Borrador</SelectItem>
+                    <SelectItem value="completada">Completada</SelectItem>
+                    <SelectItem value="revisada">En Revisión</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                onClick={handleSearch}
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
 
           {/* Table */}
-          <Card className="border-gray-200">
-            <CardContent className="p-0">
-              {loading ? (
-                <div className="flex items-center justify-center h-64">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-3">
+            {loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="relative w-12 h-12">
+                    <div className="w-12 h-12 rounded-full border-4 border-blue-500/20"></div>
+                    <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                  </div>
+                  <p className="text-sm text-gray-500 animate-pulse">Cargando valoraciones...</p>
                 </div>
-              ) : valoraciones.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                  <ClipboardList className="h-16 w-16 mb-4 opacity-20" />
-                  <p className="text-lg font-medium">No hay valoraciones</p>
-                  <p className="text-sm">Crea una nueva valoración para comenzar</p>
+              </div>
+            ) : valoraciones.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
+                  <ClipboardList className="h-8 w-8 text-blue-300" />
                 </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50 border-b border-gray-200">
-                      <tr>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Trabajador
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Documento
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Empresa
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Fecha
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Estado
-                        </th>
-                        <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                          Acciones
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-100">
-                      {valoraciones.map((valoracion) => (
-                        <tr
-                          key={valoracion.id}
-                          className="hover:bg-gray-50 transition-colors"
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-3">
-                              <div className="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                {valoracion.trabajador_nombre
-                                  ? valoracion.trabajador_nombre.charAt(0).toUpperCase()
-                                  : '?'}
-                              </div>
-                              <span className="text-sm font-medium text-gray-900">
-                                {valoracion.trabajador_nombre || 'Sin nombre'}
-                              </span>
+                <p className="text-base font-semibold text-gray-700">No hay valoraciones</p>
+                <p className="text-sm text-gray-400 mt-1 mb-4">Crea una nueva valoración para comenzar</p>
+                <Link href="/dashboard/valoraciones/nueva">
+                  <Button variant="outline" className="rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50 gap-2">
+                    <Plus className="h-4 w-4" />
+                    Nueva Valoración
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50/80 border-b border-gray-100">
+                    <tr>
+                      <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Trabajador</th>
+                      <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Documento</th>
+                      <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Empresa</th>
+                      <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
+                      <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
+                      <th className="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {valoraciones.map((valoracion) => (
+                      <tr key={valoracion.id} className="hover:bg-blue-50/30 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 h-9 w-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                              {valoracion.trabajador_nombre
+                                ? valoracion.trabajador_nombre.charAt(0).toUpperCase()
+                                : '?'}
                             </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600">
-                              {valoracion.trabajador_documento || 'Sin documento'}
+                            <span className="text-sm font-semibold text-gray-900 uppercase">
+                              {valoracion.trabajador_nombre || 'Sin nombre'}
                             </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <FileText className="h-4 w-4 text-gray-400" />
-                              {valoracion.empresa || 'Sin empresa'}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600">
-                              {formatDate(valoracion.fecha_valoracion || valoracion.created_at)}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${estadoBadgeColor(
-                                valoracion.estado
-                              )}`}
-                            >
-                              {getEstadoLabel(valoracion.estado)}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center justify-center gap-1">
-                              {/* Ver */}
-                              <Link href={`/dashboard/valoraciones/nueva?id=${valoracion.id}&modo=ver`}>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-blue-100 text-blue-600"
-                                  title="Ver detalles"
-                                >
-                                  <Eye className="h-4 w-4" />
-                                </Button>
-                              </Link>
-
-                              {/* Editar */}
-                              <Link href={`/dashboard/valoraciones/nueva?id=${valoracion.id}&modo=editar`}>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-green-100 text-green-600"
-                                  title="Editar valoración"
-                                >
-                                  <Pencil className="h-4 w-4" />
-                                </Button>
-                              </Link>
-
-                              {/* Descargar PDF (solo para completadas) */}
-                              {valoracion.estado.toLowerCase() === 'completada' && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleDownloadPDF(valoracion.id, valoracion.trabajador_documento)}
-                                  className="h-8 w-8 p-0 hover:bg-purple-100 text-purple-600"
-                                  title="Descargar PDF"
-                                >
-                                  <Download className="h-4 w-4" />
-                                </Button>
-                              )}
-
-                              {/* Eliminar */}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="text-sm text-gray-600">
+                            {valoracion.trabajador_documento || 'Sin documento'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <FileText className="h-3.5 w-3.5 text-gray-400" />
+                            {valoracion.empresa || 'Sin empresa'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="text-sm text-gray-500">
+                            {formatDate(valoracion.fecha_valoracion || valoracion.created_at)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${estadoBadgeColor(valoracion.estado)}`}>
+                            {getEstadoLabel(valoracion.estado)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center justify-center gap-1">
+                            <Link href={`/dashboard/valoraciones/nueva?id=${valoracion.id}&modo=ver`}>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-blue-100 text-blue-600 rounded-lg" title="Ver detalles">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                            <Link href={`/dashboard/valoraciones/nueva?id=${valoracion.id}&modo=editar`}>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-green-100 text-green-600 rounded-lg" title="Editar valoración">
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                            {valoracion.estado.toLowerCase() === 'completada' && (
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => openDeleteDialog(valoracion)}
-                                className="h-8 w-8 p-0 hover:bg-red-100 text-red-500"
-                                title="Eliminar"
+                                onClick={() => handleDownloadPDF(valoracion.id, valoracion.trabajador_documento)}
+                                className="h-8 w-8 p-0 hover:bg-purple-100 text-purple-600 rounded-lg"
+                                title="Descargar PDF"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Download className="h-4 w-4" />
                               </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => openDeleteDialog(valoracion)}
+                              className="h-8 w-8 p-0 hover:bg-red-100 text-red-500 rounded-lg"
+                              title="Eliminar"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-              {/* Pagination */}
-              {!loading && valoraciones.length > 0 && (
-                <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                  <div className="text-sm text-gray-500">
-                    Mostrando {(page - 1) * limit + 1} a {Math.min(page * limit, total)} de {total}{' '}
-                    resultados
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setPage(page - 1)}
-                      disabled={page === 1}
-                      className="border-gray-200"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <div className="flex items-center gap-2 px-3 text-sm text-gray-700">
-                      Página {page} de {totalPages || 1}
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setPage(page + 1)}
-                      disabled={page >= totalPages}
-                      className="border-gray-200"
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
+            {/* Pagination */}
+            {!loading && valoraciones.length > 0 && (
+              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                <div className="text-sm text-gray-500">
+                  Mostrando {(page - 1) * limit + 1}–{Math.min(page * limit, total)} de {total} resultados
                 </div>
-              )}
-            </CardContent>
-          </Card>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage(page - 1)}
+                    disabled={page === 1}
+                    className="border-gray-200 rounded-lg"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm text-gray-700 px-2">
+                    Página {page} de {totalPages || 1}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage(page + 1)}
+                    disabled={page >= totalPages}
+                    className="border-gray-200 rounded-lg"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Delete Confirmation Modal */}
           <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
@@ -420,9 +428,7 @@ export default function ValoracionesPage() {
                   </div>
                   <div>
                     <DialogTitle>Eliminar Valoración Psicológica</DialogTitle>
-                    <DialogDescription>
-                      Esta acción no se puede deshacer
-                    </DialogDescription>
+                    <DialogDescription>Esta acción no se puede deshacer</DialogDescription>
                   </div>
                 </div>
               </DialogHeader>
@@ -436,19 +442,10 @@ export default function ValoracionesPage() {
                 </p>
               </div>
               <DialogFooter className="gap-2 sm:gap-0">
-                <Button
-                  variant="outline"
-                  onClick={() => setDeleteDialogOpen(false)}
-                  disabled={deleting}
-                  className="border-gray-200"
-                >
+                <Button variant="outline" onClick={() => setDeleteDialogOpen(false)} disabled={deleting} className="border-gray-200 rounded-xl">
                   Cancelar
                 </Button>
-                <Button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
+                <Button onClick={handleDelete} disabled={deleting} className="bg-red-600 hover:bg-red-700 text-white rounded-xl">
                   {deleting ? (
                     <div className="flex items-center gap-2">
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
@@ -469,5 +466,3 @@ export default function ValoracionesPage() {
     </ModuleGuard>
   );
 }
-
-

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -116,7 +115,7 @@ export default function UsuariosPage() {
             nombre: usuario.nombre,
             apellido: usuario.apellido,
             rol: usuario.rol,
-            password: '', // No mostramos la contraseña
+            password: '',
             acceso_valoraciones: usuario.acceso_valoraciones ?? false,
             acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo ?? false,
             acceso_formatos_to: usuario.acceso_formatos_to ?? false,
@@ -132,7 +131,6 @@ export default function UsuariosPage() {
     };
 
     const handleSave = async () => {
-        // Validaciones
         if (!formData.nombre.trim() || !formData.apellido.trim()) {
             toast.error('Nombre y apellido son requeridos');
             return;
@@ -149,7 +147,6 @@ export default function UsuariosPage() {
         try {
             setSaving(true);
             if (selectedUsuario) {
-                // Actualizar
                 await api.put(`/usuarios/${selectedUsuario.id}`, {
                     nombre: formData.nombre,
                     apellido: formData.apellido,
@@ -163,7 +160,6 @@ export default function UsuariosPage() {
                 });
                 toast.success('Usuario actualizado correctamente');
             } else {
-                // Crear
                 await api.post('/usuarios/', {
                     email: formData.email,
                     nombre: formData.nombre,
@@ -224,190 +220,192 @@ export default function UsuariosPage() {
         );
     };
 
+    const activos = usuarios.filter(u => u.activo).length;
+    const inactivos = usuarios.filter(u => !u.activo).length;
+
     return (
         <DashboardLayout>
             <div className="space-y-6">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                            <Users className="h-8 w-8 text-indigo-500" />
-                            Gestión de Usuarios
-                        </h1>
-                        <p className="text-gray-600 mt-1">
-                            Administre los usuarios y sus permisos de acceso
-                        </p>
+                <div className="flex items-start justify-between anim-fade-in-up">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                            <Users className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900">Gestión de Usuarios</h1>
+                            <p className="text-sm text-gray-500 mt-0.5">Administra los usuarios y sus permisos de acceso</p>
+                        </div>
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="gap-2 bg-indigo-500 hover:bg-indigo-600 text-white"
+                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2"
                     >
                         <Plus className="h-4 w-4" />
                         Nuevo Usuario
                     </Button>
                 </div>
 
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-4 anim-fade-in-up delay-1">
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                            <Users className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold text-gray-900">{usuarios.length}</p>
+                            <p className="text-xs text-gray-500">Total Usuarios</p>
+                        </div>
+                    </div>
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                            <CheckCircle className="h-5 w-5 text-green-600" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold text-gray-900">{activos}</p>
+                            <p className="text-xs text-gray-500">Activos</p>
+                        </div>
+                    </div>
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+                            <XCircle className="h-5 w-5 text-red-500" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold text-gray-900">{inactivos}</p>
+                            <p className="text-xs text-gray-500">Inactivos</p>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Search */}
-                <form onSubmit={(e) => e.preventDefault()} autoComplete="off" className="relative max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                        id="search_query_safe"
-                        name="search_query_safe"
-                        placeholder="Buscar por nombre o email..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="pl-10"
-                        autoComplete="off"
-                        data-lpignore="true" // Agnostic attribute for LastPass/others
-                    />
-                </form>
+                <div className="anim-fade-in-up delay-2">
+                    <form onSubmit={(e) => e.preventDefault()} autoComplete="off" className="relative max-w-md">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                            id="search_query_safe"
+                            name="search_query_safe"
+                            placeholder="Buscar por nombre o email..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="pl-10 bg-white border-gray-200 rounded-xl"
+                            autoComplete="off"
+                            data-lpignore="true"
+                        />
+                    </form>
+                </div>
 
                 {/* Users Table */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Users className="h-5 w-5" />
-                            Usuarios ({filteredUsuarios.length})
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                        {loading ? (
-                            <div className="text-center py-12">
-                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-500 mx-auto"></div>
-                                <p className="mt-3 text-gray-500">Cargando usuarios...</p>
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-3">
+                    <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                        <Users className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm font-semibold text-gray-700">Usuarios ({filteredUsuarios.length})</span>
+                    </div>
+                    {loading ? (
+                        <div className="flex items-center justify-center h-64">
+                            <div className="flex flex-col items-center gap-3">
+                                <div className="relative w-12 h-12">
+                                    <div className="w-12 h-12 rounded-full border-4 border-blue-500/20"></div>
+                                    <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                                </div>
+                                <p className="text-sm text-gray-500 animate-pulse">Cargando usuarios...</p>
                             </div>
-                        ) : filteredUsuarios.length === 0 ? (
-                            <div className="text-center py-12 text-gray-500">
-                                <Users className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                                No se encontraron usuarios
+                        </div>
+                    ) : filteredUsuarios.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-48 text-gray-500">
+                            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-3">
+                                <Users className="h-7 w-7 text-blue-300" />
                             </div>
-                        ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full border-collapse">
-                                    <thead>
-                                        <tr className="bg-gray-50">
-                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
-                                                Usuario
-                                            </th>
-                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
-                                                Rol
-                                            </th>
-                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
-                                                Acceso a Módulos
-                                            </th>
-                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
-                                                Estado
-                                            </th>
-                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
-                                                Acciones
-                                            </th>
+                            <p className="text-sm font-medium text-gray-700">No se encontraron usuarios</p>
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full border-collapse">
+                                <thead>
+                                    <tr className="bg-gray-50/80 border-b border-gray-100">
+                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Usuario</th>
+                                        <th className="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Rol</th>
+                                        <th className="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Acceso a Módulos</th>
+                                        <th className="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
+                                        <th className="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100">
+                                    {filteredUsuarios.map((usuario) => (
+                                        <tr key={usuario.id} className="hover:bg-blue-50/30 transition-colors">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+                                                        {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-semibold text-gray-900 text-sm">
+                                                            {usuario.nombre} {usuario.apellido}
+                                                        </p>
+                                                        <p className="text-xs text-gray-500">{usuario.email}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {getRolBadge(usuario.rol)}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-center gap-3">
+                                                    <div title="Valoraciones Psicológicas" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_valoraciones ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                        <ClipboardList className="h-3.5 w-3.5" />
+                                                        <span className="hidden sm:inline">Val.</span>
+                                                    </div>
+                                                    <div title="Pruebas de Trabajo" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_pruebas_trabajo ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                        <Briefcase className="h-3.5 w-3.5" />
+                                                        <span className="hidden sm:inline">P.T.</span>
+                                                    </div>
+                                                    <div title="Formatos TO" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_formatos_to ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                        <FileText className="h-3.5 w-3.5" />
+                                                        <span className="hidden sm:inline">F.TO</span>
+                                                    </div>
+                                                    <div title="Análisis Exigencias Mental" className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_analisis_exigencias_mental ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                        <Activity className="h-3.5 w-3.5" />
+                                                        <span className="hidden sm:inline">A.E.M</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-center">
+                                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${usuario.activo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                    {usuario.activo ? (
+                                                        <><CheckCircle className="h-3.5 w-3.5" /> Activo</>
+                                                    ) : (
+                                                        <><XCircle className="h-3.5 w-3.5" /> Inactivo</>
+                                                    )}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-center gap-1">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleOpenEdit(usuario)}
+                                                        className="h-9 w-9 p-0 rounded-lg hover:bg-blue-100 text-blue-600"
+                                                        title="Editar usuario"
+                                                    >
+                                                        <Pencil className="h-4 w-4" />
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleOpenDelete(usuario)}
+                                                        className="h-9 w-9 p-0 rounded-lg hover:bg-red-100 text-red-600"
+                                                        title="Eliminar usuario"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-200">
-                                        {filteredUsuarios.map((usuario, index) => (
-                                            <tr
-                                                key={usuario.id}
-                                                className={`transition-colors hover:bg-orange-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                                                    }`}
-                                            >
-                                                <td className="px-6 py-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                                                            {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-semibold text-gray-900">
-                                                                {usuario.nombre} {usuario.apellido}
-                                                            </p>
-                                                            <p className="text-sm text-gray-500">{usuario.email}</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    {getRolBadge(usuario.rol)}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <div className="flex items-center justify-center gap-4">
-                                                        <div className="flex items-center gap-2" title="Valoraciones Psicológicas">
-                                                            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_valoraciones
-                                                                ? 'bg-green-100 text-green-700'
-                                                                : 'bg-gray-100 text-gray-400'
-                                                                }`}>
-                                                                <ClipboardList className="h-3.5 w-3.5" />
-                                                                <span className="hidden sm:inline">Val.</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-2" title="Pruebas de Trabajo">
-                                                            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_pruebas_trabajo
-                                                                ? 'bg-blue-100 text-blue-700'
-                                                                : 'bg-gray-100 text-gray-400'
-                                                                }`}>
-                                                                <Briefcase className="h-3.5 w-3.5" />
-                                                                <span className="hidden sm:inline">P.T.</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-2" title="Formatos TO">
-                                                            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_formatos_to
-                                                                ? 'bg-purple-100 text-purple-700'
-                                                                : 'bg-gray-100 text-gray-400'
-                                                                }`}>
-                                                                <FileText className="h-3.5 w-3.5" />
-                                                                <span className="hidden sm:inline">F.TO</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-2" title="Analisis Exigencias Mental">
-                                                            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_analisis_exigencias_mental
-                                                                ? 'bg-yellow-100 text-yellow-700'
-                                                                : 'bg-gray-100 text-gray-400'
-                                                                }`}>
-                                                                <Activity className="h-3.5 w-3.5" />
-                                                                <span className="hidden sm:inline">A.E.M</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 text-center">
-                                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${usuario.activo
-                                                        ? 'bg-green-100 text-green-700'
-                                                        : 'bg-red-100 text-red-700'
-                                                        }`}>
-                                                        {usuario.activo ? (
-                                                            <><CheckCircle className="h-3.5 w-3.5" /> Activo</>
-                                                        ) : (
-                                                            <><XCircle className="h-3.5 w-3.5" /> Inactivo</>
-                                                        )}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <div className="flex items-center justify-center gap-1">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => handleOpenEdit(usuario)}
-                                                            className="h-9 w-9 p-0 rounded-lg hover:bg-blue-100 text-blue-600"
-                                                            title="Editar usuario"
-                                                        >
-                                                            <Pencil className="h-4 w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => handleOpenDelete(usuario)}
-                                                            className="h-9 w-9 p-0 rounded-lg hover:bg-red-100 text-red-600"
-                                                            title="Eliminar usuario"
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                        </Button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Modal Crear/Editar Usuario */}
@@ -426,7 +424,6 @@ export default function UsuariosPage() {
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
-                        {/* Nombre y Apellido */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="nombre">Nombre</Label>
@@ -448,7 +445,6 @@ export default function UsuariosPage() {
                             </div>
                         </div>
 
-                        {/* Email */}
                         <div className="space-y-2">
                             <Label htmlFor="email" className="flex items-center gap-2">
                                 <Mail className="h-4 w-4" />
@@ -467,7 +463,6 @@ export default function UsuariosPage() {
                             )}
                         </div>
 
-                        {/* Contraseña */}
                         <div className="space-y-2">
                             <Label htmlFor="password" className="flex items-center gap-2">
                                 <Lock className="h-4 w-4" />
@@ -482,76 +477,52 @@ export default function UsuariosPage() {
                             />
                         </div>
 
-                        {/* Rol */}
                         <div className="space-y-2">
                             <Label>Rol</Label>
                             <div className="grid grid-cols-4 gap-2">
                                 <button
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'psicologo' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'psicologo'
-                                        ? 'border-green-500 bg-green-50'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                        }`}
+                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'psicologo' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'}`}
                                 >
                                     <User className={`h-5 w-5 ${formData.rol === 'psicologo' ? 'text-green-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'psicologo' ? 'text-green-700' : 'text-gray-600'}`}>
-                                        Psicólogo
-                                    </span>
+                                    <span className={`text-xs font-medium ${formData.rol === 'psicologo' ? 'text-green-700' : 'text-gray-600'}`}>Psicólogo</span>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'terapeuta_ocupacional' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'terapeuta_ocupacional'
-                                        ? 'border-teal-500 bg-teal-50'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                        }`}
+                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'terapeuta_ocupacional' ? 'border-teal-500 bg-teal-50' : 'border-gray-200 hover:border-gray-300'}`}
                                 >
                                     <Briefcase className={`h-5 w-5 ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-700' : 'text-gray-600'}`}>
-                                        T. Ocupacional
-                                    </span>
+                                    <span className={`text-xs font-medium ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-700' : 'text-gray-600'}`}>T. Ocupacional</span>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'supervisor' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'supervisor'
-                                        ? 'border-blue-500 bg-blue-50'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                        }`}
+                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'supervisor' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
                                 >
                                     <ShieldCheck className={`h-5 w-5 ${formData.rol === 'supervisor' ? 'text-blue-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'supervisor' ? 'text-blue-700' : 'text-gray-600'}`}>
-                                        Supervisor
-                                    </span>
+                                    <span className={`text-xs font-medium ${formData.rol === 'supervisor' ? 'text-blue-700' : 'text-gray-600'}`}>Supervisor</span>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'admin' })}
-                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'admin'
-                                        ? 'border-purple-500 bg-purple-50'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                        }`}
+                                    className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'admin' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'}`}
                                 >
                                     <Shield className={`h-5 w-5 ${formData.rol === 'admin' ? 'text-purple-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'admin' ? 'text-purple-700' : 'text-gray-600'}`}>
-                                        Admin
-                                    </span>
+                                    <span className={`text-xs font-medium ${formData.rol === 'admin' ? 'text-purple-700' : 'text-gray-600'}`}>Admin</span>
                                 </button>
                             </div>
                         </div>
 
-                        {/* Acceso a Módulos */}
                         <div className="space-y-3">
                             <Label>Acceso a Módulos</Label>
-                            <div className="space-y-2 rounded-lg border p-3">
+                            <div className="space-y-2 rounded-xl border border-gray-200 p-3">
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
                                         id="acceso_valoraciones"
                                         checked={formData.acceso_valoraciones}
-                                        onCheckedChange={(checked) =>
-                                            setFormData({ ...formData, acceso_valoraciones: !!checked })
-                                        }
+                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_valoraciones: !!checked })}
                                     />
                                     <label htmlFor="acceso_valoraciones" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <ClipboardList className="h-4 w-4 text-green-600" />
@@ -562,9 +533,7 @@ export default function UsuariosPage() {
                                     <Checkbox
                                         id="acceso_pruebas_trabajo"
                                         checked={formData.acceso_pruebas_trabajo}
-                                        onCheckedChange={(checked) =>
-                                            setFormData({ ...formData, acceso_pruebas_trabajo: !!checked })
-                                        }
+                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_pruebas_trabajo: !!checked })}
                                     />
                                     <label htmlFor="acceso_pruebas_trabajo" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <Briefcase className="h-4 w-4 text-blue-600" />
@@ -575,9 +544,7 @@ export default function UsuariosPage() {
                                     <Checkbox
                                         id="acceso_formatos_to"
                                         checked={formData.acceso_formatos_to}
-                                        onCheckedChange={(checked) =>
-                                            setFormData({ ...formData, acceso_formatos_to: !!checked })
-                                        }
+                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_formatos_to: !!checked })}
                                     />
                                     <label htmlFor="acceso_formatos_to" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <FileText className="h-4 w-4 text-teal-600" />
@@ -588,9 +555,7 @@ export default function UsuariosPage() {
                                     <Checkbox
                                         id="acceso_analisis_exigencias_mental"
                                         checked={formData.acceso_analisis_exigencias_mental}
-                                        onCheckedChange={(checked) =>
-                                            setFormData({ ...formData, acceso_analisis_exigencias_mental: !!checked })
-                                        }
+                                        onCheckedChange={(checked) => setFormData({ ...formData, acceso_analisis_exigencias_mental: !!checked })}
                                     />
                                     <label htmlFor="acceso_analisis_exigencias_mental" className="flex items-center gap-2 text-sm cursor-pointer">
                                         <Activity className="h-4 w-4 text-yellow-600" />
@@ -600,15 +565,12 @@ export default function UsuariosPage() {
                             </div>
                         </div>
 
-                        {/* Estado Activo */}
                         {selectedUsuario && (
                             <div className="flex items-center space-x-2">
                                 <Checkbox
                                     id="activo"
                                     checked={formData.activo}
-                                    onCheckedChange={(checked) =>
-                                        setFormData({ ...formData, activo: !!checked })
-                                    }
+                                    onCheckedChange={(checked) => setFormData({ ...formData, activo: !!checked })}
                                 />
                                 <label htmlFor="activo" className="text-sm cursor-pointer">
                                     Usuario activo
@@ -618,13 +580,13 @@ export default function UsuariosPage() {
                     </div>
 
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setModalOpen(false)}>
+                        <Button variant="outline" onClick={() => setModalOpen(false)} className="rounded-xl border-gray-200">
                             Cancelar
                         </Button>
                         <Button
                             onClick={handleSave}
                             disabled={saving}
-                            className="bg-indigo-500 hover:bg-indigo-600 text-white"
+                            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
                         >
                             {saving ? 'Guardando...' : selectedUsuario ? 'Guardar Cambios' : 'Crear Usuario'}
                         </Button>
@@ -649,11 +611,11 @@ export default function UsuariosPage() {
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)} className="rounded-xl border-gray-200">
                             Cancelar
                         </Button>
                         <Button
-                            className="bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/25"
+                            className="bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/25 rounded-xl"
                             onClick={handleDelete}
                         >
                             Eliminar
@@ -664,6 +626,3 @@ export default function UsuariosPage() {
         </DashboardLayout>
     );
 }
-
-
-
