@@ -144,9 +144,9 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                 </div>
                             </FormField>
 
-                            <div className="pt-6 border-t border-slate-100 dark:border-slate-700">
+                            <div className="pt-6 border-t border-slate-100">
                                 <div className="flex flex-col md:flex-row md:items-center gap-6">
-                                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 w-full md:w-auto md:mr-4 uppercase tracking-wide">¿Tiene calificación para PCL?</Label>
+                                    <Label className="text-sm font-semibold text-slate-700 w-full md:w-auto md:mr-4 uppercase tracking-wide">¿Tiene calificación para PCL?</Label>
 
                                     <div className="flex items-center gap-4">
                                         {[{ val: 'si', label: 'Sí' }, { val: 'no', label: 'No' }, { val: 'en_tramite', label: 'En trámite' }].map((opt) => (

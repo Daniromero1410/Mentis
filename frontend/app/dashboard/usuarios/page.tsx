@@ -209,10 +209,10 @@ export default function UsuariosPage() {
 
     const getRolBadge = (rol: string) => {
         const badges = {
-            admin: { label: 'Administrador', icon: Shield, color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
-            supervisor: { label: 'Supervisor', icon: ShieldCheck, color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-            psicologo: { label: 'Psicólogo', icon: User, color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
-            terapeuta_ocupacional: { label: 'Terapeuta Ocupacional', icon: Briefcase, color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400' },
+            admin: { label: 'Administrador', icon: Shield, color: 'bg-purple-100 text-purple-700' },
+            supervisor: { label: 'Supervisor', icon: ShieldCheck, color: 'bg-blue-100 text-blue-700' },
+            psicologo: { label: 'Psicólogo', icon: User, color: 'bg-green-100 text-green-700' },
+            terapeuta_ocupacional: { label: 'Terapeuta Ocupacional', icon: Briefcase, color: 'bg-teal-100 text-teal-700' },
         };
         const badge = badges[rol as keyof typeof badges] || badges.psicologo;
         const Icon = badge.icon;
@@ -230,11 +230,11 @@ export default function UsuariosPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                             <Users className="h-8 w-8 text-indigo-500" />
                             Gestión de Usuarios
                         </h1>
-                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                        <p className="text-gray-600 mt-1">
                             Administre los usuarios y sus permisos de acceso
                         </p>
                     </div>
@@ -285,29 +285,29 @@ export default function UsuariosPage() {
                             <div className="overflow-x-auto">
                                 <table className="w-full border-collapse">
                                     <thead>
-                                        <tr className="bg-gray-50 dark:bg-gray-800/50">
-                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-2 border-gray-200 dark:border-gray-700">
+                                        <tr className="bg-gray-50">
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
                                                 Usuario
                                             </th>
-                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-2 border-gray-200 dark:border-gray-700">
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
                                                 Rol
                                             </th>
-                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-2 border-gray-200 dark:border-gray-700">
+                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
                                                 Acceso a Módulos
                                             </th>
-                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-2 border-gray-200 dark:border-gray-700">
+                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
                                                 Estado
                                             </th>
-                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-2 border-gray-200 dark:border-gray-700">
+                                            <th className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-b-2 border-gray-200">
                                                 Acciones
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tbody className="divide-y divide-gray-200">
                                         {filteredUsuarios.map((usuario, index) => (
                                             <tr
                                                 key={usuario.id}
-                                                className={`transition-colors hover:bg-orange-50 dark:hover:bg-orange-900/10 ${index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/30'
+                                                className={`transition-colors hover:bg-orange-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
                                                     }`}
                                             >
                                                 <td className="px-6 py-4">
@@ -316,10 +316,10 @@ export default function UsuariosPage() {
                                                             {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
                                                         </div>
                                                         <div>
-                                                            <p className="font-semibold text-gray-900 dark:text-gray-100">
+                                                            <p className="font-semibold text-gray-900">
                                                                 {usuario.nombre} {usuario.apellido}
                                                             </p>
-                                                            <p className="text-sm text-gray-500 dark:text-gray-400">{usuario.email}</p>
+                                                            <p className="text-sm text-gray-500">{usuario.email}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -330,8 +330,8 @@ export default function UsuariosPage() {
                                                     <div className="flex items-center justify-center gap-4">
                                                         <div className="flex items-center gap-2" title="Valoraciones Psicológicas">
                                                             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_valoraciones
-                                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                                                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
+                                                                ? 'bg-green-100 text-green-700'
+                                                                : 'bg-gray-100 text-gray-400'
                                                                 }`}>
                                                                 <ClipboardList className="h-3.5 w-3.5" />
                                                                 <span className="hidden sm:inline">Val.</span>
@@ -339,8 +339,8 @@ export default function UsuariosPage() {
                                                         </div>
                                                         <div className="flex items-center gap-2" title="Pruebas de Trabajo">
                                                             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_pruebas_trabajo
-                                                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                                                                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
+                                                                ? 'bg-blue-100 text-blue-700'
+                                                                : 'bg-gray-100 text-gray-400'
                                                                 }`}>
                                                                 <Briefcase className="h-3.5 w-3.5" />
                                                                 <span className="hidden sm:inline">P.T.</span>
@@ -348,8 +348,8 @@ export default function UsuariosPage() {
                                                         </div>
                                                         <div className="flex items-center gap-2" title="Formatos TO">
                                                             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_formatos_to
-                                                                ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
-                                                                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
+                                                                ? 'bg-purple-100 text-purple-700'
+                                                                : 'bg-gray-100 text-gray-400'
                                                                 }`}>
                                                                 <FileText className="h-3.5 w-3.5" />
                                                                 <span className="hidden sm:inline">F.TO</span>
@@ -357,8 +357,8 @@ export default function UsuariosPage() {
                                                         </div>
                                                         <div className="flex items-center gap-2" title="Analisis Exigencias Mental">
                                                             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${usuario.acceso_analisis_exigencias_mental
-                                                                ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                                                                : 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500'
+                                                                ? 'bg-yellow-100 text-yellow-700'
+                                                                : 'bg-gray-100 text-gray-400'
                                                                 }`}>
                                                                 <Activity className="h-3.5 w-3.5" />
                                                                 <span className="hidden sm:inline">A.E.M</span>
@@ -368,8 +368,8 @@ export default function UsuariosPage() {
                                                 </td>
                                                 <td className="px-6 py-4 text-center">
                                                     <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${usuario.activo
-                                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                                        ? 'bg-green-100 text-green-700'
+                                                        : 'bg-red-100 text-red-700'
                                                         }`}>
                                                         {usuario.activo ? (
                                                             <><CheckCircle className="h-3.5 w-3.5" /> Activo</>
@@ -384,7 +384,7 @@ export default function UsuariosPage() {
                                                             variant="ghost"
                                                             size="sm"
                                                             onClick={() => handleOpenEdit(usuario)}
-                                                            className="h-9 w-9 p-0 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600"
+                                                            className="h-9 w-9 p-0 rounded-lg hover:bg-blue-100 text-blue-600"
                                                             title="Editar usuario"
                                                         >
                                                             <Pencil className="h-4 w-4" />
@@ -393,7 +393,7 @@ export default function UsuariosPage() {
                                                             variant="ghost"
                                                             size="sm"
                                                             onClick={() => handleOpenDelete(usuario)}
-                                                            className="h-9 w-9 p-0 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600"
+                                                            className="h-9 w-9 p-0 rounded-lg hover:bg-red-100 text-red-600"
                                                             title="Eliminar usuario"
                                                         >
                                                             <Trash2 className="h-4 w-4" />
@@ -490,12 +490,12 @@ export default function UsuariosPage() {
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'psicologo' })}
                                     className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'psicologo'
-                                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                                        ? 'border-green-500 bg-green-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <User className={`h-5 w-5 ${formData.rol === 'psicologo' ? 'text-green-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'psicologo' ? 'text-green-700 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                                    <span className={`text-xs font-medium ${formData.rol === 'psicologo' ? 'text-green-700' : 'text-gray-600'}`}>
                                         Psicólogo
                                     </span>
                                 </button>
@@ -503,12 +503,12 @@ export default function UsuariosPage() {
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'terapeuta_ocupacional' })}
                                     className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'terapeuta_ocupacional'
-                                        ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
-                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                                        ? 'border-teal-500 bg-teal-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <Briefcase className={`h-5 w-5 ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-700 dark:text-teal-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                                    <span className={`text-xs font-medium ${formData.rol === 'terapeuta_ocupacional' ? 'text-teal-700' : 'text-gray-600'}`}>
                                         T. Ocupacional
                                     </span>
                                 </button>
@@ -516,12 +516,12 @@ export default function UsuariosPage() {
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'supervisor' })}
                                     className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'supervisor'
-                                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                                        ? 'border-blue-500 bg-blue-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <ShieldCheck className={`h-5 w-5 ${formData.rol === 'supervisor' ? 'text-blue-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'supervisor' ? 'text-blue-700 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                                    <span className={`text-xs font-medium ${formData.rol === 'supervisor' ? 'text-blue-700' : 'text-gray-600'}`}>
                                         Supervisor
                                     </span>
                                 </button>
@@ -529,12 +529,12 @@ export default function UsuariosPage() {
                                     type="button"
                                     onClick={() => setFormData({ ...formData, rol: 'admin' })}
                                     className={`flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all ${formData.rol === 'admin'
-                                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                                        ? 'border-purple-500 bg-purple-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <Shield className={`h-5 w-5 ${formData.rol === 'admin' ? 'text-purple-600' : 'text-gray-400'}`} />
-                                    <span className={`text-xs font-medium ${formData.rol === 'admin' ? 'text-purple-700 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                                    <span className={`text-xs font-medium ${formData.rol === 'admin' ? 'text-purple-700' : 'text-gray-600'}`}>
                                         Admin
                                     </span>
                                 </button>

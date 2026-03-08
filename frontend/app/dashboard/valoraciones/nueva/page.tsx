@@ -818,7 +818,7 @@ export default function NuevaValoracionPage() {
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-indigo-500 mx-auto mb-4" />
-            <p className="text-gray-600 dark:text-gray-400">Cargando valoración...</p>
+            <p className="text-gray-600">Cargando valoración...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -829,10 +829,10 @@ export default function NuevaValoracionPage() {
     <DashboardLayout>
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-gray-900">
           {modoVista ? 'VER VALORACIÓN' : valoracionId ? 'EDITAR VALORACIÓN' : 'NUEVA VALORACIÓN'} DE PSICOLOGÍA PARA RECOMENDACIONES LABORALES
         </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+        <p className="text-sm text-gray-600 mt-2">
           {modoVista
             ? 'Visualización de la valoración psicológica. No se pueden realizar modificaciones.'
             : valoracionId
@@ -851,8 +851,8 @@ export default function NuevaValoracionPage() {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${currentStep === step.id
                   ? 'bg-indigo-500 text-white'
                   : currentStep > step.id
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                    : 'bg-gray-100 text-gray-500 dark:bg-[#333333] dark:text-[#b0b0b0]'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-gray-100 text-gray-500'
                   }`}
               >
                 {currentStep > step.id ? (
@@ -863,7 +863,7 @@ export default function NuevaValoracionPage() {
                 <span className="text-sm font-medium">{step.title}</span>
               </button>
               {index < steps.length - 1 && (
-                <div className={`w-8 h-0.5 mx-1 ${currentStep > step.id ? 'bg-green-500' : 'bg-gray-300 dark:bg-[#333333]'
+                <div className={`w-8 h-0.5 mx-1 ${currentStep > step.id ? 'bg-green-500' : 'bg-gray-300'
                   }`} />
               )}
             </div>
@@ -872,9 +872,9 @@ export default function NuevaValoracionPage() {
       </div>
 
       {/* Form Content */}
-      <Card className="border-gray-200 dark:border-[#333333] dark:bg-[#2a2a2a]">
-        <CardHeader className="bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-[#333333]">
-          <CardTitle className="text-gray-700 dark:text-white">
+      <Card className="border-gray-200">
+        <CardHeader className="bg-gray-50 border-b border-gray-200">
+          <CardTitle className="text-gray-700">
             {steps[currentStep - 1].title.toUpperCase()}
           </CardTitle>
         </CardHeader>
@@ -884,7 +884,7 @@ export default function NuevaValoracionPage() {
           {currentStep === 1 && (
             <div className="space-y-6">
               {/* Fecha de Valoración */}
-              <div className="p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
+              <div className="p-4 bg-gray-50 rounded-lg">
                 <Label className="text-sm font-semibold mb-3 block">FECHA DE VALORACIÓN:</Label>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
@@ -1407,7 +1407,7 @@ export default function NuevaValoracionPage() {
           {/* ============ PASO 3: HISTORIA OCUPACIONAL ============ */}
           {currentStep === 3 && (
             <div className="space-y-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+              <p className="text-sm text-gray-600 italic">
                 (Trabajos desempeñados, comenzando por el primero de su historia laboral)
               </p>
 
@@ -1415,17 +1415,17 @@ export default function NuevaValoracionPage() {
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-gray-100 dark:bg-slate-700">
-                      <th className="border border-gray-300 dark:border-slate-600 px-3 py-2 text-left text-sm font-semibold">Empresa</th>
-                      <th className="border border-gray-300 dark:border-slate-600 px-3 py-2 text-left text-sm font-semibold">Cargo - funciones / tareas</th>
-                      <th className="border border-gray-300 dark:border-slate-600 px-3 py-2 text-left text-sm font-semibold">Tiempo/duración</th>
-                      <th className="border border-gray-300 dark:border-slate-600 px-3 py-2 text-left text-sm font-semibold">Motivo de retiro</th>
+                    <tr className="bg-gray-100">
+                      <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Empresa</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Cargo - funciones / tareas</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Tiempo/duración</th>
+                      <th className="border border-gray-300 px-3 py-2 text-left text-sm font-semibold">Motivo de retiro</th>
                     </tr>
                   </thead>
                   <tbody>
                     {formData.historia_ocupacional.map((historia, index) => (
                       <tr key={index}>
-                        <td className="border border-gray-300 dark:border-slate-600 p-1">
+                        <td className="border border-gray-300 p-1">
                           <Input
                             className="border-0"
                             value={historia.empresa}
@@ -1433,7 +1433,7 @@ export default function NuevaValoracionPage() {
                             disabled={modoVista}
                           />
                         </td>
-                        <td className="border border-gray-300 dark:border-slate-600 p-1">
+                        <td className="border border-gray-300 p-1">
                           <Input
                             className="border-0"
                             value={historia.cargo_funciones_tareas}
@@ -1441,7 +1441,7 @@ export default function NuevaValoracionPage() {
                             disabled={modoVista}
                           />
                         </td>
-                        <td className="border border-gray-300 dark:border-slate-600 p-1">
+                        <td className="border border-gray-300 p-1">
                           <Input
                             className="border-0"
                             value={historia.tiempo_duracion}
@@ -1449,7 +1449,7 @@ export default function NuevaValoracionPage() {
                             disabled={modoVista}
                           />
                         </td>
-                        <td className="border border-gray-300 dark:border-slate-600 p-1">
+                        <td className="border border-gray-300 p-1">
                           <Input
                             className="border-0"
                             value={historia.motivo_retiro}
@@ -1488,7 +1488,7 @@ export default function NuevaValoracionPage() {
           {/* ============ PASO 4: ACTIVIDAD LABORAL ACTUAL ============ */}
           {currentStep === 4 && (
             <div className="space-y-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic mb-4">
+              <p className="text-sm text-gray-600 italic mb-4">
                 DESCRIPCIÓN ACTIVIDAD LABORAL ACTUAL * (antes del evento)
               </p>
 
@@ -1546,22 +1546,22 @@ export default function NuevaValoracionPage() {
           {/* ============ PASO 5: FACTORES DE RIESGO PSICOSOCIALES ============ */}
           {currentStep === 5 && (
             <div className="space-y-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-sm text-gray-600 mb-4">
                 FACTORES DE RIESGO PSICOSOCIALES - Califique cada factor según corresponda
               </p>
 
               {/* Alertas de Riesgo */}
               {alertasRiesgo.length > 0 && (
-                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-500 dark:border-red-700 rounded-lg p-4">
+                <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4">
                   <div className="flex items-start gap-3">
-                    <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                    <AlertTriangle className="h-6 w-6 text-red-600 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
-                      <h4 className="font-semibold text-red-800 dark:text-red-300 mb-2">
+                      <h4 className="font-semibold text-red-800 mb-2">
                         ⚠️ Alertas de Riesgo Detectadas
                       </h4>
                       <ul className="list-disc list-inside space-y-1">
                         {alertasRiesgo.map((alerta, idx) => (
-                          <li key={idx} className="text-red-700 dark:text-red-300 text-sm">
+                          <li key={idx} className="text-red-700 text-sm">
                             {alerta}
                           </li>
                         ))}
@@ -1572,16 +1572,16 @@ export default function NuevaValoracionPage() {
               )}
 
               {Object.entries(factoresRiesgo).map(([key, categoria]) => (
-                <div key={key} className="border border-gray-200 dark:border-[#333333] rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 dark:bg-[#1a1a1a] px-4 py-2 border-b border-gray-200 dark:border-[#333333]">
-                    <h4 className="font-semibold text-gray-700 dark:text-white text-sm">
+                <div key={key} className="border border-gray-200 rounded-lg overflow-hidden">
+                  <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
+                    <h4 className="font-semibold text-gray-700 text-sm">
                       {categoria.titulo}
                     </h4>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="bg-gray-50 dark:bg-[#1a1a1a]">
+                        <tr className="bg-gray-50">
                           <th className="text-left px-3 py-2 font-medium w-1/2">Factor</th>
                           <th className="text-center px-2 py-2 font-medium w-16">ALTO</th>
                           <th className="text-center px-2 py-2 font-medium w-16">MEDIO</th>
@@ -1592,8 +1592,8 @@ export default function NuevaValoracionPage() {
                       </thead>
                       <tbody>
                         {categoria.items.map((item, idx) => (
-                          <tr key={idx} className="border-t border-gray-100 dark:border-slate-700">
-                            <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{item}</td>
+                          <tr key={idx} className="border-t border-gray-100">
+                            <td className="px-3 py-2 text-gray-700">{item}</td>
                             {['alto', 'medio', 'bajo', 'na'].map((nivel) => (
                               <td key={nivel} className="text-center px-2 py-2">
                                 <input
@@ -1660,7 +1660,7 @@ export default function NuevaValoracionPage() {
                   )}
                 </div>
                 {!modoVista && formData.concepto_psicologico_final && (
-                  <div className="text-sm text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md mb-2">
+                  <div className="text-sm text-blue-600 bg-blue-50 p-3 rounded-md mb-2">
                     <strong>Nota:</strong> Si modificó los factores de riesgo, puede regenerar el concepto haciendo clic en el botón de arriba.
                   </div>
                 )}
@@ -1686,9 +1686,9 @@ export default function NuevaValoracionPage() {
               </div>
 
               {/* Firmas */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 pt-6 border-t border-gray-200">
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-700 dark:text-gray-300">Elaboró</h4>
+                  <h4 className="font-semibold text-gray-700">Elaboró</h4>
                   <FileUpload
                     value={formData.elaboro_firma}
                     onChange={(url) => updateField('elaboro_firma', url)}
@@ -1710,7 +1710,7 @@ export default function NuevaValoracionPage() {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-700 dark:text-gray-300">Revisión por Proveedor</h4>
+                  <h4 className="font-semibold text-gray-700">Revisión por Proveedor</h4>
                   <FileUpload
                     value={formData.reviso_firma}
                     onChange={(url) => updateField('reviso_firma', url)}
@@ -1734,7 +1734,7 @@ export default function NuevaValoracionPage() {
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
             <Button
               variant="outline"
               onClick={prevStep}
@@ -1817,15 +1817,15 @@ export default function NuevaValoracionPage() {
         }
       >
         <div className="space-y-4">
-          <div className="flex items-start gap-3 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-            <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-red-50 border border-red-200">
+            <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <h4 className="font-semibold text-red-800 dark:text-red-300 mb-2">
+              <h4 className="font-semibold text-red-800 mb-2">
                 Por favor complete los siguientes campos:
               </h4>
               <ul className="list-disc list-inside space-y-1">
                 {validationErrors.map((error, idx) => (
-                  <li key={idx} className="text-red-700 dark:text-red-300 text-sm">
+                  <li key={idx} className="text-red-700 text-sm">
                     {error}
                   </li>
                 ))}
@@ -1893,14 +1893,14 @@ export default function NuevaValoracionPage() {
         <div className="space-y-6 p-2">
           <div className="flex items-center justify-center py-6">
             <div className="flex flex-col items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
-                <Check className="h-10 w-10 text-green-600 dark:text-green-400" />
+              <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
+                <Check className="h-10 w-10 text-green-600" />
               </div>
               <div className="text-center max-w-md">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   ¡Valoración Completada!
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600">
                   El archivo de la valoración ha sido generado exitosamente
                 </p>
               </div>
@@ -1908,18 +1908,18 @@ export default function NuevaValoracionPage() {
           </div>
 
           <div className="flex justify-center">
-            <div className="p-5 rounded-lg border-2 border-indigo-500/20 bg-indigo-500/5 dark:bg-indigo-500/10 max-w-md w-full">
+            <div className="p-5 rounded-lg border-2 border-indigo-500/20 bg-indigo-500/5 max-w-md w-full">
               <div className="flex items-start gap-4">
                 <FileText className="h-10 w-10 text-indigo-500 flex-shrink-0 mt-1" />
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  <h4 className="font-semibold text-gray-900 mb-2">
                     Archivo PDF
                   </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                  <p className="text-sm text-gray-600 mb-3">
                     Documento profesional listo para imprimir y presentar
                   </p>
-                  <div className="p-2 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 break-all">
+                  <div className="p-2 bg-white rounded border border-gray-200">
+                    <p className="text-xs text-gray-600 break-all">
                       {downloadUrls?.pdf_filename}
                     </p>
                   </div>
@@ -1928,11 +1928,11 @@ export default function NuevaValoracionPage() {
             </div>
           </div>
 
-          <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+          <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
             <div className="flex items-start gap-3">
-              <Download className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <Download className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-blue-800 dark:text-blue-300">
+                <p className="text-sm text-blue-800">
                   <strong>Importante:</strong> El archivo queda guardado en el sistema y puede ser descargado nuevamente desde el listado de valoraciones.
                 </p>
               </div>

@@ -1,4 +1,4 @@
-Ôªø'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
@@ -80,7 +80,7 @@ export default function AnalisisExigenciaMentalPage() {
       setTotal(response.total || 0);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al cargar An√°lisis de Exigencias Mental');
+      toast.error('Error al cargar An·lisis de Exigencias Mental');
     } finally {
       setLoading(false);
     }
@@ -113,10 +113,10 @@ export default function AnalisisExigenciaMentalPage() {
       setDeleteDialogOpen(false);
       setaeToDelete(null);
       await fetchaes();
-      toast.success('An√°lisis eliminado correctamente');
+      toast.success('An·lisis eliminado correctamente');
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al eliminar el an√°lisis');
+      toast.error('Error al eliminar el an·lisis');
     } finally {
       setDeleting(false);
     }
@@ -135,7 +135,7 @@ export default function AnalisisExigenciaMentalPage() {
       );
 
       if (!response.ok) {
-        // Obtener el mensaje de error espec√≠fico del servidor
+        // Obtener el mensaje de error especÌfico del servidor
         const errorData = await response.json().catch(() => ({}));
         const errorMessage = errorData.detail || 'Error al descargar PDF';
         throw new Error(errorMessage);
@@ -145,7 +145,7 @@ export default function AnalisisExigenciaMentalPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      // Usar nombre del trabajador si est√° disponible
+      // Usar nombre del trabajador si est· disponible
       const nombreArchivo = ae.trabajador_nombre
         ? `Analisis_Exigencia_Mental_${ae.trabajador_nombre.replace(/\s+/g, '_')}.pdf`
         : `Analisis_Exigencia_Mental_${ae.id}.pdf`;
@@ -168,11 +168,11 @@ export default function AnalisisExigenciaMentalPage() {
   const estadoBadgeColor = (estado: string) => {
     switch (estado.toLowerCase()) {
       case 'completada':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+        return 'bg-green-100 text-green-700';
       case 'borrador':
-        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+        return 'bg-yellow-100 text-yellow-700';
       default:
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -192,41 +192,41 @@ export default function AnalisisExigenciaMentalPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                 <Briefcase className="w-8 h-8 text-violet-500" />
-                An√°lisis de Exigencias Mental
+                An·lisis de Exigencias Mental
               </h1>
-              <p className="text-gray-500 dark:text-gray-400 mt-1">
-                Gestiona los an√°lisis de exigencias mental y evaluaciones de riesgos psicosociales
+              <p className="text-gray-500 mt-1">
+                Gestiona los an·lisis de exigencias mental y evaluaciones de riesgos psicosociales
               </p>
             </div>
             <Link href="/dashboard/analisis-exigencias-mental/nueva">
               <Button className="bg-violet-500 hover:bg-violet-600 text-white shadow-lg shadow-violet-500/25">
                 <Plus className="mr-2 h-4 w-4" />
-                Nuevo An√°lisis
+                Nuevo An·lisis
               </Button>
             </Link>
           </div>
 
           {/* Filters */}
-          <Card className="border-gray-200 dark:border-[#333333]">
+          <Card className="border-gray-200">
             <CardContent className="p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                     <Input
-                      placeholder="Buscar por nombre, identificaci√≥n o empresa..."
+                      placeholder="Buscar por nombre, identificaciÛn o empresa..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="pl-10 bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                      className="pl-10 bg-white border-gray-200"
                     />
                   </div>
                 </div>
                 <div className="w-full md:w-48">
                   <Select value={estadoFilter} onValueChange={setEstadoFilter}>
-                    <SelectTrigger className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]">
+                    <SelectTrigger className="bg-white border-gray-200">
                       <Filter className="mr-2 h-4 w-4" />
                       <SelectValue placeholder="Estado" />
                     </SelectTrigger>
@@ -248,14 +248,14 @@ export default function AnalisisExigenciaMentalPage() {
           </Card>
 
           {/* Table */}
-          <Card className="border-gray-200 dark:border-[#333333]">
+          <Card className="border-gray-200">
             <CardContent className="p-0">
               {loading ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-500"></div>
                 </div>
               ) : aes.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
+                <div className="flex flex-col items-center justify-center h-64 text-gray-500">
                   <Briefcase className="h-16 w-16 mb-4 opacity-20" />
                   <p className="text-lg font-medium">No hay aes de trabajo</p>
                   <p className="text-sm">Crea una nueva ae para comenzar</p>
@@ -263,33 +263,33 @@ export default function AnalisisExigenciaMentalPage() {
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-[#333333]">
+                    <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Trabajador
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Documento
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Empresa
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Fecha
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Estado
                         </th>
-                        <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Acciones
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-[#2a2a2a] divide-y divide-gray-100 dark:divide-[#333333]">
+                    <tbody className="bg-white divide-y divide-gray-100">
                       {aes.map((ae) => (
                         <tr
                           key={ae.id}
-                          className="hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-colors"
+                          className="hover:bg-gray-50 transition-colors"
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-3">
@@ -298,24 +298,24 @@ export default function AnalisisExigenciaMentalPage() {
                                   ? ae.trabajador_nombre.charAt(0).toUpperCase()
                                   : '?'}
                               </div>
-                              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              <span className="text-sm font-medium text-gray-900">
                                 {ae.trabajador_nombre || 'Sin nombre'}
                               </span>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600 dark:text-gray-300">
+                            <span className="text-sm text-gray-600">
                               {ae.trabajador_identificacion || 'Sin documento'}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
                               <FileText className="h-4 w-4 text-gray-400" />
                               {ae.empresa || 'Sin empresa'}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600 dark:text-gray-300">
+                            <span className="text-sm text-gray-600">
                               {formatDate(ae.fecha_creacion)}
                             </span>
                           </td>
@@ -335,7 +335,7 @@ export default function AnalisisExigenciaMentalPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600"
+                                  className="h-8 w-8 p-0 hover:bg-blue-100 text-blue-600"
                                   title="Ver detalles"
                                 >
                                   <Eye className="h-4 w-4" />
@@ -348,7 +348,7 @@ export default function AnalisisExigenciaMentalPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600"
+                                  className="h-8 w-8 p-0 hover:bg-green-100 text-green-600"
                                   title="Editar ae"
                                 >
                                   <Pencil className="h-4 w-4" />
@@ -361,7 +361,7 @@ export default function AnalisisExigenciaMentalPage() {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleDownloadPDF(ae)}
-                                  className="h-8 w-8 p-0 hover:bg-purple-100 dark:hover:bg-purple-900/30 text-purple-600"
+                                  className="h-8 w-8 p-0 hover:bg-purple-100 text-purple-600"
                                   title="Descargar PDF"
                                 >
                                   <Download className="h-4 w-4" />
@@ -373,7 +373,7 @@ export default function AnalisisExigenciaMentalPage() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => openDeleteDialog(ae)}
-                                className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500"
+                                className="h-8 w-8 p-0 hover:bg-red-100 text-red-500"
                                 title="Eliminar"
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -389,8 +389,8 @@ export default function AnalisisExigenciaMentalPage() {
 
               {/* Pagination */}
               {!loading && aes.length > 0 && (
-                <div className="px-6 py-4 border-t border-gray-200 dark:border-[#333333] flex items-center justify-between">
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                  <div className="text-sm text-gray-500">
                     Mostrando {(page - 1) * limit + 1} a {Math.min(page * limit, total)} de {total}{' '}
                     resultados
                   </div>
@@ -400,19 +400,19 @@ export default function AnalisisExigenciaMentalPage() {
                       size="sm"
                       onClick={() => setPage(page - 1)}
                       disabled={page === 1}
-                      className="border-gray-200 dark:border-[#333333]"
+                      className="border-gray-200"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <div className="flex items-center gap-2 px-3 text-sm text-gray-700 dark:text-gray-300">
-                      P√°gina {page} de {totalPages || 1}
+                    <div className="flex items-center gap-2 px-3 text-sm text-gray-700">
+                      P·gina {page} de {totalPages || 1}
                     </div>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setPage(page + 1)}
                       disabled={page >= totalPages}
-                      className="border-gray-200 dark:border-[#333333]"
+                      className="border-gray-200"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -427,24 +427,24 @@ export default function AnalisisExigenciaMentalPage() {
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                    <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                  <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+                    <AlertTriangle className="h-6 w-6 text-red-600" />
                   </div>
                   <div>
                     <DialogTitle>Eliminar ae de Trabajo</DialogTitle>
                     <DialogDescription>
-                      Esta acci√≥n no se puede deshacer
+                      Esta acciÛn no se puede deshacer
                     </DialogDescription>
                   </div>
                 </div>
               </DialogHeader>
               <div className="py-4">
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  ¬øEst√°s seguro de que deseas eliminar la ae de trabajo de{' '}
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                <p className="text-sm text-gray-600">
+                  øEst·s seguro de que deseas eliminar la ae de trabajo de{' '}
+                  <span className="font-semibold text-gray-900">
                     {aeToDelete?.trabajador_nombre || 'Sin nombre'}
                   </span>
-                  ? Se eliminar√°n todos los datos asociados incluyendo el trabajador, empresa y evaluaci√≥n.
+                  ? Se eliminar·n todos los datos asociados incluyendo el trabajador, empresa y evaluaciÛn.
                 </p>
               </div>
               <DialogFooter className="gap-2 sm:gap-0">
@@ -452,7 +452,7 @@ export default function AnalisisExigenciaMentalPage() {
                   variant="outline"
                   onClick={() => setDeleteDialogOpen(false)}
                   disabled={deleting}
-                  className="border-gray-200 dark:border-[#444444]"
+                  className="border-gray-200"
                 >
                   Cancelar
                 </Button>

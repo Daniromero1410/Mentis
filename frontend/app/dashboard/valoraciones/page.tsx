@@ -143,13 +143,13 @@ export default function ValoracionesPage() {
   const estadoBadgeColor = (estado: string) => {
     switch (estado.toLowerCase()) {
       case 'completada':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+        return 'bg-green-100 text-green-700';
       case 'revisada':
-        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+        return 'bg-yellow-100 text-yellow-700';
       case 'borrador':
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-gray-100 text-gray-700';
       default:
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+        return 'bg-blue-100 text-blue-700';
     }
   };
 
@@ -180,11 +180,11 @@ export default function ValoracionesPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                 <ClipboardList className="w-8 h-8 text-indigo-500" />
                 Valoraciones Psicológicas
               </h1>
-              <p className="text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-gray-500 mt-1">
                 Gestiona las valoraciones psicológicas de los trabajadores
               </p>
             </div>
@@ -197,7 +197,7 @@ export default function ValoracionesPage() {
           </div>
 
           {/* Filters */}
-          <Card className="border-gray-200 dark:border-[#333333]">
+          <Card className="border-gray-200">
             <CardContent className="p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1">
@@ -208,13 +208,13 @@ export default function ValoracionesPage() {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="pl-10 bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                      className="pl-10 bg-white border-gray-200"
                     />
                   </div>
                 </div>
                 <div className="w-full md:w-48">
                   <Select value={estadoFilter} onValueChange={(value) => { setEstadoFilter(value); setPage(1); }}>
-                    <SelectTrigger className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]">
+                    <SelectTrigger className="bg-white border-gray-200">
                       <Filter className="mr-2 h-4 w-4" />
                       <SelectValue placeholder="Todos" />
                     </SelectTrigger>
@@ -237,14 +237,14 @@ export default function ValoracionesPage() {
           </Card>
 
           {/* Table */}
-          <Card className="border-gray-200 dark:border-[#333333]">
+          <Card className="border-gray-200">
             <CardContent className="p-0">
               {loading ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
                 </div>
               ) : valoraciones.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
+                <div className="flex flex-col items-center justify-center h-64 text-gray-500">
                   <ClipboardList className="h-16 w-16 mb-4 opacity-20" />
                   <p className="text-lg font-medium">No hay valoraciones</p>
                   <p className="text-sm">Crea una nueva valoración para comenzar</p>
@@ -252,33 +252,33 @@ export default function ValoracionesPage() {
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-[#333333]">
+                    <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Trabajador
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Documento
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Empresa
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Fecha
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Estado
                         </th>
-                        <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                           Acciones
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-[#2a2a2a] divide-y divide-gray-100 dark:divide-[#333333]">
+                    <tbody className="bg-white divide-y divide-gray-100">
                       {valoraciones.map((valoracion) => (
                         <tr
                           key={valoracion.id}
-                          className="hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-colors"
+                          className="hover:bg-gray-50 transition-colors"
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-3">
@@ -287,24 +287,24 @@ export default function ValoracionesPage() {
                                   ? valoracion.trabajador_nombre.charAt(0).toUpperCase()
                                   : '?'}
                               </div>
-                              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              <span className="text-sm font-medium text-gray-900">
                                 {valoracion.trabajador_nombre || 'Sin nombre'}
                               </span>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600 dark:text-gray-300">
+                            <span className="text-sm text-gray-600">
                               {valoracion.trabajador_documento || 'Sin documento'}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
                               <FileText className="h-4 w-4 text-gray-400" />
                               {valoracion.empresa || 'Sin empresa'}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm text-gray-600 dark:text-gray-300">
+                            <span className="text-sm text-gray-600">
                               {formatDate(valoracion.fecha_valoracion || valoracion.created_at)}
                             </span>
                           </td>
@@ -324,7 +324,7 @@ export default function ValoracionesPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600"
+                                  className="h-8 w-8 p-0 hover:bg-blue-100 text-blue-600"
                                   title="Ver detalles"
                                 >
                                   <Eye className="h-4 w-4" />
@@ -336,7 +336,7 @@ export default function ValoracionesPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600"
+                                  className="h-8 w-8 p-0 hover:bg-green-100 text-green-600"
                                   title="Editar valoración"
                                 >
                                   <Pencil className="h-4 w-4" />
@@ -349,7 +349,7 @@ export default function ValoracionesPage() {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleDownloadPDF(valoracion.id, valoracion.trabajador_documento)}
-                                  className="h-8 w-8 p-0 hover:bg-purple-100 dark:hover:bg-purple-900/30 text-purple-600"
+                                  className="h-8 w-8 p-0 hover:bg-purple-100 text-purple-600"
                                   title="Descargar PDF"
                                 >
                                   <Download className="h-4 w-4" />
@@ -361,7 +361,7 @@ export default function ValoracionesPage() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => openDeleteDialog(valoracion)}
-                                className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500"
+                                className="h-8 w-8 p-0 hover:bg-red-100 text-red-500"
                                 title="Eliminar"
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -377,8 +377,8 @@ export default function ValoracionesPage() {
 
               {/* Pagination */}
               {!loading && valoraciones.length > 0 && (
-                <div className="px-6 py-4 border-t border-gray-200 dark:border-[#333333] flex items-center justify-between">
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                  <div className="text-sm text-gray-500">
                     Mostrando {(page - 1) * limit + 1} a {Math.min(page * limit, total)} de {total}{' '}
                     resultados
                   </div>
@@ -388,11 +388,11 @@ export default function ValoracionesPage() {
                       size="sm"
                       onClick={() => setPage(page - 1)}
                       disabled={page === 1}
-                      className="border-gray-200 dark:border-[#333333]"
+                      className="border-gray-200"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <div className="flex items-center gap-2 px-3 text-sm text-gray-700 dark:text-gray-300">
+                    <div className="flex items-center gap-2 px-3 text-sm text-gray-700">
                       Página {page} de {totalPages || 1}
                     </div>
                     <Button
@@ -400,7 +400,7 @@ export default function ValoracionesPage() {
                       size="sm"
                       onClick={() => setPage(page + 1)}
                       disabled={page >= totalPages}
-                      className="border-gray-200 dark:border-[#333333]"
+                      className="border-gray-200"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -415,8 +415,8 @@ export default function ValoracionesPage() {
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                    <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                  <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+                    <AlertTriangle className="h-6 w-6 text-red-600" />
                   </div>
                   <div>
                     <DialogTitle>Eliminar Valoración Psicológica</DialogTitle>
@@ -427,9 +427,9 @@ export default function ValoracionesPage() {
                 </div>
               </DialogHeader>
               <div className="py-4">
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-gray-600">
                   ¿Estás seguro de que deseas eliminar la valoración psicológica de{' '}
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="font-semibold text-gray-900">
                     {valoracionToDelete?.trabajador_nombre || 'Sin nombre'}
                   </span>
                   ? Se eliminarán todos los datos asociados incluyendo el trabajador, empresa y evaluación.
@@ -440,7 +440,7 @@ export default function ValoracionesPage() {
                   variant="outline"
                   onClick={() => setDeleteDialogOpen(false)}
                   disabled={deleting}
-                  className="border-gray-200 dark:border-[#444444]"
+                  className="border-gray-200"
                 >
                   Cancelar
                 </Button>

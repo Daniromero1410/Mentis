@@ -1,4 +1,4 @@
-Ôªø'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-// Definici√≥n de las dimensiones de riesgo y sus condiciones
+// DefiniciÛn de las dimensiones de riesgo y sus condiciones
 const DIMENSIONES_RIESGO = {
   demandas_cuantitativas: {
     nombre: 'Demandas Cuantitativas de Trabajo',
@@ -34,29 +34,29 @@ const DIMENSIONES_RIESGO = {
   demandas_carga_mental: {
     nombre: 'Demandas de Carga Mental',
     items: [
-      { numero: 1, texto: 'Necesidad de atenci√≥n sostenida' },
+      { numero: 1, texto: 'Necesidad de atenciÛn sostenida' },
       { numero: 2, texto: 'Complejidad de las tareas' },
-      { numero: 3, texto: 'Cantidad de informaci√≥n a procesar' },
+      { numero: 3, texto: 'Cantidad de informaciÛn a procesar' },
       { numero: 4, texto: 'Necesidad de tomar decisiones complejas' },
-      { numero: 5, texto: 'Concentraci√≥n requerida' },
+      { numero: 5, texto: 'ConcentraciÛn requerida' },
     ],
   },
   demandas_emocionales: {
     nombre: 'Demandas Emocionales',
     items: [
-      { numero: 1, texto: 'Manejo de situaciones emocionalmente dif√≠ciles' },
-      { numero: 2, texto: 'Contacto con p√∫blico o usuarios' },
+      { numero: 1, texto: 'Manejo de situaciones emocionalmente difÌciles' },
+      { numero: 2, texto: 'Contacto con p˙blico o usuarios' },
       { numero: 3, texto: 'Control de emociones ante situaciones laborales' },
     ],
   },
   exigencias_responsabilidad: {
     nombre: 'Exigencias de Responsabilidad del Cargo',
     items: [
-      { numero: 1, texto: 'Responsabilidad sobre resultados cr√≠ticos' },
-      { numero: 2, texto: 'Supervisi√≥n de otros trabajadores' },
+      { numero: 1, texto: 'Responsabilidad sobre resultados crÌticos' },
+      { numero: 2, texto: 'SupervisiÛn de otros trabajadores' },
       { numero: 3, texto: 'Manejo de recursos importantes' },
       { numero: 4, texto: 'Toma de decisiones importantes' },
-      { numero: 5, texto: 'Impacto de errores en la organizaci√≥n' },
+      { numero: 5, texto: 'Impacto de errores en la organizaciÛn' },
       { numero: 6, texto: 'Responsabilidad sobre la seguridad de otros' },
     ],
   },
@@ -65,21 +65,21 @@ const DIMENSIONES_RIESGO = {
     items: [
       { numero: 1, texto: 'Claridad de las funciones del puesto' },
       { numero: 2, texto: 'Instrucciones claras y consistentes' },
-      { numero: 3, texto: 'Definici√≥n de objetivos' },
+      { numero: 3, texto: 'DefiniciÛn de objetivos' },
       { numero: 4, texto: 'Demandas contradictorias' },
     ],
   },
   demandas_ambientales: {
-    nombre: 'Demandas Ambientales y de Esfuerzo F√≠sico',
+    nombre: 'Demandas Ambientales y de Esfuerzo FÌsico',
     items: [
       { numero: 1, texto: 'Ruido en el ambiente laboral' },
-      { numero: 2, texto: 'Iluminaci√≥n inadecuada' },
+      { numero: 2, texto: 'IluminaciÛn inadecuada' },
       { numero: 3, texto: 'Temperatura extrema' },
-      { numero: 4, texto: 'Exposici√≥n a agentes qu√≠micos' },
-      { numero: 5, texto: 'Esfuerzo f√≠sico intenso' },
+      { numero: 4, texto: 'ExposiciÛn a agentes quÌmicos' },
+      { numero: 5, texto: 'Esfuerzo fÌsico intenso' },
       { numero: 6, texto: 'Posturas forzadas' },
       { numero: 7, texto: 'Movimientos repetitivos' },
-      { numero: 8, texto: 'Manipulaci√≥n de cargas' },
+      { numero: 8, texto: 'ManipulaciÛn de cargas' },
       { numero: 9, texto: 'Espacios de trabajo reducidos' },
       { numero: 10, texto: 'Vibraciones' },
     ],
@@ -127,7 +127,7 @@ const getRiskColor = (risk: string) => {
 };
 
 interface StepData {
-  // Paso 1: Metodolog√≠a y Participantes
+  // Paso 1: MetodologÌa y Participantes
   metodologia: string;
   participante_trabajador: string;
   participante_jefe: string;
@@ -136,7 +136,7 @@ interface StepData {
   fuente_jefe_fecha: string;
   fuente_par_fecha: string;
 
-  // Paso 2: Revisi√≥n Documental y Descripci√≥n
+  // Paso 2: RevisiÛn Documental y DescripciÛn
   revision_documental: string;
   descripcion_puesto: string;
   condicion_actual: string;
@@ -272,7 +272,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al cargar los datos de la evaluaci√≥n');
+      toast.error('Error al cargar los datos de la evaluaciÛn');
     } finally {
       setLoading(false);
     }
@@ -339,11 +339,11 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
           ...prev,
           conclusiones_finales: response.analisis_generado || '',
           recomendaciones: response.recomendaciones_generadas || '',
-          // Actualizar tambi√©n la conclusi√≥n breve si est√° vac√≠a
+          // Actualizar tambiÈn la conclusiÛn breve si est· vacÌa
           conclusion_evaluacion: prev.conclusion_evaluacion || (response.concepto ? response.concepto.substring(0, 500) + '...' : '')
         }));
 
-        // Guardar autom√°ticamente para persistir los cambios
+        // Guardar autom·ticamente para persistir los cambios
         await api.post(`/analisis-exigencias-mental/${params.id}/concepto-final`, {
           ...formData,
           conclusiones_finales: response.analisis_generado || '',
@@ -394,7 +394,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
 
   const handleFinish = async () => {
     await handleSave();
-    toast.success('Evaluaci√≥n completada');
+    toast.success('EvaluaciÛn completada');
     router.push(`/dashboard/analisis-exigencias-mental/${params.id}`);
   };
 
@@ -517,16 +517,16 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Briefcase className="w-8 h-8 text-violet-500" />
-              Completar Evaluaci√≥n
+              Completar EvaluaciÛn
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-gray-500 mt-1">
               Paso {currentStep} de {totalSteps}
             </p>
           </div>
           <Link href={`/dashboard/analisis-exigencias-mental/${params.id}`}>
-            <Button variant="outline" className="border-gray-200 dark:border-[#333333]">
+            <Button variant="outline" className="border-gray-200">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Volver
             </Button>
@@ -534,7 +534,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-gray-200 dark:bg-[#333333] rounded-full h-2">
+        <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-violet-500 h-2 rounded-full transition-all duration-300"
             style={{ width: `${(currentStep / totalSteps) * 100}%` }}
@@ -542,7 +542,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
         </div>
 
         {/* Step Content */}
-        <Card className="border-gray-200 dark:border-[#333333]">
+        <Card className="border-gray-200">
           <CardContent className="p-6">{renderStep()}</CardContent>
         </Card>
 
@@ -552,7 +552,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
             variant="outline"
             onClick={handlePrevious}
             disabled={currentStep === 1}
-            className="border-gray-200 dark:border-[#333333]"
+            className="border-gray-200"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Anterior
@@ -564,7 +564,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
                 variant="outline"
                 onClick={handleSave}
                 disabled={saving}
-                className="border-gray-200 dark:border-[#333333]"
+                className="border-gray-200"
               >
                 {saving ? (
                   <>
@@ -595,7 +595,7 @@ export function AnalisisExigenciaMentalForm({ readOnly = false }: AnalisisExigen
                   className="bg-green-600 hover:bg-green-700 text-white"
                 >
                   <CheckCircle2 className="mr-2 h-4 w-4" />
-                  Finalizar Evaluaci√≥n
+                  Finalizar EvaluaciÛn
                 </Button>
               )
             )}
@@ -620,21 +620,21 @@ function Step1Metodologia({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Metodolog√≠a y Participantes
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          MetodologÌa y Participantes
         </h2>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="metodologia">Metodolog√≠a</Label>
+          <Label htmlFor="metodologia">MetodologÌa</Label>
           <Textarea
             id="metodologia"
             rows={4}
             value={formData.metodologia}
             onChange={(e) => setFormData({ ...formData, metodologia: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
-            placeholder="Describa la metodolog√≠a utilizada para la evaluaci√≥n..."
+            className="bg-white border-gray-200"
+            placeholder="Describa la metodologÌa utilizada para la evaluaciÛn..."
             disabled={readOnly}
           />
         </div>
@@ -648,7 +648,7 @@ function Step1Metodologia({
               onChange={(e) =>
                 setFormData({ ...formData, participante_trabajador: e.target.value })
               }
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
@@ -658,7 +658,7 @@ function Step1Metodologia({
               id="participante_jefe"
               value={formData.participante_jefe}
               onChange={(e) => setFormData({ ...formData, participante_jefe: e.target.value })}
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
@@ -670,15 +670,15 @@ function Step1Metodologia({
               onChange={(e) =>
                 setFormData({ ...formData, participante_cargo_jefe: e.target.value })
               }
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
         </div>
 
         <div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
-            Fuentes de Recolecci√≥n de Informaci√≥n
+          <h3 className="text-lg font-medium text-gray-900 mb-3">
+            Fuentes de RecolecciÛn de InformaciÛn
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -690,7 +690,7 @@ function Step1Metodologia({
                 onChange={(e) =>
                   setFormData({ ...formData, fuente_trabajador_fecha: e.target.value })
                 }
-                className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                className="bg-white border-gray-200"
                 disabled={readOnly}
               />
             </div>
@@ -701,7 +701,7 @@ function Step1Metodologia({
                 type="date"
                 value={formData.fuente_jefe_fecha}
                 onChange={(e) => setFormData({ ...formData, fuente_jefe_fecha: e.target.value })}
-                className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                className="bg-white border-gray-200"
                 disabled={readOnly}
               />
             </div>
@@ -712,7 +712,7 @@ function Step1Metodologia({
                 type="date"
                 value={formData.fuente_par_fecha}
                 onChange={(e) => setFormData({ ...formData, fuente_par_fecha: e.target.value })}
-                className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                className="bg-white border-gray-200"
                 disabled={readOnly}
               />
             </div>
@@ -735,47 +735,47 @@ function Step2RevisionDocumental({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Revisi√≥n Documental y Descripci√≥n
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          RevisiÛn Documental y DescripciÛn
         </h2>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="revision_documental">Revisi√≥n Documental</Label>
+          <Label htmlFor="revision_documental">RevisiÛn Documental</Label>
           <Textarea
             id="revision_documental"
             rows={5}
             value={formData.revision_documental}
             onChange={(e) => setFormData({ ...formData, revision_documental: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
-            placeholder="Documente la revisi√≥n de documentos relevantes..."
+            className="bg-white border-gray-200"
+            placeholder="Documente la revisiÛn de documentos relevantes..."
             disabled={readOnly}
           />
         </div>
 
         <div>
-          <Label htmlFor="descripcion_puesto">Descripci√≥n del Puesto</Label>
+          <Label htmlFor="descripcion_puesto">DescripciÛn del Puesto</Label>
           <Textarea
             id="descripcion_puesto"
             rows={5}
             value={formData.descripcion_puesto}
             onChange={(e) => setFormData({ ...formData, descripcion_puesto: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+            className="bg-white border-gray-200"
             placeholder="Describa el puesto de trabajo evaluado..."
             disabled={readOnly}
           />
         </div>
 
         <div>
-          <Label htmlFor="condicion_actual">Condici√≥n Actual del Trabajador</Label>
+          <Label htmlFor="condicion_actual">CondiciÛn Actual del Trabajador</Label>
           <Textarea
             id="condicion_actual"
             rows={5}
             value={formData.condicion_actual}
             onChange={(e) => setFormData({ ...formData, condicion_actual: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
-            placeholder="Describa la condici√≥n actual del trabajador..."
+            className="bg-white border-gray-200"
+            placeholder="Describa la condiciÛn actual del trabajador..."
             disabled={readOnly}
           />
         </div>
@@ -796,7 +796,7 @@ function Step3AspectosOcupacionales({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
           Aspectos Ocupacionales
         </h2>
       </div>
@@ -809,43 +809,43 @@ function Step3AspectosOcupacionales({
               id="nombre_puesto"
               value={formData.nombre_puesto}
               onChange={(e) => setFormData({ ...formData, nombre_puesto: e.target.value })}
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
           <div>
-            <Label htmlFor="area_puesto">√º¬Årea</Label>
+            <Label htmlFor="area_puesto">¸Årea</Label>
             <Input
               id="area_puesto"
               value={formData.area_puesto}
               onChange={(e) => setFormData({ ...formData, area_puesto: e.target.value })}
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
           <div>
-            <Label htmlFor="antiguedad_cargo_ocupacional">Antig√ºedad en el Cargo</Label>
+            <Label htmlFor="antiguedad_cargo_ocupacional">Antig¸edad en el Cargo</Label>
             <Input
               id="antiguedad_cargo_ocupacional"
               value={formData.antiguedad_cargo_ocupacional}
               onChange={(e) =>
                 setFormData({ ...formData, antiguedad_cargo_ocupacional: e.target.value })
               }
-              placeholder="Ej: 2 a√±os 3 meses"
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              placeholder="Ej: 2 aÒos 3 meses"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
           <div>
-            <Label htmlFor="antiguedad_empresa_ocupacional">Antig√ºedad en la Empresa</Label>
+            <Label htmlFor="antiguedad_empresa_ocupacional">Antig¸edad en la Empresa</Label>
             <Input
               id="antiguedad_empresa_ocupacional"
               value={formData.antiguedad_empresa_ocupacional}
               onChange={(e) =>
                 setFormData({ ...formData, antiguedad_empresa_ocupacional: e.target.value })
               }
-              placeholder="Ej: 5 a√±os 1 mes"
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              placeholder="Ej: 5 aÒos 1 mes"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
@@ -857,7 +857,7 @@ function Step3AspectosOcupacionales({
               onChange={(e) =>
                 setFormData({ ...formData, nivel_educativo_requerido: e.target.value })
               }
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
@@ -868,7 +868,7 @@ function Step3AspectosOcupacionales({
               value={formData.jornada_laboral}
               onChange={(e) => setFormData({ ...formData, jornada_laboral: e.target.value })}
               placeholder="Ej: 8:00 AM - 5:00 PM"
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
@@ -879,7 +879,7 @@ function Step3AspectosOcupacionales({
               value={formData.horas_extras}
               onChange={(e) => setFormData({ ...formData, horas_extras: e.target.value })}
               placeholder="Ej: Ocasionales, 2-3 horas/semana"
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
@@ -890,20 +890,20 @@ function Step3AspectosOcupacionales({
               value={formData.turnos}
               onChange={(e) => setFormData({ ...formData, turnos: e.target.value })}
               placeholder="Ej: Diurno, Mixto, Rotativo"
-              className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+              className="bg-white border-gray-200"
               disabled={readOnly}
             />
           </div>
         </div>
 
         <div>
-          <Label htmlFor="descripcion_funciones">Descripci√≥n de Funciones</Label>
+          <Label htmlFor="descripcion_funciones">DescripciÛn de Funciones</Label>
           <Textarea
             id="descripcion_funciones"
             rows={6}
             value={formData.descripcion_funciones}
             onChange={(e) => setFormData({ ...formData, descripcion_funciones: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+            className="bg-white border-gray-200"
             placeholder="Describa las funciones principales del puesto..."
             disabled={readOnly}
           />
@@ -955,7 +955,7 @@ function StepCondicionesRiesgo({
         exposicion: found.exposicion ?? 0,
         intensidad: found.intensidad ?? 0,
         total_condicion: found.total_condicion ?? 0,
-        // Default text for Fuentes de Informaci√≥n if empty
+        // Default text for Fuentes de InformaciÛn if empty
         fuentes_informacion: found.fuentes_informacion || 'Entrevista con el trabajador y jefe inmediato',
       };
     }
@@ -1034,11 +1034,11 @@ function StepCondicionesRiesgo({
     try {
       setSaving(true);
 
-      // Guardar todas las condiciones de esta dimensi√≥n
+      // Guardar todas las condiciones de esta dimensiÛn
       for (const item of dimensionData.items) {
         const condicionData = getCondicionData(item.numero);
 
-        // Guardamos si tiene alg√∫n dato relevante
+        // Guardamos si tiene alg˙n dato relevante
         if (condicionData.descripcion_detallada || condicionData.total_condicion > 0 || condicionData.frecuencia !== undefined) {
           // Asegurarnos de guardar incluso si es 0 pero ha sido editado, 
           // para este caso asumimos que si existe el objeto en el estado local, lo guardamos.
@@ -1071,7 +1071,7 @@ function StepCondicionesRiesgo({
             disabled={saving}
             variant="outline"
             size="sm"
-            className="border-gray-200 dark:border-[#333333] mb-2"
+            className="border-gray-200 mb-2"
           >
             {saving ? (
               <>
@@ -1088,7 +1088,7 @@ function StepCondicionesRiesgo({
         )}
       </div>
 
-      <div className="overflow-x-auto border border-gray-200 dark:border-[#333333] rounded-lg shadow-sm">
+      <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
         <table className="w-full text-sm text-left">
           <thead>
             <tr className="bg-violet-500 text-white">
@@ -1096,21 +1096,21 @@ function StepCondicionesRiesgo({
                 {dimensionData.nombre}
               </th>
             </tr>
-            <tr className="bg-gray-100 dark:bg-[#1a1a1a] text-gray-700 dark:text-gray-200 font-semibold border-b border-gray-200 dark:border-[#333333]">
-              <th className="px-4 py-3 w-[30%]">Condici√≥n</th>
+            <tr className="bg-gray-100 text-gray-700 font-semibold border-b border-gray-200">
+              <th className="px-4 py-3 w-[30%]">CondiciÛn</th>
               <th className="px-2 py-3 text-center w-[10%]">Frecuencia<br />(0-7)</th>
-              <th className="px-2 py-3 text-center w-[10%]">Exposici√≥n<br />(0-7)</th>
+              <th className="px-2 py-3 text-center w-[10%]">ExposiciÛn<br />(0-7)</th>
               <th className="px-2 py-3 text-center w-[10%]">Intensidad<br />(0-7)</th>
               <th className="px-2 py-3 text-center w-[8%]">Total (Suma)</th>
-              <th className="px-4 py-3 w-[32%]">Fuentes de Informaci√≥n</th>
+              <th className="px-4 py-3 w-[32%]">Fuentes de InformaciÛn</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-[#333333] bg-white dark:bg-[#0f0f0f]">
+          <tbody className="divide-y divide-gray-200 bg-white">
             {dimensionData.items.map((item) => {
               const condicionData = getCondicionData(item.numero);
               return (
-                <tr key={item.numero} className="hover:bg-gray-50 dark:hover:bg-[#151515]">
-                  <td className="px-4 py-3 align-middle font-medium text-gray-900 dark:text-white">
+                <tr key={item.numero} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 align-middle font-medium text-gray-900">
                     {item.texto}
                   </td>
                   <td className="px-2 py-3 align-middle text-center">
@@ -1120,7 +1120,7 @@ function StepCondicionesRiesgo({
                       max="7"
                       value={condicionData.frecuencia}
                       onChange={(e) => handleNumericInput(item.numero, 'frecuencia', e)}
-                      className="w-full text-center h-9 rounded-md border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#1a1a1a] focus:ring-2 focus:ring-violet-500 focus:outline-none"
+                      className="w-full text-center h-9 rounded-md border border-gray-300 bg-white focus:ring-2 focus:ring-violet-500 focus:outline-none"
                       disabled={readOnly}
                     />
                   </td>
@@ -1131,7 +1131,7 @@ function StepCondicionesRiesgo({
                       max="7"
                       value={condicionData.exposicion}
                       onChange={(e) => handleNumericInput(item.numero, 'exposicion', e)}
-                      className="w-full text-center h-9 rounded-md border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#1a1a1a] focus:ring-2 focus:ring-violet-500 focus:outline-none"
+                      className="w-full text-center h-9 rounded-md border border-gray-300 bg-white focus:ring-2 focus:ring-violet-500 focus:outline-none"
                       disabled={readOnly}
                     />
                   </td>
@@ -1142,18 +1142,18 @@ function StepCondicionesRiesgo({
                       max="7"
                       value={condicionData.intensidad}
                       onChange={(e) => handleNumericInput(item.numero, 'intensidad', e)}
-                      className="w-full text-center h-9 rounded-md border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#1a1a1a] focus:ring-2 focus:ring-violet-500 focus:outline-none"
+                      className="w-full text-center h-9 rounded-md border border-gray-300 bg-white focus:ring-2 focus:ring-violet-500 focus:outline-none"
                       disabled={readOnly}
                     />
                   </td>
-                  <td className="px-2 py-3 align-middle text-center font-bold text-gray-900 dark:text-white">
+                  <td className="px-2 py-3 align-middle text-center font-bold text-gray-900">
                     {condicionData.total_condicion ?? 0}
                   </td>
                   <td className="px-4 py-3 align-middle">
                     <Input
                       value={condicionData.fuentes_informacion || 'Entrevista con el trabajador y el jefe inmediato'}
                       onChange={(e) => updateCondicion(item.numero, 'fuentes_informacion', e.target.value)}
-                      className="w-full h-9 bg-white dark:bg-[#1a1a1a] border-gray-300 dark:border-[#333333] text-sm"
+                      className="w-full h-9 bg-white border-gray-300 text-sm"
                       disabled={readOnly}
                     />
                   </td>
@@ -1162,10 +1162,10 @@ function StepCondicionesRiesgo({
             })}
           </tbody>
           <tfoot>
-            <tr className="bg-gray-50 dark:bg-[#1a1a1a] font-bold border-t-2 border-gray-200 dark:border-[#333333]">
-              <td className="px-4 py-3 text-right text-gray-700 dark:text-gray-300">TOTAL DEMANDA:</td>
+            <tr className="bg-gray-50 font-bold border-t-2 border-gray-200">
+              <td className="px-4 py-3 text-right text-gray-700">TOTAL DEMANDA:</td>
               <td colSpan={3} className="px-2 py-3">
-                {/* Visualizaci√≥n del Nivel de Riesgo en el Footer */}
+                {/* VisualizaciÛn del Nivel de Riesgo en el Footer */}
                 {(() => {
                   const { nivel, color } = getNivelRiesgo(dimension, totalDimension);
                   return (
@@ -1278,7 +1278,7 @@ function StepResumenFactores({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-gray-900">
           Resumen de Factores de Riesgo
         </h2>
         {!readOnly && (
@@ -1287,7 +1287,7 @@ function StepResumenFactores({
             disabled={saving}
             variant="outline"
             size="sm"
-            className="border-gray-200 dark:border-[#333333]"
+            className="border-gray-200"
           >
             {saving ? (
               <>
@@ -1304,9 +1304,9 @@ function StepResumenFactores({
         )}
       </div>
 
-      <p className="text-sm text-gray-600 dark:text-gray-400">
-        Compare la valoraci√≥n subjetiva del trabajador con su valoraci√≥n como experto para cada
-        dimensi√≥n de riesgo.
+      <p className="text-sm text-gray-600">
+        Compare la valoraciÛn subjetiva del trabajador con su valoraciÛn como experto para cada
+        dimensiÛn de riesgo.
       </p>
 
       <div className="space-y-6">
@@ -1323,11 +1323,11 @@ function StepResumenFactores({
           const { nivel: calculatedRisk, color: riskColor } = getNivelRiesgo(dimension, totalScore);
 
           return (
-            <Card key={dimension} className="border-gray-200 dark:border-[#333333]">
-              <CardHeader className="pb-3 bg-gray-50 dark:bg-[#1a1a1a]">
+            <Card key={dimension} className="border-gray-200">
+              <CardHeader className="pb-3 bg-gray-50">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-base">{dimensionData.nombre}</CardTitle>
-                  <span className="text-sm font-medium px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">
+                  <span className="text-sm font-medium px-2 py-1 bg-gray-200 rounded">
                     Puntaje Total: {totalScore}
                   </span>
                 </div>
@@ -1355,7 +1355,7 @@ function StepResumenFactores({
                       onChange={(e) =>
                         updateResumen(dimension, 'nivel_riesgo_experto', e.target.value)
                       }
-                      className="w-full px-3 py-2 rounded-md border border-gray-200 dark:border-[#333333] bg-white dark:bg-[#1a1a1a] text-gray-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-md border border-gray-200 bg-white text-gray-900"
                       disabled={readOnly}
                     >
                       <option value="">Seleccionar...</option>
@@ -1376,7 +1376,7 @@ function StepResumenFactores({
                     onChange={(e) =>
                       updateResumen(dimension, 'factores_detectados_trabajador', e.target.value)
                     }
-                    className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                    className="bg-white border-gray-200"
                     placeholder="Liste los factores reportados por el trabajador..."
                     disabled={readOnly}
                   />
@@ -1390,7 +1390,7 @@ function StepResumenFactores({
                     onChange={(e) =>
                       updateResumen(dimension, 'factores_detectados_experto', e.target.value)
                     }
-                    className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                    className="bg-white border-gray-200"
                     placeholder="Liste los factores identificados por el experto..."
                     disabled={readOnly}
                   />
@@ -1404,7 +1404,7 @@ function StepResumenFactores({
                     onChange={(e) =>
                       updateResumen(dimension, 'observaciones_experto', e.target.value)
                     }
-                    className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                    className="bg-white border-gray-200"
                     placeholder="Agregue observaciones adicionales..."
                     disabled={readOnly}
                   />
@@ -1434,47 +1434,47 @@ function StepConceptoFinal({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
           Conclusiones Finales
         </h2>
       </div>
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="conclusion_evaluacion">Conclusi√≥n de la Evaluaci√≥n</Label>
+          <Label htmlFor="conclusion_evaluacion">ConclusiÛn de la EvaluaciÛn</Label>
           <Textarea
             id="conclusion_evaluacion"
             rows={4}
             value={formData.conclusion_evaluacion}
             onChange={(e) => setFormData({ ...formData, conclusion_evaluacion: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
-            placeholder="Resuma la conclusi√≥n general de la evaluaci√≥n..."
+            className="bg-white border-gray-200"
+            placeholder="Resuma la conclusiÛn general de la evaluaciÛn..."
             disabled={readOnly}
           />
         </div>
 
         <div>
-          <Label htmlFor="concordancia_items">√º¬çtems con Concordancia</Label>
+          <Label htmlFor="concordancia_items">¸çtems con Concordancia</Label>
           <Textarea
             id="concordancia_items"
             rows={3}
             value={formData.concordancia_items}
             onChange={(e) => setFormData({ ...formData, concordancia_items: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
-            placeholder="Liste los √≠tems donde hay concordancia entre trabajador y experto..."
+            className="bg-white border-gray-200"
+            placeholder="Liste los Ìtems donde hay concordancia entre trabajador y experto..."
             disabled={readOnly}
           />
         </div>
 
         <div>
-          <Label htmlFor="no_concordancia_items">√º¬çtems sin Concordancia</Label>
+          <Label htmlFor="no_concordancia_items">¸çtems sin Concordancia</Label>
           <Textarea
             id="no_concordancia_items"
             rows={3}
             value={formData.no_concordancia_items}
             onChange={(e) => setFormData({ ...formData, no_concordancia_items: e.target.value })}
-            className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
-            placeholder="Liste los √≠tems donde NO hay concordancia..."
+            className="bg-white border-gray-200"
+            placeholder="Liste los Ìtems donde NO hay concordancia..."
             disabled={readOnly}
           />
         </div>
@@ -1507,12 +1507,12 @@ function StepConceptoFinal({
           rows={6}
           value={formData.conclusiones_finales}
           onChange={(e) => setFormData({ ...formData, conclusiones_finales: e.target.value })}
-          className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+          className="bg-white border-gray-200"
           placeholder="Escriba las conclusiones finales completas..."
           disabled={readOnly}
         />
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          Este campo puede ser generado autom√°ticamente por el modelo de ML en el futuro
+        <p className="text-xs text-gray-500 mt-1">
+          Este campo puede ser generado autom·ticamente por el modelo de ML en el futuro
         </p>
       </div>
 
@@ -1523,7 +1523,7 @@ function StepConceptoFinal({
           rows={4}
           value={formData.recomendaciones}
           onChange={(e) => setFormData({ ...formData, recomendaciones: e.target.value })}
-          className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+          className="bg-white border-gray-200"
           placeholder="Agregue las recomendaciones finales..."
           disabled={readOnly}
         />

@@ -111,7 +111,7 @@ export default function AnalisisExigenciaPage() {
                     {/* Header */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                                 <Activity className="w-8 h-8 text-blue-600" />
                                 Análisis de Exigencia TO
                             </h1>

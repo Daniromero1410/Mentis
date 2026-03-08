@@ -188,11 +188,11 @@ export default function PruebasTrabajoTOPage() {
     const estadoBadgeColor = (estado: string) => {
         switch (estado.toLowerCase()) {
             case 'completada':
-                return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+                return 'bg-green-100 text-green-700';
             case 'borrador':
-                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+                return 'bg-yellow-100 text-yellow-700';
             default:
-                return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+                return 'bg-gray-100 text-gray-700';
         }
     };
 
@@ -231,7 +231,7 @@ export default function PruebasTrabajoTOPage() {
                     </div>
 
                     {/* Filters */}
-                    <Card className="border-gray-200 dark:border-[#333333]">
+                    <Card className="border-gray-200">
                         <CardContent className="p-4">
                             <div className="flex flex-col md:flex-row gap-4">
                                 <div className="flex-1">
@@ -242,13 +242,13 @@ export default function PruebasTrabajoTOPage() {
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
                                             onKeyPress={handleKeyPress}
-                                            className="pl-10 bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                                            className="pl-10 bg-white border-gray-200"
                                         />
                                     </div>
                                 </div>
                                 <div className="w-full md:w-48">
                                     <Select value={estadoFilter} onValueChange={setEstadoFilter}>
-                                        <SelectTrigger className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]">
+                                        <SelectTrigger className="bg-white border-gray-200">
                                             <Filter className="mr-2 h-4 w-4" />
                                             <SelectValue placeholder="Estado" />
                                         </SelectTrigger>
@@ -423,8 +423,8 @@ export default function PruebasTrabajoTOPage() {
                         <DialogContent className="sm:max-w-md">
                             <DialogHeader>
                                 <div className="flex items-center gap-3">
-                                    <div className="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                                        <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                                    <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+                                        <AlertTriangle className="h-6 w-6 text-red-600" />
                                     </div>
                                     <div>
                                         <DialogTitle>Eliminar Prueba de Trabajo TO</DialogTitle>
@@ -435,9 +435,9 @@ export default function PruebasTrabajoTOPage() {
                                 </div>
                             </DialogHeader>
                             <div className="py-4">
-                                <p className="text-sm text-gray-600 dark:text-gray-300">
+                                <p className="text-sm text-gray-600">
                                     ¿Estás seguro de que deseas eliminar la prueba de{' '}
-                                    <span className="font-semibold text-gray-900 dark:text-white">
+                                    <span className="font-semibold text-gray-900">
                                         {pruebaToDelete?.trabajador_nombre || 'Sin nombre'}
                                     </span>
                                     ? Se eliminarán todos los datos asociados.
@@ -448,7 +448,7 @@ export default function PruebasTrabajoTOPage() {
                                     variant="outline"
                                     onClick={() => setDeleteDialogOpen(false)}
                                     disabled={deleting}
-                                    className="border-gray-200 dark:border-[#444444]"
+                                    className="border-gray-200"
                                 >
                                     Cancelar
                                 </Button>

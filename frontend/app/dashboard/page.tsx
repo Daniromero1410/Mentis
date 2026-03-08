@@ -511,13 +511,13 @@ export default function DashboardPage() {
 
             {/* Action buttons */}
             <div className="px-6 pb-5 flex gap-3">
-              <Link href={`${activeModule.newHref}?id=${selectedRecord.id}&view=true`} className="flex-1">
+              <Link href={`${activeModule.newHref}?id=${selectedRecord.id}&modo=ver`} className="flex-1">
                 <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 text-sm font-medium shadow-sm hover:shadow-md">
                   <Eye className="h-4 w-4 mr-2" />
                   Ver Registro
                 </Button>
               </Link>
-              <Link href={`${activeModule.newHref}?id=${selectedRecord.id}`} className="flex-1">
+              <Link href={`${activeModule.newHref}?id=${selectedRecord.id}&modo=editar`} className="flex-1">
                 <Button variant="outline" className="w-full rounded-xl h-11 text-sm font-medium border-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200">
                   <Pencil className="h-4 w-4 mr-2" />
                   Editar

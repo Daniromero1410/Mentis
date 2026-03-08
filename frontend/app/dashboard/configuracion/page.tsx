@@ -90,21 +90,21 @@ export default function ConfiguracionPage() {
             <div className="space-y-8 max-w-4xl mx-auto py-6">
                 {/* Header Centrado */}
                 <div className="text-center space-y-2 mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center justify-center gap-3">
+                    <h1 className="text-3xl font-bold text-gray-900 flex items-center justify-center gap-3">
                         <Settings className="h-8 w-8 text-indigo-500" />
                         Configuración
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
+                    <p className="text-gray-600 max-w-lg mx-auto">
                         Administra tu información personal y fortalece la seguridad de tu cuenta desde este panel centralizado.
                     </p>
                 </div>
 
                 <div className="space-y-8">
                     {/* Perfil Card */}
-                    <Card className="border shadow-md bg-white dark:bg-gray-900 overflow-hidden">
-                        <CardHeader className="bg-gray-50/80 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800 pb-6">
+                    <Card className="border shadow-md bg-white overflow-hidden">
+                        <CardHeader className="bg-gray-50/80 border-b border-gray-100 pb-6">
                             <div className="flex items-center gap-4">
-                                <div className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                                <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
                                     <User className="h-6 w-6 text-indigo-500" />
                                 </div>
                                 <div>
@@ -119,32 +119,32 @@ export default function ConfiguracionPage() {
                             <form onSubmit={handleProfileUpdate} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2.5">
-                                        <Label htmlFor="nombre" className="text-gray-700 dark:text-gray-300">Nombre</Label>
+                                        <Label htmlFor="nombre" className="text-gray-700">Nombre</Label>
                                         <Input
                                             id="nombre"
                                             value={profileData.nombre}
                                             onChange={(e) => setProfileData({ ...profileData, nombre: e.target.value })}
-                                            className="h-11 bg-gray-50/50 dark:bg-gray-900 border-gray-200 focus:border-indigo-500 transition-colors"
+                                            className="h-11 bg-gray-50/50 border-gray-200 focus:border-indigo-500 transition-colors"
                                         />
                                     </div>
                                     <div className="space-y-2.5">
-                                        <Label htmlFor="apellido" className="text-gray-700 dark:text-gray-300">Apellido</Label>
+                                        <Label htmlFor="apellido" className="text-gray-700">Apellido</Label>
                                         <Input
                                             id="apellido"
                                             value={profileData.apellido}
                                             onChange={(e) => setProfileData({ ...profileData, apellido: e.target.value })}
-                                            className="h-11 bg-gray-50/50 dark:bg-gray-900 border-gray-200 focus:border-indigo-500 transition-colors"
+                                            className="h-11 bg-gray-50/50 border-gray-200 focus:border-indigo-500 transition-colors"
                                         />
                                     </div>
                                 </div>
                                 <div className="space-y-2.5">
-                                    <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Correo Electrónico</Label>
+                                    <Label htmlFor="email" className="text-gray-700">Correo Electrónico</Label>
                                     <div className="relative">
                                         <Input
                                             id="email"
                                             value={profileData.email}
                                             disabled
-                                            className="h-11 bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400 border-dashed"
+                                            className="h-11 bg-gray-100 text-gray-500 border-dashed"
                                         />
                                         <Shield className="absolute right-4 top-3.5 h-4 w-4 text-gray-400" />
                                     </div>
@@ -171,10 +171,10 @@ export default function ConfiguracionPage() {
                     </Card>
 
                     {/* Seguridad Card */}
-                    <Card className="border shadow-md bg-white dark:bg-gray-900 overflow-hidden">
-                        <CardHeader className="bg-gray-50/80 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800 pb-6">
+                    <Card className="border shadow-md bg-white overflow-hidden">
+                        <CardHeader className="bg-gray-50/80 border-b border-gray-100 pb-6">
                             <div className="flex items-center gap-4">
-                                <div className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                                <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
                                     <Lock className="h-6 w-6 text-orange-500" />
                                 </div>
                                 <div>
@@ -195,7 +195,7 @@ export default function ConfiguracionPage() {
                                         value={passwordData.newPassword}
                                         onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                                         placeholder="Mínimo 6 caracteres"
-                                        className="h-11 bg-gray-50/50 dark:bg-gray-900 border-gray-200 focus:border-orange-500 transition-colors"
+                                        className="h-11 bg-gray-50/50 border-gray-200 focus:border-orange-500 transition-colors"
                                     />
                                 </div>
                                 <div className="space-y-2.5">
@@ -206,7 +206,7 @@ export default function ConfiguracionPage() {
                                         value={passwordData.confirmPassword}
                                         onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                                         placeholder="Repetir contraseña"
-                                        className="h-11 bg-gray-50/50 dark:bg-gray-900 border-gray-200 focus:border-orange-500 transition-colors"
+                                        className="h-11 bg-gray-50/50 border-gray-200 focus:border-orange-500 transition-colors"
                                     />
                                 </div>
                                 <div className="pt-4 flex justify-end">

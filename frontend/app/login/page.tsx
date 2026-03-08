@@ -99,9 +99,9 @@ export default function LoginPage() {
 
       {/* Login Card */}
       <div className="relative z-10 w-full max-w-md mx-4">
-        <div className="bg-white/80 dark:bg-[#2a2a2a]/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 dark:border-[#333333]/50 overflow-hidden">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
           {/* Header */}
-          <div className="px-8 pt-12 pb-8 text-center bg-white dark:bg-[#2a2a2a] relative">
+          <div className="px-8 pt-12 pb-8 text-center bg-white relative">
             <div className="flex justify-center mb-6">
               <div className="relative w-64 h-24">
                 <Image
@@ -120,7 +120,7 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email Input */}
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
                   Correo Electrónico
                 </label>
                 <div className="relative">
@@ -131,14 +131,14 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="correo@ejemplo.com"
                     required
-                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-gray-50 dark:bg-[#1a1a1a] border-2 border-gray-200 dark:border-[#333333] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#6b6b6b] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
               </div>
 
               {/* Password Input */}
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
                   Contraseña
                 </label>
                 <div className="relative">
@@ -149,7 +149,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
-                    className="w-full pl-12 pr-12 py-3.5 rounded-xl bg-gray-50 dark:bg-[#1a1a1a] border-2 border-gray-200 dark:border-[#333333] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#6b6b6b] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-12 pr-12 py-3.5 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                   />
                   <button
                     type="button"
@@ -157,9 +157,9 @@ export default function LoginPage() {
                     className="absolute right-4 top-1/2 -translate-y-1/2"
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
+                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" />
+                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
                     )}
                   </button>
                 </div>
@@ -187,7 +187,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setResetModalOpen(true)}
-                className="text-sm text-gray-600 dark:text-[#b0b0b0] hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors"
+                className="text-sm text-gray-600 hover:text-indigo-600 font-medium transition-colors"
               >
                 ¿Olvidaste tu contraseña?
               </button>
@@ -195,8 +195,8 @@ export default function LoginPage() {
           </div>
 
           {/* Footer */}
-          <div className="px-8 py-6 bg-gray-50/50 dark:bg-[#1a1a1a]/50 border-t border-gray-200 dark:border-[#333333]">
-            <p className="text-center text-xs text-gray-500 dark:text-[#6b6b6b]">
+          <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-200">
+            <p className="text-center text-xs text-gray-500">
               © 2026 Mentis. Sistema Integral de Psicología Ocupacional
             </p>
           </div>

@@ -39,21 +39,21 @@ function ValoracionFormContent() {
 
     return (
         <div className="space-y-6 max-w-6xl mx-auto">
-            <div className="flex items-center gap-4 border-b border-gray-200 dark:border-gray-800 pb-5">
+            <div className="flex items-center gap-4 border-b border-gray-200 pb-5">
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => router.push('/dashboard/formatos-to/valoracion-ocupacional')}
-                    className="h-10 w-10 shrink-0 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
+                    className="h-10 w-10 shrink-0 hover:bg-gray-100 text-gray-500 transition-colors"
                 >
                     <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-3">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
                         <FileText className="h-7 w-7 text-indigo-500" />
                         {isViewOnly ? 'Ver Valoración Ocupacional' : (valoracionId ? 'Editar Valoración Ocupacional' : 'Nueva Valoración Ocupacional')}
                     </h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <p className="text-sm text-gray-500 mt-1">
                         Complete el formulario de evaluación paso a paso
                     </p>
                 </div>

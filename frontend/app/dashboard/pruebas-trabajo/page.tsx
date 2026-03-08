@@ -172,11 +172,11 @@ export default function PruebasTrabajoPage() {
   const estadoBadgeColor = (estado: string) => {
     switch (estado.toLowerCase()) {
       case 'completada':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+        return 'bg-green-100 text-green-700';
       case 'borrador':
-        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+        return 'bg-yellow-100 text-yellow-700';
       default:
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -197,11 +197,11 @@ export default function PruebasTrabajoPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
                 <Briefcase className="w-8 h-8 text-violet-500" />
                 Pruebas de Trabajo
               </h1>
-              <p className="text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-gray-500 mt-1">
                 Gestiona las pruebas de trabajo y evaluaciones de riesgos psicosociales
               </p>
             </div>
@@ -214,7 +214,7 @@ export default function PruebasTrabajoPage() {
           </div>
 
           {/* Filters */}
-          <Card className="border-gray-200 dark:border-[#333333]">
+          <Card className="border-gray-200">
             <CardContent className="p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1">
@@ -225,13 +225,13 @@ export default function PruebasTrabajoPage() {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="pl-10 bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]"
+                      className="pl-10 bg-white border-gray-200"
                     />
                   </div>
                 </div>
                 <div className="w-full md:w-48">
                   <Select value={estadoFilter} onValueChange={setEstadoFilter}>
-                    <SelectTrigger className="bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-[#333333]">
+                    <SelectTrigger className="bg-white border-gray-200">
                       <Filter className="mr-2 h-4 w-4" />
                       <SelectValue placeholder="Estado" />
                     </SelectTrigger>
@@ -253,10 +253,10 @@ export default function PruebasTrabajoPage() {
           </Card>
 
           {/* Table */}
-          <div className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-[#333333] shadow-sm overflow-hidden">
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50/50 dark:bg-[#111111] hover:bg-gray-50/50 dark:hover:bg-[#111111]">
+                <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
                   <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">TRABAJADOR</TableHead>
                   <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">DOCUMENTO</TableHead>
                   <TableHead className="text-xs font-bold text-gray-500 uppercase tracking-wider py-4">EMPRESA</TableHead>
@@ -286,25 +286,25 @@ export default function PruebasTrabajoPage() {
                     const nombre = prueba.trabajador_nombre || 'Sin nombre';
                     const initial = nombre.charAt(0).toUpperCase();
                     return (
-                      <TableRow key={prueba.id} className="hover:bg-gray-50/50 dark:hover:bg-[#222222] transition-colors">
+                      <TableRow key={prueba.id} className="hover:bg-gray-50/50 transition-colors">
                         <TableCell className="py-4">
                           <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center w-8 h-8 rounded-full bg-violet-600 text-white font-bold text-sm">
                               {initial}
                             </div>
-                            <span className="font-semibold text-gray-900 dark:text-white text-sm uppercase">{nombre}</span>
+                            <span className="font-semibold text-gray-900 text-sm uppercase">{nombre}</span>
                           </div>
                         </TableCell>
-                        <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                        <TableCell className="text-sm text-gray-600">
                           {prueba.trabajador_identificacion || '-'}
                         </TableCell>
-                        <TableCell className="text-sm text-gray-600 dark:text-gray-300">
+                        <TableCell className="text-sm text-gray-600">
                           <div className="flex items-center gap-2">
                             <FileText className="h-3 w-3 text-gray-400" />
                             {prueba.empresa || '-'}
                           </div>
                         </TableCell>
-                        <TableCell className="text-sm text-gray-500 dark:text-gray-400">
+                        <TableCell className="text-sm text-gray-500">
                           {formatDate(prueba.fecha_creacion)}
                         </TableCell>
                         <TableCell>
@@ -373,7 +373,7 @@ export default function PruebasTrabajoPage() {
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <span className="text-sm text-gray-600 dark:text-gray-400">
+              <span className="text-sm text-gray-600">
                 Página {page} de {totalPages}
               </span>
               <Button
@@ -392,8 +392,8 @@ export default function PruebasTrabajoPage() {
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                    <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                  <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+                    <AlertTriangle className="h-6 w-6 text-red-600" />
                   </div>
                   <div>
                     <DialogTitle>Eliminar Prueba de Trabajo</DialogTitle>
@@ -404,9 +404,9 @@ export default function PruebasTrabajoPage() {
                 </div>
               </DialogHeader>
               <div className="py-4">
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-gray-600">
                   ¿Estás seguro de que deseas eliminar la prueba de trabajo de{' '}
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <span className="font-semibold text-gray-900">
                     {pruebaToDelete?.trabajador_nombre || 'Sin nombre'}
                   </span>
                   ? Se eliminarán todos los datos asociados incluyendo el trabajador, empresa y evaluación.
@@ -417,7 +417,7 @@ export default function PruebasTrabajoPage() {
                   variant="outline"
                   onClick={() => setDeleteDialogOpen(false)}
                   disabled={deleting}
-                  className="border-gray-200 dark:border-[#444444]"
+                  className="border-gray-200"
                 >
                   Cancelar
                 </Button>

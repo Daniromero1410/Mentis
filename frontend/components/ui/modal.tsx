@@ -59,17 +59,17 @@ export function Modal({ isOpen, onClose, title, children, footer, size = 'md' }:
       ></div>
 
       {/* Modal */}
-      <div className={`relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 w-full ${sizeClasses[size]} mx-4 max-h-[90vh] overflow-hidden flex flex-col`}>
+      <div className={`relative bg-white rounded-2xl shadow-2xl border border-gray-200 w-full ${sizeClasses[size]} mx-4 max-h-[90vh] overflow-hidden flex flex-col`}>
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl font-bold text-gray-900">
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+            <X className="h-5 w-5 text-gray-500" />
           </button>
         </div>
 
@@ -80,7 +80,7 @@ export function Modal({ isOpen, onClose, title, children, footer, size = 'md' }:
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50">
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
             {footer}
           </div>
         )}

@@ -1,4 +1,4 @@
-Ôªø'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -30,9 +30,9 @@ import {
 
 // --- Steps -----------------------------------------------------------
 const steps = [
-  { id: 1, title: 'Identificaci√≥n', icon: User },
+  { id: 1, title: 'IdentificaciÛn', icon: User },
   { id: 2, title: 'Contexto y Participantes', icon: Briefcase },
-  { id: 3, title: 'Descripci√≥n del Cargo', icon: Activity },
+  { id: 3, title: 'DescripciÛn del Cargo', icon: Activity },
   { id: 4, title: 'Factores de Riesgo', icon: AlertTriangle },
   { id: 5, title: 'Resumen y Concepto', icon: FileText },
 ];
@@ -50,18 +50,18 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
     items: [
       {
         numero: 1,
-        nombre: 'Ritmo de trabajo acelerado o bajo presi√≥n de tiempo',
-        descripcion: 'Esta condici√≥n considera la velocidad con la que se realizan las tareas y/o el ritmo acelerado de trabajo con el fin de cumplir con la cantidad de responsabilidades, lo que podr√≠a constituir un factor de riesgo.'
+        nombre: 'Ritmo de trabajo acelerado o bajo presiÛn de tiempo',
+        descripcion: 'Esta condiciÛn considera la velocidad con la que se realizan las tareas y/o el ritmo acelerado de trabajo con el fin de cumplir con la cantidad de responsabilidades, lo que podrÌa constituir un factor de riesgo.'
       },
       {
         numero: 2,
         nombre: 'Imposibilidad de hacer pausas dentro de la jornada',
-        descripcion: 'Esta condici√≥n examina la posibilidad que tiene un trabajador de detener su actividad laboral para tomar un descanso o hacer una pausa, dependiendo de la cantidad de trabajo que tiene que hacer.'
+        descripcion: 'Esta condiciÛn examina la posibilidad que tiene un trabajador de detener su actividad laboral para tomar un descanso o hacer una pausa, dependiendo de la cantidad de trabajo que tiene que hacer.'
       },
       {
         numero: 3,
         nombre: 'Tiempo adicional para cumplir con el trabajo asignado',
-        descripcion: 'Esta condici√≥n considera la cantidad de tiempo que se debe invertir para realizar todas las actividades de las tareas asignadas. Trabajar tiempo adicional al de la jornada establecida para lograr cumplir con el trabajo asignado se constituye en un factor de riesgo.'
+        descripcion: 'Esta condiciÛn considera la cantidad de tiempo que se debe invertir para realizar todas las actividades de las tareas asignadas. Trabajar tiempo adicional al de la jornada establecida para lograr cumplir con el trabajo asignado se constituye en un factor de riesgo.'
       },
     ]
   },
@@ -70,28 +70,28 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
     items: [
       {
         numero: 4,
-        nombre: 'Exigencia de memoria, atenci√≥n y concentraci√≥n',
-        descripcion: 'Esta condici√≥n considera si se debe realizar un esfuerzo mental importante de memoria, atenci√≥n o concentraci√≥n para el desarrollo de sus actividades.'
+        nombre: 'Exigencia de memoria, atenciÛn y concentraciÛn',
+        descripcion: 'Esta condiciÛn considera si se debe realizar un esfuerzo mental importante de memoria, atenciÛn o concentraciÛn para el desarrollo de sus actividades.'
       },
       {
         numero: 5,
-        nombre: 'Exigencia de altos niveles de detalle o precisi√≥n',
-        descripcion: 'Esta condici√≥n considera si se debe realizar un esfuerzo mental importante para atender informaci√≥n detallada o debe manipular con precisi√≥n materiales, equipos o herramientas para el desarrollo de sus actividades.'
+        nombre: 'Exigencia de altos niveles de detalle o precisiÛn',
+        descripcion: 'Esta condiciÛn considera si se debe realizar un esfuerzo mental importante para atender informaciÛn detallada o debe manipular con precisiÛn materiales, equipos o herramientas para el desarrollo de sus actividades.'
       },
       {
         numero: 6,
-        nombre: 'Elevada cantidad de informaci√≥n que se usa bajo presi√≥n de tiempo',
-        descripcion: 'Esta condici√≥n eval√∫a si se debe realizar un esfuerzo mental importante derivado del uso de mucha informaci√≥n en poco tiempo.'
+        nombre: 'Elevada cantidad de informaciÛn que se usa bajo presiÛn de tiempo',
+        descripcion: 'Esta condiciÛn eval˙a si se debe realizar un esfuerzo mental importante derivado del uso de mucha informaciÛn en poco tiempo.'
       },
       {
         numero: 7,
-        nombre: 'Elevada cantidad de informaci√≥n que se usa de forma simult√°nea',
-        descripcion: 'Esta condici√≥n considera si para el cargo se debe realizar un esfuerzo mental importante derivado del uso simult√°neo de mucha informaci√≥n proveniente de diferentes fuentes.'
+        nombre: 'Elevada cantidad de informaciÛn que se usa de forma simult·nea',
+        descripcion: 'Esta condiciÛn considera si para el cargo se debe realizar un esfuerzo mental importante derivado del uso simult·neo de mucha informaciÛn proveniente de diferentes fuentes.'
       },
       {
         numero: 8,
-        nombre: 'La informaci√≥n necesaria para realizar el trabajo es compleja',
-        descripcion: 'Para el desarrollo de las funciones del cargo, se eval√∫a si se debe realizar un esfuerzo mental importante derivado del uso de informaci√≥n compleja.'
+        nombre: 'La informaciÛn necesaria para realizar el trabajo es compleja',
+        descripcion: 'Para el desarrollo de las funciones del cargo, se eval˙a si se debe realizar un esfuerzo mental importante derivado del uso de informaciÛn compleja.'
       },
     ]
   },
@@ -100,18 +100,18 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
     items: [
       {
         numero: 9,
-        nombre: 'Exposici√≥n a sentimientos, emociones y trato negativo de usuarios o clientes',
-        descripcion: 'Esta condici√≥n considera si en virtud de su trabajo, la persona se expone al estado emocional alterado (tristeza, irritabilidad, agresividad) de clientes o usuarios.'
+        nombre: 'ExposiciÛn a sentimientos, emociones y trato negativo de usuarios o clientes',
+        descripcion: 'Esta condiciÛn considera si en virtud de su trabajo, la persona se expone al estado emocional alterado (tristeza, irritabilidad, agresividad) de clientes o usuarios.'
       },
       {
         numero: 10,
-        nombre: 'Exposici√≥n a situaciones emocionalmente devastadoras',
-        descripcion: 'En el desarrollo de las labores, se eval√∫a si el trabajador experimenta situaciones emocionalmente devastadoras.'
+        nombre: 'ExposiciÛn a situaciones emocionalmente devastadoras',
+        descripcion: 'En el desarrollo de las labores, se eval˙a si el trabajador experimenta situaciones emocionalmente devastadoras.'
       },
       {
         numero: 11,
         nombre: 'Requerimiento de ocultar o simular emociones o sentimientos',
-        descripcion: 'En virtud de su trabajo, se eval√∫a si el funcionario recibe directrices que limitan la expresi√≥n de sentimientos y emociones de su naturaleza humana.'
+        descripcion: 'En virtud de su trabajo, se eval˙a si el funcionario recibe directrices que limitan la expresiÛn de sentimientos y emociones de su naturaleza humana.'
       },
     ]
   },
@@ -121,32 +121,32 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
       {
         numero: 12,
         nombre: 'Responsabilidad directa por la vida, salud o seguridad de otras personas',
-        descripcion: 'Esta condici√≥n est√° presente cuando el puesto que ocupa el servidor responde directamente por la vida, salud o seguridad de otras personas. Indaga si las actividades que se desarrollan en el puesto pueden tener un impacto directo sobre la promoci√≥n de la vida, el cuidado de la salud o la seguridad de otras personas.'
+        descripcion: 'Esta condiciÛn est· presente cuando el puesto que ocupa el servidor responde directamente por la vida, salud o seguridad de otras personas. Indaga si las actividades que se desarrollan en el puesto pueden tener un impacto directo sobre la promociÛn de la vida, el cuidado de la salud o la seguridad de otras personas.'
       },
       {
         numero: 13,
-        nombre: 'Responsabilidad directa por supervisi√≥n de personal',
-        descripcion: 'Esta condici√≥n indaga si el puesto tiene bajo su directa responsabilidad la jefatura de otras personas.'
+        nombre: 'Responsabilidad directa por supervisiÛn de personal',
+        descripcion: 'Esta condiciÛn indaga si el puesto tiene bajo su directa responsabilidad la jefatura de otras personas.'
       },
       {
         numero: 14,
-        nombre: 'Responsabilidad directa por resultados del √°rea de trabajo',
-        descripcion: 'Esta condici√≥n indaga si en el puesto que se desempe√±a est√° la responsabilidad final de alcanzar los resultados generales del √°rea.'
+        nombre: 'Responsabilidad directa por resultados del ·rea de trabajo',
+        descripcion: 'Esta condiciÛn indaga si en el puesto que se desempeÒa est· la responsabilidad final de alcanzar los resultados generales del ·rea.'
       },
       {
         numero: 15,
-        nombre: 'Responsabilidad directa por bienes de elevada cuant√≠a',
-        descripcion: 'Esta condici√≥n revisa la tenencia bajo su responsabilidad de elementos cuyo costo sea considerable y su afectaci√≥n pueda resultar en un detrimento patrimonial de la instituci√≥n.'
+        nombre: 'Responsabilidad directa por bienes de elevada cuantÌa',
+        descripcion: 'Esta condiciÛn revisa la tenencia bajo su responsabilidad de elementos cuyo costo sea considerable y su afectaciÛn pueda resultar en un detrimento patrimonial de la instituciÛn.'
       },
       {
         numero: 16,
-        nombre: 'Responsabilidad directa por dinero de la organizaci√≥n',
-        descripcion: 'Se eval√∫a si el cargo desempe√±ado es responsable de la tenencia o custodia de dinero en efectivo o papeles valor.'
+        nombre: 'Responsabilidad directa por dinero de la organizaciÛn',
+        descripcion: 'Se eval˙a si el cargo desempeÒado es responsable de la tenencia o custodia de dinero en efectivo o papeles valor.'
       },
       {
         numero: 17,
-        nombre: 'Responsabilidad directa por informaci√≥n confidencial',
-        descripcion: 'El cargo exige mantener secretismo sobre informaci√≥n sensible.'
+        nombre: 'Responsabilidad directa por informaciÛn confidencial',
+        descripcion: 'El cargo exige mantener secretismo sobre informaciÛn sensible.'
       },
     ]
   },
@@ -156,12 +156,12 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
       {
         numero: 18,
         nombre: 'Falta de recursos, personas o herramientas necesarias para desarrollar el trabajo',
-        descripcion: 'La condici√≥n examina si para el desarrollo de las funciones existen falencias en algunos recursos que la tarea requiere.'
+        descripcion: 'La condiciÛn examina si para el desarrollo de las funciones existen falencias en algunos recursos que la tarea requiere.'
       },
       {
         numero: 19,
-        nombre: '√ìrdenes contradictorias provenientes de una o varias personas',
-        descripcion: 'En esta condici√≥n, el funcionario se somete a recibir √≥rdenes o requerimientos que pueden ser contradictorios dentro de la cadena de mando.'
+        nombre: '”rdenes contradictorias provenientes de una o varias personas',
+        descripcion: 'En esta condiciÛn, el funcionario se somete a recibir Ûrdenes o requerimientos que pueden ser contradictorios dentro de la cadena de mando.'
       },
       {
         numero: 20,
@@ -170,13 +170,13 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
       },
       {
         numero: 21,
-        nombre: 'Solicitudes o requerimientos que van en contra de principios √©ticos, t√©cnicos, de seguridad o de calidad o servicio del producto',
-        descripcion: 'La naturaleza de la tarea puede estar permeada por demandas no asertivas que coloquen en riesgo la integridad moral, profesional o f√≠sica del trabajador.'
+        nombre: 'Solicitudes o requerimientos que van en contra de principios Èticos, tÈcnicos, de seguridad o de calidad o servicio del producto',
+        descripcion: 'La naturaleza de la tarea puede estar permeada por demandas no asertivas que coloquen en riesgo la integridad moral, profesional o fÌsica del trabajador.'
       },
     ]
   },
   demandas_ambientales: {
-    titulo: 'Demandas Ambientales y de Esfuerzo F√≠sico',
+    titulo: 'Demandas Ambientales y de Esfuerzo FÌsico',
     items: [
       {
         numero: 22,
@@ -185,8 +185,8 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
       },
       {
         numero: 23,
-        nombre: 'Iluminaci√≥n que afecta negativamente',
-        descripcion: 'La presencia de luz artificial o la escasez de luz natural, as√≠ como el exceso de las mismas, pueden ser un factor de riesgo.'
+        nombre: 'IluminaciÛn que afecta negativamente',
+        descripcion: 'La presencia de luz artificial o la escasez de luz natural, asÌ como el exceso de las mismas, pueden ser un factor de riesgo.'
       },
       {
         numero: 24,
@@ -195,13 +195,13 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
       },
       {
         numero: 25,
-        nombre: 'Condiciones de Ventilaci√≥n que afecten negativamente',
-        descripcion: 'La ventilaci√≥n natural en su exceso o escasez puede ser un factor de riesgo.'
+        nombre: 'Condiciones de VentilaciÛn que afecten negativamente',
+        descripcion: 'La ventilaciÛn natural en su exceso o escasez puede ser un factor de riesgo.'
       },
       {
         numero: 26,
-        nombre: 'Distribuci√≥n y caracter√≠sticas del puesto, equipos o herramientas que afectan negativamente',
-        descripcion: 'La distribuci√≥n y caracter√≠sticas del puesto, equipos o herramientas pueden convertirse en un factor estresante e incluso en un factor de riesgo f√≠sico.'
+        nombre: 'DistribuciÛn y caracterÌsticas del puesto, equipos o herramientas que afectan negativamente',
+        descripcion: 'La distribuciÛn y caracterÌsticas del puesto, equipos o herramientas pueden convertirse en un factor estresante e incluso en un factor de riesgo fÌsico.'
       },
       {
         numero: 27,
@@ -210,23 +210,23 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
       },
       {
         numero: 28,
-        nombre: 'Preocupaci√≥n por exposici√≥n a agentes biol√≥gicos',
-        descripcion: 'La persona percibe la posibilidad de estar expuesto a virus, bacterias, hongos y otros pat√≥genos.'
+        nombre: 'PreocupaciÛn por exposiciÛn a agentes biolÛgicos',
+        descripcion: 'La persona percibe la posibilidad de estar expuesto a virus, bacterias, hongos y otros patÛgenos.'
       },
       {
         numero: 29,
-        nombre: 'Preocupaci√≥n por exposici√≥n a agentes qu√≠micos',
-        descripcion: 'Se eval√∫an las caracter√≠sticas de la tarea respecto a la exposici√≥n a agentes qu√≠micos.'
+        nombre: 'PreocupaciÛn por exposiciÛn a agentes quÌmicos',
+        descripcion: 'Se eval˙an las caracterÌsticas de la tarea respecto a la exposiciÛn a agentes quÌmicos.'
       },
       {
         numero: 30,
-        nombre: 'Preocupaci√≥n ante la posibilidad de sufrir un accidente de trabajo',
+        nombre: 'PreocupaciÛn ante la posibilidad de sufrir un accidente de trabajo',
         descripcion: 'La persona percibe que puede estar sujeta a la ocurrencia de un accidente de trabajo en el cumplimiento de sus tareas.'
       },
       {
         numero: 31,
-        nombre: 'Exigencias de esfuerzo f√≠sico que afectan negativamente',
-        descripcion: 'Para el desarrollo de las tareas se requiere esfuerzo f√≠sico que puede constituir un factor de riesgo.'
+        nombre: 'Exigencias de esfuerzo fÌsico que afectan negativamente',
+        descripcion: 'Para el desarrollo de las tareas se requiere esfuerzo fÌsico que puede constituir un factor de riesgo.'
       },
     ]
   },
@@ -236,12 +236,12 @@ const factoresRiesgo: Record<string, { titulo: string; items: CondicionItem[] }>
       {
         numero: 32,
         nombre: 'Trabajo en horario nocturno',
-        descripcion: 'A raz√≥n del cargo, el trabajador puede requerir laborar en horario nocturno.'
+        descripcion: 'A razÛn del cargo, el trabajador puede requerir laborar en horario nocturno.'
       },
       {
         numero: 33,
-        nombre: 'D√≠as de trabajo consecutivo sin descanso',
-        descripcion: 'Se eval√∫a si se refieren d√≠as de trabajo consecutivos sin descanso.'
+        nombre: 'DÌas de trabajo consecutivo sin descanso',
+        descripcion: 'Se eval˙a si se refieren dÌas de trabajo consecutivos sin descanso.'
       },
     ]
   }
@@ -340,7 +340,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
     // Evaluador
     nombre_evaluador: 'William Fernando Romero Suarez',
     identificacion_evaluador: '79.247.156',
-    formacion_evaluador: 'Psic√≥logo especialista en Seguridad y Salud en el Trabajo',
+    formacion_evaluador: 'PsicÛlogo especialista en Seguridad y Salud en el Trabajo',
     tarjeta_profesional: '140039',
     licencia_sst: '13828',
     // Secciones
@@ -397,14 +397,14 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
     setFormData(prev => ({ ...prev, resumen_factores: resumenInit }));
   });
 
-  // Efecto para recalcular autom√°ticamente concordancia
+  // Efecto para recalcular autom·ticamente concordancia
   useEffect(() => {
     const concordancias: string[] = [];
     const noConcordancias: string[] = [];
 
     Object.entries(formData.resumen_factores).forEach(([key, values]) => {
       if (values.nivel_trabajador && values.nivel_experto) {
-        // Encontrar t√≠tulo legible
+        // Encontrar tÌtulo legible
         const categoria = Object.values(factoresRiesgo).find(c => c.titulo === factoresRiesgo[key]?.titulo);
         const nombreTitulo = categoria ? categoria.titulo : key;
 
@@ -579,7 +579,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
           setFormData(prev => ({ ...prev, ...mappedData }));
         } catch (error) {
           console.error("Error cargando ae:", error);
-          toast.error("No se pudo cargar la informaci√≥n de la ae");
+          toast.error("No se pudo cargar la informaciÛn de la ae");
         } finally {
           setCargando(false);
         }
@@ -677,7 +677,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
 
 
 
-      // Calcular concordancia expl√≠citamente antes de guardar
+      // Calcular concordancia explÌcitamente antes de guardar
       const concordanciasCalc: string[] = [];
       const noConcordanciasCalc: string[] = [];
 
@@ -805,9 +805,9 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
         if (!formData.empresa) errors.push('Nombre de la Empresa');
         if (!formData.nit) errors.push('NIT');
         if (!formData.nombre_trabajador) errors.push('Nombre del Trabajador');
-        if (!formData.identificacion_trabajador) errors.push('Identificaci√≥n del Trabajador');
+        if (!formData.identificacion_trabajador) errors.push('IdentificaciÛn del Trabajador');
         if (!formData.nombre_evaluador) errors.push('Nombre del Evaluador');
-        if (!formData.identificacion_evaluador) errors.push('Identificaci√≥n del Evaluador');
+        if (!formData.identificacion_evaluador) errors.push('IdentificaciÛn del Evaluador');
         break;
       case 2:
         if (!formData.participante_trabajador) errors.push('Nombre del Participante (Trabajador)');
@@ -857,7 +857,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
               {mode === 'create' ? 'Nueva ae de Trabajo' : mode === 'edit' ? 'Editar ae' : 'Detalle de ae'}
             </h1>
             <p className="text-muted-foreground">
-              {mode === 'view' ? 'Visualizaci√≥n de la evaluaci√≥n' : 'Complete el formulario de evaluaci√≥n paso a paso'}
+              {mode === 'view' ? 'VisualizaciÛn de la evaluaciÛn' : 'Complete el formulario de evaluaciÛn paso a paso'}
             </p>
           </div>
         </div>
@@ -884,7 +884,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                       "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200",
                       isCompleted && "bg-green-500 text-white",
                       isCurrent && "bg-orange-500 text-white shadow-sm",
-                      isPending && "bg-gray-100 dark:bg-gray-800 text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-gray-700"
+                      isPending && "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
                     )}>
                       {isCompleted ? (
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -896,8 +896,8 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     </div>
                     <span className={cn(
                       "mt-2 text-[11px] font-medium text-center leading-tight",
-                      isCurrent && "text-orange-600 dark:text-orange-400 font-semibold",
-                      isCompleted && "text-green-600 dark:text-green-400",
+                      isCurrent && "text-orange-600 font-semibold",
+                      isCompleted && "text-green-600",
                       isPending && "text-gray-400"
                     )}>
                       {step.title}
@@ -907,7 +907,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                   {index < steps.length - 1 && (
                     <div className={cn(
                       "w-8 h-0.5",
-                      step.id < currentStep ? "bg-green-400" : "bg-gray-200 dark:bg-gray-700"
+                      step.id < currentStep ? "bg-green-400" : "bg-gray-200"
                     )} />
                   )}
                 </div>
@@ -921,68 +921,68 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
           <CardContent className="p-6">
 
             {/* ----------------------------------------------------------- */}
-            {/* PASO 1: IDENTIFICACI√ìN                                     */}
+            {/* PASO 1: IDENTIFICACI”N                                     */}
             {/* ----------------------------------------------------------- */}
             {currentStep === 1 && (
               <div className="space-y-6">
                 {/* Empresa Section */}
-                <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                  <SectionHeader icon={Briefcase}>DATOS DE IDENTIFICACI√ìN DE LA EMPRESA</SectionHeader>
+                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
+                  <SectionHeader icon={Briefcase}>DATOS DE IDENTIFICACI”N DE LA EMPRESA</SectionHeader>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Empresa <span className="text-red-500">*</span></Label>
-                      <Input disabled={readOnly} value={formData.empresa} onChange={e => updateField('empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.empresa} onChange={e => updateField('empresa', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Tipo de Documento</Label>
-                      <Input disabled={readOnly} value={formData.tipo_documento_empresa} onChange={e => updateField('tipo_documento_empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.tipo_documento_empresa} onChange={e => updateField('tipo_documento_empresa', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">NIT <span className="text-red-500">*</span></Label>
-                      <Input disabled={readOnly} value={formData.nit} onChange={e => updateField('nit', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.nit} onChange={e => updateField('nit', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Persona de Contacto</Label>
-                      <Input disabled={readOnly} value={formData.persona_contacto} onChange={e => updateField('persona_contacto', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.persona_contacto} onChange={e => updateField('persona_contacto', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">E-mail para Notificaciones</Label>
-                      <Input disabled={readOnly} type="email" value={formData.email_notificaciones} onChange={e => updateField('email_notificaciones', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} type="email" value={formData.email_notificaciones} onChange={e => updateField('email_notificaciones', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Direcci√≥n</Label>
-                      <Input disabled={readOnly} value={formData.direccion_empresa} onChange={e => updateField('direccion_empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">DirecciÛn</Label>
+                      <Input disabled={readOnly} value={formData.direccion_empresa} onChange={e => updateField('direccion_empresa', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">ARL</Label>
-                      <Input disabled={readOnly} value={formData.arl} onChange={e => updateField('arl', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.arl} onChange={e => updateField('arl', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Ciudad</Label>
-                      <Input disabled={readOnly} value={formData.ciudad_empresa} onChange={e => updateField('ciudad_empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.ciudad_empresa} onChange={e => updateField('ciudad_empresa', e.target.value)} className="bg-white" />
                     </div>
                   </div>
                 </div>
 
                 {/* Trabajador Section */}
-                <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
+                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
                   <SectionHeader icon={User}>DATOS DEL TRABAJADOR</SectionHeader>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Nombre <span className="text-red-500">*</span></Label>
-                      <Input disabled={readOnly} value={formData.nombre_trabajador} onChange={e => updateField('nombre_trabajador', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.nombre_trabajador} onChange={e => updateField('nombre_trabajador', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Identificaci√≥n <span className="text-red-500">*</span></Label>
-                      <Input disabled={readOnly} value={formData.identificacion_trabajador} onChange={e => updateField('identificacion_trabajador', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">IdentificaciÛn <span className="text-red-500">*</span></Label>
+                      <Input disabled={readOnly} value={formData.identificacion_trabajador} onChange={e => updateField('identificacion_trabajador', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Edad</Label>
-                      <Input disabled={readOnly} type="number" value={formData.edad} onChange={e => updateField('edad', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} type="number" value={formData.edad} onChange={e => updateField('edad', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">G√©nero</Label>
-                      <select disabled={readOnly} className="w-full border rounded-md p-2.5 text-sm bg-white dark:bg-gray-800 dark:border-gray-700 focus:ring-2 focus:ring-orange-500 focus:border-orange-500" value={formData.genero} onChange={e => updateField('genero', e.target.value)}>
+                      <Label className="text-sm font-medium">GÈnero</Label>
+                      <select disabled={readOnly} className="w-full border rounded-md p-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500" value={formData.genero} onChange={e => updateField('genero', e.target.value)}>
                         <option value="">Seleccione...</option>
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
@@ -991,87 +991,87 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Fecha de Nacimiento</Label>
-                      <Input disabled={readOnly} type="date" value={formData.fecha_nacimiento} onChange={e => updateField('fecha_nacimiento', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} type="date" value={formData.fecha_nacimiento} onChange={e => updateField('fecha_nacimiento', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Escolaridad</Label>
-                      <Input disabled={readOnly} value={formData.escolaridad} onChange={e => updateField('escolaridad', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.escolaridad} onChange={e => updateField('escolaridad', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Nivel Educativo</Label>
-                      <Input disabled={readOnly} value={formData.nivel_educativo} onChange={e => updateField('nivel_educativo', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.nivel_educativo} onChange={e => updateField('nivel_educativo', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">EPS</Label>
-                      <Input disabled={readOnly} value={formData.eps} onChange={e => updateField('eps', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.eps} onChange={e => updateField('eps', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Puesto de Trabajo Evaluado</Label>
-                      <Input disabled={readOnly} value={formData.puesto_trabajo_evaluado} onChange={e => updateField('puesto_trabajo_evaluado', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.puesto_trabajo_evaluado} onChange={e => updateField('puesto_trabajo_evaluado', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Cargo</Label>
-                      <Input disabled={readOnly} value={formData.cargo} onChange={e => updateField('cargo', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.cargo} onChange={e => updateField('cargo', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">√Årea</Label>
-                      <Input disabled={readOnly} value={formData.area} onChange={e => updateField('area', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">¡rea</Label>
+                      <Input disabled={readOnly} value={formData.area} onChange={e => updateField('area', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Fecha Ingreso a Puesto</Label>
-                      <Input disabled={readOnly} type="date" value={formData.fecha_ingreso_puesto_evaluado} onChange={e => updateField('fecha_ingreso_puesto_evaluado', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} type="date" value={formData.fecha_ingreso_puesto_evaluado} onChange={e => updateField('fecha_ingreso_puesto_evaluado', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Fecha Ingreso a Empresa</Label>
-                      <Input disabled={readOnly} type="date" value={formData.fecha_ingreso_empresa} onChange={e => updateField('fecha_ingreso_empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} type="date" value={formData.fecha_ingreso_empresa} onChange={e => updateField('fecha_ingreso_empresa', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Antig√ºedad en la Empresa</Label>
-                      <Input disabled={readOnly} value={formData.antiguedad_empresa} onChange={e => updateField('antiguedad_empresa', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">Antig¸edad en la Empresa</Label>
+                      <Input disabled={readOnly} value={formData.antiguedad_empresa} onChange={e => updateField('antiguedad_empresa', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Antig√ºedad en Puesto</Label>
-                      <Input disabled={readOnly} value={formData.antiguedad_puesto_evaluado} onChange={e => updateField('antiguedad_puesto_evaluado', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">Antig¸edad en Puesto</Label>
+                      <Input disabled={readOnly} value={formData.antiguedad_puesto_evaluado} onChange={e => updateField('antiguedad_puesto_evaluado', e.target.value)} className="bg-white" />
                     </div>
 
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Diagn√≥stico</Label>
-                      <Input disabled={readOnly} value={formData.diagnostico} onChange={e => updateField('diagnostico', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">DiagnÛstico</Label>
+                      <Input disabled={readOnly} value={formData.diagnostico} onChange={e => updateField('diagnostico', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">C√≥digo CIE 10</Label>
-                      <Input disabled={readOnly} value={formData.codigo_cie10} onChange={e => updateField('codigo_cie10', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">CÛdigo CIE 10</Label>
+                      <Input disabled={readOnly} value={formData.codigo_cie10} onChange={e => updateField('codigo_cie10', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Fecha de Siniestro</Label>
-                      <Input disabled={readOnly} type="date" value={formData.fecha_siniestro} onChange={e => updateField('fecha_siniestro', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} type="date" value={formData.fecha_siniestro} onChange={e => updateField('fecha_siniestro', e.target.value)} className="bg-white" />
                     </div>
                   </div>
                 </div>
 
                 {/* Evaluador Section */}
-                <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
+                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100">
                   <SectionHeader icon={FileText}>DATOS DEL EVALUADOR</SectionHeader>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Nombre <span className="text-red-500">*</span></Label>
-                      <Input disabled={readOnly} value={formData.nombre_evaluador} onChange={e => updateField('nombre_evaluador', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Input disabled={readOnly} value={formData.nombre_evaluador} onChange={e => updateField('nombre_evaluador', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Identificaci√≥n <span className="text-red-500">*</span></Label>
-                      <Input disabled={readOnly} value={formData.identificacion_evaluador} onChange={e => updateField('identificacion_evaluador', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">IdentificaciÛn <span className="text-red-500">*</span></Label>
+                      <Input disabled={readOnly} value={formData.identificacion_evaluador} onChange={e => updateField('identificacion_evaluador', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">Formaci√≥n</Label>
-                      <Input disabled={readOnly} value={formData.formacion_evaluador} onChange={e => updateField('formacion_evaluador', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">FormaciÛn</Label>
+                      <Input disabled={readOnly} value={formData.formacion_evaluador} onChange={e => updateField('formacion_evaluador', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">N¬∞ Tarjeta Profesional</Label>
-                      <Input disabled={readOnly} value={formData.tarjeta_profesional} onChange={e => updateField('tarjeta_profesional', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">N∞ Tarjeta Profesional</Label>
+                      <Input disabled={readOnly} value={formData.tarjeta_profesional} onChange={e => updateField('tarjeta_profesional', e.target.value)} className="bg-white" />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-sm font-medium">N¬∞ Licencia en SST</Label>
-                      <Input disabled={readOnly} value={formData.licencia_sst} onChange={e => updateField('licencia_sst', e.target.value)} className="bg-white dark:bg-gray-800" />
+                      <Label className="text-sm font-medium">N∞ Licencia en SST</Label>
+                      <Input disabled={readOnly} value={formData.licencia_sst} onChange={e => updateField('licencia_sst', e.target.value)} className="bg-white" />
                     </div>
                   </div>
                 </div>
@@ -1083,13 +1083,13 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
             {/* ----------------------------------------------------------- */}
             {currentStep === 2 && (
               <div className="space-y-4">
-                <SectionHeader>METODOLOG√çA</SectionHeader>
+                <SectionHeader>METODOLOGÕA</SectionHeader>
                 <Textarea
                   disabled={readOnly}
                   className="min-h-[120px]"
                   value={formData.metodologia}
                   onChange={e => updateField('metodologia', e.target.value)}
-                  placeholder="El siguiente instrumento establecido para la realizaci√≥n de aes de Trabajo de Esfera Mental basa su estructura en el apartado del Dominio Demandas del Trabajo de la Bater√≠a de instrumentos para la evaluaci√≥n de factores de riesgo psicosocial del ministerio de protecci√≥n social..."
+                  placeholder="El siguiente instrumento establecido para la realizaciÛn de aes de Trabajo de Esfera Mental basa su estructura en el apartado del Dominio Demandas del Trabajo de la BaterÌa de instrumentos para la evaluaciÛn de factores de riesgo psicosocial del ministerio de protecciÛn social..."
                 />
 
                 <SectionHeader>PARTICIPANTES</SectionHeader>
@@ -1099,7 +1099,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                   <div><Label>Cargo Jefe</Label><Input disabled={readOnly} value={formData.participante_cargo_jefe} onChange={e => updateField('participante_cargo_jefe', e.target.value)} /></div>
                 </div>
 
-                <SectionHeader>FUENTES DE RECOLECCI√ìN DE LA INFORMACI√ìN</SectionHeader>
+                <SectionHeader>FUENTES DE RECOLECCI”N DE LA INFORMACI”N</SectionHeader>
                 <p className="text-sm text-gray-600 mb-2">Se llevaron a cabo las siguientes entrevistas</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm border-collapse border border-gray-300">
@@ -1125,23 +1125,23 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                   </table>
                 </div>
 
-                <SectionHeader>REVISI√ìN DOCUMENTAL</SectionHeader>
+                <SectionHeader>REVISI”N DOCUMENTAL</SectionHeader>
                 <Textarea
                   disabled={readOnly}
                   className="min-h-[80px]"
                   value={formData.revision_documental}
                   onChange={e => updateField('revision_documental', e.target.value)}
-                  placeholder="Se verifica documentaci√≥n cl√≠nica..."
+                  placeholder="Se verifica documentaciÛn clÌnica..."
                 />
               </div>
             )}
 
             {/* ----------------------------------------------------------- */}
-            {/* PASO 3: DESCRIPCI√ìN DEL CARGO                              */}
+            {/* PASO 3: DESCRIPCI”N DEL CARGO                              */}
             {/* ----------------------------------------------------------- */}
             {currentStep === 3 && (
               <div className="space-y-4">
-                <SectionHeader>DESCRIPCI√ìN DEL PUESTO DE TRABAJO</SectionHeader>
+                <SectionHeader>DESCRIPCI”N DEL PUESTO DE TRABAJO</SectionHeader>
                 <Textarea
                   disabled={readOnly}
                   className="min-h-[120px]"
@@ -1150,28 +1150,28 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                   placeholder="Describa el puesto de trabajo evaluado..."
                 />
 
-                <SectionHeader>CONDICI√ìN ACTUAL</SectionHeader>
+                <SectionHeader>CONDICI”N ACTUAL</SectionHeader>
                 <Textarea
                   disabled={readOnly}
                   className="min-h-[100px]"
                   value={formData.condicion_actual}
                   onChange={e => updateField('condicion_actual', e.target.value)}
-                  placeholder="Describa la condici√≥n actual del trabajador..."
+                  placeholder="Describa la condiciÛn actual del trabajador..."
                 />
 
                 <SectionHeader>ASPECTOS OCUPACIONALES</SectionHeader>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div><Label>Nombre o Denominaci√≥n del Puesto</Label><Input disabled={readOnly} value={formData.nombre_puesto_ocupacional} onChange={e => updateField('nombre_puesto_ocupacional', e.target.value)} /></div>
-                  <div><Label>√Årea a la que pertenece el puesto</Label><Input disabled={readOnly} value={formData.area_puesto} onChange={e => updateField('area_puesto', e.target.value)} /></div>
+                  <div><Label>Nombre o DenominaciÛn del Puesto</Label><Input disabled={readOnly} value={formData.nombre_puesto_ocupacional} onChange={e => updateField('nombre_puesto_ocupacional', e.target.value)} /></div>
+                  <div><Label>¡rea a la que pertenece el puesto</Label><Input disabled={readOnly} value={formData.area_puesto} onChange={e => updateField('area_puesto', e.target.value)} /></div>
 
-                  <div><Label>Antig√ºedad en la Empresa</Label><Input disabled={readOnly} value={formData.antiguedad_empresa_ocupacional} onChange={e => updateField('antiguedad_empresa_ocupacional', e.target.value)} /></div>
+                  <div><Label>Antig¸edad en la Empresa</Label><Input disabled={readOnly} value={formData.antiguedad_empresa_ocupacional} onChange={e => updateField('antiguedad_empresa_ocupacional', e.target.value)} /></div>
                   <div><Label>Nivel Educativo Requerido para el Cargo</Label><Input disabled={readOnly} value={formData.nivel_educativo_requerido} onChange={e => updateField('nivel_educativo_requerido', e.target.value)} /></div>
                   <div><Label>Jornada Laboral</Label><Input disabled={readOnly} value={formData.jornada_laboral} onChange={e => updateField('jornada_laboral', e.target.value)} /></div>
                   <div><Label>Horas Extras</Label><Input disabled={readOnly} value={formData.horas_extras} onChange={e => updateField('horas_extras', e.target.value)} /></div>
                   <div><Label>Turnos</Label><Input disabled={readOnly} value={formData.turnos} onChange={e => updateField('turnos', e.target.value)} /></div>
                 </div>
 
-                <SectionHeader>DESCRIPCI√ìN DE FUNCIONES</SectionHeader>
+                <SectionHeader>DESCRIPCI”N DE FUNCIONES</SectionHeader>
                 <Textarea
                   disabled={readOnly}
                   className="min-h-[120px]"
@@ -1189,17 +1189,17 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
               <div className="space-y-6">
                 {/* Header */}
                 <div className="text-center space-y-3">
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center justify-center gap-2">
+                  <h2 className="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
                     <AlertTriangle className="w-6 h-6 text-orange-500" />
                     Factores de Riesgo Psicosociales
                   </h2>
-                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded-full text-base font-medium">
+                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-orange-50 text-orange-600 rounded-full text-base font-medium">
                     <Activity className="w-5 h-5" /> Demandas de Trabajo
                   </span>
                 </div>
 
                 {Object.entries(factoresRiesgo).map(([key, categoria]) => (
-                  <div key={key} className="bg-white dark:bg-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+                  <div key={key} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                     {/* Category Header */}
                     <div className="bg-orange-500 text-white px-5 py-4 font-bold text-base uppercase tracking-wide flex items-center gap-2">
                       <AlertTriangle className="w-5 h-5" />
@@ -1210,14 +1210,14 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead>
-                          <tr className="bg-gray-50 dark:bg-gray-800/50 border-b-2 border-gray-200 dark:border-gray-700">
-                            <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 dark:text-gray-300 w-[180px]">Condici√≥n</th>
-                            <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 dark:text-gray-300 min-w-[250px]">Descripci√≥n</th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 dark:text-orange-400 w-[75px]">FR</th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 dark:text-orange-400 w-[75px]">EXP</th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 dark:text-orange-400 w-[75px]">INT</th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-gray-800 dark:text-gray-200 w-[75px]">Total</th>
-                            <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 dark:text-gray-300 w-[160px]">Fuentes</th>
+                          <tr className="bg-gray-50 border-b-2 border-gray-200">
+                            <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[180px]">CondiciÛn</th>
+                            <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 min-w-[250px]">DescripciÛn</th>
+                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 w-[75px]">FR</th>
+                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 w-[75px]">EXP</th>
+                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 w-[75px]">INT</th>
+                            <th className="text-center px-3 py-3 font-bold text-sm text-gray-800 w-[75px]">Total</th>
+                            <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[160px]">Fuentes</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1225,16 +1225,16 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                             <tr
                               key={item.numero}
                               className={cn(
-                                "border-b border-gray-100 dark:border-gray-800",
-                                index % 2 === 1 && "bg-gray-50/50 dark:bg-gray-900/20"
+                                "border-b border-gray-100",
+                                index % 2 === 1 && "bg-gray-50/50"
                               )}
                             >
                               <td className="px-4 py-3 align-top">
                                 <div className="flex items-start gap-2">
-                                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 text-xs bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 rounded font-bold">
+                                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 text-xs bg-orange-100 text-orange-600 rounded font-bold">
                                     {item.numero}
                                   </span>
-                                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200 leading-snug">
+                                  <span className="text-sm font-medium text-gray-800 leading-snug">
                                     {item.nombre}
                                   </span>
                                 </div>
@@ -1242,8 +1242,8 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                               <td className="px-4 py-2">
                                 <Textarea
                                   disabled={readOnly}
-                                  className="min-h-[80px] text-sm resize-y bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 w-full"
-                                  placeholder="Describa la condici√≥n..."
+                                  className="min-h-[80px] text-sm resize-y bg-white border-gray-200 w-full"
+                                  placeholder="Describa la condiciÛn..."
                                   value={formData.factores_riesgo[item.nombre]?.observaciones || ''}
                                   onChange={e => updateFactorRiesgo(item.nombre, 'observaciones', e.target.value)}
                                 />
@@ -1252,7 +1252,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                                 <Input
                                   disabled={readOnly}
                                   type="number"
-                                  className="h-11 w-14 text-center text-base font-bold bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mx-auto"
+                                  className="h-11 w-14 text-center text-base font-bold bg-white border-gray-200 mx-auto"
                                   min={0} max={7}
                                   value={formData.factores_riesgo[item.nombre]?.fr || ''}
                                   onChange={e => updateFactorRiesgo(item.nombre, 'fr', e.target.value)}
@@ -1262,7 +1262,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                                 <Input
                                   disabled={readOnly}
                                   type="number"
-                                  className="h-11 w-14 text-center text-base font-bold bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mx-auto"
+                                  className="h-11 w-14 text-center text-base font-bold bg-white border-gray-200 mx-auto"
                                   min={0} max={7}
                                   value={formData.factores_riesgo[item.nombre]?.exp || ''}
                                   onChange={e => updateFactorRiesgo(item.nombre, 'exp', e.target.value)}
@@ -1272,21 +1272,21 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                                 <Input
                                   disabled={readOnly}
                                   type="number"
-                                  className="h-11 w-14 text-center text-base font-bold bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mx-auto"
+                                  className="h-11 w-14 text-center text-base font-bold bg-white border-gray-200 mx-auto"
                                   min={0} max={7}
                                   value={formData.factores_riesgo[item.nombre]?.int || ''}
                                   onChange={e => updateFactorRiesgo(item.nombre, 'int', e.target.value)}
                                 />
                               </td>
                               <td className="px-3 py-2 text-center align-middle">
-                                <span className="inline-flex items-center justify-center w-12 h-11 rounded-lg bg-gray-100 dark:bg-gray-800 font-bold text-gray-800 dark:text-gray-200 text-base border border-gray-200 dark:border-gray-700">
+                                <span className="inline-flex items-center justify-center w-12 h-11 rounded-lg bg-gray-100 font-bold text-gray-800 text-base border border-gray-200">
                                   {formData.factores_riesgo[item.nombre]?.total || '-'}
                                 </span>
                               </td>
                               <td className="px-4 py-2 align-middle">
                                 <Input
                                   disabled={readOnly}
-                                  className="h-10 text-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 w-full"
+                                  className="h-10 text-sm bg-white border-gray-200 w-full"
                                   placeholder="Entrevista..."
                                   value={formData.factores_riesgo[item.nombre]?.fuentes || ''}
                                   onChange={e => updateFactorRiesgo(item.nombre, 'fuentes', e.target.value)}
@@ -1299,12 +1299,12 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     </div>
 
                     {/* Category Total */}
-                    <div className="bg-gray-50 dark:bg-gray-800/50 px-5 py-4 flex items-center justify-end gap-4 border-t border-gray-200 dark:border-gray-700">
-                      <span className="text-base font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    <div className="bg-gray-50 px-5 py-4 flex items-center justify-end gap-4 border-t border-gray-200">
+                      <span className="text-base font-semibold text-gray-700 flex items-center gap-2">
                         <Activity className="w-5 h-5 text-orange-500" />
                         Total {categoria.titulo}:
                       </span>
-                      <span className="inline-flex items-center justify-center min-w-[56px] h-12 px-4 rounded-lg bg-white dark:bg-gray-900 font-bold text-xl text-orange-600 dark:text-orange-400 border-2 border-orange-200 dark:border-orange-800">
+                      <span className="inline-flex items-center justify-center min-w-[56px] h-12 px-4 rounded-lg bg-white font-bold text-xl text-orange-600 border-2 border-orange-200">
                         {categoria.items.reduce((acc, item) => acc + (parseFloat(formData.factores_riesgo[item.nombre]?.total || '0') || 0), 0)}
                       </span>
                       {(() => {
@@ -1329,38 +1329,38 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
               <div className="space-y-6">
                 {/* Per-dimension editing table */}
                 <SectionHeader>FACTORES DE RIESGO PSICOSOCIAL</SectionHeader>
-                <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="overflow-x-auto bg-white rounded-xl border border-gray-200">
                   <table className="w-full min-w-[900px]">
                     <thead>
-                      <tr className="bg-gray-100 dark:bg-gray-800">
-                        <th className="border-b border-r border-gray-200 dark:border-gray-700 p-3 text-left text-sm font-bold text-gray-700 dark:text-gray-300 w-[220px]" rowSpan={2}>
+                      <tr className="bg-gray-100">
+                        <th className="border-b border-r border-gray-200 p-3 text-left text-sm font-bold text-gray-700 w-[220px]" rowSpan={2}>
                           Factores de Riesgo Psicosocial
                         </th>
-                        <th className="border-b border-r border-gray-200 dark:border-gray-700 p-3 text-center text-sm font-bold text-orange-600 dark:text-orange-400" colSpan={2}>
-                          Valoraci√≥n Subjetiva del Trabajador
+                        <th className="border-b border-r border-gray-200 p-3 text-center text-sm font-bold text-orange-600" colSpan={2}>
+                          ValoraciÛn Subjetiva del Trabajador
                         </th>
-                        <th className="border-b border-gray-200 dark:border-gray-700 p-3 text-center text-sm font-bold text-blue-600 dark:text-blue-400" colSpan={2}>
-                          Valoraci√≥n del Experto
+                        <th className="border-b border-gray-200 p-3 text-center text-sm font-bold text-blue-600" colSpan={2}>
+                          ValoraciÛn del Experto
                         </th>
                       </tr>
-                      <tr className="bg-gray-50 dark:bg-gray-800/50">
-                        <th className="border-b border-r border-gray-200 dark:border-gray-700 p-2 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 w-[140px]">Nivel de Riesgo</th>
-                        <th className="border-b border-r border-gray-200 dark:border-gray-700 p-2 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Factores Detectados</th>
-                        <th className="border-b border-r border-gray-200 dark:border-gray-700 p-2 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 w-[140px]">Nivel de Riesgo</th>
-                        <th className="border-b border-gray-200 dark:border-gray-700 p-2 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Factores / Observaciones</th>
+                      <tr className="bg-gray-50">
+                        <th className="border-b border-r border-gray-200 p-2 text-center text-xs font-semibold text-gray-600 w-[140px]">Nivel de Riesgo</th>
+                        <th className="border-b border-r border-gray-200 p-2 text-center text-xs font-semibold text-gray-600">Factores Detectados</th>
+                        <th className="border-b border-r border-gray-200 p-2 text-center text-xs font-semibold text-gray-600 w-[140px]">Nivel de Riesgo</th>
+                        <th className="border-b border-gray-200 p-2 text-center text-xs font-semibold text-gray-600">Factores / Observaciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       {Object.entries(factoresRiesgo).map(([key, categoria], index) => (
                         <tr key={key} className={cn(
-                          "border-b border-gray-100 dark:border-gray-800",
-                          index % 2 === 1 && "bg-gray-50/50 dark:bg-gray-900/30"
+                          "border-b border-gray-100",
+                          index % 2 === 1 && "bg-gray-50/50"
                         )}>
-                          <td className="border-r border-gray-200 dark:border-gray-700 p-3 font-medium text-sm text-gray-800 dark:text-gray-200">
+                          <td className="border-r border-gray-200 p-3 font-medium text-sm text-gray-800">
                             {categoria.titulo}
                           </td>
                           {/* Worker risk level - Auto calculated from Step 4 */}
-                          <td className="border-r border-gray-200 dark:border-gray-700 p-3 text-center">
+                          <td className="border-r border-gray-200 p-3 text-center">
                             {(() => {
                               const cat = factoresRiesgo[key];
                               const total = cat.items.reduce((acc, item) => acc + (parseFloat(formData.factores_riesgo[item.nombre]?.total || '0') || 0), 0);
@@ -1373,17 +1373,17 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                             })()}
                           </td>
                           {/* Worker factors */}
-                          <td className="border-r border-gray-200 dark:border-gray-700 p-2">
+                          <td className="border-r border-gray-200 p-2">
                             <Textarea
                               disabled={readOnly}
-                              className="min-h-[60px] text-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                              className="min-h-[60px] text-sm bg-white border-gray-200"
                               placeholder="Factores detectados..."
                               value={formData.resumen_factores[key]?.factores_trabajador || ''}
                               onChange={e => updateResumenFactor(key, 'factores_trabajador', e.target.value)}
                             />
                           </td>
                           {/* Expert risk level */}
-                          <td className="border-r border-gray-200 dark:border-gray-700 p-3 text-center">
+                          <td className="border-r border-gray-200 p-3 text-center">
                             <select
                               disabled={readOnly}
                               className={cn(
@@ -1405,7 +1405,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                           <td className="p-2">
                             <Textarea
                               disabled={readOnly}
-                              className="min-h-[60px] text-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                              className="min-h-[60px] text-sm bg-white border-gray-200"
                               placeholder="Factores / Observaciones..."
                               value={formData.resumen_factores[key]?.factores_experto || ''}
                               onChange={e => updateResumenFactor(key, 'factores_experto', e.target.value)}
@@ -1423,12 +1423,12 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     <div className="grid grid-cols-3 gap-0">
                       <div className="p-2 font-bold text-center text-sm border-r border-orange-200">Factores de Riesgo Psicosocial</div>
                       <div className="p-2 font-bold text-center text-xs border-r border-orange-200">
-                        Factores de Riesgo Detectados por la Valoraci√≥n Subjetiva del Trabajador
-                        <div className="font-normal text-[10px] mt-1">De acuerdo a los resultados arrojados por el cuestionario intralaboral forma A se encontr√≥:</div>
+                        Factores de Riesgo Detectados por la ValoraciÛn Subjetiva del Trabajador
+                        <div className="font-normal text-[10px] mt-1">De acuerdo a los resultados arrojados por el cuestionario intralaboral forma A se encontrÛ:</div>
                       </div>
                       <div className="p-2 font-bold text-center text-xs">
-                        Factores Detectados por la Valoraci√≥n del Experto
-                        <div className="font-normal text-[10px] mt-1">De acuerdo con el an√°lisis psicosocial del puesto de trabajo se encontr√≥:</div>
+                        Factores Detectados por la ValoraciÛn del Experto
+                        <div className="font-normal text-[10px] mt-1">De acuerdo con el an·lisis psicosocial del puesto de trabajo se encontrÛ:</div>
                       </div>
                     </div>
                   </div>
@@ -1471,7 +1471,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                 </div>
 
                 {/* Concordance - Auto calculated */}
-                <SectionHeader>CONCLUSI√ìN DE LA EVALUACI√ìN</SectionHeader>
+                <SectionHeader>CONCLUSI”N DE LA EVALUACI”N</SectionHeader>
                 {(() => {
                   // Map getNivelRiesgo text to value format
                   const nivelToValue: Record<string, string> = {
@@ -1506,15 +1506,15 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                   return (
                     <div className="space-y-4">
                       <div>
-                        <Label className="font-semibold">Se encuentra concordancia entre la percepci√≥n del evaluado y la valoraci√≥n del profesional para los √≠tems:</Label>
-                        <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 min-h-[60px] text-sm">
-                          {concordancias.length > 0 ? concordancias.join(', ') : <span className="text-gray-400">Ninguna (complete la valoraci√≥n del experto)</span>}
+                        <Label className="font-semibold">Se encuentra concordancia entre la percepciÛn del evaluado y la valoraciÛn del profesional para los Ìtems:</Label>
+                        <div className="mt-2 p-3 bg-gray-50 rounded border border-gray-200 min-h-[60px] text-sm">
+                          {concordancias.length > 0 ? concordancias.join(', ') : <span className="text-gray-400">Ninguna (complete la valoraciÛn del experto)</span>}
                         </div>
                       </div>
                       <div>
-                        <Label className="font-semibold">No se encuentra concordancia entre la percepci√≥n del evaluado y la valoraci√≥n del profesional para los √≠tems:</Label>
-                        <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 min-h-[60px] text-sm">
-                          {noConcordancias.length > 0 ? noConcordancias.join(', ') : <span className="text-gray-400">Ninguna (complete la valoraci√≥n del experto)</span>}
+                        <Label className="font-semibold">No se encuentra concordancia entre la percepciÛn del evaluado y la valoraciÛn del profesional para los Ìtems:</Label>
+                        <div className="mt-2 p-3 bg-gray-50 rounded border border-gray-200 min-h-[60px] text-sm">
+                          {noConcordancias.length > 0 ? noConcordancias.join(', ') : <span className="text-gray-400">Ninguna (complete la valoraciÛn del experto)</span>}
                         </div>
                       </div>
                     </div>
@@ -1537,7 +1537,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                   className="min-h-[200px]"
                   value={formData.conclusiones_finales}
                   onChange={e => updateField('conclusiones_finales', e.target.value)}
-                  placeholder="Realizada la ae de Trabajo de Esfera Mental, analizados todos los √≠tems propios del instrumento y contrastada la informaci√≥n con otras fuentes..."
+                  placeholder="Realizada la ae de Trabajo de Esfera Mental, analizados todos los Ìtems propios del instrumento y contrastada la informaciÛn con otras fuentes..."
                 />
 
                 <div>
@@ -1555,7 +1555,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                 <div className="border-t-2 border-gray-300 pt-6 mt-8">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                     <div>
-                      <Label className="font-semibold">Psic√≥logo Especialista</Label>
+                      <Label className="font-semibold">PsicÛlogo Especialista</Label>
                       <Input disabled className="mt-1 bg-gray-50" value={formData.nombre_evaluador} />
                     </div>
                     <div>
@@ -1566,7 +1566,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                       <Label className="font-semibold">Firma del Evaluador</Label>
                       <div className="mt-1 space-y-2">
                         {formData.firma_evaluador ? (
-                          <div className="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-800">
+                          <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-2 bg-white">
                             <img
                               src={formData.firma_evaluador}
                               alt="Firma del evaluador"
@@ -1578,13 +1578,13 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                                 onClick={() => updateField('firma_evaluador', '')}
                                 className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
                               >
-                                √ó
+                                ◊
                               </button>
                             )}
                           </div>
                         ) : (
                           <label className={cn(
-                            "flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-800 cursor-pointer hover:border-orange-400 transition-colors",
+                            "flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50 cursor-pointer hover:border-orange-400 transition-colors",
                             readOnly && "cursor-not-allowed opacity-60"
                           )}>
                             <Upload className="w-6 h-6 text-gray-400 mb-1" />
@@ -1660,13 +1660,13 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
         {/* ----------------------------------------------------------- */}
         {/* Navigation                                                 */}
         {/* ----------------------------------------------------------- */}
-        <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+        <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-100">
           <Button
             variant="ghost"
             onClick={prevStep}
             disabled={currentStep === 1}
             className={cn(
-              "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800",
+              "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
               currentStep === 1 && 'invisible'
             )}
           >
@@ -1679,7 +1679,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                 variant="ghost"
                 onClick={() => handleSave(false)}
                 disabled={saving}
-                className="text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                className="text-orange-600 hover:bg-orange-50"
               >
                 <Save className="mr-1 h-4 w-4" /> Guardar
               </Button>
@@ -1710,15 +1710,15 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
         {/* ----------------------------------------------------------- */}
         {showDownloadModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <Card className="w-full max-w-md p-6 bg-white dark:bg-gray-900 shadow-xl rounded-xl">
+            <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
               <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">ae Finalizada</h2>
-                <p className="mb-6 text-gray-600 dark:text-gray-400">La ae se ha guardado correctamente.</p>
+                <h2 className="text-xl font-bold mb-2 text-gray-900">ae Finalizada</h2>
+                <p className="mb-6 text-gray-600">La ae se ha guardado correctamente.</p>
                 <div className="flex flex-col sm:flex-row justify-center gap-3">
                   {downloadUrls?.pdf_url && (
                     <a
