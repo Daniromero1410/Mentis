@@ -540,15 +540,16 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
     return (
         <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="text-left mb-8">
-                <h1 className="text-3xl font-bold text-slate-900">
+            <div className="text-left mb-4 sm:mb-8">
+                <h1 className="text-xl sm:text-3xl font-bold text-slate-900">
                     {mode === 'create' ? 'Nuevo Análisis de Exigencia' : mode === 'view' ? 'Ver Análisis de Exigencia' : 'Editar Análisis de Exigencia'}
                 </h1>
                 <p className="text-slate-600 mt-2">Complete el formulario de análisis paso a paso</p>
             </div>
 
             {/* Stepper */}
-            <div className="flex items-start justify-between relative mb-12 px-4">
+            <div className="overflow-x-auto scrollbar-none -mx-4 px-4 mb-8 sm:mb-12">
+                <div className="flex items-start justify-between relative min-w-[480px] px-4">
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
                 <div
                     className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-10 transition-all duration-500 ease-in-out"
@@ -582,10 +583,11 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                         </div>
                     );
                 })}
+                </div>
             </div>
 
             {/* Form content */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 sm:p-6">
 
                 {currentStep === 1 && (
                     <Step1IdentificacionAE
@@ -649,7 +651,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
             </div>
 
             {/* Navigation bar */}
-            <div className="flex items-center justify-between mt-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 mt-6">
                 <button
                     onClick={() => setCurrentStep(prev => Math.max(1, prev - 1))}
                     disabled={currentStep === 1}

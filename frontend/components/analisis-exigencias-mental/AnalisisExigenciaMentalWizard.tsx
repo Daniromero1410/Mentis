@@ -263,7 +263,7 @@ const getNivelRiesgo = (dimension: string, puntaje: number) => {
   if (!rangos) return { nivel: 'N/A', color: 'bg-gray-200 text-gray-800' };
   if (puntaje <= rangos.sin) return { nivel: 'SIN RIESGO', color: 'bg-green-500 text-white' };
   if (puntaje <= rangos.bajo) return { nivel: 'RIESGO BAJO', color: 'bg-yellow-400 text-black' };
-  if (puntaje <= rangos.medio) return { nivel: 'RIESGO MEDIO', color: 'bg-orange-500 text-white' };
+  if (puntaje <= rangos.medio) return { nivel: 'RIESGO MEDIO', color: 'bg-blue-600 text-white' };
   if (puntaje <= rangos.alto) return { nivel: 'RIESGO ALTO', color: 'bg-red-500 text-white' };
   return { nivel: 'RIESGO MUY ALTO', color: 'bg-red-900 text-white' };
 };
@@ -272,7 +272,7 @@ const getRiskColor = (risk: string) => {
   switch (risk) {
     case 'sin_riesgo': return 'bg-green-100 text-green-800 border-green-200';
     case 'riesgo_bajo': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    case 'riesgo_medio': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'riesgo_medio': return 'bg-blue-100 text-orange-800 border-blue-200';
     case 'riesgo_alto': return 'bg-red-100 text-red-800 border-red-200';
     case 'riesgo_muy_alto': return 'bg-red-800 text-white border-red-900';
     default: return 'bg-white border-gray-200';
@@ -282,7 +282,7 @@ const getRiskColor = (risk: string) => {
 const NIVELES_RIESGO = [
   { value: 'riesgo_muy_alto', label: 'RIESGO MUY ALTO', color: 'bg-red-900 text-white' },
   { value: 'riesgo_alto', label: 'RIESGO ALTO', color: 'bg-red-500 text-white' },
-  { value: 'riesgo_medio', label: 'RIESGO MEDIO', color: 'bg-orange-500 text-white' },
+  { value: 'riesgo_medio', label: 'RIESGO MEDIO', color: 'bg-blue-600 text-white' },
   { value: 'riesgo_bajo', label: 'RIESGO BAJO', color: 'bg-yellow-400 text-black' },
   { value: 'sin_riesgo', label: 'SIN RIESGO', color: 'bg-green-500 text-white' },
 ];
@@ -858,7 +858,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
 
   // --- Helper: Section Header ---------------------------------------
   const SectionHeader = ({ children, icon: Icon }: { children: React.ReactNode; icon?: React.ComponentType<{ className?: string }> }) => (
-    <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-3 font-bold text-sm uppercase tracking-wide rounded-lg shadow-md flex items-center gap-2 mb-4">
+    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 font-bold text-sm uppercase tracking-wide rounded-lg shadow-md flex items-center gap-2 mb-4">
       {Icon && <Icon className="h-5 w-5" />}
       <span>{children}</span>
     </div>
@@ -869,7 +869,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
     return (
       <DashboardLayout>
         <div className="flex justify-center items-center h-screen">
-          <Loader2 className="animate-spin h-10 w-10 text-orange-500" />
+          <Loader2 className="animate-spin h-10 w-10 text-blue-500" />
         </div>
       </DashboardLayout>
     );
@@ -878,11 +878,11 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
   // --- Render -------------------------------------------------------
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto space-y-6 pb-20">
+      <div className="max-w-7xl mx-auto space-y-6 pb-20 px-2 sm:px-0">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight">
               {mode === 'create' ? 'Nueva ae de Trabajo' : mode === 'edit' ? 'Editar ae' : 'Detalle de ae'}
             </h1>
             <p className="text-muted-foreground">
@@ -892,8 +892,8 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
         </div>
 
         {/* Step Navigation */}
-        <div className="flex items-center justify-center py-4 mb-4">
-          <div className="flex items-center gap-2">
+        <div className="overflow-x-auto scrollbar-none -mx-2 px-2 py-3 mb-3">
+          <div className="flex items-center justify-center min-w-max mx-auto gap-2">
             {steps.map((step, index) => {
               const StepIcon = step.icon;
               const isCompleted = step.id < currentStep;
@@ -912,7 +912,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     <div className={cn(
                       "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200",
                       isCompleted && "bg-green-500 text-white",
-                      isCurrent && "bg-orange-500 text-white shadow-sm",
+                      isCurrent && "bg-blue-600 text-white shadow-sm",
                       isPending && "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
                     )}>
                       {isCompleted ? (
@@ -925,7 +925,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     </div>
                     <span className={cn(
                       "mt-2 text-[11px] font-medium text-center leading-tight",
-                      isCurrent && "text-orange-600 font-semibold",
+                      isCurrent && "text-blue-600 font-semibold",
                       isCompleted && "text-green-600",
                       isPending && "text-gray-400"
                     )}>
@@ -947,7 +947,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
 
         {/* Card Content */}
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-6">
 
             {/* ----------------------------------------------------------- */}
             {/* PASO 1: IDENTIFICACIÓN                                     */}
@@ -1011,7 +1011,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Género</Label>
-                      <select disabled={readOnly} className="w-full border rounded-md p-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500" value={formData.genero} onChange={e => updateField('genero', e.target.value)}>
+                      <select disabled={readOnly} className="w-full border rounded-md p-2.5 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value={formData.genero} onChange={e => updateField('genero', e.target.value)}>
                         <option value="">Seleccione...</option>
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
@@ -1219,10 +1219,10 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                 {/* Header */}
                 <div className="text-center space-y-3">
                   <h2 className="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
-                    <AlertTriangle className="w-6 h-6 text-orange-500" />
+                    <AlertTriangle className="w-6 h-6 text-blue-500" />
                     Factores de Riesgo Psicosociales
                   </h2>
-                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-orange-50 text-orange-600 rounded-full text-base font-medium">
+                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-base font-medium">
                     <Activity className="w-5 h-5" /> Demandas de Trabajo
                   </span>
                 </div>
@@ -1230,7 +1230,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                 {Object.entries(factoresRiesgo).map(([key, categoria]) => (
                   <div key={key} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                     {/* Category Header */}
-                    <div className="bg-orange-500 text-white px-5 py-4 font-bold text-base uppercase tracking-wide flex items-center gap-2">
+                    <div className="bg-blue-600 text-white px-5 py-4 font-bold text-base uppercase tracking-wide flex items-center gap-2">
                       <AlertTriangle className="w-5 h-5" />
                       {categoria.titulo}
                     </div>
@@ -1242,9 +1242,9 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                           <tr className="bg-gray-50 border-b-2 border-gray-200">
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[180px]">Condición</th>
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 min-w-[250px]">Descripción</th>
-                            <th className="text-center px-2 py-3 font-bold text-sm text-orange-600 w-[110px]">FR <span className="text-[10px] font-normal text-orange-400">(1 · 2 · prom)</span></th>
-                            <th className="text-center px-2 py-3 font-bold text-sm text-orange-600 w-[110px]">EXP <span className="text-[10px] font-normal text-orange-400">(1 · 2 · prom)</span></th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-orange-600 w-[75px]">INT</th>
+                            <th className="text-center px-2 py-3 font-bold text-sm text-blue-600 w-[110px]">FR <span className="text-[10px] font-normal text-blue-400">(1 · 2 · prom)</span></th>
+                            <th className="text-center px-2 py-3 font-bold text-sm text-blue-600 w-[110px]">EXP <span className="text-[10px] font-normal text-blue-400">(1 · 2 · prom)</span></th>
+                            <th className="text-center px-3 py-3 font-bold text-sm text-blue-600 w-[75px]">INT</th>
                             <th className="text-center px-3 py-3 font-bold text-sm text-gray-800 w-[75px]">Total</th>
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[160px]">Fuentes</th>
                           </tr>
@@ -1260,7 +1260,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                             >
                               <td className="px-4 py-3 align-top">
                                 <div className="flex items-start gap-2">
-                                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 text-xs bg-orange-100 text-orange-600 rounded font-bold">
+                                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 text-xs bg-blue-100 text-blue-600 rounded font-bold">
                                     {item.numero}
                                   </span>
                                   <span className="text-sm font-medium text-gray-800 leading-snug">
@@ -1300,7 +1300,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                                     />
                                   </div>
                                   {formData.factores_riesgo[item.nombre]?.fr !== '' && (
-                                    <span className="text-[11px] font-bold text-orange-600 bg-orange-50 border border-orange-200 rounded px-1.5 py-0.5">
+                                    <span className="text-[11px] font-bold text-blue-600 bg-blue-50 border border-blue-200 rounded px-1.5 py-0.5">
                                       ≈ {formData.factores_riesgo[item.nombre]?.fr}
                                     </span>
                                   )}
@@ -1329,7 +1329,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                                     />
                                   </div>
                                   {formData.factores_riesgo[item.nombre]?.exp !== '' && (
-                                    <span className="text-[11px] font-bold text-orange-600 bg-orange-50 border border-orange-200 rounded px-1.5 py-0.5">
+                                    <span className="text-[11px] font-bold text-blue-600 bg-blue-50 border border-blue-200 rounded px-1.5 py-0.5">
                                       ≈ {formData.factores_riesgo[item.nombre]?.exp}
                                     </span>
                                   )}
@@ -1368,10 +1368,10 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     {/* Category Total */}
                     <div className="bg-gray-50 px-5 py-4 flex items-center justify-end gap-4 border-t border-gray-200">
                       <span className="text-base font-semibold text-gray-700 flex items-center gap-2">
-                        <Activity className="w-5 h-5 text-orange-500" />
+                        <Activity className="w-5 h-5 text-blue-500" />
                         Total {categoria.titulo}:
                       </span>
-                      <span className="inline-flex items-center justify-center min-w-[56px] h-12 px-4 rounded-lg bg-white font-bold text-xl text-orange-600 border-2 border-orange-200">
+                      <span className="inline-flex items-center justify-center min-w-[56px] h-12 px-4 rounded-lg bg-white font-bold text-xl text-blue-600 border-2 border-blue-200">
                         {categoria.items.reduce((acc, item) => acc + (parseFloat(formData.factores_riesgo[item.nombre]?.total || '0') || 0), 0)}
                       </span>
                       {(() => {
@@ -1403,7 +1403,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                         <th className="border-b border-r border-gray-200 p-3 text-left text-sm font-bold text-gray-700 w-[220px]" rowSpan={2}>
                           Factores de Riesgo Psicosocial
                         </th>
-                        <th className="border-b border-r border-gray-200 p-3 text-center text-sm font-bold text-orange-600" colSpan={2}>
+                        <th className="border-b border-r border-gray-200 p-3 text-center text-sm font-bold text-blue-600" colSpan={2}>
                           Valoración Subjetiva del Trabajador
                         </th>
                         <th className="border-b border-gray-200 p-3 text-center text-sm font-bold text-blue-600" colSpan={2}>
@@ -1486,10 +1486,10 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
 
                 {/* Summary grouped by risk level (matching PDF) */}
                 <div className="border rounded-lg overflow-hidden">
-                  <div className="bg-orange-100 border-b border-orange-200">
-                    <div className="grid grid-cols-3 gap-0">
-                      <div className="p-2 font-bold text-center text-sm border-r border-orange-200">Factores de Riesgo Psicosocial</div>
-                      <div className="p-2 font-bold text-center text-xs border-r border-orange-200">
+                  <div className="bg-blue-100 border-b border-blue-200">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
+                      <div className="p-2 font-bold text-center text-sm sm:border-r border-blue-200 border-b sm:border-b-0">Factores de Riesgo Psicosocial</div>
+                      <div className="p-2 font-bold text-center text-xs sm:border-r border-blue-200 border-b sm:border-b-0">
                         Factores de Riesgo Detectados por la Valoración Subjetiva del Trabajador
                         <div className="font-normal text-[10px] mt-1">De acuerdo a los resultados arrojados por el cuestionario intralaboral forma A se encontró:</div>
                       </div>
@@ -1522,7 +1522,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                       .map(([, cat]) => cat.titulo);
 
                     return (
-                      <div key={nivel.value} className="grid grid-cols-3 gap-0 border-b border-gray-200">
+                      <div key={nivel.value} className="grid grid-cols-1 sm:grid-cols-3 gap-0 border-b border-gray-200">
                         <div className="p-2 border-r border-gray-200 flex items-center justify-center">
                           <span className={`px-3 py-1 rounded text-xs font-bold ${nivel.color}`}>{nivel.label}</span>
                         </div>
@@ -1727,7 +1727,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
         {/* ----------------------------------------------------------- */}
         {/* Navigation                                                 */}
         {/* ----------------------------------------------------------- */}
-        <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-100">
+        <div className="flex flex-wrap justify-between items-center gap-2 mt-6 pt-4 border-t border-gray-100">
           <Button
             variant="ghost"
             onClick={prevStep}
@@ -1746,7 +1746,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                 variant="ghost"
                 onClick={() => handleSave(false)}
                 disabled={saving}
-                className="text-orange-600 hover:bg-orange-50"
+                className="text-blue-600 hover:bg-blue-50"
               >
                 <Save className="mr-1 h-4 w-4" /> Guardar
               </Button>
@@ -1754,7 +1754,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
             {currentStep < 5 ? (
               <Button
                 onClick={nextStep}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6"
               >
                 Siguiente <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
@@ -1793,7 +1793,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                         <Download className="mr-2 h-4 w-4" /> Descargar PDF ReportLab
                       </Button>
                     </a>
@@ -1828,7 +1828,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                 </ul>
               </div>
               <div className="flex justify-end">
-                <Button onClick={() => setShowValidationModal(false)} className="bg-orange-500 hover:bg-orange-600 text-white">Entendido</Button>
+                <Button onClick={() => setShowValidationModal(false)} className="bg-blue-600 hover:bg-blue-700 text-white">Entendido</Button>
               </div>
             </Card>
           </div>

@@ -878,7 +878,7 @@ export default function NuevaValoracionPage() {
             {steps[currentStep - 1].title.toUpperCase()}
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-3 sm:p-6">
 
           {/* ============ PASO 1: IDENTIFICACIÓN ============ */}
           {currentStep === 1 && (
@@ -1052,7 +1052,7 @@ export default function NuevaValoracionPage() {
               {/* Nivel Educativo */}
               <div className="space-y-3">
                 <Label>Nivel educativo</Label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {[
                     { field: 'nivel_formacion_empirica', label: 'Formación empírica' },
                     { field: 'nivel_basica_primaria', label: 'Básica primaria' },

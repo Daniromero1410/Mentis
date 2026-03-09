@@ -90,7 +90,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 />
                             </FormField>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <FormField label="Fecha de Nacimiento">
                                     <FormInput
                                         type="date"
@@ -300,7 +300,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 />
                             </FormField>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <FormField label="Fecha Ingreso Cargo">
                                     <FormInput
                                         type="date"
@@ -316,7 +316,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 </FormField>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <FormField label="Fecha Ingreso Empresa">
                                     <FormInput
                                         type="date"

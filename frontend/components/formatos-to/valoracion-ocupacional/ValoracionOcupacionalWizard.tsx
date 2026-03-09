@@ -309,7 +309,8 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
         <div className="max-w-6xl mx-auto">
 
             {/* PROGRESS BAR (Refactored Stepper) */}
-            <div className="flex items-start justify-between relative mb-12 px-4">
+            <div className="overflow-x-auto scrollbar-none -mx-4 px-4 mb-8 sm:mb-12">
+                <div className="flex items-start justify-between relative min-w-[480px] px-4">
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
                 <div
                     className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-10 transition-all duration-500 ease-in-out"
@@ -342,15 +343,16 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                         </div>
                     );
                 })}
+                </div>
             </div>
 
             {/* Form content */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 sm:p-6">
                 {STEPS_COMPONENTS[currentStep]}
             </div>
 
             {/* Navigation bar */}
-            <div className="flex items-center justify-between mt-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 mt-6">
                 <button
                     onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
                     disabled={currentStep === 0 || saving}
