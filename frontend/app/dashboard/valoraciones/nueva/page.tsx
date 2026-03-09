@@ -828,7 +828,7 @@ export default function NuevaValoracionPage() {
   return (
     <DashboardLayout>
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-6 anim-fade-in-up">
         <h1 className="text-2xl font-bold text-gray-900">
           {modoVista ? 'VER VALORACIÓN' : valoracionId ? 'EDITAR VALORACIÓN' : 'NUEVA VALORACIÓN'} DE PSICOLOGÍA PARA RECOMENDACIONES LABORALES
         </h1>
@@ -878,7 +878,7 @@ export default function NuevaValoracionPage() {
             {steps[currentStep - 1].title.toUpperCase()}
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-3 sm:p-6">
+        <CardContent key={currentStep} className="p-3 sm:p-6 anim-fade-in-up">
 
           {/* ============ PASO 1: IDENTIFICACIÓN ============ */}
           {currentStep === 1 && (

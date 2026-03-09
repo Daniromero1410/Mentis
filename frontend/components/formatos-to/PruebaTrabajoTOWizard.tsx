@@ -466,7 +466,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     };
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto anim-fade-in-up">
             {/* Header */}
             <div className="text-left mb-4 sm:mb-8">
                 <h1 className="text-xl sm:text-3xl font-bold text-slate-900">
@@ -516,7 +516,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
             </div>
 
             {/* Form content */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 sm:p-6">
+            <div key={currentStep} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 sm:p-6 anim-fade-in-up">
 
                 {currentStep === 1 && (
                     <Step1Identificacion

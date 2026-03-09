@@ -878,7 +878,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
   // --- Render -------------------------------------------------------
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto space-y-6 pb-20 px-2 sm:px-0">
+      <div className="max-w-7xl mx-auto space-y-6 pb-20 px-2 sm:px-0 anim-fade-in-up">
         {/* Header */}
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -947,7 +947,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
 
         {/* Card Content */}
         <Card>
-          <CardContent className="p-3 sm:p-6">
+          <CardContent key={currentStep} className="p-3 sm:p-6 anim-fade-in-up">
 
             {/* ----------------------------------------------------------- */}
             {/* PASO 1: IDENTIFICACIÓN                                     */}

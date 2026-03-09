@@ -306,7 +306,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
     }
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto anim-fade-in-up">
 
             {/* PROGRESS BAR (Refactored Stepper) */}
             <div className="overflow-x-auto scrollbar-none -mx-4 px-4 mb-8 sm:mb-12">
@@ -347,7 +347,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
             </div>
 
             {/* Form content */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 sm:p-6">
+            <div key={currentStep} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 sm:p-6 anim-fade-in-up">
                 {STEPS_COMPONENTS[currentStep]}
             </div>
 
