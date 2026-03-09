@@ -338,7 +338,7 @@ export default function DashboardPage() {
                     key={mod.key}
                     onClick={() => setActiveTab(mod.key)}
                     className={`px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap tab-transition ${activeTab === mod.key
-                      ? 'bg-brand-600 text-white shadow-sm shadow-brand-500/25'
+                      ? 'bg-brand-600 text-[#ffc600] shadow-sm shadow-brand-500/25'
                       : 'text-gray-500 hover:text-brand-600 hover:bg-brand-50'
                       }`}
                   >

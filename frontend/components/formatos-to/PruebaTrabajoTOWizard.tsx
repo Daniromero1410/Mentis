@@ -499,7 +499,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                                     ${isActive
                                         ? 'border-brand-600 bg-white text-brand-600 shadow-lg scale-110'
                                         : isCompleted
-                                            ? 'border-brand-600 bg-brand-600 text-white'
+                                            ? 'border-brand-600 bg-brand-600 text-[#ffc600]'
                                             : 'border-gray-300 bg-white text-gray-500 hover:border-gray-400'
                                     }
                                 `}

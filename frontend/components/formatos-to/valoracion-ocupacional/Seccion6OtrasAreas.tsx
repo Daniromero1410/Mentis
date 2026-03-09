@@ -66,7 +66,7 @@ const RatingTable = ({
                                                 disabled={readOnly}
                                                 onClick={() => onChange(item, 'valor', r)}
                                                 className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${values[item]?.valor === r
-                                                    ? 'bg-brand-600 text-white shadow-md scale-110'
+                                                    ? 'bg-brand-600 text-[#ffc600] shadow-md scale-110'
                                                     : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                                                     }`}
                                             >

@@ -912,7 +912,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
                     <div className={cn(
                       "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200",
                       isCompleted && "bg-green-500 text-white",
-                      isCurrent && "bg-brand-600 text-white shadow-sm",
+                      isCurrent && "bg-brand-600 text-[#ffc600] shadow-sm",
                       isPending && "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
                     )}>
                       {isCompleted ? (
