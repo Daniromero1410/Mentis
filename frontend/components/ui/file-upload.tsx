@@ -142,7 +142,7 @@ export function FileUpload({
           >
             {uploading ? (
               <div className="flex flex-col items-center gap-2">
-                <Loader2 className="h-8 w-8 text-indigo-500 animate-spin" />
+                <Loader2 className="h-8 w-8 text-brand-500 animate-spin" />
                 <p className="text-sm text-gray-500">Subiendo archivo...</p>
               </div>
             ) : (

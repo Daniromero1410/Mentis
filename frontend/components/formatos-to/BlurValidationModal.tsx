@@ -72,7 +72,7 @@ export function BlurValidationModal({ isOpen, onClose, title, message, errors, t
                             onClick={act.onClick}
                             className={`px-6 py-2 rounded-lg font-medium shadow-sm transition-colors focus:ring-2 focus:ring-offset-1 ${act.variant === 'secondary'
                                 ? 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
-                                : 'text-white ' + (type === 'success' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-600' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-600')
+                                : 'text-white ' + (type === 'success' ? 'bg-green-600 hover:bg-green-700 focus:ring-green-600' : 'bg-brand-600 hover:bg-brand-700 focus:ring-brand-600')
                                 }`}
                         >
                             {act.label}

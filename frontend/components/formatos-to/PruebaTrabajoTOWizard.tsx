@@ -481,7 +481,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 {/* Connecting Lines */}
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
                 <div
-                    className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-10 transition-all duration-500 ease-in-out"
+                    className="absolute top-5 left-0 h-0.5 bg-brand-600 -z-10 transition-all duration-500 ease-in-out"
                     style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
                 />
 
@@ -497,16 +497,16 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                                 className={`
                                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
                                     ${isActive
-                                        ? 'border-blue-600 bg-white text-blue-600 shadow-lg scale-110'
+                                        ? 'border-brand-600 bg-white text-brand-600 shadow-lg scale-110'
                                         : isCompleted
-                                            ? 'border-blue-600 bg-blue-600 text-white'
+                                            ? 'border-brand-600 bg-brand-600 text-white'
                                             : 'border-gray-300 bg-white text-gray-500 hover:border-gray-400'
                                     }
                                 `}
                             >
                                 <StepIcon className="h-5 w-5" />
                             </button>
-                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-blue-600 font-bold' : 'text-gray-500'}`}>
+                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-brand-600 font-bold' : 'text-gray-500'}`}>
                                 <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
                             </div>
                         </div>
@@ -579,7 +579,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                             href={`${API_URL}${downloadUrl}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100 transition-colors"
                         >
                             <Download className="h-4 w-4" /> PDF Actual
                         </a>
@@ -610,7 +610,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                     {currentStep !== STEPS.length && (
                         <button
                             onClick={handleNext}
-                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors shadow-sm"
                         >
                             Siguiente <ChevronRight className="h-4 w-4" />
                         </button>

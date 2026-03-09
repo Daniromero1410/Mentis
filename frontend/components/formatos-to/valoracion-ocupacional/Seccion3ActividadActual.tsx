@@ -109,7 +109,7 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
                                                     }
                                                     onChange={() => handleActividadChange('ocurrencia_atel_puesto', opt.val === 'si')}
                                                     disabled={readOnly}
-                                                    className="accent-blue-600 h-4 w-4"
+                                                    className="accent-brand-600 h-4 w-4"
                                                 />
                                                 {opt.label}
                                             </label>
@@ -127,7 +127,7 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
                                                 checked={!!data?.actividad_actual?.ocurrencia_atel_area}
                                                 onChange={(e) => handleActividadChange('ocurrencia_atel_area', e.target.checked)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             NO (fuera del área)
                                         </label>

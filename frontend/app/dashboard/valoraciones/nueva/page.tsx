@@ -817,7 +817,7 @@ export default function NuevaValoracionPage() {
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <Loader2 className="h-12 w-12 animate-spin text-indigo-500 mx-auto mb-4" />
+            <Loader2 className="h-12 w-12 animate-spin text-brand-500 mx-auto mb-4" />
             <p className="text-gray-600">Cargando valoración...</p>
           </div>
         </div>
@@ -849,7 +849,7 @@ export default function NuevaValoracionPage() {
               <button
                 onClick={() => setCurrentStep(step.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${currentStep === step.id
-                  ? 'bg-indigo-500 text-white'
+                  ? 'bg-brand-500 text-white'
                   : currentStep > step.id
                     ? 'bg-green-100 text-green-700'
                     : 'bg-gray-100 text-gray-500'
@@ -1608,7 +1608,7 @@ export default function NuevaValoracionPage() {
                                       updateFactorRiesgo(item, 'calificacion', nivel);
                                     }
                                   }}
-                                  className="w-4 h-4 text-indigo-500 cursor-pointer"
+                                  className="w-4 h-4 text-brand-500 cursor-pointer"
                                   disabled={modoVista}
                                 />
                               </td>
@@ -1643,7 +1643,7 @@ export default function NuevaValoracionPage() {
                       type="button"
                       onClick={generarConceptoAutomatico}
                       disabled={generandoConcepto}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      className="bg-brand-600 hover:bg-brand-700 text-white"
                     >
                       {generandoConcepto ? (
                         <>
@@ -1660,7 +1660,7 @@ export default function NuevaValoracionPage() {
                   )}
                 </div>
                 {!modoVista && formData.concepto_psicologico_final && (
-                  <div className="text-sm text-blue-600 bg-blue-50 p-3 rounded-md mb-2">
+                  <div className="text-sm text-brand-600 bg-brand-50 p-3 rounded-md mb-2">
                     <strong>Nota:</strong> Si modificó los factores de riesgo, puede regenerar el concepto haciendo clic en el botón de arriba.
                   </div>
                 )}
@@ -1769,7 +1769,7 @@ export default function NuevaValoracionPage() {
                   </Button>
 
                   {currentStep < 6 ? (
-                    <Button onClick={nextStep} className="gap-2 bg-indigo-500 hover:bg-indigo-600">
+                    <Button onClick={nextStep} className="gap-2 bg-brand-500 hover:bg-brand-600">
                       Siguiente
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -1809,7 +1809,7 @@ export default function NuevaValoracionPage() {
           <div className="flex justify-end">
             <Button
               onClick={() => setShowValidationModal(false)}
-              className="bg-indigo-500 hover:bg-indigo-600"
+              className="bg-brand-500 hover:bg-brand-600"
             >
               Entendido
             </Button>
@@ -1865,7 +1865,7 @@ export default function NuevaValoracionPage() {
                     toast.success('Abriendo PDF en nueva pestaña');
                   }
                 }}
-                className="gap-2 bg-indigo-500 hover:bg-indigo-600 text-white"
+                className="gap-2 bg-brand-500 hover:bg-brand-600 text-white"
               >
                 <FileText className="h-5 w-5" />
                 Ver PDF
@@ -1908,9 +1908,9 @@ export default function NuevaValoracionPage() {
           </div>
 
           <div className="flex justify-center">
-            <div className="p-5 rounded-lg border-2 border-indigo-500/20 bg-indigo-500/5 max-w-md w-full">
+            <div className="p-5 rounded-lg border-2 border-brand-500/20 bg-brand-500/5 max-w-md w-full">
               <div className="flex items-start gap-4">
-                <FileText className="h-10 w-10 text-indigo-500 flex-shrink-0 mt-1" />
+                <FileText className="h-10 w-10 text-brand-500 flex-shrink-0 mt-1" />
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-gray-900 mb-2">
                     Archivo PDF
@@ -1928,11 +1928,11 @@ export default function NuevaValoracionPage() {
             </div>
           </div>
 
-          <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
+          <div className="p-4 rounded-lg bg-brand-50 border border-brand-200">
             <div className="flex items-start gap-3">
-              <Download className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <Download className="h-5 w-5 text-brand-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-blue-800">
+                <p className="text-sm text-brand-800">
                   <strong>Importante:</strong> El archivo queda guardado en el sistema y puede ser descargado nuevamente desde el listado de valoraciones.
                 </p>
               </div>

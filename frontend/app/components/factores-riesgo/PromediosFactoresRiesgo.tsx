@@ -72,7 +72,7 @@ export function PromediosFactoresRiesgo({
       <Card className="border-2 border-gray-200">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <FileText className="h-5 w-5 text-indigo-500" />
+            <FileText className="h-5 w-5 text-brand-500" />
             Resumen de Evaluación de Riesgos
           </CardTitle>
         </CardHeader>
@@ -197,7 +197,7 @@ export function PromediosFactoresRiesgo({
         <div className="flex justify-center">
           <Button
             onClick={handleGenerarConcepto}
-            className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 shadow-lg shadow-indigo-500/25 gap-2"
+            className="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-500 shadow-lg shadow-brand-500/25 gap-2"
             size="lg"
           >
             <Sparkles className="h-5 w-5" />

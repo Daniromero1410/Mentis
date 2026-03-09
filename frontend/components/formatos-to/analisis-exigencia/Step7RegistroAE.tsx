@@ -100,7 +100,7 @@ export const Step7RegistroAE = ({ formData, updateField, readOnly }: Step7AEProp
                                     value={formData.nombre_proveedor || ''}
                                     onChange={(e) => updateField('nombre_proveedor', e.target.value)}
                                     disabled={readOnly}
-                                    className="h-10 text-center font-bold text-blue-600 border-dashed border-blue-200 bg-blue-50/50 hover:bg-blue-50 placeholder:text-blue-300"
+                                    className="h-10 text-center font-bold text-brand-600 border-dashed border-brand-200 bg-brand-50/50 hover:bg-brand-50 placeholder:text-brand-300"
                                     placeholder="Nombre del Proveedor"
                                 />
                             </div>

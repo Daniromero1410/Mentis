@@ -27,7 +27,7 @@ export const Step2MetodologiaCondicionesAE = ({ formData, updateField, readOnly 
             <FormSection title="3. CONDICIONES DE TRABAJO">
                 {/* 3.1 DESCRIPCION DEL PROCESO PRODUCTIVO */}
                 <div className="mb-8">
-                    <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-blue-500">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-brand-500">
                         3.1 DESCRIPCION DEL PROCESO PRODUCTIVO
                     </h3>
                     <FormTextarea
@@ -41,7 +41,7 @@ export const Step2MetodologiaCondicionesAE = ({ formData, updateField, readOnly 
 
                 {/* 3.2 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL */}
                 <div className="mb-4">
-                    <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-blue-500">
+                    <h3 className="text-sm font-bold text-slate-700 uppercase mb-4 pl-1 border-l-4 border-brand-500">
                         3.2 REQUERIMIENTOS DEL DESEMPEÑO ORGANIZACIONAL
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-lg border border-slate-100">

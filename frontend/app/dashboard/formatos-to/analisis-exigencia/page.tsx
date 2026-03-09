@@ -110,7 +110,7 @@ export default function AnalisisExigenciaPage() {
                     {/* Header */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
                         <div className="flex items-center gap-3 sm:gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                            <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
                                 <Activity className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -119,7 +119,7 @@ export default function AnalisisExigenciaPage() {
                             </div>
                         </div>
                         <Link href="/dashboard/formatos-to/analisis-exigencia/nueva" className="w-full sm:w-auto">
-                            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center">
+                            <Button className="bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center">
                                 <Plus className="h-4 w-4" />
                                 Nuevo Análisis
                             </Button>
@@ -129,8 +129,8 @@ export default function AnalisisExigenciaPage() {
                     {/* Stats */}
                     <div className="grid grid-cols-3 gap-2 sm:gap-4 anim-fade-in-up delay-1">
                         <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
-                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                                <ListFilter className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                                <ListFilter className="h-4 w-4 sm:h-5 sm:w-5 text-brand-600" />
                             </div>
                             <div>
                                 <p className="text-lg sm:text-2xl font-bold text-gray-900">{totalItems}</p>
@@ -188,21 +188,21 @@ export default function AnalisisExigenciaPage() {
                             <div className="flex items-center justify-center h-64">
                                 <div className="flex flex-col items-center gap-3">
                                     <div className="relative w-12 h-12">
-                                        <div className="w-12 h-12 rounded-full border-4 border-blue-500/20"></div>
-                                        <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                                        <div className="w-12 h-12 rounded-full border-4 border-brand-500/20"></div>
+                                        <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-brand-600 border-t-transparent animate-spin"></div>
                                     </div>
                                     <p className="text-sm text-gray-500 animate-pulse">Cargando análisis...</p>
                                 </div>
                             </div>
                         ) : analisis.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-64">
-                                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
-                                    <Activity className="h-8 w-8 text-blue-300" />
+                                <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center mb-4">
+                                    <Activity className="h-8 w-8 text-brand-300" />
                                 </div>
                                 <p className="text-base font-semibold text-gray-700">No se encontraron análisis de exigencia</p>
                                 <p className="text-sm text-gray-400 mt-1 mb-4">Crea un nuevo análisis para comenzar</p>
                                 <Link href="/dashboard/formatos-to/analisis-exigencia/nueva">
-                                    <Button variant="outline" className="rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50 gap-2">
+                                    <Button variant="outline" className="rounded-xl border-brand-200 text-brand-600 hover:bg-brand-50 gap-2">
                                         <Plus className="h-4 w-4" />
                                         Nuevo Análisis
                                     </Button>
@@ -226,10 +226,10 @@ export default function AnalisisExigenciaPage() {
                                             const nombre = item.trabajador_nombre || 'Sin nombre';
                                             const initial = nombre.charAt(0).toUpperCase();
                                             return (
-                                                <tr key={item.id} className="hover:bg-blue-50/30 transition-colors">
+                                                <tr key={item.id} className="hover:bg-brand-50/30 transition-colors">
                                                     <td className="px-3 py-3 sm:px-6 sm:py-4">
                                                         <div className="flex items-center gap-2 sm:gap-3">
-                                                            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0">
+                                                            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-600 text-white font-bold text-sm shrink-0">
                                                                 {initial}
                                                             </div>
                                                             <div className="min-w-0">
@@ -266,7 +266,7 @@ export default function AnalisisExigenciaPage() {
                                                     <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
                                                         <div className="flex items-center justify-end gap-1">
                                                             <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}`}>
-                                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
+                                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-brand-600 hover:text-brand-700 hover:bg-brand-50 rounded-lg">
                                                                     <Eye className="h-4 w-4" />
                                                                 </Button>
                                                             </Link>

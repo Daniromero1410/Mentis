@@ -180,7 +180,7 @@ export function Seccion4RolLaboralEvento({ data, updateData, readOnly = false }:
                                                         }
                                                     }}
                                                     disabled={readOnly}
-                                                    className="accent-blue-600 h-4 w-4"
+                                                    className="accent-brand-600 h-4 w-4"
                                                 />
                                                 {opt.label}
                                             </label>

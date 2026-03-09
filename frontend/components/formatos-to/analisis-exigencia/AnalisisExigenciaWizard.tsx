@@ -552,7 +552,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 <div className="flex items-start justify-between relative min-w-[480px] px-4">
                 <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-20" />
                 <div
-                    className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-10 transition-all duration-500 ease-in-out"
+                    className="absolute top-5 left-0 h-0.5 bg-brand-600 -z-10 transition-all duration-500 ease-in-out"
                     style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
                 />
 
@@ -568,16 +568,16 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                                 className={`
                                     flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
                                     ${isActive
-                                        ? 'border-blue-600 bg-white text-blue-600 shadow-lg scale-110'
+                                        ? 'border-brand-600 bg-white text-brand-600 shadow-lg scale-110'
                                         : isCompleted
-                                            ? 'border-blue-600 bg-blue-600 text-white'
+                                            ? 'border-brand-600 bg-brand-600 text-white'
                                             : 'border-gray-300 bg-white text-gray-500 hover:border-gray-400'
                                     }
                                 `}
                             >
                                 <StepIcon className="h-5 w-5" />
                             </button>
-                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-blue-600 font-bold' : 'text-gray-500'}`}>
+                            <div className={`mt-3 text-center transition-all duration-300 ${isActive ? 'text-brand-600 font-bold' : 'text-gray-500'}`}>
                                 <span className="text-xs font-semibold block whitespace-nowrap">{step.title}</span>
                             </div>
                         </div>
@@ -684,7 +684,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                     {currentStep !== STEPS.length ? (
                         <button
                             onClick={handleNext}
-                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors shadow-sm"
                         >
                             Siguiente <ChevronRight className="h-4 w-4" />
                         </button>
@@ -715,8 +715,8 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                     <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
                         <div className="text-center">
-                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
@@ -724,7 +724,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                             <p className="mb-6 text-gray-600">El Análisis de Exigencias se ha guardado y finalizado correctamente.</p>
                             <div className="flex flex-col sm:flex-row justify-center gap-3">
                                 <Button
-                                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                                    className="flex-1 bg-brand-600 hover:bg-brand-700 text-white"
                                     onClick={() => generatePDF(analisisId!, 'download')}
                                 >
                                     <Download className="mr-2 h-4 w-4" /> Descargar PDF

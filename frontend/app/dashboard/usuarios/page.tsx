@@ -206,7 +206,7 @@ export default function UsuariosPage() {
     const getRolBadge = (rol: string) => {
         const badges = {
             admin: { label: 'Administrador', icon: Shield, color: 'bg-purple-100 text-purple-700' },
-            supervisor: { label: 'Supervisor', icon: ShieldCheck, color: 'bg-blue-100 text-blue-700' },
+            supervisor: { label: 'Supervisor', icon: ShieldCheck, color: 'bg-brand-100 text-brand-700' },
             psicologo: { label: 'Psicólogo', icon: User, color: 'bg-green-100 text-green-700' },
             terapeuta_ocupacional: { label: 'T. Ocupacional', icon: Briefcase, color: 'bg-teal-100 text-teal-700' },
         };
@@ -229,7 +229,7 @@ export default function UsuariosPage() {
                 {/* Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
                     <div className="flex items-center gap-3 sm:gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                        <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
                             <Users className="h-6 w-6 text-white" />
                         </div>
                         <div>
@@ -239,7 +239,7 @@ export default function UsuariosPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center"
+                        className="bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center"
                     >
                         <Plus className="h-4 w-4" />
                         Nuevo Usuario
@@ -249,8 +249,8 @@ export default function UsuariosPage() {
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-2 sm:gap-4 anim-fade-in-up delay-1">
                     <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-brand-600" />
                         </div>
                         <div>
                             <p className="text-lg sm:text-2xl font-bold text-gray-900">{usuarios.length}</p>
@@ -304,16 +304,16 @@ export default function UsuariosPage() {
                         <div className="flex items-center justify-center h-64">
                             <div className="flex flex-col items-center gap-3">
                                 <div className="relative w-12 h-12">
-                                    <div className="w-12 h-12 rounded-full border-4 border-blue-500/20"></div>
-                                    <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                                    <div className="w-12 h-12 rounded-full border-4 border-brand-500/20"></div>
+                                    <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-brand-600 border-t-transparent animate-spin"></div>
                                 </div>
                                 <p className="text-sm text-gray-500 animate-pulse">Cargando usuarios...</p>
                             </div>
                         </div>
                     ) : filteredUsuarios.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-48 text-gray-500">
-                            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-3">
-                                <Users className="h-7 w-7 text-blue-300" />
+                            <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center mb-3">
+                                <Users className="h-7 w-7 text-brand-300" />
                             </div>
                             <p className="text-sm font-medium text-gray-700">No se encontraron usuarios</p>
                         </div>
@@ -331,10 +331,10 @@ export default function UsuariosPage() {
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
                                     {filteredUsuarios.map((usuario) => (
-                                        <tr key={usuario.id} className="hover:bg-blue-50/30 transition-colors">
+                                        <tr key={usuario.id} className="hover:bg-brand-50/30 transition-colors">
                                             <td className="px-3 py-3 sm:px-6 sm:py-4">
                                                 <div className="flex items-center gap-2 sm:gap-3">
-                                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+                                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-brand-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
                                                         {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
                                                     </div>
                                                     <div className="min-w-0">
@@ -357,7 +357,7 @@ export default function UsuariosPage() {
                                                         <ClipboardList className="h-3.5 w-3.5" />
                                                         <span>Val.</span>
                                                     </div>
-                                                    <div title="Pruebas de Trabajo" className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${usuario.acceso_pruebas_trabajo ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400'}`}>
+                                                    <div title="Pruebas de Trabajo" className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${usuario.acceso_pruebas_trabajo ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 text-gray-400'}`}>
                                                         <Briefcase className="h-3.5 w-3.5" />
                                                         <span>P.T.</span>
                                                     </div>
@@ -386,7 +386,7 @@ export default function UsuariosPage() {
                                                         variant="ghost"
                                                         size="sm"
                                                         onClick={() => handleOpenEdit(usuario)}
-                                                        className="h-8 w-8 p-0 rounded-lg hover:bg-blue-100 text-blue-600"
+                                                        className="h-8 w-8 p-0 rounded-lg hover:bg-brand-100 text-brand-600"
                                                         title="Editar usuario"
                                                     >
                                                         <Pencil className="h-4 w-4" />
@@ -415,7 +415,7 @@ export default function UsuariosPage() {
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
                 <DialogContent className="p-0 gap-0 w-full max-w-lg sm:max-w-[540px] max-h-[95dvh] flex flex-col overflow-hidden rounded-2xl">
                     {/* Gradient header */}
-                    <div className="bg-blue-600 px-5 pt-5 pb-6 shrink-0">
+                    <div className="bg-brand-600 px-5 pt-5 pb-6 shrink-0">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30 shrink-0">
                                 {selectedUsuario ? (
@@ -428,7 +428,7 @@ export default function UsuariosPage() {
                                 <DialogTitle className="text-lg font-bold text-white">
                                     {selectedUsuario ? 'Editar Usuario' : 'Nuevo Usuario'}
                                 </DialogTitle>
-                                <DialogDescription className="text-sm text-blue-100 mt-0.5">
+                                <DialogDescription className="text-sm text-brand-100 mt-0.5">
                                     {selectedUsuario
                                         ? 'Modifica los datos y permisos del usuario'
                                         : 'Completa los datos para crear un nuevo acceso'}
@@ -450,7 +450,7 @@ export default function UsuariosPage() {
                                         value={formData.nombre}
                                         onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
                                         placeholder="Nombre"
-                                        className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-blue-500"
+                                        className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-brand-500"
                                     />
                                 </div>
                                 <div className="space-y-1.5">
@@ -460,13 +460,13 @@ export default function UsuariosPage() {
                                         value={formData.apellido}
                                         onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
                                         placeholder="Apellido"
-                                        className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-blue-500"
+                                        className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-brand-500"
                                     />
                                 </div>
                             </div>
                             <div className="space-y-1.5">
                                 <Label htmlFor="email" className="text-xs font-semibold text-gray-600 flex items-center gap-1.5">
-                                    <Mail className="h-3.5 w-3.5 text-blue-500" />
+                                    <Mail className="h-3.5 w-3.5 text-brand-500" />
                                     Correo Electrónico
                                 </Label>
                                 <div className="relative">
@@ -477,7 +477,7 @@ export default function UsuariosPage() {
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         placeholder="correo@ejemplo.com"
                                         disabled={!!selectedUsuario}
-                                        className={`h-10 rounded-xl border-gray-200 ${selectedUsuario ? 'bg-gray-100 text-gray-500 border-dashed pr-10' : 'bg-gray-50/50 focus:border-blue-500'}`}
+                                        className={`h-10 rounded-xl border-gray-200 ${selectedUsuario ? 'bg-gray-100 text-gray-500 border-dashed pr-10' : 'bg-gray-50/50 focus:border-brand-500'}`}
                                     />
                                     {selectedUsuario && <Shield className="absolute right-3 top-3 h-4 w-4 text-gray-400" />}
                                 </div>
@@ -489,7 +489,7 @@ export default function UsuariosPage() {
                             </div>
                             <div className="space-y-1.5">
                                 <Label htmlFor="password" className="text-xs font-semibold text-gray-600 flex items-center gap-1.5">
-                                    <Lock className="h-3.5 w-3.5 text-blue-500" />
+                                    <Lock className="h-3.5 w-3.5 text-brand-500" />
                                     Contraseña {selectedUsuario && <span className="font-normal text-gray-400">(vacío = sin cambios)</span>}
                                 </Label>
                                 <Input
@@ -498,7 +498,7 @@ export default function UsuariosPage() {
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     placeholder={selectedUsuario ? '••••••••' : 'Mínimo 6 caracteres'}
-                                    className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-blue-500"
+                                    className="h-10 rounded-xl border-gray-200 bg-gray-50/50 focus:border-brand-500"
                                 />
                             </div>
                         </div>
@@ -518,7 +518,7 @@ export default function UsuariosPage() {
                                     const colors: Record<string, string> = {
                                         green: active ? 'border-green-500 bg-green-50 text-green-700' : 'border-gray-200 text-gray-500 hover:border-green-300',
                                         teal: active ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-gray-200 text-gray-500 hover:border-teal-300',
-                                        blue: active ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-200 text-gray-500 hover:border-blue-300',
+                                        blue: active ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-gray-200 text-gray-500 hover:border-brand-300',
                                         purple: active ? 'border-purple-500 bg-purple-50 text-purple-700' : 'border-gray-200 text-gray-500 hover:border-purple-300',
                                     };
                                     return (
@@ -542,7 +542,7 @@ export default function UsuariosPage() {
                             <div className="rounded-xl border border-gray-200 divide-y divide-gray-100 overflow-hidden">
                                 {([
                                     { id: 'acceso_valoraciones', key: 'acceso_valoraciones', label: 'Valoraciones Psicológicas', icon: ClipboardList, color: 'text-green-600 bg-green-50' },
-                                    { id: 'acceso_pruebas_trabajo', key: 'acceso_pruebas_trabajo', label: 'Pruebas de Trabajo', icon: Briefcase, color: 'text-blue-600 bg-blue-50' },
+                                    { id: 'acceso_pruebas_trabajo', key: 'acceso_pruebas_trabajo', label: 'Pruebas de Trabajo', icon: Briefcase, color: 'text-brand-600 bg-brand-50' },
                                     { id: 'acceso_formatos_to', key: 'acceso_formatos_to', label: 'Formatos TO', icon: FileText, color: 'text-teal-600 bg-teal-50' },
                                     { id: 'acceso_analisis_exigencias_mental', key: 'acceso_analisis_exigencias_mental', label: 'Análisis Exigencias Mental', icon: Activity, color: 'text-yellow-600 bg-yellow-50' },
                                 ] as const).map((mod) => {
@@ -591,7 +591,7 @@ export default function UsuariosPage() {
                         <Button
                             onClick={handleSave}
                             disabled={saving}
-                            className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 shadow-md shadow-blue-500/20"
+                            className="flex-1 sm:flex-none bg-brand-600 hover:bg-brand-700 text-white rounded-xl h-11 shadow-md shadow-brand-500/20"
                         >
                             {saving ? 'Guardando...' : selectedUsuario ? 'Guardar Cambios' : 'Crear Usuario'}
                         </Button>

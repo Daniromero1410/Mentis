@@ -66,7 +66,7 @@ const RatingTable = ({
                                                 disabled={readOnly}
                                                 onClick={() => onChange(item, 'valor', r)}
                                                 className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${values[item]?.valor === r
-                                                    ? 'bg-blue-600 text-white shadow-md scale-110'
+                                                    ? 'bg-brand-600 text-white shadow-md scale-110'
                                                     : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                                                     }`}
                                             >
@@ -157,9 +157,9 @@ export function Seccion6OtrasAreas({ data, updateData, readOnly = false }: Secci
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <FormSection title="8. Evaluación Otras Áreas Ocupacionales">
-                <div className="bg-blue-50/50 p-4 rounded-lg border border-blue-100 mb-6 text-sm text-blue-800">
+                <div className="bg-brand-50/50 p-4 rounded-lg border border-brand-100 mb-6 text-sm text-brand-800">
                     <p>Califique de 0 a 4 cada factor según el nivel de dificultad/dependencia y añada observaciones si es necesario.</p>
-                    <div className="grid grid-cols-5 gap-2 mt-3 text-xs text-blue-700">
+                    <div className="grid grid-cols-5 gap-2 mt-3 text-xs text-brand-700">
                         {DIFFICULTY_LEVELS.map((level, i) => (
                             <div key={i} className="text-center">
                                 <span className="font-bold">{i}</span> = {level.replace('\n', ' / ')}

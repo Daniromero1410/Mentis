@@ -119,7 +119,7 @@ export const Step1IdentificacionAE = ({ formData, updateField, readOnly }: Step1
                                                 checked={formData.dominancia === opt}
                                                 onChange={(e) => updateField('dominancia', e.target.value)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt}
                                         </label>
@@ -157,7 +157,7 @@ export const Step1IdentificacionAE = ({ formData, updateField, readOnly }: Step1
                                                 checked={formData.nivel_educativo === item.val}
                                                 onChange={(e) => updateField('nivel_educativo', e.target.value)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {item.label}
                                         </label>
@@ -271,7 +271,7 @@ export const Step1IdentificacionAE = ({ formData, updateField, readOnly }: Step1
                                                 checked={formData.cargo_unico == opt}
                                                 onChange={(e) => updateField('cargo_unico', e.target.value)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt}
                                         </label>
@@ -338,7 +338,7 @@ export const Step1IdentificacionAE = ({ formData, updateField, readOnly }: Step1
                                                 checked={formData.modalidad && formData.modalidad.toLowerCase() === opt.toLowerCase()}
                                                 onChange={(e) => updateField('modalidad', opt)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt}
                                         </label>

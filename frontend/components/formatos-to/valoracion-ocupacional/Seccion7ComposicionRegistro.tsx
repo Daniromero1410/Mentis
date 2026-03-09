@@ -127,8 +127,8 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                                             </div>
                                         ) : (
                                             !readOnly && (
-                                                <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 transition-all py-6 h-full">
-                                                    <Upload className="mb-2 h-6 w-6 text-blue-500" />
+                                                <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 hover:border-brand-500 hover:bg-brand-50/50 transition-all py-6 h-full">
+                                                    <Upload className="mb-2 h-6 w-6 text-brand-500" />
                                                     <span className="text-xs font-semibold text-slate-600">Insertar Firma</span>
                                                     <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_elaboro')} />
                                                 </Label>
@@ -182,8 +182,8 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                                             </div>
                                         ) : (
                                             !readOnly && (
-                                                <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 transition-all py-6 h-full">
-                                                    <Upload className="mb-2 h-6 w-6 text-blue-500" />
+                                                <Label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 hover:border-brand-500 hover:bg-brand-50/50 transition-all py-6 h-full">
+                                                    <Upload className="mb-2 h-6 w-6 text-brand-500" />
                                                     <span className="text-xs font-semibold text-slate-600">Insertar Firma</span>
                                                     <Input type="file" className="hidden" accept="image/*" onChange={(e) => handleFirmaUpload(e, 'firma_proveedor')} />
                                                 </Label>
@@ -206,7 +206,7 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                                     value={data?.registro?.nombre_equipo_rhb || ''}
                                     onChange={(e) => handleRegistroChange('nombre_equipo_rhb', e.target.value)}
                                     disabled={readOnly}
-                                    className="h-10 text-center font-bold text-blue-600 border-dashed border-blue-200 bg-blue-50/50 hover:bg-blue-50 placeholder:text-blue-300"
+                                    className="h-10 text-center font-bold text-brand-600 border-dashed border-brand-200 bg-brand-50/50 hover:bg-brand-50 placeholder:text-brand-300"
                                     placeholder="Nombre del Proveedor"
                                 />
                             </div>

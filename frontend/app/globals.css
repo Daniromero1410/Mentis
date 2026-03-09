@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-50: #fdf2f4;
+  --color-brand-100: #fbe6ea;
+  --color-brand-200: #f5c6ce;
+  --color-brand-300: #e8a0aa;
+  --color-brand-400: #d4707a;
+  --color-brand-500: #8a2535;
+  --color-brand-600: #6d1d2a;
+  --color-brand-700: #5a1722;
+  --color-brand-800: #4a1219;
+  --color-brand-900: #3a0e14;
+}
+
 :root {
   /* Light mode colors */
   --background: #f9fafb;

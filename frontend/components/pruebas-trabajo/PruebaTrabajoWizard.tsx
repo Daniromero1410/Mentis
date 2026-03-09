@@ -263,7 +263,7 @@ const getNivelRiesgo = (dimension: string, puntaje: number) => {
   if (!rangos) return { nivel: 'N/A', color: 'bg-gray-200 text-gray-800' };
   if (puntaje <= rangos.sin) return { nivel: 'SIN RIESGO', color: 'bg-green-500 text-white' };
   if (puntaje <= rangos.bajo) return { nivel: 'RIESGO BAJO', color: 'bg-yellow-400 text-black' };
-  if (puntaje <= rangos.medio) return { nivel: 'RIESGO MEDIO', color: 'bg-blue-600 text-white' };
+  if (puntaje <= rangos.medio) return { nivel: 'RIESGO MEDIO', color: 'bg-brand-600 text-white' };
   if (puntaje <= rangos.alto) return { nivel: 'RIESGO ALTO', color: 'bg-red-500 text-white' };
   return { nivel: 'RIESGO MUY ALTO', color: 'bg-red-900 text-white' };
 };
@@ -272,7 +272,7 @@ const getRiskColor = (risk: string) => {
   switch (risk) {
     case 'sin_riesgo': return 'bg-green-100 text-green-800 border-green-200';
     case 'riesgo_bajo': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    case 'riesgo_medio': return 'bg-blue-100 text-orange-800 border-blue-200';
+    case 'riesgo_medio': return 'bg-brand-100 text-orange-800 border-brand-200';
     case 'riesgo_alto': return 'bg-red-100 text-red-800 border-red-200';
     case 'riesgo_muy_alto': return 'bg-red-800 text-white border-red-900';
     default: return 'bg-white border-gray-200';
@@ -282,7 +282,7 @@ const getRiskColor = (risk: string) => {
 const NIVELES_RIESGO = [
   { value: 'riesgo_muy_alto', label: 'RIESGO MUY ALTO', color: 'bg-red-900 text-white' },
   { value: 'riesgo_alto', label: 'RIESGO ALTO', color: 'bg-red-500 text-white' },
-  { value: 'riesgo_medio', label: 'RIESGO MEDIO', color: 'bg-blue-600 text-white' },
+  { value: 'riesgo_medio', label: 'RIESGO MEDIO', color: 'bg-brand-600 text-white' },
   { value: 'riesgo_bajo', label: 'RIESGO BAJO', color: 'bg-yellow-400 text-black' },
   { value: 'sin_riesgo', label: 'SIN RIESGO', color: 'bg-green-500 text-white' },
 ];
@@ -858,7 +858,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
 
   // --- Helper: Section Header ---------------------------------------
   const SectionHeader = ({ children, icon: Icon }: { children: React.ReactNode; icon?: React.ComponentType<{ className?: string }> }) => (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 font-bold text-sm uppercase tracking-wide rounded-lg shadow-md flex items-center gap-2 mb-4">
+    <div className="bg-gradient-to-r from-brand-600 to-brand-700 text-white p-3 font-bold text-sm uppercase tracking-wide rounded-lg shadow-md flex items-center gap-2 mb-4">
       {Icon && <Icon className="h-5 w-5" />}
       <span>{children}</span>
     </div>
@@ -869,7 +869,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
     return (
       <DashboardLayout>
         <div className="flex justify-center items-center h-screen">
-          <Loader2 className="animate-spin h-10 w-10 text-blue-500" />
+          <Loader2 className="animate-spin h-10 w-10 text-brand-500" />
         </div>
       </DashboardLayout>
     );
@@ -912,7 +912,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                     <div className={cn(
                       "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200",
                       isCompleted && "bg-green-500 text-white",
-                      isCurrent && "bg-blue-600 text-white shadow-sm",
+                      isCurrent && "bg-brand-600 text-white shadow-sm",
                       isPending && "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
                     )}>
                       {isCompleted ? (
@@ -925,7 +925,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                     </div>
                     <span className={cn(
                       "mt-2 text-[11px] font-medium text-center leading-tight",
-                      isCurrent && "text-blue-600 font-semibold",
+                      isCurrent && "text-brand-600 font-semibold",
                       isCompleted && "text-green-600",
                       isPending && "text-gray-400"
                     )}>
@@ -1011,7 +1011,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-sm font-medium">Género</Label>
-                      <select disabled={readOnly} className="w-full border rounded-md p-2.5 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value={formData.genero} onChange={e => updateField('genero', e.target.value)}>
+                      <select disabled={readOnly} className="w-full border rounded-md p-2.5 text-sm bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500" value={formData.genero} onChange={e => updateField('genero', e.target.value)}>
                         <option value="">Seleccione...</option>
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
@@ -1219,10 +1219,10 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                 {/* Header */}
                 <div className="text-center space-y-3">
                   <h2 className="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
-                    <AlertTriangle className="w-6 h-6 text-blue-500" />
+                    <AlertTriangle className="w-6 h-6 text-brand-500" />
                     Factores de Riesgo Psicosociales
                   </h2>
-                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-base font-medium">
+                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-brand-50 text-brand-600 rounded-full text-base font-medium">
                     <Activity className="w-5 h-5" /> Demandas de Trabajo
                   </span>
                 </div>
@@ -1230,7 +1230,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                 {Object.entries(factoresRiesgo).map(([key, categoria]) => (
                   <div key={key} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                     {/* Category Header */}
-                    <div className="bg-blue-600 text-white px-5 py-4 font-bold text-base uppercase tracking-wide flex items-center gap-2">
+                    <div className="bg-brand-600 text-white px-5 py-4 font-bold text-base uppercase tracking-wide flex items-center gap-2">
                       <AlertTriangle className="w-5 h-5" />
                       {categoria.titulo}
                     </div>
@@ -1242,9 +1242,9 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                           <tr className="bg-gray-50 border-b-2 border-gray-200">
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[180px]">Condición</th>
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 min-w-[250px]">Descripción</th>
-                            <th className="text-center px-2 py-3 font-bold text-sm text-blue-600 w-[110px]">FR <span className="text-[10px] font-normal text-blue-400">(1 · 2 · prom)</span></th>
-                            <th className="text-center px-2 py-3 font-bold text-sm text-blue-600 w-[110px]">EXP <span className="text-[10px] font-normal text-blue-400">(1 · 2 · prom)</span></th>
-                            <th className="text-center px-3 py-3 font-bold text-sm text-blue-600 w-[75px]">INT</th>
+                            <th className="text-center px-2 py-3 font-bold text-sm text-brand-600 w-[110px]">FR <span className="text-[10px] font-normal text-brand-400">(1 · 2 · prom)</span></th>
+                            <th className="text-center px-2 py-3 font-bold text-sm text-brand-600 w-[110px]">EXP <span className="text-[10px] font-normal text-brand-400">(1 · 2 · prom)</span></th>
+                            <th className="text-center px-3 py-3 font-bold text-sm text-brand-600 w-[75px]">INT</th>
                             <th className="text-center px-3 py-3 font-bold text-sm text-gray-800 w-[75px]">Total</th>
                             <th className="text-left px-4 py-3 font-bold text-sm text-gray-700 w-[160px]">Fuentes</th>
                           </tr>
@@ -1260,7 +1260,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                             >
                               <td className="px-4 py-3 align-top">
                                 <div className="flex items-start gap-2">
-                                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 text-xs bg-blue-100 text-blue-600 rounded font-bold">
+                                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 text-xs bg-brand-100 text-brand-600 rounded font-bold">
                                     {item.numero}
                                   </span>
                                   <span className="text-sm font-medium text-gray-800 leading-snug">
@@ -1300,7 +1300,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                                     />
                                   </div>
                                   {formData.factores_riesgo[item.nombre]?.fr !== '' && (
-                                    <span className="text-[11px] font-bold text-blue-600 bg-blue-50 border border-blue-200 rounded px-1.5 py-0.5">
+                                    <span className="text-[11px] font-bold text-brand-600 bg-brand-50 border border-brand-200 rounded px-1.5 py-0.5">
                                       ≈ {formData.factores_riesgo[item.nombre]?.fr}
                                     </span>
                                   )}
@@ -1329,7 +1329,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                                     />
                                   </div>
                                   {formData.factores_riesgo[item.nombre]?.exp !== '' && (
-                                    <span className="text-[11px] font-bold text-blue-600 bg-blue-50 border border-blue-200 rounded px-1.5 py-0.5">
+                                    <span className="text-[11px] font-bold text-brand-600 bg-brand-50 border border-brand-200 rounded px-1.5 py-0.5">
                                       ≈ {formData.factores_riesgo[item.nombre]?.exp}
                                     </span>
                                   )}
@@ -1368,10 +1368,10 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                     {/* Category Total */}
                     <div className="bg-gray-50 px-5 py-4 flex items-center justify-end gap-4 border-t border-gray-200">
                       <span className="text-base font-semibold text-gray-700 flex items-center gap-2">
-                        <Activity className="w-5 h-5 text-blue-500" />
+                        <Activity className="w-5 h-5 text-brand-500" />
                         Total {categoria.titulo}:
                       </span>
-                      <span className="inline-flex items-center justify-center min-w-[56px] h-12 px-4 rounded-lg bg-white font-bold text-xl text-blue-600 border-2 border-blue-200">
+                      <span className="inline-flex items-center justify-center min-w-[56px] h-12 px-4 rounded-lg bg-white font-bold text-xl text-brand-600 border-2 border-brand-200">
                         {categoria.items.reduce((acc, item) => acc + (parseFloat(formData.factores_riesgo[item.nombre]?.total || '0') || 0), 0)}
                       </span>
                       {(() => {
@@ -1403,10 +1403,10 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                         <th className="border-b border-r border-gray-200 p-3 text-left text-sm font-bold text-gray-700 w-[220px]" rowSpan={2}>
                           Factores de Riesgo Psicosocial
                         </th>
-                        <th className="border-b border-r border-gray-200 p-3 text-center text-sm font-bold text-blue-600" colSpan={2}>
+                        <th className="border-b border-r border-gray-200 p-3 text-center text-sm font-bold text-brand-600" colSpan={2}>
                           Valoración Subjetiva del Trabajador
                         </th>
-                        <th className="border-b border-gray-200 p-3 text-center text-sm font-bold text-blue-600" colSpan={2}>
+                        <th className="border-b border-gray-200 p-3 text-center text-sm font-bold text-brand-600" colSpan={2}>
                           Valoración del Experto
                         </th>
                       </tr>
@@ -1486,10 +1486,10 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
 
                 {/* Summary grouped by risk level (matching PDF) */}
                 <div className="border rounded-lg overflow-hidden">
-                  <div className="bg-blue-100 border-b border-blue-200">
+                  <div className="bg-brand-100 border-b border-brand-200">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
-                      <div className="p-2 font-bold text-center text-sm sm:border-r border-blue-200 border-b sm:border-b-0">Factores de Riesgo Psicosocial</div>
-                      <div className="p-2 font-bold text-center text-xs sm:border-r border-blue-200 border-b sm:border-b-0">
+                      <div className="p-2 font-bold text-center text-sm sm:border-r border-brand-200 border-b sm:border-b-0">Factores de Riesgo Psicosocial</div>
+                      <div className="p-2 font-bold text-center text-xs sm:border-r border-brand-200 border-b sm:border-b-0">
                         Factores de Riesgo Detectados por la Valoración Subjetiva del Trabajador
                         <div className="font-normal text-[10px] mt-1">De acuerdo a los resultados arrojados por el cuestionario intralaboral forma A se encontró:</div>
                       </div>
@@ -1746,7 +1746,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                 variant="ghost"
                 onClick={() => handleSave(false)}
                 disabled={saving}
-                className="text-blue-600 hover:bg-blue-50"
+                className="text-brand-600 hover:bg-brand-50"
               >
                 <Save className="mr-1 h-4 w-4" /> Guardar
               </Button>
@@ -1754,7 +1754,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
             {currentStep < 5 ? (
               <Button
                 onClick={nextStep}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+                className="bg-brand-600 hover:bg-brand-700 text-white px-6"
               >
                 Siguiente <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
@@ -1793,7 +1793,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                      <Button className="w-full bg-brand-600 hover:bg-brand-700 text-white">
                         <Download className="mr-2 h-4 w-4" /> Descargar PDF ReportLab
                       </Button>
                     </a>
@@ -1828,7 +1828,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                 </ul>
               </div>
               <div className="flex justify-end">
-                <Button onClick={() => setShowValidationModal(false)} className="bg-blue-600 hover:bg-blue-700 text-white">Entendido</Button>
+                <Button onClick={() => setShowValidationModal(false)} className="bg-brand-600 hover:bg-brand-700 text-white">Entendido</Button>
               </div>
             </Card>
           </div>

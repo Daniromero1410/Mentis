@@ -54,7 +54,7 @@ const RatingTable = ({
                                                 disabled={readOnly}
                                                 onClick={() => onChange(item, 'valor', r)}
                                                 className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${values[item]?.valor === r
-                                                    ? 'bg-blue-600 text-white shadow-md scale-110'
+                                                    ? 'bg-brand-600 text-white shadow-md scale-110'
                                                     : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                                                     }`}
                                             >
@@ -134,12 +134,12 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             <FormSection title="11. PERFIL DE EXIGENCIAS">
-                <div className="bg-blue-50/50 p-4 rounded-lg border border-blue-100 mb-6 text-sm text-blue-800">
+                <div className="bg-brand-50/50 p-4 rounded-lg border border-brand-100 mb-6 text-sm text-brand-800">
                     <p>Califique de 0 a 4 (o 0 a 3 según corresponda) cada factor y añada observaciones si es necesario.</p>
                 </div>
 
                 {/* SENSOPERCEPCIÓN */}
-                <h3 className="text-lg font-bold text-slate-800 mb-4 border-l-4 border-blue-500 pl-3">SENSOPERCEPCIÓN</h3>
+                <h3 className="text-lg font-bold text-slate-800 mb-4 border-l-4 border-brand-500 pl-3">SENSOPERCEPCIÓN</h3>
 
                 <RatingTable
                     title="VISIÓN"
@@ -175,7 +175,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 />
 
                 {/* MOTRICIDAD GRUESA */}
-                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-blue-500 pl-3">MOTRICIDAD GRUESA</h3>
+                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-brand-500 pl-3">MOTRICIDAD GRUESA</h3>
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={motricidadGruesaItems}
@@ -186,7 +186,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 />
 
                 {/* MOTRICIDAD FINA */}
-                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-blue-500 pl-3">MOTRICIDAD FINA</h3>
+                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-brand-500 pl-3">MOTRICIDAD FINA</h3>
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={motricidadFinaItems}
@@ -197,7 +197,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 />
 
                 {/* ARMONÍA */}
-                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-blue-500 pl-3">ARMONÍA</h3>
+                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-brand-500 pl-3">ARMONÍA</h3>
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={armoniaItems}
@@ -208,7 +208,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 />
 
                 {/* COGNITIVOS */}
-                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-blue-500 pl-3">COGNITIVOS</h3>
+                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-brand-500 pl-3">COGNITIVOS</h3>
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={cognitivosItems}
@@ -219,7 +219,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 />
 
                 {/* PSICOSOCIALES */}
-                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-blue-500 pl-3">PSICOSOCIALES</h3>
+                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-brand-500 pl-3">PSICOSOCIALES</h3>
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={psicosocialesItems}
@@ -230,7 +230,7 @@ export const Step6PerfilExigenciasAE = ({ perfil, setPerfil, readOnly }: Step6AE
                 />
 
                 {/* LABORALES */}
-                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-blue-500 pl-3">LABORALES</h3>
+                <h3 className="text-lg font-bold text-slate-800 mb-4 mt-8 border-l-4 border-brand-500 pl-3">LABORALES</h3>
                 <RatingTable
                     title="FACTORES A EVALUAR"
                     items={laboralesItems}

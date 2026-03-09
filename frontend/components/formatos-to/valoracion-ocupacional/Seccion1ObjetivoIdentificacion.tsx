@@ -154,7 +154,7 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                                 checked={data?.identificacion?.dominancia === opt}
                                                 onChange={(e) => handleIdentificacionChange('dominancia', e.target.value)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt}
                                         </label>
@@ -192,7 +192,7 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                                 checked={data?.identificacion?.nivel_educativo === item.val}
                                                 onChange={(e) => handleIdentificacionChange('nivel_educativo', e.target.value)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {item.label}
                                         </label>
@@ -236,7 +236,7 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                                 checked={data?.identificacion?.zona_residencia === opt}
                                                 onChange={(e) => handleIdentificacionChange('zona_residencia', e.target.value)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt}
                                         </label>
@@ -282,7 +282,7 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                                 checked={data?.identificacion?.eventos_no_laborales === opt.val}
                                                 onChange={(e) => handleIdentificacionChange('eventos_no_laborales', e.target.value)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt.label}
                                         </label>
@@ -357,7 +357,7 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                                 }
                                                 onChange={() => handleIdentificacionChange('vinculacion_laboral', opt.val === 'si')}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt.label}
                                         </label>
@@ -384,7 +384,7 @@ export function Seccion1ObjetivoIdentificacion({ data, updateData, readOnly = fa
                                                 checked={data?.identificacion?.modalidad && data.identificacion.modalidad.toLowerCase() === opt.toLowerCase()}
                                                 onChange={() => handleIdentificacionChange('modalidad', opt)}
                                                 disabled={readOnly}
-                                                className="accent-blue-600 h-4 w-4"
+                                                className="accent-brand-600 h-4 w-4"
                                             />
                                             {opt}
                                         </label>

@@ -78,7 +78,7 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly }: Step5
                         {!readOnly ? (
                             <>
                                 {uploading === field ? (
-                                    <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
+                                    <Loader2 className="h-6 w-6 text-brand-500 animate-spin" />
                                 ) : (
                                     <label className="cursor-pointer flex flex-col items-center justify-center w-full h-full">
                                         <Upload className="h-6 w-6 text-slate-400 mb-1" />

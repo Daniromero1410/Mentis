@@ -28,7 +28,7 @@ function ValoracionFormContent() {
     if (isLoading) {
         return (
             <div className="flex justify-center items-center py-20">
-                <Loader2 className="h-8 w-8 text-indigo-500 animate-spin" />
+                <Loader2 className="h-8 w-8 text-brand-500 animate-spin" />
             </div>
         );
     }
@@ -50,7 +50,7 @@ function ValoracionFormContent() {
                 </Button>
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
-                        <FileText className="h-7 w-7 text-indigo-500" />
+                        <FileText className="h-7 w-7 text-brand-500" />
                         {isViewOnly ? 'Ver Valoración Ocupacional' : (valoracionId ? 'Editar Valoración Ocupacional' : 'Nueva Valoración Ocupacional')}
                     </h1>
                     <p className="text-sm text-gray-500 mt-1">
@@ -71,7 +71,7 @@ export default function NuevaValoracionOcupacionalPage() {
         <DashboardLayout>
             <Suspense fallback={
                 <div className="flex justify-center flex-col gap-4 items-center py-20 min-h-[50vh]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
                     <p className="text-gray-500 font-medium">Cargando el editor...</p>
                 </div>
             }>

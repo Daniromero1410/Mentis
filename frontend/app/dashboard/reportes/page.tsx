@@ -97,9 +97,9 @@ export default function ReportesPage() {
         </div>
 
         {/* Info banner */}
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200 opacity-0 anim-fade-in-up delay-1" style={{ animationFillMode: 'forwards' }}>
-          <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-          <p className="text-sm text-blue-800">
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-brand-50 border border-brand-200 opacity-0 anim-fade-in-up delay-1" style={{ animationFillMode: 'forwards' }}>
+          <Info className="h-5 w-5 text-brand-600 shrink-0 mt-0.5" />
+          <p className="text-sm text-brand-800">
             <strong>Nota:</strong> Los reportes de valoraciones completadas pueden ser descargados en formato PDF y Excel desde el módulo correspondiente.
           </p>
         </div>
@@ -115,14 +115,14 @@ export default function ReportesPage() {
                 style={{ animationFillMode: 'forwards' }}
               >
                 {/* Card header with gradient */}
-                <div className="bg-blue-600 px-5 py-5">
+                <div className="bg-brand-600 px-5 py-5">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-white/20 rounded-xl backdrop-blur-sm">
                       <Icon className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-base font-bold text-white">{plantilla.title}</h3>
-                      <p className="text-xs text-blue-100 mt-0.5">{plantilla.description}</p>
+                      <p className="text-xs text-brand-100 mt-0.5">{plantilla.description}</p>
                     </div>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export default function ReportesPage() {
                   <ul className="space-y-2.5 mb-5">
                     {plantilla.items.map((item, i) => (
                       <li key={i} className="flex items-start gap-2.5">
-                        <CheckCircle className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+                        <CheckCircle className="h-4 w-4 text-brand-500 shrink-0 mt-0.5" />
                         <span className="text-sm text-gray-600">{item}</span>
                       </li>
                     ))}
@@ -141,7 +141,7 @@ export default function ReportesPage() {
 
                   <Button
                     onClick={plantilla.handler}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 font-medium shadow-sm hover:shadow-md"
+                    className="w-full bg-brand-600 hover:bg-brand-700 text-white rounded-xl h-11 font-medium shadow-sm hover:shadow-md"
                   >
                     <Download className="h-4 w-4 mr-2" />
                     Descargar Plantilla Excel
@@ -161,8 +161,8 @@ export default function ReportesPage() {
             {formatosInfo.map((info, idx) => {
               const InfoIcon = info.icon;
               return (
-                <div key={idx} className="p-4 rounded-xl bg-gray-50 hover:bg-blue-50/50 row-hover">
-                  <div className="p-2 w-fit rounded-lg bg-blue-50 text-blue-600 mb-3">
+                <div key={idx} className="p-4 rounded-xl bg-gray-50 hover:bg-brand-50/50 row-hover">
+                  <div className="p-2 w-fit rounded-lg bg-brand-50 text-brand-600 mb-3">
                     <InfoIcon className="h-4 w-4" />
                   </div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-1">{info.title}</h4>

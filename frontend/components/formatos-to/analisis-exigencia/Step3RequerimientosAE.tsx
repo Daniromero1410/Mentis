@@ -94,12 +94,12 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
 
             {/* --- SECCIÓN 4: TAREAS --- */}
             <div className="mb-8">
-                <div className="flex justify-between items-center mb-6 pl-1 border-l-4 border-blue-500">
+                <div className="flex justify-between items-center mb-6 pl-1 border-l-4 border-brand-500">
                     <h2 className="text-lg font-bold text-slate-800 uppercase">
                         4. REQUERIMIENTOS DEL PROCESO PRODUCTIVO POR TAREA
                     </h2>
                     {!readOnly && (
-                        <Button onClick={addTarea} size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white ml-4">
+                        <Button onClick={addTarea} size="sm" className="bg-brand-600 hover:bg-brand-700 text-white ml-4">
                             <Plus className="h-4 w-4 mr-2" /> Agregar Tarea
                         </Button>
                     )}
@@ -115,7 +115,7 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                     <Card key={idx} className="border-slate-200 shadow-sm mb-6 overflow-hidden">
                         <CardHeader className="bg-slate-50/80 border-b border-slate-100 flex flex-row items-center justify-between py-3">
                             <div className="flex items-center gap-2">
-                                <div className="bg-blue-100 text-blue-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
+                                <div className="bg-brand-100 text-brand-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">
                                     {idx + 1}
                                 </div>
                                 <CardTitle className="text-sm font-bold text-slate-700">TAREA {idx + 1}</CardTitle>
@@ -211,11 +211,11 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                         ))}
 
                                         {!readOnly && (!tarea.registro_fotografico || tarea.registro_fotografico.split(';').filter((u: string) => u.trim()).length < 3) && (
-                                            <div className="aspect-square border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 transition-all rounded-lg flex flex-col items-center justify-center cursor-pointer relative group">
+                                            <div className="aspect-square border-2 border-dashed border-slate-300 hover:border-brand-500 hover:bg-brand-50/50 transition-all rounded-lg flex flex-col items-center justify-center cursor-pointer relative group">
                                                 <div className="bg-white p-3 rounded-full shadow-sm border border-slate-100 mb-2 group-hover:scale-110 transition-transform">
-                                                    <Upload className="h-6 w-6 text-blue-500" />
+                                                    <Upload className="h-6 w-6 text-brand-500" />
                                                 </div>
-                                                <span className="text-xs font-semibold text-slate-600 group-hover:text-blue-600">Subir Foto</span>
+                                                <span className="text-xs font-semibold text-slate-600 group-hover:text-brand-600">Subir Foto</span>
                                                 <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleImageUpload(idx, e)} />
                                             </div>
                                         )}
@@ -247,8 +247,8 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                             <label
                                                 key={opt.value}
                                                 className={`flex flex-col items-start gap-2 p-4 rounded-xl border text-sm transition-all cursor-pointer relative overflow-hidden ${tarea.conclusion === opt.value
-                                                    ? 'bg-blue-50 border-blue-500 text-blue-800 shadow-sm ring-1 ring-blue-500'
-                                                    : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:bg-slate-50'
+                                                    ? 'bg-brand-50 border-brand-500 text-brand-800 shadow-sm ring-1 ring-brand-500'
+                                                    : 'bg-white border-slate-200 text-slate-600 hover:border-brand-300 hover:bg-slate-50'
                                                     }`}
                                             >
                                                 <input
@@ -262,7 +262,7 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
                                                 />
                                                 <div className="flex items-center justify-between w-full">
                                                     <span className="font-medium leading-tight">{opt.label}</span>
-                                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${tarea.conclusion === opt.value ? 'border-blue-600 bg-blue-600' : 'border-slate-300'
+                                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${tarea.conclusion === opt.value ? 'border-brand-600 bg-brand-600' : 'border-slate-300'
                                                         }`}>
                                                         {tarea.conclusion === opt.value && <div className="w-2 h-2 rounded-full bg-white" />}
                                                     </div>
@@ -279,12 +279,12 @@ export const Step3RequerimientosAE = ({ tareas, setTareas, materiales, setMateri
 
             {/* --- SECCIÓN 5: MATERIALES --- */}
             <div className="mb-10">
-                <div className="flex justify-between items-center mb-6 pl-1 border-l-4 border-blue-500">
+                <div className="flex justify-between items-center mb-6 pl-1 border-l-4 border-brand-500">
                     <h2 className="text-lg font-bold text-slate-800 uppercase">
                         5. MATERIALES, EQUIPOS Y HERRAMIENTAS
                     </h2>
                     {!readOnly && (
-                        <Button onClick={addMaterial} size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white ml-4">
+                        <Button onClick={addMaterial} size="sm" className="bg-brand-600 hover:bg-brand-700 text-white ml-4">
                             <Plus className="h-4 w-4 mr-2" /> Agregar Item
                         </Button>
                     )}

@@ -66,7 +66,7 @@ export function BlurSuccessModal({
                 <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:justify-center mt-4 w-full">
                     <button
                         onClick={handleDownload}
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium hover:bg-brand-700 transition-colors shadow-sm"
                     >
                         <Download className="h-4 w-4" />
                         Descargar PDF

@@ -100,7 +100,7 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                     <Button
                         onClick={addTarea}
                         size="sm"
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                        className="bg-brand-600 hover:bg-brand-700 text-white"
                     >
                         <Plus className="h-4 w-4 mr-2" />
                         AGREGAR TAREA
@@ -194,7 +194,7 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
 
                                 {/* Upload Placeholder - SÓLO SI HAY MENOS DE 3 IMÁGENES */}
                                 {!readOnly && (!tarea.registro_fotografico || tarea.registro_fotografico.split(';').filter((u: string) => u.trim()).length < 3) && (
-                                    <div className="border-2 border-dashed border-slate-300 rounded-lg p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 hover:border-indigo-400 transition-colors bg-white aspect-[4/3] relative">
+                                    <div className="border-2 border-dashed border-slate-300 rounded-lg p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 hover:border-brand-400 transition-colors bg-white aspect-[4/3] relative">
                                         <Upload className="h-8 w-8 text-slate-400 mb-2" />
                                         <div className="text-xs text-slate-500 font-medium">Subir Foto</div>
                                         <input
@@ -259,7 +259,7 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                                     <label
                                         key={opt.value}
                                         className={`flex items-center gap-3 p-3 rounded-md border cursor-pointer transition-all ${tarea.conclusion === opt.value
-                                            ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                                            ? 'bg-brand-50 border-brand-200 text-brand-700'
                                             : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
                                             }`}
                                     >
@@ -270,7 +270,7 @@ export const Step3Tareas = ({ tareas, setTareas, readOnly }: Step3Props) => {
                                             checked={tarea.conclusion === opt.value}
                                             onChange={(e) => updateTarea(idx, 'conclusion', e.target.value)}
                                             disabled={readOnly}
-                                            className="accent-indigo-600 h-4 w-4"
+                                            className="accent-brand-600 h-4 w-4"
                                         />
                                         <span className="text-sm font-medium">{opt.label}</span>
                                     </label>

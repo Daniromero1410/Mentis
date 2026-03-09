@@ -201,7 +201,7 @@ export default function DashboardPage() {
       case 'en_proceso':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 border border-amber-200 badge-animate">EN PROCESO</span>;
       default:
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700 border border-blue-200 badge-animate">BORRADOR</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-100 text-brand-700 border border-brand-200 badge-animate">BORRADOR</span>;
     }
   };
 
@@ -227,7 +227,7 @@ export default function DashboardPage() {
 
             {/* Welcome — no Card wrapper, manual rounded container */}
             <div className="rounded-xl border border-gray-200 overflow-hidden shadow-sm anim-fade-in-up bg-white">
-              <div className="bg-blue-600 px-5 pt-6 pb-6">
+              <div className="bg-brand-600 px-5 pt-6 pb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
                     <TrendingUp className="h-4 w-4 text-white" />
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                   <span className="text-[11px] font-bold uppercase tracking-widest text-white/70">Foco del día</span>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-1">Hola, {user?.nombre}</h2>
-                <p className="text-sm text-blue-100 capitalize flex items-center gap-1.5">
+                <p className="text-sm text-brand-100 capitalize flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5" />
                   {formattedDate}
                 </p>
@@ -248,11 +248,11 @@ export default function DashboardPage() {
                     const Icon = mod.icon;
                     return (
                       <Link key={mod.key} href={mod.newHref}>
-                        <div className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 bg-white hover:border-blue-300 hover:bg-blue-50 hover:shadow-md cursor-pointer group opacity-0 anim-fade-in-up delay-${idx + 1}`} style={{ animationFillMode: 'forwards' }}>
-                          <div className="p-2 rounded-lg bg-blue-600 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-transform duration-200">
+                        <div className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 bg-white hover:border-brand-300 hover:bg-brand-50 hover:shadow-md cursor-pointer group opacity-0 anim-fade-in-up delay-${idx + 1}`} style={{ animationFillMode: 'forwards' }}>
+                          <div className="p-2 rounded-lg bg-brand-600 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-transform duration-200">
                             <Icon className="h-4 w-4 text-white" />
                           </div>
-                          <span className="text-[10px] font-semibold text-gray-500 group-hover:text-blue-600 text-center leading-tight line-clamp-2 transition-colors duration-200">{mod.shortLabel}</span>
+                          <span className="text-[10px] font-semibold text-gray-500 group-hover:text-brand-600 text-center leading-tight line-clamp-2 transition-colors duration-200">{mod.shortLabel}</span>
                         </div>
                       </Link>
                     );
@@ -266,14 +266,14 @@ export default function DashboardPage() {
               <div className="divide-y divide-gray-100">
                 {[
                   { icon: ClipboardList, label: 'Total Registros', value: totalRegistros, color: 'text-gray-900' },
-                  { icon: FileCheck, label: 'Completados', value: totalCompletadas, color: 'text-blue-600' },
-                  { icon: FileEdit, label: 'Pendientes', value: totalBorradores, color: 'text-blue-600' },
+                  { icon: FileCheck, label: 'Completados', value: totalCompletadas, color: 'text-brand-600' },
+                  { icon: FileEdit, label: 'Pendientes', value: totalBorradores, color: 'text-brand-600' },
                 ].map((stat, idx) => {
                   const SIcon = stat.icon;
                   return (
-                    <div key={idx} className="flex items-center justify-between px-5 py-3.5 hover:bg-blue-50/30 row-hover">
+                    <div key={idx} className="flex items-center justify-between px-5 py-3.5 hover:bg-brand-50/30 row-hover">
                       <div className="flex items-center gap-3">
-                        <SIcon className="h-4 w-4 text-blue-500" />
+                        <SIcon className="h-4 w-4 text-brand-500" />
                         <span className="text-sm font-medium text-gray-700">{stat.label}</span>
                       </div>
                       {loading ? (
@@ -296,12 +296,12 @@ export default function DashboardPage() {
                   const count = moduleData[mod.key]?.total || 0;
                   return (
                     <Link key={mod.key} href={mod.href}>
-                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 row-hover cursor-pointer group">
-                        <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors duration-200">
+                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-brand-50 row-hover cursor-pointer group">
+                        <div className="p-1.5 rounded-lg bg-brand-50 text-brand-600 group-hover:bg-brand-100 transition-colors duration-200">
                           <Icon className="h-3.5 w-3.5" />
                         </div>
-                        <span className="flex-1 text-sm font-medium text-gray-700 group-hover:text-blue-600 truncate transition-colors duration-200">{mod.label}</span>
-                        {!loading && <span className="text-xs font-semibold text-gray-400 group-hover:text-blue-500 transition-colors duration-200">{count}</span>}
+                        <span className="flex-1 text-sm font-medium text-gray-700 group-hover:text-brand-600 truncate transition-colors duration-200">{mod.label}</span>
+                        {!loading && <span className="text-xs font-semibold text-gray-400 group-hover:text-brand-500 transition-colors duration-200">{count}</span>}
                       </div>
                     </Link>
                   );
@@ -316,7 +316,7 @@ export default function DashboardPage() {
             {/* Header */}
             <div className="px-6 py-4 border-b border-gray-100 bg-white flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
+                <div className="p-2 rounded-lg bg-brand-50 text-brand-600">
                   <TrendingUp className="h-5 w-5" />
                 </div>
                 <h2 className="text-lg font-bold text-gray-900">Centro de Actividad</h2>
@@ -324,7 +324,7 @@ export default function DashboardPage() {
               <button
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 disabled:opacity-50"
+                className="p-2 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 disabled:opacity-50"
               >
                 <RefreshCcw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
               </button>
@@ -338,8 +338,8 @@ export default function DashboardPage() {
                     key={mod.key}
                     onClick={() => setActiveTab(mod.key)}
                     className={`px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap tab-transition ${activeTab === mod.key
-                      ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25'
-                      : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'
+                      ? 'bg-brand-600 text-white shadow-sm shadow-brand-500/25'
+                      : 'text-gray-500 hover:text-brand-600 hover:bg-brand-50'
                       }`}
                   >
                     {mod.shortLabel}
@@ -367,13 +367,13 @@ export default function DashboardPage() {
                 <div className="p-12 text-center anim-fade-in-scale" style={{ animationFillMode: 'forwards' }}>
                   {activeModule && (
                     <>
-                      <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center">
+                      <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-brand-50 text-brand-500 flex items-center justify-center">
                         {(() => { const Icon = activeModule.icon; return <Icon className="h-7 w-7" />; })()}
                       </div>
                       <p className="text-sm font-medium text-gray-900 mb-1">No hay registros</p>
                       <p className="text-xs text-gray-500 mb-4">Aún no se han creado registros en {activeModule.label}</p>
                       <Link href={activeModule.newHref}>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                        <Button size="sm" className="bg-brand-600 hover:bg-brand-700 text-white">
                           <Plus className="h-3.5 w-3.5 mr-1" />
                           Crear primero
                         </Button>
@@ -400,11 +400,11 @@ export default function DashboardPage() {
                         <div
                           key={item.id}
                           onClick={() => openModal(item)}
-                          className={`grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_auto_auto_auto] gap-3 sm:gap-4 items-center px-4 sm:px-6 py-3 sm:py-3.5 hover:bg-blue-50/40 row-hover cursor-pointer opacity-0 anim-fade-in-up delay-${idx + 1}`}
+                          className={`grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_auto_auto_auto] gap-3 sm:gap-4 items-center px-4 sm:px-6 py-3 sm:py-3.5 hover:bg-brand-50/40 row-hover cursor-pointer opacity-0 anim-fade-in-up delay-${idx + 1}`}
                           style={{ animationFillMode: 'forwards' }}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
+                            <div className="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
                               {initials}
                             </div>
                             <div className="min-w-0">
@@ -419,7 +419,7 @@ export default function DashboardPage() {
                           <div className="text-right flex items-center gap-1 justify-end">
                             <span className="sm:hidden">{getEstadoBadge(item.estado)}</span>
                             <button
-                              className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 hidden sm:block"
+                              className="p-2 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 hidden sm:block"
                               onClick={(e) => { e.stopPropagation(); openModal(item); }}
                             >
                               <Eye className="h-4 w-4" />
@@ -433,7 +433,7 @@ export default function DashboardPage() {
                   {activeModule && (
                     <div className="px-6 py-3 border-t border-gray-100 bg-white">
                       <Link href={activeModule.href}>
-                        <button className="w-full text-center text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-blue-600 flex items-center justify-center gap-1.5 py-1">
+                        <button className="w-full text-center text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-brand-600 flex items-center justify-center gap-1.5 py-1">
                           Ver historial completo
                           <ArrowRight className="h-3.5 w-3.5" />
                         </button>
@@ -458,7 +458,7 @@ export default function DashboardPage() {
 
           <div className={`relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden transition-all duration-200 ${modalVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'}`}>
             {/* Gradient header */}
-            <div className="bg-blue-600 px-6 pt-5 pb-6 relative">
+            <div className="bg-brand-600 px-6 pt-5 pb-6 relative">
               <button onClick={closeModal} className="absolute top-4 right-4 p-1.5 hover:bg-white/20 rounded-lg transition-colors duration-200">
                 <X className="h-4 w-4 text-white/80" />
               </button>
@@ -468,7 +468,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white">{selectedRecord.trabajador_nombre || 'Sin nombre'}</h3>
-                  <p className="text-sm text-blue-100">{selectedRecord.trabajador_documento || selectedRecord.trabajador_identificacion || '—'}</p>
+                  <p className="text-sm text-brand-100">{selectedRecord.trabajador_documento || selectedRecord.trabajador_identificacion || '—'}</p>
                 </div>
               </div>
             </div>
@@ -478,21 +478,21 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 gap-y-4 gap-x-6">
                 <div>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <Hash className="h-3 w-3 text-blue-400" />
+                    <Hash className="h-3 w-3 text-brand-400" />
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Registro</p>
                   </div>
                   <p className="text-sm font-semibold text-gray-800">#{selectedRecord.id}</p>
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <Activity className="h-3 w-3 text-blue-400" />
+                    <Activity className="h-3 w-3 text-brand-400" />
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Estado</p>
                   </div>
                   {getEstadoBadge(selectedRecord.estado)}
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <ClipboardList className="h-3 w-3 text-blue-400" />
+                    <ClipboardList className="h-3 w-3 text-brand-400" />
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Módulo</p>
                   </div>
                   <p className="text-sm text-gray-700">{activeModule.label}</p>
@@ -500,7 +500,7 @@ export default function DashboardPage() {
                 {selectedRecord.empresa && (
                   <div>
                     <div className="flex items-center gap-1.5 mb-1">
-                      <Building2 className="h-3 w-3 text-blue-400" />
+                      <Building2 className="h-3 w-3 text-brand-400" />
                       <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Empresa</p>
                     </div>
                     <p className="text-sm text-gray-700">{selectedRecord.empresa}</p>
@@ -508,14 +508,14 @@ export default function DashboardPage() {
                 )}
                 <div>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <Calendar className="h-3 w-3 text-blue-400" />
+                    <Calendar className="h-3 w-3 text-brand-400" />
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Fecha</p>
                   </div>
                   <p className="text-sm text-gray-700">{getFormattedDate(selectedRecord)}</p>
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <Clock className="h-3 w-3 text-blue-400" />
+                    <Clock className="h-3 w-3 text-brand-400" />
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Creado</p>
                   </div>
                   <p className="text-sm text-gray-700">{getRecordDate(selectedRecord)}</p>
@@ -526,13 +526,13 @@ export default function DashboardPage() {
             {/* Action buttons */}
             <div className="px-6 pb-5 flex gap-3">
               <Link href={activeModule.getViewUrl(selectedRecord.id)} className="flex-1">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-11 text-sm font-medium shadow-sm hover:shadow-md">
+                <Button className="w-full bg-brand-600 hover:bg-brand-700 text-white rounded-xl h-11 text-sm font-medium shadow-sm hover:shadow-md">
                   <Eye className="h-4 w-4 mr-2" />
                   Ver Registro
                 </Button>
               </Link>
               <Link href={activeModule.getEditUrl(selectedRecord.id)} className="flex-1">
-                <Button variant="outline" className="w-full rounded-xl h-11 text-sm font-medium border-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200">
+                <Button variant="outline" className="w-full rounded-xl h-11 text-sm font-medium border-gray-200 text-gray-700 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200">
                   <Pencil className="h-4 w-4 mr-2" />
                   Editar
                 </Button>

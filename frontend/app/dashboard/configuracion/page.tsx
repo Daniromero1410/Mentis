@@ -86,7 +86,7 @@ export default function ConfiguracionPage() {
             <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
                 {/* Header */}
                 <div className="flex items-center gap-3 sm:gap-4 anim-fade-in-up">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
                         <Settings className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -99,7 +99,7 @@ export default function ConfiguracionPage() {
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-1">
                     <div className="px-4 py-4 sm:px-6 sm:py-5 border-b border-gray-100 flex items-center gap-3 sm:gap-4 bg-gray-50/60">
                         <div className="p-2 sm:p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
-                            <User className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                            <User className="h-4 w-4 sm:h-5 sm:w-5 text-brand-600" />
                         </div>
                         <div>
                             <h2 className="text-sm sm:text-base font-semibold text-gray-900">Información Personal</h2>
@@ -115,7 +115,7 @@ export default function ConfiguracionPage() {
                                         id="nombre"
                                         value={profileData.nombre}
                                         onChange={(e) => setProfileData({ ...profileData, nombre: e.target.value })}
-                                        className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                        className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-brand-500 transition-colors"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -124,7 +124,7 @@ export default function ConfiguracionPage() {
                                         id="apellido"
                                         value={profileData.apellido}
                                         onChange={(e) => setProfileData({ ...profileData, apellido: e.target.value })}
-                                        className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                        className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-brand-500 transition-colors"
                                     />
                                 </div>
                             </div>
@@ -147,7 +147,7 @@ export default function ConfiguracionPage() {
                                 <Button
                                     type="submit"
                                     disabled={savingProfile}
-                                    className="h-11 px-6 sm:px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl w-full sm:w-auto"
+                                    className="h-11 px-6 sm:px-8 bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 rounded-xl w-full sm:w-auto"
                                 >
                                     {savingProfile ? (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -165,7 +165,7 @@ export default function ConfiguracionPage() {
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden anim-fade-in-up delay-2">
                     <div className="px-4 py-4 sm:px-6 sm:py-5 border-b border-gray-100 flex items-center gap-3 sm:gap-4 bg-gray-50/60">
                         <div className="p-2 sm:p-2.5 bg-white rounded-xl shadow-sm border border-gray-100">
-                            <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                            <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-brand-600" />
                         </div>
                         <div>
                             <h2 className="text-sm sm:text-base font-semibold text-gray-900">Seguridad</h2>
@@ -182,7 +182,7 @@ export default function ConfiguracionPage() {
                                     value={passwordData.newPassword}
                                     onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                                     placeholder="Mínimo 6 caracteres"
-                                    className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                    className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-brand-500 transition-colors"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -193,14 +193,14 @@ export default function ConfiguracionPage() {
                                     value={passwordData.confirmPassword}
                                     onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                                     placeholder="Repetir contraseña"
-                                    className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-blue-500 transition-colors"
+                                    className="h-11 bg-gray-50/50 border-gray-200 rounded-xl focus:border-brand-500 transition-colors"
                                 />
                             </div>
                             <div className="flex justify-end pt-2">
                                 <Button
                                     type="submit"
                                     disabled={savingPassword || !passwordData.newPassword}
-                                    className="h-11 px-6 sm:px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl w-full sm:w-auto"
+                                    className="h-11 px-6 sm:px-8 bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 rounded-xl w-full sm:w-auto"
                                 >
                                     {savingPassword ? (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

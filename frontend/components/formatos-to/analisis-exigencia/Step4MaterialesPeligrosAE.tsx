@@ -53,7 +53,7 @@ export const Step4MaterialesPeligrosAE = ({ materiales, setMateriales, peligros,
                     <Button
                         onClick={addMaterial}
                         size="sm"
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                        className="bg-brand-600 hover:bg-brand-700 text-white"
                     >
                         <Plus className="h-4 w-4 mr-2" />
                         AGREGAR MATERIAL

@@ -152,7 +152,7 @@ export default function ValoracionesPage() {
       case 'borrador':
         return 'bg-gray-100 text-gray-700';
       default:
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-brand-100 text-brand-700';
     }
   };
 
@@ -186,7 +186,7 @@ export default function ValoracionesPage() {
           {/* Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25 shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
                 <ClipboardList className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -195,7 +195,7 @@ export default function ValoracionesPage() {
               </div>
             </div>
             <Link href="/dashboard/valoraciones/nueva" className="w-full sm:w-auto">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center">
+              <Button className="bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 rounded-xl gap-2 w-full sm:w-auto justify-center">
                 <Plus className="h-4 w-4" />
                 Nueva Valoración
               </Button>
@@ -205,8 +205,8 @@ export default function ValoracionesPage() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2 sm:gap-4 anim-fade-in-up delay-1">
             <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                <ListFilter className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">
+                <ListFilter className="h-4 w-4 sm:h-5 sm:w-5 text-brand-600" />
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">{total}</p>
@@ -263,7 +263,7 @@ export default function ValoracionesPage() {
                 </div>
                 <Button
                   onClick={handleSearch}
-                  className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shrink-0"
+                  className="bg-brand-600 hover:bg-brand-700 text-white rounded-xl shrink-0"
                 >
                   <Search className="h-4 w-4" />
                 </Button>
@@ -277,21 +277,21 @@ export default function ValoracionesPage() {
               <div className="flex items-center justify-center h-64">
                 <div className="flex flex-col items-center gap-3">
                   <div className="relative w-12 h-12">
-                    <div className="w-12 h-12 rounded-full border-4 border-blue-500/20"></div>
-                    <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+                    <div className="w-12 h-12 rounded-full border-4 border-brand-500/20"></div>
+                    <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-4 border-brand-600 border-t-transparent animate-spin"></div>
                   </div>
                   <p className="text-sm text-gray-500 animate-pulse">Cargando valoraciones...</p>
                 </div>
               </div>
             ) : valoraciones.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-4">
-                  <ClipboardList className="h-8 w-8 text-blue-300" />
+                <div className="w-16 h-16 rounded-2xl bg-brand-50 flex items-center justify-center mb-4">
+                  <ClipboardList className="h-8 w-8 text-brand-300" />
                 </div>
                 <p className="text-base font-semibold text-gray-700">No hay valoraciones</p>
                 <p className="text-sm text-gray-400 mt-1 mb-4">Crea una nueva valoración para comenzar</p>
                 <Link href="/dashboard/valoraciones/nueva">
-                  <Button variant="outline" className="rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50 gap-2">
+                  <Button variant="outline" className="rounded-xl border-brand-200 text-brand-600 hover:bg-brand-50 gap-2">
                     <Plus className="h-4 w-4" />
                     Nueva Valoración
                   </Button>
@@ -312,10 +312,10 @@ export default function ValoracionesPage() {
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {valoraciones.map((valoracion) => (
-                      <tr key={valoracion.id} className="hover:bg-blue-50/30 transition-colors">
+                      <tr key={valoracion.id} className="hover:bg-brand-50/30 transition-colors">
                         <td className="px-3 py-3 sm:px-6 sm:py-4">
                           <div className="flex items-center gap-2 sm:gap-3">
-                            <div className="flex-shrink-0 h-9 w-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            <div className="flex-shrink-0 h-9 w-9 bg-brand-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                               {valoracion.trabajador_nombre
                                 ? valoracion.trabajador_nombre.charAt(0).toUpperCase()
                                 : '?'}
@@ -354,7 +354,7 @@ export default function ValoracionesPage() {
                         <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
                           <div className="flex items-center justify-center gap-1">
                             <Link href={`/dashboard/valoraciones/nueva?id=${valoracion.id}&modo=ver`}>
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-blue-100 text-blue-600 rounded-lg" title="Ver detalles">
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-brand-100 text-brand-600 rounded-lg" title="Ver detalles">
                                 <Eye className="h-4 w-4" />
                               </Button>
                             </Link>

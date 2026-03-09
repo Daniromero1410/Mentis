@@ -132,8 +132,8 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                   <div className="divide-y divide-gray-100">
                     {pendingRequests.map((req) => (
                       <div key={req.id} className="p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors">
-                        <div className="bg-indigo-100 p-2 rounded-full">
-                          <UserCircle className="h-4 w-4 text-indigo-600" />
+                        <div className="bg-brand-100 p-2 rounded-full">
+                          <UserCircle className="h-4 w-4 text-brand-600" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-900 truncate">
@@ -247,8 +247,8 @@ export function Header({ onToggleSidebar }: HeaderProps) {
       {/* Modal de Cerrar Sesión */}
       {showLogoutModal && mounted && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
-          {/* Backdrop blur - vinotinto */}
-          <div className="absolute inset-0 backdrop-blur-md transition-all duration-300" style={{ backgroundColor: 'rgba(109,29,42,0.75)' }} onClick={() => setShowLogoutModal(false)} />
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/50" onClick={() => setShowLogoutModal(false)} />
 
           {/* Modal card */}
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
