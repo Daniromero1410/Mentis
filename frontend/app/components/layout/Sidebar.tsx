@@ -171,15 +171,15 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
               onClick={() => toggleExpand(item.title)}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all duration-200 ${active
                 ? 'text-[#6d1d2a]'
-                : 'text-gray-600 hover:text-[#6d1d2a]'
+                : 'text-[#e6b200] hover:text-[#ffc600]'
                 } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
               style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
             >
-              <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-[#6d1d2a]' : 'text-gray-400'}`} />
+              <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-[#6d1d2a]' : 'text-[#e6b200]'}`} />
               {!collapsed && (
                 <>
                   <span className="flex-1 text-left truncate">{item.title}</span>
-                  <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 text-[#e6b200] transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                 </>
               )}
             </button>
@@ -197,11 +197,11 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
             onClick={closeMobileSidebar}
             className={`flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all duration-200 ${active
               ? 'bg-brand-50 text-brand-600'
-              : 'text-gray-600 hover:bg-brand-50/50 hover:text-brand-600'
+              : 'text-[#e6b200] hover:bg-brand-50/50 hover:text-[#ffc600]'
               } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
             style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
           >
-            <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-[#6d1d2a]' : 'text-gray-400'}`} />
+            <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-[#6d1d2a]' : 'text-[#e6b200]'}`} />
             {!collapsed && <span className="truncate">{item.title}</span>}
             {!collapsed && active && (
               <div className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#6d1d2a' }} />
@@ -247,7 +247,7 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         {menuItems.map((section, sectionIndex) => (
           <div key={section.title} className={sectionIndex > 0 ? 'mt-5' : ''}>
             {!collapsed && (
-              <h3 className="mb-2 px-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+              <h3 className="mb-2 px-3 text-[10px] font-bold text-[#e6b200] uppercase tracking-widest">
                 {section.title}
               </h3>
             )}
@@ -273,7 +273,7 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
               </span>
             )}
           </div>
-          <p className="text-center text-[10px] text-gray-400 mt-2 font-medium tracking-wide">
+          <p className="text-center text-[10px] text-[#e6b200] mt-2 font-medium tracking-wide">
             Desarrollado por S.O.L SAS
           </p>
         </div>

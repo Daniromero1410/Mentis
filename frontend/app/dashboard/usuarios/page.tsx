@@ -425,10 +425,10 @@ export default function UsuariosPage() {
                                 )}
                             </div>
                             <div>
-                                <DialogTitle className="text-lg font-bold text-white">
+                                <DialogTitle className="text-lg font-bold text-[#ffc600]">
                                     {selectedUsuario ? 'Editar Usuario' : 'Nuevo Usuario'}
                                 </DialogTitle>
-                                <DialogDescription className="text-sm text-brand-100 mt-0.5">
+                                <DialogDescription className="text-sm text-[#ffc600]/80 mt-0.5">
                                     {selectedUsuario
                                         ? 'Modifica los datos y permisos del usuario'
                                         : 'Completa los datos para crear un nuevo acceso'}

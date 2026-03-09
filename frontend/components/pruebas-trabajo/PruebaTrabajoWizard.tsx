@@ -1230,7 +1230,7 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
                 {Object.entries(factoresRiesgo).map(([key, categoria]) => (
                   <div key={key} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                     {/* Category Header */}
-                    <div className="bg-brand-600 text-white px-5 py-4 font-bold text-base uppercase tracking-wide flex items-center gap-2">
+                    <div className="bg-brand-600 text-[#ffc600] px-5 py-4 font-bold text-base uppercase tracking-wide flex items-center gap-2">
                       <AlertTriangle className="w-5 h-5" />
                       {categoria.titulo}
                     </div>

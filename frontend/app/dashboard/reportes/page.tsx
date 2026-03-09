@@ -121,8 +121,8 @@ export default function ReportesPage() {
                       <Icon className="h-6 w-6 text-[#ffc600]" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white">{plantilla.title}</h3>
-                      <p className="text-xs text-brand-100 mt-0.5">{plantilla.description}</p>
+                      <h3 className="text-base font-bold text-[#ffc600]">{plantilla.title}</h3>
+                      <p className="text-xs text-[#ffc600]/80 mt-0.5">{plantilla.description}</p>
                     </div>
                   </div>
                 </div>
