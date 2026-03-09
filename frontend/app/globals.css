@@ -8,22 +8,28 @@
   --card-foreground: #111827;
   --popover: #ffffff;
   --popover-foreground: #111827;
-  --primary: #6366f1;
+  --primary: #6d1d2a;
   --primary-foreground: #ffffff;
-  --secondary: #f3f4f6;
+  --secondary: #ffc600;
   --secondary-foreground: #111827;
   --muted: #f3f4f6;
   --muted-foreground: #6b6b6b;
-  --accent: #8b5cf6;
+  --accent: #8b2a38;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: #e5e7eb;
   --input: #e5e7eb;
-  --ring: #6366f1;
+  --ring: #6d1d2a;
   --radius: 0.5rem;
 
-  /* Custom colors */
+  /* S.O.L SAS brand colors */
+  --brand: #6d1d2a;
+  --brand-light: #8a2535;
+  --brand-50: #fdf2f4;
+  --brand-100: #fbe6ea;
+  --gold: #ffc600;
+  --gold-dark: #e6b200;
   --accent-indigo: #6366f1;
   --accent-violet: #8b5cf6;
   --accent-red: #ef4444;

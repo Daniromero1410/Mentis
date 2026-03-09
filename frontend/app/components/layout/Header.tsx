@@ -175,7 +175,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="gap-3 h-10 px-3 hover:bg-gray-100 rounded-lg">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-sm font-semibold">
+                  <AvatarFallback className="text-white text-sm font-semibold" style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}>
                     {user ? getInitials(user.nombre, user.apellido) : 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -186,8 +186,8 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-64 bg-white border border-gray-200 shadow-xl p-2 rounded-2xl">
               {/* Profile Header */}
-              <div className="flex items-center gap-3 px-3 py-3 mb-2 rounded-xl bg-blue-50">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold">
+              <div className="flex items-center gap-3 px-3 py-3 mb-2 rounded-xl" style={{ backgroundColor: '#fdf2f4' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold" style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}>
                   {user ? getInitials(user.nombre, user.apellido) : 'U'}
                 </div>
                 <div className="flex-1 overflow-hidden">
@@ -201,7 +201,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard"
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-gray-700 hover:text-[#6d1d2a] hover:bg-[#fdf2f4] transition-colors"
                   >
                     <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
                       <Menu className="h-4 w-4" />
@@ -216,7 +216,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/configuracion"
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer text-gray-700 hover:text-[#6d1d2a] hover:bg-[#fdf2f4] transition-colors"
                   >
                     <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
                       <Settings className="h-4 w-4" />
@@ -247,23 +247,23 @@ export function Header({ onToggleSidebar }: HeaderProps) {
       {/* Modal de Cerrar Sesión */}
       {showLogoutModal && mounted && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
-          {/* Backdrop blur */}
-          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-all duration-300" onClick={() => setShowLogoutModal(false)} />
+          {/* Backdrop blur - vinotinto */}
+          <div className="absolute inset-0 backdrop-blur-md transition-all duration-300" style={{ backgroundColor: 'rgba(109,29,42,0.75)' }} onClick={() => setShowLogoutModal(false)} />
 
           {/* Modal card */}
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Top accent */}
-            <div className="h-1.5 bg-blue-600" />
+            <div className="h-1.5" style={{ backgroundColor: '#6d1d2a' }} />
 
             <div className="p-6">
               {/* Avatar + info */}
               <div className="flex flex-col items-center text-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-bold mb-3 shadow-lg shadow-blue-500/25">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold mb-3 shadow-lg" style={{ backgroundColor: '#6d1d2a' }}>
                   {user ? getInitials(user.nombre, user.apellido) : 'U'}
                 </div>
                 <h3 className="text-lg font-bold text-gray-900">{user?.nombre} {user?.apellido}</h3>
                 <p className="text-sm text-gray-500 mt-0.5">{user?.email}</p>
-                <span className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-600 border border-blue-200 capitalize">
+                <span className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize" style={{ backgroundColor: '#fdf2f4', color: '#6d1d2a', border: '1px solid #f5c6ce' }}>
                   {user?.rol}
                 </span>
               </div>

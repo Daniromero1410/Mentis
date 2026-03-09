@@ -106,16 +106,17 @@ export default function LoginPage() {
 
       {/* Success Overlay Animation */}
       <div
-        className={`fixed inset-0 bg-blue-600 z-50 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${loginSuccess ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'
+        className={`fixed inset-0 z-50 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${loginSuccess ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'
           }`}
+        style={{ backgroundColor: '#ffc600' }}
       >
-        <div className={`flex flex-col items-center justify-center text-white transition-all duration-500 delay-300 ${loginSuccess ? 'opacity-100 scale-110' : 'opacity-0 scale-90'}`}>
+        <div className={`flex flex-col items-center justify-center transition-all duration-500 delay-300 ${loginSuccess ? 'opacity-100 scale-110' : 'opacity-0 scale-90'}`}>
           <div className="relative">
-            <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-            <CheckCircle2 className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white" />
+            <div className="absolute inset-0 rounded-full blur-xl animate-pulse" style={{ backgroundColor: 'rgba(109,29,42,0.2)' }}></div>
+            <CheckCircle2 className="h-24 w-24 mb-6 relative z-10 drop-shadow-md" style={{ color: '#6d1d2a' }} />
           </div>
-          <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Bienvenido!</h2>
-          <p className="text-blue-100 text-lg flex items-center gap-2">
+          <h2 className="text-4xl font-bold tracking-tight mb-3" style={{ color: '#6d1d2a' }}>¡Bienvenido!</h2>
+          <p className="text-lg flex items-center gap-2" style={{ color: '#6d1d2a' }}>
             <Loader2 className="h-5 w-5 animate-spin" />
             Preparando tu entorno...
           </p>
@@ -156,7 +157,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="correo@ejemplo.com"
                     required
-                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6d1d2a] focus:border-transparent transition-all duration-200"
                   />
                 </div>
               </div>
@@ -174,7 +175,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
-                    className="w-full pl-12 pr-12 py-3.5 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-12 pr-12 py-3.5 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6d1d2a] focus:border-transparent transition-all duration-200"
                   />
                   <button
                     type="button"
@@ -194,7 +195,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 disabled:from-indigo-400 disabled:to-indigo-500 text-white font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50"
+                className="w-full py-3.5 rounded-xl text-white font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:opacity-90 disabled:opacity-60" style={{ background: 'linear-gradient(to right, #8a2535, #6d1d2a)' }}
               >
                 {isSubmitting ? (
                   <>
@@ -212,7 +213,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setResetModalOpen(true)}
-                className="text-sm text-gray-600 hover:text-indigo-600 font-medium transition-colors"
+                className="text-sm text-gray-600 hover:text-[#6d1d2a] font-medium transition-colors"
               >
                 ¿Olvidaste tu contraseña?
               </button>
@@ -232,7 +233,7 @@ export default function LoginPage() {
       <Dialog open={resetModalOpen} onOpenChange={setResetModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-indigo-600">
+            <DialogTitle className="flex items-center gap-2" style={{ color: '#6d1d2a' }}>
               <AlertCircle className="h-5 w-5" />
               Restablecer Contraseña
             </DialogTitle>
@@ -264,7 +265,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isResetting}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                className="text-white" style={{ backgroundColor: '#6d1d2a' }}
               >
                 {isResetting ? (
                   <>

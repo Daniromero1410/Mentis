@@ -170,12 +170,12 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
             <button
               onClick={() => toggleExpand(item.title)}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all duration-200 ${active
-                ? 'bg-blue-50 text-blue-600'
-                : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600'
+                ? 'text-[#6d1d2a]'
+                : 'text-gray-600 hover:text-[#6d1d2a]'
                 } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
               style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
             >
-              <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
+              <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-[#6d1d2a]' : 'text-gray-400'}`} />
               {!collapsed && (
                 <>
                   <span className="flex-1 text-left truncate">{item.title}</span>
@@ -185,7 +185,7 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
             </button>
             {!collapsed && (
               <div className={`overflow-hidden transition-all duration-200 ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <ul className="mt-0.5 space-y-0.5 ml-3 border-l-2 border-blue-100 pl-0">
+                <ul className="mt-0.5 space-y-0.5 ml-3 border-l-2 pl-0" style={{ borderColor: '#f5c6ce' }}>
                   {item.children.map((child: any) => renderMenuItem(child, depth + 1))}
                 </ul>
               </div>
@@ -201,10 +201,10 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
               } ${collapsed ? 'justify-center px-2' : ''} ${isNested ? 'text-xs py-2' : 'text-sm'}`}
             style={{ paddingLeft: depth > 0 ? `${depth * 0.75 + 0.75}rem` : '' }}
           >
-            <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
+            <Icon className={`${isNested ? 'h-4 w-4' : 'h-[18px] w-[18px]'} shrink-0 ${active ? 'text-[#6d1d2a]' : 'text-gray-400'}`} />
             {!collapsed && <span className="truncate">{item.title}</span>}
             {!collapsed && active && (
-              <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />
+              <div className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#6d1d2a' }} />
             )}
           </Link>
         )}
@@ -258,13 +258,13 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         ))}
       </nav>
 
-      {/* Bottom section - Role badge only */}
+      {/* Bottom section - Role badge + branding */}
       {!collapsed && (
         <div className="p-3 border-t border-gray-100 shrink-0">
-          <div className="flex items-center justify-center px-3 py-2.5 rounded-xl bg-blue-50/50">
+          <div className="flex items-center justify-center px-3 py-2.5 rounded-xl" style={{ backgroundColor: '#fdf2f4' }}>
             {user?.rol && (
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold ${{
-                admin: 'bg-blue-100 text-blue-700',
+                admin: 'bg-green-100 text-green-700',
                 psicologo: 'bg-green-100 text-green-700',
                 terapeuta_ocupacional: 'bg-violet-100 text-violet-700',
                 supervisor: 'bg-amber-100 text-amber-700',
@@ -273,6 +273,9 @@ export function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
               </span>
             )}
           </div>
+          <p className="text-center text-[10px] text-gray-400 mt-2 font-medium tracking-wide">
+            Desarrollado por S.O.L SAS
+          </p>
         </div>
       )}
     </aside>
