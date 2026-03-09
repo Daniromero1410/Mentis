@@ -253,7 +253,7 @@ def listar_AEs(
     """Lista todas las AEs de trabajo del usuario"""
     
     # Base query for filtering
-    if current_user.rol == "admin":
+    if current_user.rol in ("admin", "supervisor"):
         base_query = select(AnalisisExigenciaMental)
     else:
         base_query = select(AnalisisExigenciaMental).where(

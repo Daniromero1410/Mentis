@@ -252,7 +252,7 @@ def listar_pruebas(
     """Lista todas las pruebas de trabajo del usuario"""
     
     # Base query for filtering
-    if current_user.rol == "admin":
+    if current_user.rol in ("admin", "supervisor"):
         base_query = select(PruebaTrabajo)
     else:
         base_query = select(PruebaTrabajo).where(
