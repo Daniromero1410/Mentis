@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest tests/test_auth.py -v --tb=short --no-header -p no:allure)",
+      "Bash(python -m pytest tests/ -v --tb=short --no-header -p no:allure)",
+      "Bash(python -m pytest tests/ -v --tb=line --no-header -p no:allure)",
+      "Bash(python -c \":*)",
+      "Bash(xargs grep -l \"analisis.exigencia.mental\\\\|analisis_exigencia_mental\")",
+      "Bash(xargs grep -l \"analisis_exigencia_mental\\\\|exigencias_mental\\\\|exigencias-mental\")",
+      "Bash(xargs grep -l \"finalizar\\\\|generar_pdf\")",
+      "Bash(xargs grep -l \"analisis_exigencias_mental\\\\|analisis-exigencias-mental\")",
+      "Bash(xargs grep -l \"ValoracionCreate\\\\|ValoracionUpdate\")",
+      "Bash(python -m pytest tests/test_analisis_exigencia_mental.py -v --tb=short --no-header -p no:allure)",
+      "Bash(python -m pytest tests/ --tb=short --no-header -p no:allure -q)"
+    ]
+  }
+}
