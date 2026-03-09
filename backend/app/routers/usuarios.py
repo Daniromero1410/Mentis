@@ -45,6 +45,7 @@ def crear_usuario(
         apellido=usuario.apellido,
         rol=usuario.rol,
         hashed_password=hashed_password,
+        activo=usuario.activo,
         acceso_valoraciones=usuario.acceso_valoraciones,
         acceso_pruebas_trabajo=usuario.acceso_pruebas_trabajo,
         acceso_formatos_to=usuario.acceso_formatos_to,

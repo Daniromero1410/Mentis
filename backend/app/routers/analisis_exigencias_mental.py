@@ -735,7 +735,7 @@ def finalizar_AE(
     try:
         # Generar PDF
         pdf_path = generar_pdf_analisis_exigencia_mental(
-            AE=AE,
+            Ae=AE,
             datos_empresa=datos_empresa,
             trabajador=trabajador,
             evaluador=evaluador,
@@ -986,7 +986,7 @@ def descargar_pdf(
         print(f"  - Concepto: {concepto is not None}")
         
         pdf_path = generar_pdf_analisis_exigencia_mental(
-            AE=AE,
+            Ae=AE,
             datos_empresa=datos_empresa,
             trabajador=trabajador,
             evaluador=evaluador,

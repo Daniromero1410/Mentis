@@ -11,6 +11,11 @@
 .env.test.local
 .env.production.local
 *.env
+# Archivos de configuracion de tests (contienen credenciales)
+.env.test
+**/.env.test
+# Reportes de pruebas (generados localmente)
+reports/
 
 # ===========================================
 # PYTHON / BACKEND

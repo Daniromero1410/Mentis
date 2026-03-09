@@ -39,6 +39,7 @@ class UsuarioCreate(SQLModel):
     apellido: str
     rol: RolUsuario = RolUsuario.PSICOLOGO
     password: str
+    activo: bool = True
     acceso_valoraciones: bool = True
     acceso_pruebas_trabajo: bool = True
     acceso_formatos_to: bool = False
