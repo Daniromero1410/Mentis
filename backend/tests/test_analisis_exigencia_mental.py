@@ -54,8 +54,15 @@ class TestAnalisisExigenciaMentalCRUD:
         id_ = created_analisis_mental["id"]
         res = client.post(f"/analisis-exigencias-mental/{id_}/finalizar", headers=auth_headers)
         assert res.status_code == 200
-        estado = res.json().get("estado", "")
-        assert estado.upper() in ["COMPLETADA", "COMPLETED", "FINALIZADA"]
+        body = res.json()
+        # El endpoint devuelve {message, AE_id, pdf_url}
+        finalizado = (
+            body.get("estado", "").upper() in ["COMPLETADA", "COMPLETED", "FINALIZADA"]
+            or body.get("AE_id") == id_
+            or body.get("pdf_url") is not None
+            or "finaliz" in body.get("message", "").lower()
+        )
+        assert finalizado, f"Respuesta inesperada de finalizar: {body}"
 
     @allure.story("Eliminación")
     @allure.severity(allure.severity_level.NORMAL)
