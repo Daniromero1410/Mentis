@@ -230,7 +230,7 @@ export default function UsuariosPage() {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
                     <div className="flex items-center gap-3 sm:gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
-                            <Users className="h-6 w-6 text-white" />
+                            <Users className="h-6 w-6 text-[#ffc600]" />
                         </div>
                         <div>
                             <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Gestión de Usuarios</h1>
@@ -334,7 +334,7 @@ export default function UsuariosPage() {
                                         <tr key={usuario.id} className="hover:bg-brand-50/30 transition-colors">
                                             <td className="px-3 py-3 sm:px-6 sm:py-4">
                                                 <div className="flex items-center gap-2 sm:gap-3">
-                                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-brand-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+                                                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-brand-600 flex items-center justify-center text-[#ffc600] font-bold text-sm shadow-sm shrink-0">
                                                         {usuario.nombre.charAt(0)}{usuario.apellido.charAt(0)}
                                                     </div>
                                                     <div className="min-w-0">
@@ -419,9 +419,9 @@ export default function UsuariosPage() {
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30 shrink-0">
                                 {selectedUsuario ? (
-                                    <Pencil className="h-6 w-6 text-white" />
+                                    <Pencil className="h-6 w-6 text-[#ffc600]" />
                                 ) : (
-                                    <Plus className="h-6 w-6 text-white" />
+                                    <Plus className="h-6 w-6 text-[#ffc600]" />
                                 )}
                             </div>
                             <div>

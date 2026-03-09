@@ -118,7 +118,7 @@ export default function ReportesPage() {
                 <div className="bg-brand-600 px-5 py-5">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-white/20 rounded-xl backdrop-blur-sm">
-                      <Icon className="h-6 w-6 text-white" />
+                      <Icon className="h-6 w-6 text-[#ffc600]" />
                     </div>
                     <div>
                       <h3 className="text-base font-bold text-white">{plantilla.title}</h3>

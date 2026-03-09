@@ -199,7 +199,7 @@ export default function PruebasTrabajoTOPage() {
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
                         <div className="flex items-center gap-3 sm:gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
-                                <ClipboardList className="h-6 w-6 text-white" />
+                                <ClipboardList className="h-6 w-6 text-[#ffc600]" />
                             </div>
                             <div>
                                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Pruebas de Trabajo (TO)</h1>

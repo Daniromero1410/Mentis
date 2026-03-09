@@ -187,7 +187,7 @@ export default function AnalisisExigenciaMentalPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
-                <Brain className="h-6 w-6 text-white" />
+                <Brain className="h-6 w-6 text-[#ffc600]" />
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Análisis de Exigencias Mental</h1>
@@ -311,7 +311,7 @@ export default function AnalisisExigenciaMentalPage() {
                       <tr key={item.id} className="hover:bg-brand-50/30 transition-colors">
                         <td className="px-3 py-3 sm:px-6 sm:py-4">
                           <div className="flex items-center gap-2 sm:gap-3">
-                            <div className="flex-shrink-0 h-9 w-9 bg-brand-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            <div className="flex-shrink-0 h-9 w-9 bg-brand-600 rounded-full flex items-center justify-center text-[#ffc600] font-bold text-sm">
                               {item.trabajador_nombre ? item.trabajador_nombre.charAt(0).toUpperCase() : '?'}
                             </div>
                             <div className="min-w-0">

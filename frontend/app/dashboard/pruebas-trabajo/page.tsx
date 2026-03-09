@@ -187,7 +187,7 @@ export default function PruebasTrabajoPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between anim-fade-in-up">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
-                <Briefcase className="h-6 w-6 text-white" />
+                <Briefcase className="h-6 w-6 text-[#ffc600]" />
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Pruebas de Trabajo</h1>
@@ -314,7 +314,7 @@ export default function PruebasTrabajoPage() {
                         <tr key={prueba.id} className="hover:bg-brand-50/30 transition-colors">
                           <td className="px-3 py-3 sm:px-6 sm:py-4">
                             <div className="flex items-center gap-2 sm:gap-3">
-                              <div className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-600 text-white font-bold text-sm shrink-0">
+                              <div className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-600 text-[#ffc600] font-bold text-sm shrink-0">
                                 {initial}
                               </div>
                               <div className="min-w-0">

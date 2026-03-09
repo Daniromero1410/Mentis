@@ -175,7 +175,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="gap-3 h-10 px-3 hover:bg-gray-100 rounded-lg">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="text-white text-sm font-semibold" style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}>
+                  <AvatarFallback className="text-[#ffc600] text-sm font-semibold" style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}>
                     {user ? getInitials(user.nombre, user.apellido) : 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -187,7 +187,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <DropdownMenuContent align="end" className="w-64 bg-white border border-gray-200 shadow-xl p-2 rounded-2xl">
               {/* Profile Header */}
               <div className="flex items-center gap-3 px-3 py-3 mb-2 rounded-xl" style={{ backgroundColor: '#fdf2f4' }}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold" style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[#ffc600] text-sm font-bold" style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}>
                   {user ? getInitials(user.nombre, user.apellido) : 'U'}
                 </div>
                 <div className="flex-1 overflow-hidden">
@@ -248,7 +248,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
       {showLogoutModal && mounted && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/50" onClick={() => setShowLogoutModal(false)} />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowLogoutModal(false)} />
 
           {/* Modal card */}
           <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -258,7 +258,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <div className="p-6">
               {/* Avatar + info */}
               <div className="flex flex-col items-center text-center mb-6">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold mb-3 shadow-lg" style={{ backgroundColor: '#6d1d2a' }}>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center text-[#ffc600] text-xl font-bold mb-3 shadow-lg" style={{ backgroundColor: '#6d1d2a' }}>
                   {user ? getInitials(user.nombre, user.apellido) : 'U'}
                 </div>
                 <h3 className="text-lg font-bold text-gray-900">{user?.nombre} {user?.apellido}</h3>

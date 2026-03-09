@@ -12,7 +12,8 @@
       "Bash(xargs grep -l \"ValoracionCreate\\\\|ValoracionUpdate\")",
       "Bash(python -m pytest tests/test_analisis_exigencia_mental.py -v --tb=short --no-header -p no:allure)",
       "Bash(python -m pytest tests/ --tb=short --no-header -p no:allure -q)",
-      "Bash(xargs sed -i 's/blue-600/brand-600/g; s/blue-700/brand-700/g; s/blue-800/brand-800/g; s/blue-500/brand-500/g; s/blue-400/brand-400/g; s/blue-300/brand-300/g; s/blue-200/brand-200/g; s/blue-100/brand-100/g; s/blue-50/brand-50/g; s/indigo-600/brand-600/g; s/indigo-700/brand-700/g; s/indigo-500/brand-500/g; s/indigo-400/brand-400/g; s/indigo-200/brand-200/g; s/indigo-100/brand-100/g; s/indigo-50/brand-50/g')"
+      "Bash(xargs sed -i 's/blue-600/brand-600/g; s/blue-700/brand-700/g; s/blue-800/brand-800/g; s/blue-500/brand-500/g; s/blue-400/brand-400/g; s/blue-300/brand-300/g; s/blue-200/brand-200/g; s/blue-100/brand-100/g; s/blue-50/brand-50/g; s/indigo-600/brand-600/g; s/indigo-700/brand-700/g; s/indigo-500/brand-500/g; s/indigo-400/brand-400/g; s/indigo-200/brand-200/g; s/indigo-100/brand-100/g; s/indigo-50/brand-50/g')",
+      "Bash(xargs sed -i 's/text-white\"\" \\\\/>/text-[#ffc600]\"\" \\\\/>/g; s/text-white\\\\/80\"\" \\\\/>/text-[#ffc600]\\\\/80\"\" \\\\/>/g')"
     ]
   }
 }

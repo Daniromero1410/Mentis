@@ -37,7 +37,7 @@ function LogoutOverlay() {
       >
         <div className="relative">
           <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-          <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-white" />
+          <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-[#ffc600]" />
         </div>
         <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Hasta Pronto!</h2>
         <p className="text-red-100 text-lg flex items-center gap-2">

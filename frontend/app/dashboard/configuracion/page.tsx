@@ -87,7 +87,7 @@ export default function ConfiguracionPage() {
                 {/* Header */}
                 <div className="flex items-center gap-3 sm:gap-4 anim-fade-in-up">
                     <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/25 shrink-0">
-                        <Settings className="h-6 w-6 text-white" />
+                        <Settings className="h-6 w-6 text-[#ffc600]" />
                     </div>
                     <div>
                         <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Configuración</h1>

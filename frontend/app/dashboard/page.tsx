@@ -230,7 +230,7 @@ export default function DashboardPage() {
               <div className="bg-brand-600 px-5 pt-6 pb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
-                    <TrendingUp className="h-4 w-4 text-white" />
+                    <TrendingUp className="h-4 w-4 text-[#ffc600]" />
                   </div>
                   <span className="text-[11px] font-bold uppercase tracking-widest text-white/70">Foco del día</span>
                 </div>
@@ -250,7 +250,7 @@ export default function DashboardPage() {
                       <Link key={mod.key} href={mod.newHref}>
                         <div className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border border-gray-100 bg-white hover:border-brand-300 hover:bg-brand-50 hover:shadow-md cursor-pointer group opacity-0 anim-fade-in-up delay-${idx + 1}`} style={{ animationFillMode: 'forwards' }}>
                           <div className="p-2 rounded-lg bg-brand-600 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-transform duration-200">
-                            <Icon className="h-4 w-4 text-white" />
+                            <Icon className="h-4 w-4 text-[#ffc600]" />
                           </div>
                           <span className="text-[10px] font-semibold text-gray-500 group-hover:text-brand-600 text-center leading-tight line-clamp-2 transition-colors duration-200">{mod.shortLabel}</span>
                         </div>
@@ -404,7 +404,7 @@ export default function DashboardPage() {
                           style={{ animationFillMode: 'forwards' }}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
+                            <div className="w-9 h-9 rounded-full bg-brand-600 flex items-center justify-center text-[#ffc600] text-xs font-bold shrink-0 shadow-sm">
                               {initials}
                             </div>
                             <div className="min-w-0">
@@ -460,10 +460,10 @@ export default function DashboardPage() {
             {/* Gradient header */}
             <div className="bg-brand-600 px-6 pt-5 pb-6 relative">
               <button onClick={closeModal} className="absolute top-4 right-4 p-1.5 hover:bg-white/20 rounded-lg transition-colors duration-200">
-                <X className="h-4 w-4 text-white/80" />
+                <X className="h-4 w-4 text-[#ffc600]/80" />
               </button>
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-lg font-bold shadow-lg border-2 border-white/30">
+                <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-[#ffc600] text-lg font-bold shadow-lg border-2 border-white/30">
                   {(selectedRecord.trabajador_nombre || 'SN').split(' ').map(n => n.charAt(0)).slice(0, 2).join('').toUpperCase()}
                 </div>
                 <div>
