@@ -85,7 +85,8 @@ async def get_current_user(
 
 async def get_current_admin(current_user: Usuario = Depends(get_current_user)) -> Usuario:
     """Verifica que el usuario sea administrador"""
-    if current_user.rol != "admin":
+    rol_val = current_user.rol.value if hasattr(current_user.rol, 'value') else str(current_user.rol)
+    if rol_val.lower() != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permisos de administrador"

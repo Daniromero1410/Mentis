@@ -3,6 +3,7 @@ from typing import Optional, List, TYPE_CHECKING, Any
 from datetime import datetime
 from enum import Enum
 from sqlalchemy import Column, String
+from sqlalchemy.orm import validates as sa_validates
 from pydantic import field_validator
 
 if TYPE_CHECKING:
@@ -36,6 +37,12 @@ class Usuario(SQLModel, table=True):
     @classmethod
     def coerce_rol(cls, v: Any) -> Any:
         return _normalize_rol(v)
+
+    @sa_validates('rol')
+    def normalize_rol_orm(self, key: str, value: Any) -> Any:
+        """Normaliza rol durante carga ORM (SQLAlchemy), no solo en validación Pydantic."""
+        return _normalize_rol(value)
+
     activo: bool = Field(default=True)
     hashed_password: str
     # Permisos de acceso a módulos
