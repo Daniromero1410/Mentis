@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List, TYPE_CHECKING
 from datetime import datetime
 from enum import Enum
+from sqlalchemy import Column, Enum as SAEnum
 
 if TYPE_CHECKING:
     from app.models.valoracion import Valoracion
@@ -19,7 +20,13 @@ class Usuario(SQLModel, table=True):
     email: str = Field(unique=True, index=True)
     nombre: str
     apellido: str
-    rol: RolUsuario = Field(default=RolUsuario.PSICOLOGO)
+    rol: RolUsuario = Field(
+        default=RolUsuario.PSICOLOGO,
+        sa_column=Column(
+            SAEnum(RolUsuario, values_callable=lambda x: [e.value for e in x], name='rolusuario'),
+            nullable=False
+        )
+    )
     activo: bool = Field(default=True)
     hashed_password: str
     # Permisos de acceso a módulos
