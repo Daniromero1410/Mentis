@@ -1,8 +1,9 @@
 from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional, List, TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING, Any
 from datetime import datetime
 from enum import Enum
 from sqlalchemy import Column, String
+from pydantic import field_validator
 
 if TYPE_CHECKING:
     from app.models.valoracion import Valoracion
@@ -13,9 +14,15 @@ class RolUsuario(str, Enum):
     PSICOLOGO = "psicologo"
     TERAPEUTA_OCUPACIONAL = "terapeuta_ocupacional"
 
+def _normalize_rol(v: Any) -> Any:
+    """Convierte 'ADMIN' -> 'admin' para compatibilidad con datos legacy en DB."""
+    if isinstance(v, str):
+        return v.lower()
+    return v
+
 class Usuario(SQLModel, table=True):
     __tablename__ = "usuarios"
-    
+
     id: Optional[int] = Field(default=None, primary_key=True)
     email: str = Field(unique=True, index=True)
     nombre: str
@@ -24,6 +31,11 @@ class Usuario(SQLModel, table=True):
         default=RolUsuario.PSICOLOGO,
         sa_column=Column(String, nullable=False)
     )
+
+    @field_validator('rol', mode='before')
+    @classmethod
+    def coerce_rol(cls, v: Any) -> Any:
+        return _normalize_rol(v)
     activo: bool = Field(default=True)
     hashed_password: str
     # Permisos de acceso a módulos
@@ -68,6 +80,11 @@ class UsuarioRead(SQLModel):
     nombre: str
     apellido: str
     rol: RolUsuario
+
+    @field_validator('rol', mode='before')
+    @classmethod
+    def coerce_rol(cls, v: Any) -> Any:
+        return _normalize_rol(v)
     activo: bool
     acceso_valoraciones: bool
     acceso_pruebas_trabajo: bool
