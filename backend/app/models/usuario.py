@@ -2,8 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional, List, TYPE_CHECKING, Any
 from datetime import datetime
 from enum import Enum
-from sqlalchemy import Column, String
-from sqlalchemy.orm import validates as sa_validates
+from sqlalchemy import Column, String, TypeDecorator
 from pydantic import field_validator
 
 if TYPE_CHECKING:
@@ -21,6 +20,16 @@ def _normalize_rol(v: Any) -> Any:
         return v.lower()
     return v
 
+class LowerString(TypeDecorator):
+    """Columna String que normaliza a minúsculas al leer de la DB (fix para roles legacy en mayúsculas)."""
+    impl = String
+    cache_ok = True
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            return value.lower()
+        return value
+
 class Usuario(SQLModel, table=True):
     __tablename__ = "usuarios"
 
@@ -30,18 +39,13 @@ class Usuario(SQLModel, table=True):
     apellido: str
     rol: RolUsuario = Field(
         default=RolUsuario.PSICOLOGO,
-        sa_column=Column(String, nullable=False)
+        sa_column=Column(LowerString, nullable=False)
     )
 
     @field_validator('rol', mode='before')
     @classmethod
     def coerce_rol(cls, v: Any) -> Any:
         return _normalize_rol(v)
-
-    @sa_validates('rol')
-    def normalize_rol_orm(self, key: str, value: Any) -> Any:
-        """Normaliza rol durante carga ORM (SQLAlchemy), no solo en validación Pydantic."""
-        return _normalize_rol(value)
 
     activo: bool = Field(default=True)
     hashed_password: str
