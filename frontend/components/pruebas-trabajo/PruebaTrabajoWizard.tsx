@@ -571,13 +571,16 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
           if (data.condiciones_riesgo) {
             data.condiciones_riesgo.forEach((cond: any) => {
               if (factoresMapa[cond.condicion_texto]) {
-                const loadedFr1 = cond.frecuencia_1?.toString() || '';
-                const loadedFr2 = cond.frecuencia_2?.toString() || '';
-                const loadedExp1 = cond.exposicion_1?.toString() || '';
-                const loadedExp2 = cond.exposicion_2?.toString() || '';
-                // Prom: usar el guardado; si no existe, usar fr1 como fallback
-                const loadedFr = cond.frecuencia?.toString() || loadedFr1;
-                const loadedExp = cond.exposicion?.toString() || loadedExp1;
+                const frecProm = cond.frecuencia?.toString() || '';
+                const expProm  = cond.exposicion?.toString()  || '';
+                // Para registros nuevos usa los sub-campos; para registros legacy
+                // (frecuencia_1 null) pone el promedio guardado en fr1 como fallback
+                const loadedFr1 = cond.frecuencia_1 != null ? cond.frecuencia_1.toString() : frecProm;
+                const loadedFr2 = cond.frecuencia_2 != null ? cond.frecuencia_2.toString() : '';
+                const loadedExp1 = cond.exposicion_1 != null ? cond.exposicion_1.toString() : expProm;
+                const loadedExp2 = cond.exposicion_2 != null ? cond.exposicion_2.toString() : '';
+                const loadedFr  = frecProm || loadedFr1;
+                const loadedExp = expProm  || loadedExp1;
                 factoresMapa[cond.condicion_texto] = {
                   fr: loadedFr, fr1: loadedFr1, fr2: loadedFr2,
                   exp: loadedExp, exp1: loadedExp1, exp2: loadedExp2,
