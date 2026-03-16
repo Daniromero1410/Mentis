@@ -571,11 +571,16 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
           if (data.condiciones_riesgo) {
             data.condiciones_riesgo.forEach((cond: any) => {
               if (factoresMapa[cond.condicion_texto]) {
-                const loadedFr = cond.frecuencia?.toString() || '';
-                const loadedExp = cond.exposicion?.toString() || '';
+                const loadedFr1 = cond.frecuencia_1?.toString() || '';
+                const loadedFr2 = cond.frecuencia_2?.toString() || '';
+                const loadedExp1 = cond.exposicion_1?.toString() || '';
+                const loadedExp2 = cond.exposicion_2?.toString() || '';
+                // Prom: usar el guardado; si no existe, usar fr1 como fallback
+                const loadedFr = cond.frecuencia?.toString() || loadedFr1;
+                const loadedExp = cond.exposicion?.toString() || loadedExp1;
                 factoresMapa[cond.condicion_texto] = {
-                  fr: loadedFr, fr1: loadedFr, fr2: '',
-                  exp: loadedExp, exp1: loadedExp, exp2: '',
+                  fr: loadedFr, fr1: loadedFr1, fr2: loadedFr2,
+                  exp: loadedExp, exp1: loadedExp1, exp2: loadedExp2,
                   int: cond.intensidad?.toString() || '',
                   total: cond.total_condicion?.toString() || '',
                   fuentes: cond.fuentes_informacion || '',
@@ -635,8 +640,14 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
             if (values && (values.fr || values.exp || values.int)) {
               condicionesRiesgo.push({
                 dimension: key, item_numero: index + 1, item_texto: item.nombre, condicion_texto: item.nombre,
-                frecuencia: values.fr ? Math.ceil(parseFloat(values.fr)) : null, exposicion: values.exp ? Math.ceil(parseFloat(values.exp)) : null,
-                intensidad: values.int ? Math.ceil(parseFloat(values.int)) : null, total_condicion: values.total ? Math.ceil(parseFloat(values.total)) : null,
+                frecuencia_1: values.fr1 ? Math.ceil(parseFloat(values.fr1)) : null,
+                frecuencia_2: values.fr2 ? Math.ceil(parseFloat(values.fr2)) : null,
+                exposicion_1: values.exp1 ? Math.ceil(parseFloat(values.exp1)) : null,
+                exposicion_2: values.exp2 ? Math.ceil(parseFloat(values.exp2)) : null,
+                frecuencia: values.fr ? Math.ceil(parseFloat(values.fr)) : null,
+                exposicion: values.exp ? Math.ceil(parseFloat(values.exp)) : null,
+                intensidad: values.int ? Math.ceil(parseFloat(values.int)) : null,
+                total_condicion: values.total ? Math.ceil(parseFloat(values.total)) : null,
                 fuentes_informacion: values.fuentes, descripcion_detallada: values.observaciones || ''
               });
             }
@@ -679,6 +690,10 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
             condicionesRiesgo.push({
               dimension: key, item_numero: index + 1, condicion_texto: item.nombre,
               descripcion_detallada: values.observaciones || null,
+              frecuencia_1: values.fr1 ? Math.ceil(parseFloat(values.fr1)) : null,
+              frecuencia_2: values.fr2 ? Math.ceil(parseFloat(values.fr2)) : null,
+              exposicion_1: values.exp1 ? Math.ceil(parseFloat(values.exp1)) : null,
+              exposicion_2: values.exp2 ? Math.ceil(parseFloat(values.exp2)) : null,
               frecuencia: values.fr ? Math.ceil(parseFloat(values.fr)) : null,
               exposicion: values.exp ? Math.ceil(parseFloat(values.exp)) : null,
               intensidad: values.int ? Math.ceil(parseFloat(values.int)) : null,

@@ -202,7 +202,13 @@ class CondicionRiesgoPrueba(SQLModel, table=True):
     # Descripción detallada del experto
     descripcion_detallada: Optional[str] = None  # La explicación completa del factor
 
-    # Calificaciones (0-7 cada una)
+    # Calificaciones individuales por evaluador (sub-campos del promedio)
+    frecuencia_1: Optional[int] = Field(default=None, ge=0, le=7)
+    frecuencia_2: Optional[int] = Field(default=None, ge=0, le=7)
+    exposicion_1: Optional[int] = Field(default=None, ge=0, le=7)
+    exposicion_2: Optional[int] = Field(default=None, ge=0, le=7)
+
+    # Calificaciones promedio (0-7 cada una)
     frecuencia: Optional[int] = Field(default=None, ge=0, le=7)
     exposicion: Optional[int] = Field(default=None, ge=0, le=7)
     intensidad: Optional[int] = Field(default=None, ge=0, le=7)

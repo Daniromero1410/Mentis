@@ -132,6 +132,10 @@ class CondicionRiesgoPruebaCreate(BaseModel):
     item_numero: int
     condicion_texto: str
     descripcion_detallada: Optional[str] = None
+    frecuencia_1: Optional[int] = Field(None, ge=0, le=7)
+    frecuencia_2: Optional[int] = Field(None, ge=0, le=7)
+    exposicion_1: Optional[int] = Field(None, ge=0, le=7)
+    exposicion_2: Optional[int] = Field(None, ge=0, le=7)
     frecuencia: Optional[int] = Field(None, ge=0, le=7)
     exposicion: Optional[int] = Field(None, ge=0, le=7)
     intensidad: Optional[int] = Field(None, ge=0, le=7)
