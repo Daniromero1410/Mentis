@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
@@ -441,7 +442,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
         const has2 = updatedFactor.fr2 !== '';
         if (has1 && has2) {
           const avg = (parseFloat(updatedFactor.fr1) + parseFloat(updatedFactor.fr2)) / 2;
-          updatedFactor.fr = String(Math.round(avg * 10) / 10);
+          updatedFactor.fr = String(Math.ceil(avg));
         } else {
           updatedFactor.fr = has1 ? updatedFactor.fr1 : has2 ? updatedFactor.fr2 : '';
         }
@@ -453,7 +454,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
         const has2 = updatedFactor.exp2 !== '';
         if (has1 && has2) {
           const avg = (parseFloat(updatedFactor.exp1) + parseFloat(updatedFactor.exp2)) / 2;
-          updatedFactor.exp = String(Math.round(avg * 10) / 10);
+          updatedFactor.exp = String(Math.ceil(avg));
         } else {
           updatedFactor.exp = has1 ? updatedFactor.exp1 : has2 ? updatedFactor.exp2 : '';
         }
@@ -462,10 +463,10 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
       // Recalculate total
       if (['fr', 'fr1', 'fr2', 'exp', 'exp1', 'exp2', 'int'].includes(field)) {
         if (updatedFactor.fr !== '' && updatedFactor.exp !== '' && updatedFactor.int !== '') {
-          const fr = parseFloat(updatedFactor.fr) || 0;
-          const exp = parseFloat(updatedFactor.exp) || 0;
-          const intVal = parseInt(updatedFactor.int) || 0;
-          updatedFactor.total = String(Math.round((fr + exp + intVal) * 10) / 10);
+          const fr = Math.ceil(parseFloat(updatedFactor.fr)) || 0;
+          const exp = Math.ceil(parseFloat(updatedFactor.exp)) || 0;
+          const intVal = Math.ceil(parseFloat(updatedFactor.int)) || 0;
+          updatedFactor.total = String(fr + exp + intVal);
         }
       }
 
@@ -570,11 +571,17 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
           if (data.condiciones_riesgo) {
             data.condiciones_riesgo.forEach((cond: any) => {
               if (factoresMapa[cond.condicion_texto]) {
-                const loadedFr = cond.frecuencia?.toString() || '';
-                const loadedExp = cond.exposicion?.toString() || '';
+                const frecProm = cond.frecuencia?.toString() || '';
+                const expProm  = cond.exposicion?.toString()  || '';
+                const loadedFr1 = cond.frecuencia_1 != null ? cond.frecuencia_1.toString() : frecProm;
+                const loadedFr2 = cond.frecuencia_2 != null ? cond.frecuencia_2.toString() : '';
+                const loadedExp1 = cond.exposicion_1 != null ? cond.exposicion_1.toString() : expProm;
+                const loadedExp2 = cond.exposicion_2 != null ? cond.exposicion_2.toString() : '';
+                const loadedFr  = frecProm || loadedFr1;
+                const loadedExp = expProm  || loadedExp1;
                 factoresMapa[cond.condicion_texto] = {
-                  fr: loadedFr, fr1: loadedFr, fr2: '',
-                  exp: loadedExp, exp1: loadedExp, exp2: '',
+                  fr: loadedFr, fr1: loadedFr1, fr2: loadedFr2,
+                  exp: loadedExp, exp1: loadedExp1, exp2: loadedExp2,
                   int: cond.intensidad?.toString() || '',
                   total: cond.total_condicion?.toString() || '',
                   fuentes: cond.fuentes_informacion || '',
@@ -678,10 +685,14 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
             condicionesRiesgo.push({
               dimension: key, item_numero: index + 1, condicion_texto: item.nombre,
               descripcion_detallada: values.observaciones || null,
-              frecuencia: values.fr ? parseInt(values.fr) : null,
-              exposicion: values.exp ? parseInt(values.exp) : null,
-              intensidad: values.int ? parseInt(values.int) : null,
-              total_condicion: values.total ? parseInt(values.total) : null,
+              frecuencia_1: values.fr1 ? Math.ceil(parseFloat(values.fr1)) : null,
+              frecuencia_2: values.fr2 ? Math.ceil(parseFloat(values.fr2)) : null,
+              exposicion_1: values.exp1 ? Math.ceil(parseFloat(values.exp1)) : null,
+              exposicion_2: values.exp2 ? Math.ceil(parseFloat(values.exp2)) : null,
+              frecuencia: values.fr ? Math.ceil(parseFloat(values.fr)) : null,
+              exposicion: values.exp ? Math.ceil(parseFloat(values.exp)) : null,
+              intensidad: values.int ? Math.ceil(parseFloat(values.int)) : null,
+              total_condicion: values.total ? Math.ceil(parseFloat(values.total)) : null,
               fuentes_informacion: values.fuentes
             });
           }
@@ -877,6 +888,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
 
   // --- Render -------------------------------------------------------
   return (
+    <>
     <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-6 pb-20 px-2 sm:px-0 anim-fade-in-up">
         {/* Header */}
@@ -1772,68 +1784,68 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
           </div>
         </div>
 
-        {/* ----------------------------------------------------------- */}
-        {/* Download Modal                                             */}
-        {/* ----------------------------------------------------------- */}
-        {showDownloadModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h2 className="text-xl font-bold mb-2 text-gray-900">ae Finalizada</h2>
-                <p className="mb-6 text-gray-600">La ae se ha guardado correctamente.</p>
-                <div className="flex flex-col sm:flex-row justify-center gap-3">
-                  {downloadUrls?.pdf_url && (
-                    <a
-                      href={downloadUrls.pdf_url.startsWith('http') ? downloadUrls.pdf_url : `${process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app'}${downloadUrls.pdf_url}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button className="w-full bg-brand-600 hover:bg-brand-700 text-white">
-                        <Download className="mr-2 h-4 w-4" /> Descargar PDF ReportLab
-                      </Button>
-                    </a>
-                  )}
-                  <Button variant="outline" onClick={() => router.push('/dashboard/analisis-exigencias-mental')}>
-                    Volver al listado
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          </div>
-        )}
-
-        {/* ----------------------------------------------------------- */}
-        {/* Validation Modal                                           */}
-        {/* ----------------------------------------------------------- */}
-        {showValidationModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
-              <div className="flex justify-between items-center mb-4 border-b pb-2">
-                <h3 className="text-lg font-bold text-gray-900">Campos Requeridos</h3>
-                <button onClick={() => setShowValidationModal(false)} className="text-gray-400 hover:text-gray-500">
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
-                <p className="text-red-800 font-semibold flex items-center mb-2">
-                  <AlertCircle className="h-5 w-5 mr-2" /> Por favor complete los siguientes campos:
-                </p>
-                <ul className="list-disc list-inside text-sm text-red-700 space-y-1 ml-1">
-                  {validationErrors.map((error, idx) => (<li key={idx}>{error}</li>))}
-                </ul>
-              </div>
-              <div className="flex justify-end">
-                <Button onClick={() => setShowValidationModal(false)} className="bg-brand-600 hover:bg-brand-700 text-white">Entendido</Button>
-              </div>
-            </Card>
-          </div>
-        )}
       </div>
     </DashboardLayout>
+
+    {/* Download Modal — portal para cubrir toda la página incluido el sidebar */}
+    {showDownloadModal && createPortal(
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-bold mb-2 text-gray-900">Análisis Finalizado</h2>
+            <p className="mb-6 text-gray-600">El análisis se ha guardado correctamente.</p>
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              {downloadUrls?.pdf_url && (
+                <a
+                  href={downloadUrls.pdf_url.startsWith('http') ? downloadUrls.pdf_url : `${process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app'}${downloadUrls.pdf_url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button className="w-full bg-brand-600 hover:bg-brand-700 text-white">
+                    <Download className="mr-2 h-4 w-4" /> Descargar PDF ReportLab
+                  </Button>
+                </a>
+              )}
+              <Button variant="outline" onClick={() => router.push('/dashboard/analisis-exigencias-mental')}>
+                Volver al listado
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </div>,
+      document.body
+    )}
+
+    {/* Validation Modal — portal para cubrir toda la página */}
+    {showValidationModal && createPortal(
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
+          <div className="flex justify-between items-center mb-4 border-b pb-2">
+            <h3 className="text-lg font-bold text-gray-900">Campos Requeridos</h3>
+            <button onClick={() => setShowValidationModal(false)} className="text-gray-400 hover:text-gray-500">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+            <p className="text-red-800 font-semibold flex items-center mb-2">
+              <AlertCircle className="h-5 w-5 mr-2" /> Por favor complete los siguientes campos:
+            </p>
+            <ul className="list-disc list-inside text-sm text-red-700 space-y-1 ml-1">
+              {validationErrors.map((error, idx) => (<li key={idx}>{error}</li>))}
+            </ul>
+          </div>
+          <div className="flex justify-end">
+            <Button onClick={() => setShowValidationModal(false)} className="bg-brand-600 hover:bg-brand-700 text-white">Entendido</Button>
+          </div>
+        </Card>
+      </div>,
+      document.body
+    )}
+    </>
   );
 }
