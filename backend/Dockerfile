@@ -7,14 +7,16 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1
 
 # Instalar LibreOffice y dependencias del sistema
-RUN apt-get update && apt-get install -y \
+RUN apt-get update --fix-missing && \
+    apt-get install -y --no-install-recommends \
     libreoffice \
     libreoffice-writer \
     libreoffice-calc \
     fonts-liberation \
     fonts-dejavu \
     fonts-freefont-ttf \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Crear directorio de trabajo
 WORKDIR /app
