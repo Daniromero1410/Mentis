@@ -52,12 +52,11 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly, onGener
                             type="button"
                             onClick={onGenerarRecomendaciones}
                             disabled={generandoRecomendaciones}
-                            className="bg-purple-600 hover:bg-purple-700 text-white"
                             size="sm"
                         >
                             {generandoRecomendaciones
                                 ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generando...</>
-                                : <><Sparkles className="mr-2 h-4 w-4 text-yellow-300" />Enriquecer con IA</>
+                                : 'Enriquecer con IA'
                             }
                         </Button>
                     </div>
