@@ -11,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Trash2, Upload, Sparkles, Loader2 } from 'lucide-react';
+import { Trash2, Upload, Loader2 } from 'lucide-react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -61,12 +61,11 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                                         type="button"
                                         onClick={onGenerarConcepto}
                                         disabled={generandoConcepto}
-                                        className="bg-purple-600 hover:bg-purple-700 text-white"
                                         size="sm"
                                     >
                                         {generandoConcepto
                                             ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generando...</>
-                                            : <><Sparkles className="mr-2 h-4 w-4 text-yellow-300" />Enriquecer con IA</>
+                                            : 'Enriquecer con IA'
                                         }
                                     </Button>
                                 </div>

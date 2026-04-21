@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FileUpload } from '@/components/ui/file-upload';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface Step5Props {
     formData: any;
@@ -26,12 +26,11 @@ export const Step5ConceptoRegistro = ({ formData, updateField, readOnly, onGener
                             type="button"
                             onClick={onGenerarConcepto}
                             disabled={generandoConcepto}
-                            className="bg-purple-600 hover:bg-purple-700 text-white"
                             size="sm"
                         >
                             {generandoConcepto
                                 ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generando...</>
-                                : <><Sparkles className="mr-2 h-4 w-4 text-yellow-300" />Enriquecer con IA</>
+                                : 'Enriquecer con IA'
                             }
                         </Button>
                     </div>

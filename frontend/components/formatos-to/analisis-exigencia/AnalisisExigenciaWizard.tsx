@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import {
     Save, ChevronLeft, ChevronRight, Loader2,
     FileText, User, Briefcase,
-    Activity, AlertTriangle, Download, Sparkles
+    Activity, AlertTriangle, Download
 } from 'lucide-react';
 import { BlurValidationModal } from '../BlurValidationModal';
 

@@ -20,8 +20,7 @@ import {
     Heart,
     PenTool,
     Download,
-    X,
-    Sparkles
+    X
 } from 'lucide-react';
 
 import { toast } from '@/components/ui/sileo-toast';

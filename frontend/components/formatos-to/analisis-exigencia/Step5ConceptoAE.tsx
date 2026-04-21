@@ -2,7 +2,7 @@ import { FormSection, FormField, FormTextarea } from '../prueba-trabajo/FormComp
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface Step5AEProps {
     formData: any;
@@ -54,12 +54,11 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly, onGenerarReco
                             type="button"
                             onClick={onGenerarRecomendaciones}
                             disabled={generandoRecomendaciones}
-                            className="bg-purple-600 hover:bg-purple-700 text-white"
                             size="sm"
                         >
                             {generandoRecomendaciones
                                 ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generando...</>
-                                : <><Sparkles className="mr-2 h-4 w-4 text-yellow-300" />Enriquecer con IA</>
+                                : 'Enriquecer con IA'
                             }
                         </Button>
                     </div>

@@ -7,7 +7,7 @@ import { toast } from '../ui/sileo-toast';
 import {
     Save, ChevronLeft, ChevronRight, Download, Loader2,
     Plus, Trash2, CheckCircle2, FileText, User, Briefcase,
-    Activity, AlertTriangle, Sparkles
+    Activity, AlertTriangle
 } from 'lucide-react';
 import { BlurValidationModal } from './BlurValidationModal';
 import { BlurSuccessModal } from './BlurSuccessModal';
