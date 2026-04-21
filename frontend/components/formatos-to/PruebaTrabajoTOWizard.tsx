@@ -43,6 +43,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     const [showDownloadModal, setShowDownloadModal] = useState(false);
     const [downloadUrl, setDownloadUrl] = useState('');
     const [generandoRec, setGenerandoRec] = useState(false);
+    const [generandoConcepto, setGenerandoConcepto] = useState(false);
 
     const [formData, setFormData] = useState({
         fecha_valoracion: new Date().toISOString().split('T')[0],
@@ -349,6 +350,25 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         return true;
     };
 
+    const handleGenerarConcepto = async () => {
+        if (!pruebaId) { toast.error('Guarda el formulario antes de generar el concepto.'); return; }
+        setGenerandoConcepto(true);
+        try {
+            const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/${pruebaId}/generar-concepto`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            updateField('concepto_prueba_trabajo', data.concepto_prueba_trabajo);
+            toast.success('Concepto generado con IA');
+        } catch (e: any) {
+            toast.error(e.message || 'Error generando concepto');
+        } finally {
+            setGenerandoConcepto(false);
+        }
+    };
+
     const handleGenerarRecomendaciones = async () => {
         if (!pruebaId) { toast.error('Guarda el formulario antes de generar recomendaciones.'); return; }
         setGenerandoRec(true);
@@ -582,6 +602,8 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         readOnly={readOnly}
                         onGenerarRecomendaciones={handleGenerarRecomendaciones}
                         generandoRecomendaciones={generandoRec}
+                        onGenerarConcepto={handleGenerarConcepto}
+                        generandoConcepto={generandoConcepto}
                     />
                 )}
             </div>

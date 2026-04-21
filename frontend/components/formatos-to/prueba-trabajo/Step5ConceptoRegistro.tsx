@@ -12,12 +12,30 @@ interface Step5Props {
     readOnly?: boolean;
     onGenerarRecomendaciones?: () => void;
     generandoRecomendaciones?: boolean;
+    onGenerarConcepto?: () => void;
+    generandoConcepto?: boolean;
 }
 
-export const Step5ConceptoRegistro = ({ formData, updateField, readOnly, onGenerarRecomendaciones, generandoRecomendaciones }: Step5Props) => {
+export const Step5ConceptoRegistro = ({ formData, updateField, readOnly, onGenerarRecomendaciones, generandoRecomendaciones, onGenerarConcepto, generandoConcepto }: Step5Props) => {
     return (
         <div className="space-y-6">
             <FormSection title="7. CONCEPTO PARA PRUEBA DE TRABAJO">
+                {!readOnly && onGenerarConcepto && (
+                    <div className="flex justify-end mb-4">
+                        <Button
+                            type="button"
+                            onClick={onGenerarConcepto}
+                            disabled={generandoConcepto}
+                            className="bg-purple-600 hover:bg-purple-700 text-white"
+                            size="sm"
+                        >
+                            {generandoConcepto
+                                ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generando...</>
+                                : <><Sparkles className="mr-2 h-4 w-4 text-yellow-300" />Enriquecer con IA</>
+                            }
+                        </Button>
+                    </div>
+                )}
                 <FormField label="COMPETENCIA, SEGURIDAD, CONFORT, RELACIONES SOCIALES, OTROS ASPECTOS">
                     <FormTextarea
                         className="min-h-[120px]"
