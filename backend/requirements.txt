@@ -33,3 +33,4 @@ sqlmodel==0.0.31
 starlette==0.50.0
 typing_extensions==4.15.0
 uvicorn==0.40.0
+groq>=0.9.0

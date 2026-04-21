@@ -252,6 +252,54 @@ def generar_pdf_ae(
 
 
 # ═════════════════════════════════════════════════════════════════════
+# GENERAR RECOMENDACIONES CON IA
+# ═════════════════════════════════════════════════════════════════════
+@router.post("/{analisis_id}/generar-recomendaciones")
+def generar_recomendaciones(
+    analisis_id: int,
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user),
+):
+    analisis = session.get(AnalisisExigencia, analisis_id)
+    if not analisis:
+        raise HTTPException(404, "Análisis no encontrado")
+
+    ident = session.exec(select(IdentificacionAE).where(IdentificacionAE.prueba_id == analisis_id)).first()
+    tareas = session.exec(select(TareaAE).where(TareaAE.prueba_id == analisis_id).order_by(TareaAE.orden)).all()
+    perfil = session.exec(select(PerfilExigenciasAE).where(PerfilExigenciasAE.prueba_id == analisis_id)).first()
+
+    perfil_dict = None
+    if perfil:
+        perfil_dict = {}
+        for campo in ["sensopercepcion", "motricidad_gruesa", "motricidad_fina", "armonia", "cognitivos", "psicosociales", "laborales"]:
+            val = getattr(perfil, campo, None)
+            if val:
+                perfil_dict[campo] = val
+
+    try:
+        from app.services.groq_service import generar_recomendaciones_ae
+        resultado = generar_recomendaciones_ae(
+            nombre_trabajador=ident.nombre_trabajador if ident else "",
+            cargo=ident.cargo_actual if ident else "",
+            diagnosticos_atel=ident.diagnosticos_atel if ident else "",
+            tareas=[
+                {
+                    "actividad": t.actividad,
+                    "ciclo": t.ciclo or "",
+                    "conclusion": t.conclusion or "",
+                    "descripcion_biomecanica": t.descripcion_biomecanica or "",
+                    "requerimientos_motrices": getattr(t, "requerimientos_motrices", "") or "",
+                }
+                for t in tareas
+            ],
+            perfil_exigencias=perfil_dict,
+        )
+        return resultado
+    except Exception as e:
+        raise HTTPException(500, f"Error generando recomendaciones: {str(e)}")
+
+
+# ═════════════════════════════════════════════════════════════════════
 # HELPERS INTERNOS
 # ═════════════════════════════════════════════════════════════════════
 

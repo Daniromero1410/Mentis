@@ -7,7 +7,7 @@ import { toast } from '../ui/sileo-toast';
 import {
     Save, ChevronLeft, ChevronRight, Download, Loader2,
     Plus, Trash2, CheckCircle2, FileText, User, Briefcase,
-    Activity, AlertTriangle // Updated icons
+    Activity, AlertTriangle, Sparkles
 } from 'lucide-react';
 import { BlurValidationModal } from './BlurValidationModal';
 import { BlurSuccessModal } from './BlurSuccessModal';
@@ -42,6 +42,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     const [saving, setSaving] = useState(false);
     const [showDownloadModal, setShowDownloadModal] = useState(false);
     const [downloadUrl, setDownloadUrl] = useState('');
+    const [generandoRec, setGenerandoRec] = useState(false);
 
     const [formData, setFormData] = useState({
         fecha_valoracion: new Date().toISOString().split('T')[0],
@@ -348,6 +349,26 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         return true;
     };
 
+    const handleGenerarRecomendaciones = async () => {
+        if (!pruebaId) { toast.error('Guarda el formulario antes de generar recomendaciones.'); return; }
+        setGenerandoRec(true);
+        try {
+            const res = await fetch(`${API_URL}/formatos-to/pruebas-trabajo/${pruebaId}/generar-recomendaciones`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            updateField('recomendaciones_trabajador', data.para_trabajador);
+            updateField('recomendaciones_empresa', data.para_empresa);
+            toast.success('Recomendaciones generadas con IA');
+        } catch (e: any) {
+            toast.error(e.message || 'Error generando recomendaciones');
+        } finally {
+            setGenerandoRec(false);
+        }
+    };
+
     const handleNext = () => {
         if (validateStep(currentStep)) {
             setCurrentStep(prev => Math.min(STEPS.length, prev + 1));
@@ -559,6 +580,8 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         formData={formData}
                         updateField={updateField}
                         readOnly={readOnly}
+                        onGenerarRecomendaciones={handleGenerarRecomendaciones}
+                        generandoRecomendaciones={generandoRec}
                     />
                 )}
             </div>

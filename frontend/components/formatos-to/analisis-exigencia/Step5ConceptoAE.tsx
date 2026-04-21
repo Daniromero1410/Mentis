@@ -1,15 +1,18 @@
-import React from 'react';
-import { FormSection, FormField, FormTextarea, FormInput } from '../prueba-trabajo/FormComponents';
+import { FormSection, FormField, FormTextarea } from '../prueba-trabajo/FormComponents';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Sparkles, Loader2 } from 'lucide-react';
 
 interface Step5AEProps {
     formData: any;
     updateField: (field: string, value: any) => void;
     readOnly?: boolean;
+    onGenerarRecomendaciones?: () => void;
+    generandoRecomendaciones?: boolean;
 }
 
-export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProps) => {
+export const Step5ConceptoAE = ({ formData, updateField, readOnly, onGenerarRecomendaciones, generandoRecomendaciones }: Step5AEProps) => {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
@@ -45,6 +48,22 @@ export const Step5ConceptoAE = ({ formData, updateField, readOnly }: Step5AEProp
 
             {/* 9. RECOMENDACIONES */}
             <FormSection title="9. RECOMENDACIONES">
+                {!readOnly && onGenerarRecomendaciones && (
+                    <div className="flex justify-end mb-4">
+                        <Button
+                            type="button"
+                            onClick={onGenerarRecomendaciones}
+                            disabled={generandoRecomendaciones}
+                            className="bg-purple-600 hover:bg-purple-700 text-white"
+                            size="sm"
+                        >
+                            {generandoRecomendaciones
+                                ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generando...</>
+                                : <><Sparkles className="mr-2 h-4 w-4 text-yellow-300" />Enriquecer con IA</>
+                            }
+                        </Button>
+                    </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField label="PARA EL TRABAJADOR">
                         <FormTextarea

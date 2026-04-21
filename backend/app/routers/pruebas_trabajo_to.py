@@ -305,6 +305,49 @@ def descargar_pdf(
 
 
 # ═════════════════════════════════════════════════════════════════════
+# GENERAR RECOMENDACIONES CON IA
+# ═════════════════════════════════════════════════════════════════════
+@router.post("/{prueba_id}/generar-recomendaciones")
+def generar_recomendaciones(
+    prueba_id: int,
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user),
+):
+    prueba = session.get(PruebaTrabajoTO, prueba_id)
+    if not prueba:
+        raise HTTPException(404, "Prueba no encontrada")
+    _check_permission(prueba, current_user)
+
+    ident = session.exec(select(IdentificacionTO).where(IdentificacionTO.prueba_id == prueba_id)).first()
+    tareas = session.exec(select(TareaTO).where(TareaTO.prueba_id == prueba_id).order_by(TareaTO.orden)).all()
+    peligros = session.exec(select(PeligroProcesoTO).where(PeligroProcesoTO.prueba_id == prueba_id)).all()
+
+    try:
+        from app.services.groq_service import generar_recomendaciones_pto
+        resultado = generar_recomendaciones_pto(
+            nombre_trabajador=ident.nombre_trabajador if ident else "",
+            cargo=ident.cargo_actual if ident else "",
+            empresa=ident.empresa if ident else "",
+            diagnosticos_atel=ident.diagnosticos_atel if ident else "",
+            tareas=[
+                {
+                    "actividad": t.actividad,
+                    "conclusion": t.conclusion,
+                    "descripcion_biomecanica": t.descripcion_biomecanica or "",
+                }
+                for t in tareas
+            ],
+            peligros=[
+                {"categoria": p.categoria, "descripcion": p.descripcion}
+                for p in peligros
+            ],
+        )
+        return resultado
+    except Exception as e:
+        raise HTTPException(500, f"Error generando recomendaciones: {str(e)}")
+
+
+# ═════════════════════════════════════════════════════════════════════
 # HELPERS INTERNOS
 # ═════════════════════════════════════════════════════════════════════
 

@@ -206,6 +206,55 @@ def eliminar_valoracion(
 
 
 # ═════════════════════════════════════════════════════════════════════
+# GENERAR CONCEPTO OCUPACIONAL CON IA
+# ═════════════════════════════════════════════════════════════════════
+@router.post("/{valoracion_id}/generar-concepto")
+def generar_concepto(
+    valoracion_id: int,
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user),
+):
+    valoracion = session.get(ValoracionOcupacional, valoracion_id)
+    if not valoracion:
+        raise HTTPException(404, "Valoración no encontrada")
+    _check_permission(valoracion, current_user)
+
+    ident = session.exec(
+        select(IdentificacionVO).where(IdentificacionVO.valoracion_id == valoracion_id)
+    ).first()
+    otras_areas = session.exec(
+        select(EvaluacionOtrasAreasVO).where(EvaluacionOtrasAreasVO.valoracion_id == valoracion_id)
+    ).first()
+    registro = session.exec(
+        select(RegistroVO).where(RegistroVO.valoracion_id == valoracion_id)
+    ).first()
+
+    # Construir dict de áreas desde los campos JSON serializados
+    import json
+    areas_dict = {}
+    if otras_areas:
+        for campo in ["cuidado_personal", "comunicacion", "movilidad", "aprendizaje_sensopercepcion", "vida_domestica"]:
+            raw = getattr(otras_areas, campo, None)
+            if raw:
+                try:
+                    areas_dict[campo] = json.loads(raw) if isinstance(raw, str) else raw
+                except Exception:
+                    areas_dict[campo] = {"observaciones": str(raw)}
+
+    try:
+        from app.services.groq_service import generar_concepto_vo
+        resultado = generar_concepto_vo(
+            nombre_trabajador=ident.nombre_trabajador if ident else "",
+            cargo=ident.cargo_actual if ident else "",
+            otras_areas=areas_dict or None,
+            orientacion_previa=registro.orientacion_ocupacional if registro else "",
+        )
+        return resultado
+    except Exception as e:
+        raise HTTPException(500, f"Error generando concepto: {str(e)}")
+
+
+# ═════════════════════════════════════════════════════════════════════
 # HELPERS INTERNOS
 # ═════════════════════════════════════════════════════════════════════
 

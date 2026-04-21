@@ -20,7 +20,8 @@ import {
     Heart,
     PenTool,
     Download,
-    X
+    X,
+    Sparkles
 } from 'lucide-react';
 
 import { toast } from '@/components/ui/sileo-toast';
@@ -64,6 +65,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [generandoConcepto, setGenerandoConcepto] = useState(false);
     const [showDownloadModal, setShowDownloadModal] = useState(false);
     const [downloadUrls, setDownloadUrls] = useState<any>(null);
     const [validationModal, setValidationModal] = useState<ValidationModalState>({
@@ -138,6 +140,26 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
                 }
             };
         });
+    };
+
+    const handleGenerarConcepto = async () => {
+        if (!valoracionId) { toast.error('Guarda la valoración antes de generar el concepto.'); return; }
+        setGenerandoConcepto(true);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/formatos-to/valoracion-ocupacional/${valoracionId}/generar-concepto`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            updateData('registro', 'concepto_ocupacional', data.concepto_ocupacional);
+            updateData('registro', 'orientacion_ocupacional', data.orientacion_ocupacional);
+            toast.success('Concepto generado con IA');
+        } catch (e: any) {
+            toast.error(e.message || 'Error generando concepto');
+        } finally {
+            setGenerandoConcepto(false);
+        }
     };
 
     const handleSave = async (finalizar: boolean = false) => {
@@ -293,7 +315,7 @@ export function ValoracionOcupacionalWizard({ valoracionId, readOnly = false }: 
         <Seccion4RolLaboralEvento key="s4" data={formData} updateData={updateData} readOnly={readOnly} />,
         <Seccion5ComposicionFamiliar key="s5" data={formData} updateData={updateData} readOnly={readOnly} />,
         <Seccion6OtrasAreas key="s6" data={formData} updateData={updateData} readOnly={readOnly} />,
-        <Seccion7ComposicionRegistro key="s7" data={formData} updateData={updateData} readOnly={readOnly} />
+        <Seccion7ComposicionRegistro key="s7" data={formData} updateData={updateData} readOnly={readOnly} onGenerarConcepto={handleGenerarConcepto} generandoConcepto={generandoConcepto} />
     ];
 
     if (loading) {

@@ -923,11 +923,11 @@ def generar_pdf_prueba_trabajo_to(
     if registro:
         reg_header = [
             Paragraph("<b>ELABORÓ</b>", styles["CellBold"]),
-            Paragraph("<b>REVISÓ</b>", styles["CellBold"]),
-            Paragraph("<b>DATOS DEL USUARIO</b>", styles["CellBold"]),
+            Paragraph("<b>REVISIÓN POR PROVEEDOR</b>", styles["CellBold"]),
+            Paragraph("<b>EQUIPO DE REHABILITACIÓN INTEGRAL</b>", styles["CellBold"]),
         ]
 
-        def build_sig_cell(nombre_label, nombre_val, firma_path, extra_label, extra_val):
+        def build_sig_cell(nombre_label, nombre_val, firma_path, extra_label=None, extra_val=None):
             cell_parts = []
             cell_parts.append(Paragraph(f"<b>{nombre_label}:</b> {nombre_val or ''}", styles["ValueSmall"]))
             cell_parts.append(Spacer(1, 4))
@@ -939,8 +939,9 @@ def generar_pdf_prueba_trabajo_to(
                     cell_parts.append(Spacer(1, 30))
             else:
                 cell_parts.append(Spacer(1, 30))
-            cell_parts.append(Spacer(1, 4))
-            cell_parts.append(Paragraph(f"<b>{extra_label}:</b> {extra_val or ''}", styles["ValueSmall"]))
+            if extra_label:
+                cell_parts.append(Spacer(1, 4))
+                cell_parts.append(Paragraph(f"<b>{extra_label}:</b> {extra_val or ''}", styles["ValueSmall"]))
             return cell_parts
 
         elaboro_cell = build_sig_cell(
@@ -951,14 +952,14 @@ def generar_pdf_prueba_trabajo_to(
         reviso_cell = build_sig_cell(
             "NOMBRE", registro.nombre_revisor,
             registro.firma_revisor,
-            "LICENCIA S.O", registro.licencia_so_revisor if hasattr(registro, 'licencia_so_revisor') else ""
         )
-        trabajador_cell = build_sig_cell(
-            "NOMBRE",
-            registro.nombre_trabajador if hasattr(registro, 'nombre_trabajador') else (identificacion.nombre_trabajador if identificacion else ""),
-            registro.firma_trabajador,
-            "C.C", identificacion.numero_documento if identificacion else ""
-        )
+        nombre_proveedor_val = registro.nombre_proveedor if hasattr(registro, 'nombre_proveedor') else ""
+        equipo_cell = [
+            Spacer(1, 20),
+            Paragraph(f"<b>NOMBRE PROVEEDOR:</b> {nombre_proveedor_val or ''}", styles["ValueSmall"]),
+            Spacer(1, 8),
+            Paragraph("Gerencia Médica", styles["CellBold"]),
+        ]
 
         reg_header_table = Table([reg_header], colWidths=[page_width / 3] * 3)
         reg_header_table.setStyle(TableStyle([
@@ -970,11 +971,12 @@ def generar_pdf_prueba_trabajo_to(
         ]))
         sec8_9_elements.append(reg_header_table)
 
-        reg_data = [[elaboro_cell, reviso_cell, trabajador_cell]]
+        reg_data = [[elaboro_cell, reviso_cell, equipo_cell]]
         reg_table = Table(reg_data, colWidths=[page_width / 3] * 3)
         reg_table.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('ALIGN', (2, 0), (2, -1), 'CENTER'),
             ('LEFTPADDING', (0, 0), (-1, -1), 4),
             ('RIGHTPADDING', (0, 0), (-1, -1), 4),
             ('TOPPADDING', (0, 0), (-1, -1), 4),

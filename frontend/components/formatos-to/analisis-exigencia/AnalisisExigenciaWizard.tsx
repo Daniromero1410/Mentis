@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import {
     Save, ChevronLeft, ChevronRight, Loader2,
     FileText, User, Briefcase,
-    Activity, AlertTriangle, Download
+    Activity, AlertTriangle, Download, Sparkles
 } from 'lucide-react';
 import { BlurValidationModal } from '../BlurValidationModal';
 
@@ -55,6 +55,7 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
     const [currentStep, setCurrentStep] = useState(1);
     const [analisisId, setAnalisisId] = useState<number | null>(id || null);
     const [saving, setSaving] = useState(false);
+    const [generandoRec, setGenerandoRec] = useState(false);
     const [showDownloadModal, setShowDownloadModal] = useState(false);
 
     const [perfilExigencias, setPerfilExigencias] = useState<any>({});
@@ -404,6 +405,26 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
         return true;
     };
 
+    const handleGenerarRecomendaciones = async () => {
+        if (!analisisId) { toast.error('Guarda el formulario antes de generar recomendaciones.'); return; }
+        setGenerandoRec(true);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/formatos-to/analisis-exigencia/${analisisId}/generar-recomendaciones`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            updateField('recomendaciones_trabajador', data.para_trabajador);
+            updateField('recomendaciones_empresa', data.para_empresa);
+            toast.success('Recomendaciones generadas con IA');
+        } catch (e: any) {
+            toast.error(e.message || 'Error generando recomendaciones');
+        } finally {
+            setGenerandoRec(false);
+        }
+    };
+
     const handleNext = () => {
         if (validateStep(currentStep)) {
             setCurrentStep(prev => Math.min(STEPS.length, prev + 1));
@@ -630,6 +651,8 @@ export function AnalisisExigenciaWizard({ mode, id, readOnly = false }: Analisis
                         formData={formData}
                         updateField={updateField}
                         readOnly={readOnly}
+                        onGenerarRecomendaciones={handleGenerarRecomendaciones}
+                        generandoRecomendaciones={generandoRec}
                     />
                 )}
 

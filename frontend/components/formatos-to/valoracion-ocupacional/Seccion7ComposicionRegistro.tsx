@@ -11,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Trash2, Upload } from 'lucide-react';
+import { Trash2, Upload, Sparkles, Loader2 } from 'lucide-react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -21,9 +21,11 @@ interface Seccion6Props {
     data: any;
     updateData: (section: string, field: string, value: any) => void;
     readOnly?: boolean;
+    onGenerarConcepto?: () => void;
+    generandoConcepto?: boolean;
 }
 
-export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false }: Seccion6Props) {
+export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false, onGenerarConcepto, generandoConcepto }: Seccion6Props) {
 
     const handleRegistroChange = (field: string, value: any) => {
         updateData('registro', field, value);
@@ -53,6 +55,22 @@ export function Seccion7ComposicionRegistro({ data, updateData, readOnly = false
                             <CardTitle className="text-sm font-bold text-slate-700">Conceptos Individuales</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 grid gap-6">
+                            {!readOnly && onGenerarConcepto && (
+                                <div className="flex justify-end">
+                                    <Button
+                                        type="button"
+                                        onClick={onGenerarConcepto}
+                                        disabled={generandoConcepto}
+                                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                                        size="sm"
+                                    >
+                                        {generandoConcepto
+                                            ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generando...</>
+                                            : <><Sparkles className="mr-2 h-4 w-4 text-yellow-300" />Enriquecer con IA</>
+                                        }
+                                    </Button>
+                                </div>
+                            )}
                             <div className="grid grid-cols-1 gap-6">
                                 <FormField label="Concepto Ocupacional">
                                     <FormTextarea
