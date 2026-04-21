@@ -74,7 +74,7 @@ def generar_concepto_pto(
 
     tareas_texto = "\n".join(
         f"- {t.get('actividad', '')} → {CONCLUSIONES.get(t.get('conclusion', ''), t.get('conclusion', ''))}"
-        f" | Análisis biomecánico: {t.get('descripcion_biomecanica', '')[:150]}"
+        f" | Análisis biomecánico: {t.get('descripcion_biomecanica', '')[:250]}"
         for t in tareas
     ) or "No se registraron tareas."
 
@@ -95,13 +95,13 @@ TAREAS EVALUADAS Y CONCLUSIONES:
 
 PELIGROS DEL PROCESO: {peligros_texto}
 
-Instrucciones de redacción:
-- Escribe UN único párrafo narrativo continuo de 5 a 8 oraciones (sin listas, sin numeración).
-- Menciona el cargo y la empresa, describe brevemente las condiciones de desempeño observadas.
-- Integra cada tarea evaluada con su conclusión y los hallazgos biomecánicos relevantes.
-- Relaciona los peligros identificados con el diagnóstico ATEL.
-- Finaliza con una valoración global de la capacidad funcional del trabajador para el cargo evaluado.
-- Usa conectores clínicos: "se evidenció", "se observó", "los hallazgos indican", "en consecuencia", "la evaluación concluye".
+REGLAS DE REDACCIÓN (obligatorias):
+1. Escribe entre 6 y 8 oraciones. Cada oración termina en punto seguido. Está prohibido unir dos oraciones independientes con comas (sin comma-splicing).
+2. ORACIÓN 1: Presenta al trabajador, cargo y empresa, y resume los diagnósticos ATEL agrupados por área anatómica (no los listes todos uno por uno; agrúpalos, por ejemplo: "lesiones osteoarticulares del tobillo izquierdo que comprenden fractura, artrosis postraumática y lesión de sindesmosis").
+3. ORACIONES 2 a N-2: Menciona CADA tarea evaluada por su nombre exacto, describe los requerimientos biomecánicos relevantes observados y su conclusión. No omitas ninguna tarea.
+4. PENÚLTIMA ORACIÓN: Describe las capacidades conservadas del trabajador en términos de competencia para el cargo, seguridad en la ejecución de las tareas y relaciones sociales en el entorno laboral.
+5. ÚLTIMA ORACIÓN: Concluye con la valoración global de la capacidad funcional para el cargo. Usa "la evaluación concluye" solo UNA vez y solo aquí.
+6. No repitas conectores. No uses el mismo sujeto gramatical en oraciones consecutivas.
 
 Escribe solo el párrafo, sin título ni encabezado."""
 
@@ -139,7 +139,7 @@ def generar_recomendaciones_pto(
 
     tareas_texto = "\n".join(
         f"- {t.get('actividad', '')} → {CONCLUSIONES.get(t.get('conclusion', ''), t.get('conclusion', ''))}"
-        f" | Biomecánica: {t.get('descripcion_biomecanica', '')[:150]}"
+        f" | Biomecánica: {t.get('descripcion_biomecanica', '')[:250]}"
         for t in tareas
     ) or "No se registraron tareas."
 
@@ -161,13 +161,17 @@ TAREAS EVALUADAS:
 PELIGROS IDENTIFICADOS:
 {peligros_texto}
 
-Redacta dos bloques de recomendaciones. Cada recomendación debe ser específica al caso (mencionar estructuras anatómicas, movimientos, tareas y diagnósticos concretos), no genérica.
+REGLAS DE REDACCIÓN (obligatorias para AMBOS bloques):
+- Cada recomendación es una oración completa que termina en punto. Sin comma-splicing.
+- Cada recomendación debe mencionar: (a) a qué tarea o actividad aplica, (b) qué segmento corporal o diagnóstico aborda, y (c) la acción concreta con criterio clínico.
+- Prohibido usar frases genéricas sin especificar: "mantener buena postura", "realizar pausas activas", "evitar sobreesfuerzo" son inaceptables solas; siempre deben ir con el contexto específico de este caso.
+- No repitas la misma idea en dos recomendaciones distintas.
 
 RECOMENDACIONES PARA EL TRABAJADOR:
-Escribe entre 4 y 6 recomendaciones numeradas. Deben incluir: pautas posturales específicas para las tareas con conclusión de reintegro con modificaciones o desarrollo de capacidades, manejo de los peligros biomecánicos identificados, pausas activas relacionadas con los segmentos corporales comprometidos por el diagnóstico ATEL, y autocuidado de la condición de salud en el contexto laboral.
+Escribe entre 5 y 7 recomendaciones numeradas que cubran: higiene postural específica para cada tarea evaluada con sus requerimientos biomecánicos concretos, manejo del dolor y control de los segmentos anatómicos comprometidos por el diagnóstico ATEL durante las actividades laborales, pausas activas con descripción del ejercicio, duración y frecuencia específica según los peligros biomecánicos identificados, restricciones de movimiento o postura derivadas directamente de los diagnósticos, y autocuidado fuera de la jornada laboral.
 
 RECOMENDACIONES PARA LA EMPRESA:
-Escribe entre 4 y 6 recomendaciones numeradas. Deben incluir: adaptaciones específicas del puesto de trabajo para las tareas identificadas, protocolo de reintegro gradual o supervisado, controles de los peligros identificados según categoría, y seguimiento con el equipo de salud ocupacional.
+Escribe entre 4 y 6 recomendaciones numeradas que cubran: adaptaciones concretas del puesto para cada tarea evaluada, esquema de reintegro gradual con tiempos y criterios de progresión, controles operativos para los peligros identificados según su categoría, coordinación con el equipo de salud y seguimiento periódico del caso, y responsabilidades del empleador frente a las restricciones del trabajador.
 
 Usa exactamente los encabezados: "RECOMENDACIONES PARA EL TRABAJADOR:" y "RECOMENDACIONES PARA LA EMPRESA:".
 No uses "SECCIÓN" ni ningún otro prefijo antes de los encabezados."""
@@ -207,7 +211,7 @@ def generar_recomendaciones_ae(
     tareas_texto = "\n".join(
         f"- {t.get('actividad', '')} | Ciclo: {t.get('ciclo', '')} | "
         f"Conclusión: {CONCLUSIONES.get(t.get('conclusion', ''), t.get('conclusion', ''))} | "
-        f"Biomecánica: {t.get('descripcion_biomecanica', '')[:150]} | "
+        f"Biomecánica: {t.get('descripcion_biomecanica', '')[:250]} | "
         f"Requerimientos motrices: {t.get('requerimientos_motrices', '')[:80]}"
         for t in tareas
     ) or "No se registraron tareas."
@@ -233,13 +237,17 @@ Diagnóstico(s) ATEL: {diagnosticos_atel or 'No especificado'}
 TAREAS ANALIZADAS:
 {tareas_texto}
 
-Redacta dos bloques de recomendaciones terapéuticas específicas al caso. Menciona la tarea, los segmentos corporales y el diagnóstico en cada recomendación.
+REGLAS DE REDACCIÓN (obligatorias para AMBOS bloques):
+- Cada recomendación es una oración completa que termina en punto. Sin comma-splicing.
+- Cada recomendación debe mencionar: (a) a qué tarea o actividad aplica, (b) qué segmento corporal o diagnóstico aborda, y (c) la acción terapéutica concreta con criterio clínico.
+- Prohibido usar frases genéricas sin especificar el contexto de este caso.
+- No repitas la misma idea en dos recomendaciones distintas.
 
 RECOMENDACIONES PARA EL TRABAJADOR:
-Escribe entre 4 y 6 recomendaciones numeradas. La primera DEBE ser la simulación progresiva de la tarea laboral (especificar qué tarea, duración inicial propuesta y criterio de progresión). Las siguientes deben abordar: habilitación de los requerimientos motrices deficitarios identificados en el perfil, tolerancia al esfuerzo sostenido, control del dolor en los segmentos comprometidos por el diagnóstico ATEL, e higiene postural específica para los ciclos de trabajo evaluados.
+Escribe entre 5 y 7 recomendaciones numeradas. La primera DEBE ser la simulación progresiva de la tarea laboral más exigente (especificar el nombre exacto de la tarea, la duración inicial propuesta, el incremento gradual semanal y el criterio clínico de progresión). Las siguientes deben cubrir: habilitación de los requerimientos motrices específicos deficitarios identificados en el perfil de exigencias, técnicas de control del dolor en los segmentos anatómicos comprometidos durante los ciclos de trabajo evaluados, tolerancia al esfuerzo sostenido para las tareas de mayor duración, higiene postural específica para los requerimientos biomecánicos identificados, y autocuidado fuera de la jornada laboral relacionado con el diagnóstico ATEL.
 
 RECOMENDACIONES PARA LA EMPRESA:
-Escribe entre 3 y 5 recomendaciones numeradas sobre: preparación y adecuación del puesto de trabajo previo al reintegro, esquema de reincorporación gradual con tiempos y criterios de seguimiento, coordinación con el terapeuta ocupacional tratante, y medidas preventivas para los peligros biomecánicos identificados en las tareas.
+Escribe entre 4 y 5 recomendaciones numeradas que cubran: preparación y adecuación del puesto previo al reintegro con especificaciones concretas por tarea, cronograma de reincorporación gradual con porcentajes de carga de trabajo y criterios de avance, coordinación periódica con el terapeuta ocupacional tratante, medidas preventivas para los peligros biomecánicos identificados en las tareas analizadas, y responsabilidades del empleador durante el período de adaptación.
 
 Usa exactamente los encabezados: "RECOMENDACIONES PARA EL TRABAJADOR:" y "RECOMENDACIONES PARA LA EMPRESA:".
 No uses "SECCIÓN" ni ningún otro prefijo antes de los encabezados."""
@@ -290,13 +298,16 @@ Cargo: {cargo}
 CALIFICACIONES POR ÁREA (escala 0-4 donde 0=sin limitación, 4=limitación total):
 {areas_texto}
 
-Redacta dos secciones. Sé específico con cada área y su calificación.
+REGLAS DE REDACCIÓN (obligatorias):
+- Cada oración termina en punto seguido. Está prohibido unir dos oraciones independientes con comas (sin comma-splicing).
+- No repitas el mismo conector en oraciones consecutivas.
+- No uses el mismo sujeto gramatical en dos oraciones seguidas.
 
 CONCEPTO OCUPACIONAL:
-Redacta un único párrafo narrativo continuo (sin listas) que integre TODAS las áreas calificadas. Para cada área: menciona el nombre del área, su calificación numérica y la observación clínica registrada. Usa frases de transición entre áreas (por su parte, en cuanto a, respecto a, en el área de, adicionalmente). Finaliza con una conclusión sobre la aptitud funcional global del trabajador para el desempeño del cargo de {cargo}. Mínimo 6 oraciones.
+Redacta entre 6 y 9 oraciones en un único párrafo narrativo continuo (sin listas, sin numeración). OBLIGATORIO: menciona CADA área calificada con su nombre, su calificación numérica y la observación clínica registrada. Usa conectores de transición entre áreas: "en cuanto a", "respecto al área de", "por su parte", "en relación con", "adicionalmente". La última oración concluye con la aptitud funcional global del trabajador para el cargo de {cargo}, usando "la valoración concluye" solo UNA vez y solo en esa oración.
 
 ORIENTACIÓN OCUPACIONAL:
-Redacta un párrafo con orientaciones concretas derivadas del concepto anterior. Si existe orientación previa, complémntala y amplíala: "{orientacion_previa or 'ninguna registrada'}". Incluye recomendaciones de seguimiento funcional y ajustes según las áreas con mayor compromiso.
+Redacta entre 3 y 5 oraciones con orientaciones concretas derivadas del concepto anterior. Cada oración describe una acción específica relacionada con las áreas de mayor compromiso. Si existe orientación previa, complementa y amplía: "{orientacion_previa or 'ninguna registrada'}". Incluye criterios de seguimiento funcional con periodicidad sugerida.
 
 Usa exactamente los encabezados: "CONCEPTO OCUPACIONAL:" y "ORIENTACIÓN OCUPACIONAL:".
 No uses "SECCIÓN" ni ningún otro prefijo antes de los encabezados."""
