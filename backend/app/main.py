@@ -24,6 +24,8 @@ origins = settings.get_cors_origins()
 origins.extend([
     "https://mentis-nu.vercel.app",
     "https://mentis-nu.vercel.app/",
+    "https://mentis.sol-sas.com",
+    "https://mentis.sol-sas.com/",
     "http://localhost:3000",
     "http://localhost:3000/",
 ])

@@ -37,6 +37,7 @@ class Settings:
         origins = [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
         # Agregar dominios de producción explícitamente para asegurar acceso
         origins.append("https://mentis-nu.vercel.app")
+        origins.append("https://mentis.sol-sas.com")
         return list(set(origins))
 
 settings = Settings()
