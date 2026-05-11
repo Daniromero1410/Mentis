@@ -165,7 +165,6 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
                                     </div>
                                 </div>
                             </div>
-                            </div>
                         </CardContent>
                     </Card>
                 </div>
