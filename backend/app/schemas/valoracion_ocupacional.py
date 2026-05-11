@@ -80,6 +80,8 @@ class ActividadActualVOCreate(BaseModel):
     ocurrencia_atel_puesto: Optional[bool] = None
     ocurrencia_atel_area: Optional[bool] = None
     ocurrencia_atel_otro: Optional[str] = None
+    que_hacia_atel: Optional[str] = None
+    relato_atel: Optional[str] = None
 
     class Config:
         from_attributes = True

@@ -127,6 +127,13 @@ def _run_migrations():
         """
         ALTER TABLE registro_vo ADD COLUMN IF NOT EXISTS firma_equipo_rhb VARCHAR;
         """,
+        # Campos nuevos en actividad_actual_vo (sección V VO)
+        """
+        ALTER TABLE actividad_actual_vo ADD COLUMN IF NOT EXISTS que_hacia_atel TEXT;
+        """,
+        """
+        ALTER TABLE actividad_actual_vo ADD COLUMN IF NOT EXISTS relato_atel TEXT;
+        """,
     ]
 
     try:

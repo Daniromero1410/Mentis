@@ -487,8 +487,8 @@ def generar_pdf_valoracion_ocupacional(
         [B("Trabaja actualmente / Cargo:"), P(actividad_actual.nombre_cargo if actividad_actual else "")],
         [B("Herramientas, materiales y equipos:"), P(actividad_actual.herramientas_trabajo if actividad_actual else "")],
         [B("Otras actividades de trabajo:"), P(actividad_actual.tareas_descripcion if actividad_actual else "")],
-        [B("Qué se encontraba haciendo durante la ATEL:"), P("")],
-        [B("Relato del evento ATEL (del trabajador):"), P("")],
+        [B("Qué se encontraba haciendo durante la ATEL:"), P(actividad_actual.que_hacia_atel if actividad_actual else "")],
+        [B("Relato del evento ATEL (del trabajador):"), P(actividad_actual.relato_atel if actividad_actual else "")],
     ]
     t_act = Table(act_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
     t_act.setStyle(TableStyle([
@@ -506,6 +506,7 @@ def generar_pdf_valoracion_ocupacional(
     rol_rows = [
         [B("Tareas y Operaciones:"), P(ActT(rol_laboral.tareas_operaciones if rol_laboral else ""))],
         [B("Componentes de Desempeño:"), P(ActT(rol_laboral.componentes_desempeno if rol_laboral else ""))],
+        [B("Tiempo de Ejecución:"), P(ActT(rol_laboral.tiempo_ejecucion if rol_laboral else ""))],
         [B("Forma de Integración:"), P(ActT(rol_laboral.forma_integracion if rol_laboral else ""))],
     ]
     t_rol = Table(rol_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])

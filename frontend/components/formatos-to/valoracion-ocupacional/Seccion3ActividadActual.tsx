@@ -91,7 +91,27 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
                         <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-3">
                             <CardTitle className="text-sm font-bold text-slate-700">Ocurrencia del ATEL</CardTitle>
                         </CardHeader>
-                        <CardContent className="p-6">
+                        <CardContent className="p-6 flex flex-col gap-6">
+                            <div className="grid grid-cols-1 gap-4">
+                                <FormField label="Qué se encontraba haciendo durante la ATEL:">
+                                    <FormTextarea
+                                        value={data?.actividad_actual?.que_hacia_atel || ''}
+                                        onChange={(e) => handleActividadChange('que_hacia_atel', e.target.value)}
+                                        disabled={readOnly}
+                                        className="min-h-[80px]"
+                                        placeholder="Describa qué actividad realizaba el trabajador cuando ocurrió el evento ATEL..."
+                                    />
+                                </FormField>
+                                <FormField label="Relato del evento ATEL (del trabajador):">
+                                    <FormTextarea
+                                        value={data?.actividad_actual?.relato_atel || ''}
+                                        onChange={(e) => handleActividadChange('relato_atel', e.target.value)}
+                                        disabled={readOnly}
+                                        className="min-h-[80px]"
+                                        placeholder="Relato del trabajador sobre cómo ocurrió el evento..."
+                                    />
+                                </FormField>
+                            </div>
                             <div className="flex flex-col gap-4">
                                 <div className="flex gap-x-8 gap-y-4 flex-wrap items-center">
                                     <span className="text-sm font-semibold text-slate-700 min-w-[150px]">PUESTO DE TRABAJO</span>
@@ -144,6 +164,7 @@ export function Seccion3ActividadActual({ data, updateData, readOnly = false }: 
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </CardContent>
                     </Card>
