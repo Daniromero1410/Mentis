@@ -192,7 +192,7 @@ export default function PruebasTrabajoTOPage() {
     };
 
     return (
-        <ModuleGuard requiredModule="pruebas_trabajo">
+        <ModuleGuard requiredModule="formatos_to">
             <DashboardLayout>
                 <div className="space-y-6">
                     {/* Header */}

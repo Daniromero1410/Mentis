@@ -13,7 +13,7 @@ export default function DetallePruebaTrabajoTOPage() {
     const isViewMode = mode === 'view';
 
     return (
-        <ModuleGuard requiredModule="pruebas_trabajo">
+        <ModuleGuard requiredModule="formatos_to">
             <DashboardLayout>
                 <div className="p-6">
                     <PruebaTrabajoTOWizard mode={isViewMode ? 'view' : 'edit'} id={id} readOnly={isViewMode} />
