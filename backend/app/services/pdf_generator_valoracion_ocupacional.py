@@ -39,10 +39,9 @@ class NumberedCanvas(pdfgen_canvas.Canvas):
 
     def _draw_page_number(self, total):
         self.saveState()
-        self.setFont("Helvetica", 7)
+        self.setFont("Helvetica", 8)
         text = f"Página {self._pageNumber} de {total}"
-        # Posición: esquina superior derecha, alineada con el encabezado
-        self.drawRightString(letter[0] - 30, letter[1] - 38, text)
+        self.drawCentredString(letter[0] / 2, 12, text)
         self.restoreState()
 
 
