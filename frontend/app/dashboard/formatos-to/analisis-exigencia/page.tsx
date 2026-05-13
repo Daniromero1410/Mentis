@@ -270,7 +270,7 @@ export default function AnalisisExigenciaPage() {
                                                                     <Eye className="h-4 w-4" />
                                                                 </Button>
                                                             </Link>
-                                                            {(isAdminOrSupervisor || item.created_by === user?.id) && (
+                                                            {(isAdminOrSupervisor || item.creado_por === user?.id) && (
                                                                 <>
                                                                     <Link href={`/dashboard/formatos-to/analisis-exigencia/${item.id}/editar`}>
                                                                         <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg">
