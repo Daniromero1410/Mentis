@@ -1,8 +1,8 @@
-import json
 """
 Generador de PDF para Valoración Ocupacional (Formatos TO)
 Diseño profesional y estético
 """
+import json
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch, cm
@@ -11,10 +11,39 @@ from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
     Spacer, KeepTogether, Image as ReportLabImage, Flowable
 )
-from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
-from datetime import datetime
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.pdfgen import canvas as pdfgen_canvas
+from datetime import datetime, date as date_type
 from pathlib import Path
 import os
+
+
+class NumberedCanvas(pdfgen_canvas.Canvas):
+    """Canvas que escribe 'Página X de Y' en la esquina superior derecha de cada página."""
+
+    def __init__(self, *args, **kwargs):
+        pdfgen_canvas.Canvas.__init__(self, *args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        total = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self._draw_page_number(total)
+            pdfgen_canvas.Canvas.showPage(self)
+        pdfgen_canvas.Canvas.save(self)
+
+    def _draw_page_number(self, total):
+        self.saveState()
+        self.setFont("Helvetica", 7)
+        text = f"Página {self._pageNumber} de {total}"
+        # Posición: esquina superior derecha, alineada con el encabezado
+        self.drawRightString(letter[0] - 30, letter[1] - 38, text)
+        self.restoreState()
 
 
 # Path al logo del encabezado
@@ -204,10 +233,13 @@ def generar_pdf_valoracion_ocupacional(
                 if 'T' in fecha_ingreso: fecha_ingreso = fecha_ingreso.split('T')[0]
                 fecha_ingreso = datetime.strptime(fecha_ingreso, "%Y-%m-%d").date()
             except: return ""
-        elif hasattr(fecha_ingreso, 'date'): fecha_ingreso = fecha_ingreso.date()
-        elif isinstance(fecha_ingreso, datetime): fecha_ingreso = fecha_ingreso.date()
-        else: return ""
-        
+        elif isinstance(fecha_ingreso, datetime):
+            fecha_ingreso = fecha_ingreso.date()
+        elif isinstance(fecha_ingreso, date_type):
+            pass  # ya es un objeto date, usar directamente
+        else:
+            return ""
+
         today = datetime.now().date()
         anios = today.year - fecha_ingreso.year - ((today.month, today.day) < (fecha_ingreso.month, fecha_ingreso.day))
         return f"{anios} años" if anios > 0 else "Menos de 1 año"
@@ -234,7 +266,7 @@ def generar_pdf_valoracion_ocupacional(
     )
 
     r2_left = Paragraph("<b>Código</b><br/><b>Fecha</b>&nbsp;&nbsp;&nbsp;&nbsp;2022/07", style_small)
-    r2_right = Paragraph("Página 1 de ___", style_small)
+    r2_right = Paragraph("", style_small)
 
     r3_c1 = Paragraph("<para align=center>Aprobado por:<br/><b>Gerencia Médica</b></para>", style_small)
     r3_c2 = Paragraph("<para align=center>Proceso:<br/><b>Rehabilitación Integral</b></para>", style_small)
@@ -485,7 +517,10 @@ def generar_pdf_valoracion_ocupacional(
     
     act_rows = [
         [B("Trabaja actualmente / Cargo:"), P(actividad_actual.nombre_cargo if actividad_actual else "")],
+        [B("Antigüedad en el cargo:"), P(actividad_actual.antiguedad_cargo if actividad_actual else "")],
         [B("Herramientas, materiales y equipos:"), P(actividad_actual.herramientas_trabajo if actividad_actual else "")],
+        [B("Horario de trabajo:"), P(actividad_actual.horario_trabajo if actividad_actual else "")],
+        [B("Elementos de Protección Personal:"), P(actividad_actual.elementos_proteccion if actividad_actual else "")],
         [B("Otras actividades de trabajo:"), P(actividad_actual.tareas_descripcion if actividad_actual else "")],
         [B("Qué se encontraba haciendo durante la ATEL:"), P(actividad_actual.que_hacia_atel if actividad_actual else "")],
         [B("Relato del evento ATEL (del trabajador):"), P(actividad_actual.relato_atel if actividad_actual else "")],
@@ -795,5 +830,5 @@ def generar_pdf_valoracion_ocupacional(
     # Keep Orientación + Registro together on the same page (security: firmas can't be alone)
     story.append(KeepTogether([ori_header, t_ori, Spacer(1, 4), reg_header, t_firmas]))
 
-    doc.build(story)
+    doc.build(story, canvasmaker=NumberedCanvas)
     return str(pdf_path)
