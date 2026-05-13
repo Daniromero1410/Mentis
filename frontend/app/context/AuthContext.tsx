@@ -37,13 +37,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+    if (!storedToken) {
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false);
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
+    fetch(`${apiUrl}/auth/me`, {
+      headers: { Authorization: `Bearer ${storedToken}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Token inválido');
+        return res.json();
+      })
+      .then((freshUser) => {
+        setToken(storedToken);
+        setUser(freshUser);
+        localStorage.setItem('user', JSON.stringify(freshUser));
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const login = async (email: string, password: string, redirect = true) => {
