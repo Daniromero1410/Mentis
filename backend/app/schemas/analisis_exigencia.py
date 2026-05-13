@@ -216,6 +216,7 @@ class AnalisisExigenciaResponse(BaseModel):
 class AnalisisExigenciaListItem(BaseModel):
     id: int
     estado: str
+    creado_por: int
     fecha_creacion: datetime
     fecha_actualizacion: datetime
     trabajador_nombre: Optional[str] = None

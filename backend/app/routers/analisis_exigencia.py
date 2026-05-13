@@ -98,6 +98,7 @@ def listar_analisis(
         items.append(AnalisisExigenciaListItem(
             id=a.id,
             estado=a.estado,
+            creado_por=a.creado_por,
             fecha_creacion=a.fecha_creacion,
             fecha_actualizacion=a.fecha_actualizacion,
             trabajador_nombre=ident.nombre_trabajador if ident else None,
