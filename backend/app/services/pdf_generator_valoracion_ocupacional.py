@@ -658,19 +658,33 @@ def generar_pdf_valoracion_ocupacional(
         ]))
         return t_scale
 
+    DIFICULTADES_HEADERS = [
+        "NO DIFICULTAD\nNO DEPENDENCIA",
+        "DIFICULTAD\nLEVE NO\nDEPENDENCIA",
+        "DIFICULTAD\nMODERADA\nDEPENDENCIA\nMODERADA",
+        "DIFICULTAD\nSEVERA\nDEPENDENCIA\nSEVERA",
+        "DIFICULTAD\nCOMPLETA\nDEPENDENCIA\nGRAVE\nCOMPLETA",
+    ]
+    style_dif_hdr = ParagraphStyle('dif_hdr', fontSize=5, alignment=TA_CENTER,
+                                   fontName='Helvetica-Bold', leading=6)
+    style_x = ParagraphStyle('x_mark', fontSize=9, alignment=TA_CENTER,
+                              fontName='Helvetica-Bold', leading=11)
+
+    col_factor = PAGE_WIDTH * 0.245
+    col_dif    = PAGE_WIDTH * 0.088
+    col_obs    = PAGE_WIDTH * 0.315
+
     def render_area_dic(title, json_string):
         if not json_string:
             return
-        
+
         try:
             dic_data = json.loads(json_string)
         except:
-            # Fallback if not JSON
             story.append(crear_seccion_header(title))
             story.append(P(json_string))
             return
 
-        # Sub-header orange light
         sub_h = [[B(title)]]
         sub_ht = Table(sub_h, colWidths=[PAGE_WIDTH])
         sub_ht.setStyle(TableStyle([
@@ -681,37 +695,48 @@ def generar_pdf_valoracion_ocupacional(
             ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
         story.append(sub_ht)
-        
-        h_data = [
-            B("FACTORES A EVALUAR"),
-            B("CALIFICACIÓN (0-4)"),
-            B("OBSERVACIONES")
-        ]
-        p_rows = [h_data]
-        
+
+        header_row = (
+            [B("FACTORES A EVALUAR")]
+            + [Paragraph(d, style_dif_hdr) for d in DIFICULTADES_HEADERS]
+            + [B("OBSERVACIONES")]
+        )
+        p_rows = [header_row]
+
         for k, v in dic_data.items():
             k_formatted = k.replace("_", " ").title() if isinstance(k, str) else str(k)
-            
+
             if isinstance(v, dict):
                 val = v.get('valor', '')
                 obs = v.get('observaciones', v.get('observacion', ''))
             else:
                 val = v
                 obs = ''
-                
-            rating_tab = build_rating_scale(val)
-            p_rows.append([B(k_formatted), rating_tab, P(str(obs))])
-            
+
+            try:
+                val_int = int(val)
+            except:
+                val_int = -1
+
+            x_cells = [
+                Paragraph("X", style_x) if i == val_int else Paragraph("", style_x)
+                for i in range(5)
+            ]
+
+            p_rows.append([B(k_formatted)] + x_cells + [P(str(obs) if obs else "")])
+
         if len(p_rows) > 1:
-            p_t = Table(p_rows, colWidths=[PAGE_WIDTH * 0.35, PAGE_WIDTH * 0.30, PAGE_WIDTH * 0.35])
+            col_widths = [col_factor] + [col_dif] * 5 + [col_obs]
+            p_t = Table(p_rows, colWidths=col_widths)
             p_t.setStyle(TableStyle([
                 ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
                 ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('ALIGN', (1, 0), (5, -1), 'CENTER'),
                 ('BACKGROUND', (0, 0), (-1, 0), COLOR_LABEL_BG),
-                ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-                ('TOPPADDING', (0, 0), (-1, -1), 4),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+                ('LEFTPADDING', (0, 0), (-1, -1), 3),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 3),
+                ('TOPPADDING', (0, 0), (-1, -1), 3),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
             ]))
             story.append(p_t)
 
