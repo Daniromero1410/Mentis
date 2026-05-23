@@ -603,9 +603,8 @@ def generar_pdf_valoracion_ocupacional(
     # ===== EVENTO ATEL =====
     story.append(crear_seccion_header("6. INFORMACION DEL EVENTO ATEL (resultado del proceso de rhb)"))
 
-    # Adaptaciones recibidas — dos grupos fijos como en el documento de referencia
-    _ADAPT_GROUP1 = ["Bastón", "Muletas", "Caminador", "Prótesis"]
-    _ADAPT_GROUP2 = ["Audífono", "Gafas", "Bastón guía", "Otros"]
+    # Adaptaciones recibidas — una sola fila con los 8 items en dos columnas
+    _ADAPT_ALL = ["Bastón", "Muletas", "Caminador", "Prótesis", "Audífono", "Gafas", "Bastón guía", "Otros"]
     _adapt_dict = {}
     if evento_atel and evento_atel.adaptaciones_recibidas:
         try:
@@ -613,13 +612,20 @@ def generar_pdf_valoracion_ocupacional(
         except Exception:
             pass
 
-    def _adapt_col(items):
-        rows = [[checkbox(_adapt_dict.get(k, False), k)] for k in items]
-        t = Table(rows, colWidths=[PAGE_WIDTH - 2.2*inch])
-        t.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4), ('TOPPADDING', (0, 0), (-1, -1), 1), ('BOTTOMPADDING', (0, 0), (-1, -1), 1)]))
-        return t
-
-    _adapt_label = "Adaptaciones recibidas (medio ambiente laboral, hogar y/o del individuo)*"
+    _half = len(_ADAPT_ALL) // 2
+    _col_w = (PAGE_WIDTH - 2.2*inch) / 2
+    adapt_inner_rows = [
+        [checkbox(_adapt_dict.get(_ADAPT_ALL[i], False), _ADAPT_ALL[i]),
+         checkbox(_adapt_dict.get(_ADAPT_ALL[i + _half], False), _ADAPT_ALL[i + _half])]
+        for i in range(_half)
+    ]
+    adapt_inner_t = Table(adapt_inner_rows, colWidths=[_col_w, _col_w])
+    adapt_inner_t.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 1),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+    ]))
 
     _pcl_si = bool(evento_atel and evento_atel.calificacion_pcl_si)
     _pcl_no = bool(evento_atel and evento_atel.calificacion_pcl_no)
@@ -633,8 +639,7 @@ def generar_pdf_valoracion_ocupacional(
 
     atel_rows = [
         [B("Tratamiento recibido por Rehabilitación:"), P(ActT(evento_atel.tratamiento_rehabilitacion if evento_atel else ""))],
-        [B(_adapt_label), _adapt_col(_ADAPT_GROUP1)],
-        [B(_adapt_label), _adapt_col(_ADAPT_GROUP2)],
+        [B("Adaptaciones recibidas (medio ambiente laboral, hogar y/o del individuo)*"), adapt_inner_t],
         [B("Calificación PCL:"), pcl_display],
     ]
     t_atel = Table(atel_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
@@ -643,10 +648,10 @@ def generar_pdf_valoracion_ocupacional(
         ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
-        ('LEFTPADDING', (1, 1), (1, 3), 0),
-        ('RIGHTPADDING', (1, 1), (1, 3), 0),
-        ('TOPPADDING', (1, 1), (1, 3), 0),
-        ('BOTTOMPADDING', (1, 1), (1, 3), 0),
+        ('LEFTPADDING', (1, 1), (1, 2), 0),
+        ('RIGHTPADDING', (1, 1), (1, 2), 0),
+        ('TOPPADDING', (1, 1), (1, 2), 0),
+        ('BOTTOMPADDING', (1, 1), (1, 2), 0),
     ]))
     story.append(t_atel)
     story.append(Spacer(1, 10))
