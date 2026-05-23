@@ -620,13 +620,15 @@ def generar_pdf_valoracion_ocupacional(
     else:
         adapt_cell = P("")
 
-    pcl_val = str(evento_atel.calificacion_pcl_porcentaje) if evento_atel and evento_atel.calificacion_pcl_si else ""
+    _pcl_si = bool(evento_atel and evento_atel.calificacion_pcl_si)
+    _pcl_no = bool(evento_atel and evento_atel.calificacion_pcl_no)
+    _pcl_pct = str(evento_atel.calificacion_pcl_porcentaje) if evento_atel and evento_atel.calificacion_pcl_porcentaje else ""
+    _pcl_si_label = f"SI  {_pcl_pct}%" if _pcl_si and _pcl_pct else "SI"
     pcl_display = Table([[
-        checkbox(bool(evento_atel and evento_atel.calificacion_pcl_si), "SI"),
-        P(f"  {pcl_val}%" if pcl_val else ""),
-        checkbox(bool(evento_atel and evento_atel.calificacion_pcl_no), "NO"),
-    ]], colWidths=[0.8*inch, 1.0*inch, 0.8*inch])
-    pcl_display.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 2)]))
+        checkbox(_pcl_si, _pcl_si_label),
+        checkbox(_pcl_no, "NO"),
+    ]], colWidths=[2.0*inch, 1.0*inch])
+    pcl_display.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
 
     atel_rows = [
         [B("Tratamiento recibido por Rehabilitación:"), P(ActT(evento_atel.tratamiento_rehabilitacion if evento_atel else ""))],

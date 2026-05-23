@@ -222,6 +222,9 @@ def generar_concepto(
     ident = session.exec(
         select(IdentificacionVO).where(IdentificacionVO.valoracion_id == valoracion_id)
     ).first()
+    actividad = session.exec(
+        select(ActividadActualVO).where(ActividadActualVO.valoracion_id == valoracion_id)
+    ).first()
     otras_areas = session.exec(
         select(EvaluacionOtrasAreasVO).where(EvaluacionOtrasAreasVO.valoracion_id == valoracion_id)
     ).first()
@@ -229,7 +232,6 @@ def generar_concepto(
         select(RegistroVO).where(RegistroVO.valoracion_id == valoracion_id)
     ).first()
 
-    # Construir dict de áreas desde los campos JSON serializados
     import json
     areas_dict = {}
     if otras_areas:
@@ -245,7 +247,7 @@ def generar_concepto(
         from app.services.groq_service import generar_concepto_vo
         resultado = generar_concepto_vo(
             nombre_trabajador=ident.nombre_trabajador if ident else "",
-            cargo=ident.cargo_actual if ident else "",
+            cargo=actividad.nombre_cargo if actividad else "",
             otras_areas=areas_dict or None,
             orientacion_previa=registro.orientacion_ocupacional if registro else "",
         )
