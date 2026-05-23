@@ -572,7 +572,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 10))
 
     # ===== ROL LABORAL DENTRO DE LA EMPRESA (EXIGENCIAS) =====
-    story.append(crear_seccion_header("5. ROL LABORAL\n       (Resultado del proceso de rhb)"))
+    story.append(crear_seccion_header("5. ROL LABORAL<br/>       (Resultado del proceso de rhb)"))
     
     rol_rows = [
         [B("Tareas y Operaciones:"), P(ActT(rol_laboral.tareas_operaciones if rol_laboral else ""))],
@@ -654,7 +654,7 @@ def generar_pdf_valoracion_ocupacional(
     
     # Agrupar miembros: composicion_nucleo (count) y fechas
     _nucleo_count = str(len(miembros_familiares)) if miembros_familiares else ""
-    _fechas_nac = ", ".join([m.fecha_nacimiento for m in miembros_familiares if m.fecha_nacimiento]) if miembros_familiares else "NO REFIERE"
+    _fechas_nac = ", ".join([fmt_fecha(m.fecha_nacimiento) for m in miembros_familiares if m.fecha_nacimiento]) if miembros_familiares else "NO REFIERE"
 
     _personas_hogar = composicion_familiar.personas_sostienen_hogar if composicion_familiar else ""
     _ingreso = composicion_familiar.ingreso_promedio if composicion_familiar else ""
