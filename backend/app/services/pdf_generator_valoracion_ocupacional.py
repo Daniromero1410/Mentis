@@ -105,10 +105,10 @@ def generar_pdf_valoracion_ocupacional(
     # Estilos
     styles = getSampleStyleSheet()
 
-    # Colores profesionales (Theme Positiva S.A)
-    COLOR_HEADER = colors.HexColor('#E65100')     # Naranja oscuro
-    COLOR_LABEL_BG = colors.HexColor('#f5f5f5')   # Gris claro
-    COLOR_BORDER = colors.HexColor('#424242')     # Gris oscuro
+    # Colores Positiva S.A (coinciden con el PDF de referencia)
+    COLOR_HEADER = colors.HexColor('#F07820')     # Naranja Positiva
+    COLOR_LABEL_BG = colors.HexColor('#FFF3E0')   # Naranja muy claro (labels)
+    COLOR_BORDER = colors.HexColor('#BDBDBD')     # Gris suave
     COLOR_TEXT = colors.black
 
     PAGE_WIDTH = 7.4 * inch
@@ -315,7 +315,7 @@ def generar_pdf_valoracion_ocupacional(
 
     # ===== OBJETIVO DE LA VALORACIÓN =====
     if secciones_texto and secciones_texto.objetivo_valoracion:
-        story.append(crear_seccion_header("I. OBJETIVO DE LA VALORACIÓN"))
+        story.append(crear_seccion_header("1. OBJETIVO DE LA VALORACIÓN"))
         t_obj = Table([[Paragraph(secciones_texto.objetivo_valoracion.replace('\n', '<br/>'), style_normal)]], colWidths=[PAGE_WIDTH])
         t_obj.setStyle(TableStyle([
             ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -328,7 +328,7 @@ def generar_pdf_valoracion_ocupacional(
         story.append(Spacer(1, 8))
 
     # ===== DATOS DE IDENTIFICACIÓN Y EMPRESA =====
-    story.append(crear_seccion_header("II. IDENTIFICACIÓN"))
+    story.append(crear_seccion_header("2. IDENTIFICACIÓN"))
     
     # Sub-header orange light
     sub_h = [[B("(Datos trabajador, evento ATEL, Empresa)")]]
@@ -485,7 +485,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 10))
 
     # ===== HISTORIA OCUPACIONAL =====
-    story.append(crear_seccion_header("III. HISTORIA OCUPACIONAL"))
+    story.append(crear_seccion_header("3. HISTORIA OCUPACIONAL: *"))
     
     if historia_ocupacional and len(historia_ocupacional) > 0:
         hist_headers = [B("Empresa"), B("Cargo/Funciones"), B("Tiempo Duración"), B("Motivo Retiro")]
@@ -518,7 +518,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 10))
 
     # ===== ACTIVIDAD ACTUAL =====
-    story.append(crear_seccion_header("IV. DESCRIPCIÓN ACTIVIDAD LABORAL ACTUAL * (antes del evento)"))
+    story.append(crear_seccion_header("4. DESCRIPCION ACTIVIDAD LABORAL ACTUAL * (antes del evento)"))
     ActT = lambda text: text.replace("\n", "<br/>") if text else ""
     
     act_rows = [
@@ -572,7 +572,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 10))
 
     # ===== ROL LABORAL DENTRO DE LA EMPRESA (EXIGENCIAS) =====
-    story.append(crear_seccion_header("V. ROL LABORAL (Resultado del proceso de rhb)"))
+    story.append(crear_seccion_header("5. ROL LABORAL\n       (Resultado del proceso de rhb)"))
     
     rol_rows = [
         [B("Tareas y Operaciones:"), P(ActT(rol_laboral.tareas_operaciones if rol_laboral else ""))],
@@ -591,7 +591,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 10))
 
     # ===== EVENTO ATEL =====
-    story.append(crear_seccion_header("VI. INFORMACIÓN DEL EVENTO ATEL (resultado del proceso de rhb)"))
+    story.append(crear_seccion_header("6. INFORMACION DEL EVENTO ATEL (resultado del proceso de rhb)"))
 
     # Adaptaciones recibidas (JSON → checkboxes)
     _adaptaciones_items = []
@@ -650,40 +650,31 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 10))
 
     # ===== COMPOSICIÓN Y DINÁMICA FAMILIAR =====
-    story.append(crear_seccion_header("VII. COMPOSICIÓN Y DINÁMICA FAMILIAR"))
+    story.append(crear_seccion_header("7. COMPOSICION FAMILIAR *"))
     
-    if composicion_familiar:
-        cf_rows = [
-            [B("Convivencia actual:"), P(composicion_familiar.convivencia_actual), B("Personas que sostienen el hogar:"), P(composicion_familiar.personas_sostienen_hogar)],
-            [B("Ingreso promedio:"), P(composicion_familiar.ingreso_promedio), "", ""],
-        ]
-        t_cf = Table(cf_rows, colWidths=[1.5*inch, 2.2*inch, 1.5*inch, 2.2*inch])
-        t_cf.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-            ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
-            ('BACKGROUND', (2, 0), (2, -1), COLOR_LABEL_BG),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('SPAN', (1, 1), (3, 1)),
-        ]))
-        story.append(t_cf)
-        story.append(Spacer(1, 5))
+    # Agrupar miembros: composicion_nucleo (count) y fechas
+    _nucleo_count = str(len(miembros_familiares)) if miembros_familiares else ""
+    _fechas_nac = ", ".join([m.fecha_nacimiento for m in miembros_familiares if m.fecha_nacimiento]) if miembros_familiares else "NO REFIERE"
 
-    if miembros_familiares and len(miembros_familiares) > 0:
-        fam_headers = [B("Composición Núcleo"), B("Fecha Nacimiento")]
-        fam_data = [fam_headers]
-        for m in miembros_familiares:
-            fam_data.append([
-                P(m.composicion_nucleo),
-                P(m.fecha_nacimiento),
-            ])
-            
-        t_fam = Table(fam_data, colWidths=[PAGE_WIDTH*0.6, PAGE_WIDTH*0.4])
-        t_fam.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-            ('BACKGROUND', (0, 0), (-1, 0), COLOR_LABEL_BG),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ]))
-        story.append(t_fam)
+    _personas_hogar = composicion_familiar.personas_sostienen_hogar if composicion_familiar else ""
+    _ingreso = composicion_familiar.ingreso_promedio if composicion_familiar else ""
+    _convivencia = composicion_familiar.convivencia_actual if composicion_familiar else ""
+
+    cf_rows = [
+        [B("Composición del núcleo familiar:"), P(_nucleo_count)],
+        [B("Fecha de nacimiento de cada integrante que compone el núcleo familiar:"), P(_fechas_nac)],
+        [B("Persona(s) que sostiene económicamente el hogar:"), P(_personas_hogar)],
+        [B("Ingreso Promedio en el hogar:"), P(_ingreso)],
+        [B("Convivencia actual:"), P(_convivencia)],
+    ]
+    t_cf = Table(cf_rows, colWidths=[PAGE_WIDTH * 0.45, PAGE_WIDTH * 0.55])
+    t_cf.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    story.append(t_cf)
     
     story.append(Spacer(1, 10))
 
@@ -701,8 +692,8 @@ def generar_pdf_valoracion_ocupacional(
             c = self.canv
             c.saveState()
             if self.is_active:
-                c.setFillColor(colors.HexColor("#E65100"))  # Positiva Orange
-                c.setStrokeColor(colors.HexColor("#E65100"))
+                c.setFillColor(colors.HexColor("#F07820"))  # Naranja Positiva
+                c.setStrokeColor(colors.HexColor("#F07820"))
             else:
                 c.setFillColor(colors.HexColor("#F3F4F6"))
                 c.setStrokeColor(colors.HexColor("#D1D5DB"))
@@ -820,7 +811,7 @@ def generar_pdf_valoracion_ocupacional(
             story.append(p_t)
 
     if evaluacion_otras_areas_raw:
-        story.append(crear_seccion_header("VIII. EVALUACIÓN OTRAS ÁREAS OCUPACIONALES"))
+        story.append(crear_seccion_header("8. EVALUACION OTRAS AREAS OCUPACIONALES"))
         
         render_area_dic("Cuidado Personal", evaluacion_otras_areas_raw.cuidado_personal)
         render_area_dic("Comunicación", evaluacion_otras_areas_raw.comunicacion)
@@ -835,7 +826,7 @@ def generar_pdf_valoracion_ocupacional(
     orientacion = getattr(registro, 'orientacion_ocupacional', None) or ""
 
     # IX. CONCEPTO OCUPACIONAL
-    story.append(crear_seccion_header("IX. CONCEPTO OCUPACIONAL"))
+    story.append(crear_seccion_header("9. CONCEPTO OCUPACIONAL *"))
     t_conc = Table([[P(ActT(concepto))]], colWidths=[PAGE_WIDTH], minRowHeights=[40])
     t_conc.setStyle(TableStyle([
         ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -846,7 +837,7 @@ def generar_pdf_valoracion_ocupacional(
     story.append(t_conc)
 
     # X. ORIENTACION OCUPACIONAL
-    ori_header = crear_seccion_header("X. ORIENTACION OCUPACIONAL *")
+    ori_header = crear_seccion_header("10. ORIENTACION OCUPACIONAL *")
     t_ori = Table([[P(ActT(orientacion))]], colWidths=[PAGE_WIDTH], minRowHeights=[40])
     t_ori.setStyle(TableStyle([
         ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -856,7 +847,7 @@ def generar_pdf_valoracion_ocupacional(
     ]))
 
     # XI. REGISTRO (FIRMAS) - must stay together with Orientación for security
-    reg_header = crear_seccion_header("XI. REGISTRO")
+    reg_header = crear_seccion_header("11. REGISTRO")
 
     # --- Helper to resolve firma (base64 or file path) ---
     import tempfile, base64 as b64mod
