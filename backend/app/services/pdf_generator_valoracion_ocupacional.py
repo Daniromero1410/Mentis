@@ -328,7 +328,7 @@ def generar_pdf_valoracion_ocupacional(
         story.append(Spacer(1, 8))
 
     # ===== DATOS DE IDENTIFICACIÓN Y EMPRESA =====
-    story.append(crear_seccion_header("2. IDENTIFICACIÓN"))
+    story.append(crear_seccion_header("II. IDENTIFICACIÓN"))
     
     # Sub-header orange light
     sub_h = [[B("(Datos trabajador, evento ATEL, Empresa)")]]
@@ -447,7 +447,11 @@ def generar_pdf_valoracion_ocupacional(
     ev_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4), ('LEFTPADDING', (1, 0), (1, -1), 0), ('RIGHTPADDING', (1, 0), (1, -1), 0), ('BOTTOMPADDING', (1, 0), (1, -1), 0), ('TOPPADDING', (1, 0), (1, -1), 0)]))
     story.append(ev_t)
 
-    eps_t = Table([[B("EPS - IPS*"), P(i.eps_ips if i else "")], [B("AFP"), P(i.afp if i else "")]], colWidths=[lw, vw])
+    eps_t = Table([
+        [B("EPS - IPS*"), P(i.eps_ips if i else "")],
+        [B("AFP"), P(i.afp if i else "")],
+        [B("Tiempo total de incapacidad"), P((str(i.tiempo_incapacidad_dias) + " días") if i and i.tiempo_incapacidad_dias else "")],
+    ], colWidths=[lw, vw])
     eps_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
     story.append(eps_t)
     
@@ -504,23 +508,27 @@ def generar_pdf_valoracion_ocupacional(
         story.append(t_hist)
     else:
         story.append(P("No se registraron antecedentes de historia ocupacional relevantes.", style_center))
-    
-    story.append(Spacer(1, 8))
 
-    # Removed Section IV
+    otros_oficios_t = Table([
+        [B("Otros Oficios desempeñados:"), P(secciones_texto.otros_oficios_desempenados if secciones_texto else "")],
+        [B("Oficios de interés:"), P(secciones_texto.oficios_interes if secciones_texto else "")],
+    ], colWidths=[lw, vw])
+    otros_oficios_t.setStyle(TableStyle([('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG), ('LEFTPADDING', (0, 0), (-1, -1), 4)]))
+    story.append(otros_oficios_t)
     story.append(Spacer(1, 10))
 
     # ===== ACTIVIDAD ACTUAL =====
-    story.append(crear_seccion_header("V. ACTIVIDAD ACTUAL (A QUÉ SE DEDICA RECIENTEMENTE)"))
+    story.append(crear_seccion_header("IV. DESCRIPCIÓN ACTIVIDAD LABORAL ACTUAL * (antes del evento)"))
     ActT = lambda text: text.replace("\n", "<br/>") if text else ""
     
     act_rows = [
-        [B("Trabaja actualmente / Cargo:"), P(actividad_actual.nombre_cargo if actividad_actual else "")],
-        [B("Antigüedad en el cargo:"), P(actividad_actual.antiguedad_cargo if actividad_actual else "")],
-        [B("Herramientas, materiales y equipos:"), P(actividad_actual.herramientas_trabajo if actividad_actual else "")],
+        [B("Nombre del cargo:"), P(actividad_actual.nombre_cargo if actividad_actual else "")],
+        [B("Tareas (nombre y descripción):"), P(actividad_actual.tareas_descripcion if actividad_actual else "")],
+        [B("Herramientas de trabajo:"), P(actividad_actual.herramientas_trabajo if actividad_actual else "")],
         [B("Horario de trabajo:"), P(actividad_actual.horario_trabajo if actividad_actual else "")],
         [B("Elementos de Protección Personal:"), P(actividad_actual.elementos_proteccion if actividad_actual else "")],
-        [B("Otras actividades de trabajo:"), P(actividad_actual.tareas_descripcion if actividad_actual else "")],
+        [B("Antigüedad en el cargo:"), P(actividad_actual.antiguedad_cargo if actividad_actual else "")],
+        [B("Requerimientos motrices de la actividad:"), P(actividad_actual.requerimientos_motrices if actividad_actual else "")],
         [B("Qué se encontraba haciendo durante la ATEL:"), P(actividad_actual.que_hacia_atel if actividad_actual else "")],
         [B("Relato del evento ATEL (del trabajador):"), P(actividad_actual.relato_atel if actividad_actual else "")],
     ]
@@ -532,10 +540,39 @@ def generar_pdf_valoracion_ocupacional(
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
     ]))
     story.append(t_act)
+
+    # Ocurrencia del ATEL
+    _puesto = actividad_actual.ocurrencia_atel_puesto if actividad_actual else None
+    _area = actividad_actual.ocurrencia_atel_area if actividad_actual else None
+    _otro = actividad_actual.ocurrencia_atel_otro if actividad_actual else ""
+    oc_row = [
+        B("Ocurrencia del ATEL:"),
+        Table([[
+            B("PUESTO DE TRABAJO"),
+            checkbox(_puesto is True, "SI"),
+            checkbox(_puesto is False, "NO"),
+            Spacer(6, 1),
+            B("ÁREA"),
+            checkbox(bool(_area), "NO (fuera del área)"),
+            Paragraph(f"<b>OTRO:</b> {_otro or ''}", style_small),
+        ]], colWidths=[1.1*inch, 0.55*inch, 0.55*inch, 0.1*inch, 0.5*inch, 1.3*inch, 1.5*inch])
+    ]
+    t_oc = Table([oc_row], colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
+    t_oc.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
+        ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('LEFTPADDING', (1, 0), (1, -1), 0),
+        ('RIGHTPADDING', (1, 0), (1, -1), 0),
+        ('TOPPADDING', (1, 0), (1, -1), 0),
+        ('BOTTOMPADDING', (1, 0), (1, -1), 0),
+    ]))
+    story.append(t_oc)
     story.append(Spacer(1, 10))
 
     # ===== ROL LABORAL DENTRO DE LA EMPRESA (EXIGENCIAS) =====
-    story.append(crear_seccion_header("VI. ROL LABORAL DENTRO DE LA EMPRESA (DE SU CARGO)"))
+    story.append(crear_seccion_header("V. ROL LABORAL (Resultado del proceso de rhb)"))
     
     rol_rows = [
         [B("Tareas y Operaciones:"), P(ActT(rol_laboral.tareas_operaciones if rol_laboral else ""))],
@@ -554,24 +591,64 @@ def generar_pdf_valoracion_ocupacional(
     story.append(Spacer(1, 10))
 
     # ===== EVENTO ATEL =====
-    story.append(crear_seccion_header("VII. INFORMACIÓN DEL EVENTO ATEL Y REHABILITACIÓN"))
-    
+    story.append(crear_seccion_header("VI. INFORMACIÓN DEL EVENTO ATEL (resultado del proceso de rhb)"))
+
+    # Adaptaciones recibidas (JSON → checkboxes)
+    _adaptaciones_items = []
+    if evento_atel and evento_atel.adaptaciones_recibidas:
+        try:
+            adapt_dict = json.loads(evento_atel.adaptaciones_recibidas)
+            for nombre_adapt, activo in adapt_dict.items():
+                if isinstance(activo, bool):
+                    _adaptaciones_items.append(checkbox(activo, nombre_adapt))
+                elif isinstance(activo, str) and activo:
+                    _adaptaciones_items.append(checkbox(True, f"{nombre_adapt}: {activo}"))
+        except Exception:
+            pass
+
+    if _adaptaciones_items:
+        # Agrupar en filas de 4
+        adapt_rows = []
+        for k in range(0, len(_adaptaciones_items), 4):
+            row = _adaptaciones_items[k:k+4]
+            while len(row) < 4:
+                row.append(Paragraph("", style_small))
+            adapt_rows.append(row)
+        t_adapt_inner = Table(adapt_rows, colWidths=[PAGE_WIDTH * 0.175] * 4)
+        t_adapt_inner.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 2)]))
+        adapt_cell = t_adapt_inner
+    else:
+        adapt_cell = P("")
+
+    pcl_val = str(evento_atel.calificacion_pcl_porcentaje) if evento_atel and evento_atel.calificacion_pcl_si else ""
+    pcl_display = Table([[
+        checkbox(bool(evento_atel and evento_atel.calificacion_pcl_si), "SI"),
+        P(f"  {pcl_val}%" if pcl_val else ""),
+        checkbox(bool(evento_atel and evento_atel.calificacion_pcl_no), "NO"),
+    ]], colWidths=[0.8*inch, 1.0*inch, 0.8*inch])
+    pcl_display.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('LEFTPADDING', (0, 0), (-1, -1), 2)]))
+
     atel_rows = [
-        [B("Tratamientos e intervención recibida:"), P(ActT(evento_atel.tratamiento_rehabilitacion if evento_atel else ""))],
-        [B("Calificación PCL / Adaptaciones:"), P(str(evento_atel.calificacion_pcl_porcentaje) if evento_atel and evento_atel.calificacion_pcl_si else "No Calificado")],
+        [B("Tratamiento recibido por Rehabilitación:"), P(ActT(evento_atel.tratamiento_rehabilitacion if evento_atel else ""))],
+        [B("Adaptaciones recibidas:"), adapt_cell],
+        [B("Calificación PCL:"), pcl_display],
     ]
     t_atel = Table(atel_rows, colWidths=[2.2*inch, PAGE_WIDTH - 2.2*inch])
     t_atel.setStyle(TableStyle([
         ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
         ('BACKGROUND', (0, 0), (0, -1), COLOR_LABEL_BG),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('LEFTPADDING', (1, 1), (1, 2), 0),
+        ('RIGHTPADDING', (1, 1), (1, 2), 0),
+        ('TOPPADDING', (1, 1), (1, 2), 0),
+        ('BOTTOMPADDING', (1, 1), (1, 2), 0),
     ]))
     story.append(t_atel)
     story.append(Spacer(1, 10))
 
     # ===== COMPOSICIÓN Y DINÁMICA FAMILIAR =====
-    story.append(crear_seccion_header("VIII. COMPOSICIÓN Y DINÁMICA FAMILIAR"))
+    story.append(crear_seccion_header("VII. COMPOSICIÓN Y DINÁMICA FAMILIAR"))
     
     if composicion_familiar:
         cf_rows = [
@@ -741,7 +818,7 @@ def generar_pdf_valoracion_ocupacional(
             story.append(p_t)
 
     if evaluacion_otras_areas_raw:
-        story.append(crear_seccion_header("IX. EVALUACIÓN OTRAS ÁREAS OCUPACIONALES"))
+        story.append(crear_seccion_header("VIII. EVALUACIÓN OTRAS ÁREAS OCUPACIONALES"))
         
         render_area_dic("Cuidado Personal", evaluacion_otras_areas_raw.cuidado_personal)
         render_area_dic("Comunicación", evaluacion_otras_areas_raw.comunicacion)
@@ -755,8 +832,8 @@ def generar_pdf_valoracion_ocupacional(
     concepto = getattr(registro, 'concepto_ocupacional', None) or getattr(registro, 'concepto_to', None) or ""
     orientacion = getattr(registro, 'orientacion_ocupacional', None) or ""
 
-    # 9. CONCEPTO OCUPACIONAL
-    story.append(crear_seccion_header("9. CONCEPTO OCUPACIONAL"))
+    # IX. CONCEPTO OCUPACIONAL
+    story.append(crear_seccion_header("IX. CONCEPTO OCUPACIONAL"))
     t_conc = Table([[P(ActT(concepto))]], colWidths=[PAGE_WIDTH], minRowHeights=[40])
     t_conc.setStyle(TableStyle([
         ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -766,8 +843,8 @@ def generar_pdf_valoracion_ocupacional(
     ]))
     story.append(t_conc)
 
-    # 10. ORIENTACION OCUPACIONAL
-    ori_header = crear_seccion_header("10. ORIENTACION OCUPACIONAL *")
+    # X. ORIENTACION OCUPACIONAL
+    ori_header = crear_seccion_header("X. ORIENTACION OCUPACIONAL *")
     t_ori = Table([[P(ActT(orientacion))]], colWidths=[PAGE_WIDTH], minRowHeights=[40])
     t_ori.setStyle(TableStyle([
         ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
@@ -776,8 +853,8 @@ def generar_pdf_valoracion_ocupacional(
         ('TOPPADDING', (0, 0), (-1, -1), 6),
     ]))
 
-    # 11. REGISTRO (FIRMAS) - must stay together with Orientación for security
-    reg_header = crear_seccion_header("11. REGISTRO")
+    # XI. REGISTRO (FIRMAS) - must stay together with Orientación for security
+    reg_header = crear_seccion_header("XI. REGISTRO")
 
     # --- Helper to resolve firma (base64 or file path) ---
     import tempfile, base64 as b64mod
