@@ -329,10 +329,11 @@ def generar_pdf_prueba_trabajo_to(
 
     # Fecha de nacimiento/edad row
     nac_fecha = format_date(i.fecha_nacimiento if i else None)
-    edad_val = f"{i.edad or ''}" if i else ""
+    _edad_stored = str(i.edad) if i and i.edad else ""
+    edad_val = _edad_stored or calc_edad(i.fecha_nacimiento if i else None)
 
     nac_row = [
-        [bold("Fecha de nacimiento/edad"), p(nac_fecha), bold("edad"), p(f"{edad_val}    años" if edad_val else "")]
+        [bold("Fecha de nacimiento/edad"), p(nac_fecha), bold("edad"), p(f"{edad_val} años" if edad_val else "")]
     ]
     nac_t = Table(nac_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
     nac_t.setStyle(TableStyle([
@@ -522,29 +523,57 @@ def generar_pdf_prueba_trabajo_to(
 
     # Fecha ingreso cargo/antigüedad
     fic_fecha = format_date(i.fecha_ingreso_cargo if i else None)
-    # Calculate years from the date (matching frontend calculateAge logic)
-    def calc_years(date_val):
+    def calc_tiempo(date_val):
+        """Retorna '2 años 3 meses', '8 meses', etc. según la antigüedad."""
         if not date_val:
             return ""
         try:
             if isinstance(date_val, str):
                 dt = datetime.strptime(date_val, "%Y-%m-%d")
             else:
-                dt = date_val
+                dt = datetime(*date_val.timetuple()[:6]) if hasattr(date_val, 'timetuple') else date_val
             today = datetime.today()
             years = today.year - dt.year
-            if (today.month, today.day) < (dt.month, dt.day):
+            months = today.month - dt.month
+            if today.day < dt.day:
+                months -= 1
+            if months < 0:
                 years -= 1
-            return str(years)
+                months += 12
+            if years > 0 and months > 0:
+                return f"{years} año{'s' if years != 1 else ''} {months} mes{'es' if months != 1 else ''}"
+            elif years > 0:
+                return f"{years} año{'s' if years != 1 else ''}"
+            elif months > 0:
+                return f"{months} mes{'es' if months != 1 else ''}"
+            else:
+                return "Menos de 1 mes"
         except Exception:
             return ""
 
-    cargo_years = calc_years(i.fecha_ingreso_cargo if i else None)
+    def calc_edad(fecha_nac):
+        """Calcula edad en años desde fecha de nacimiento."""
+        if not fecha_nac:
+            return ""
+        try:
+            if isinstance(fecha_nac, str):
+                dt = datetime.strptime(fecha_nac, "%Y-%m-%d")
+            else:
+                dt = datetime(*fecha_nac.timetuple()[:6]) if hasattr(fecha_nac, 'timetuple') else fecha_nac
+            today = datetime.today()
+            age = today.year - dt.year
+            if (today.month, today.day) < (dt.month, dt.day):
+                age -= 1
+            return str(age)
+        except Exception:
+            return ""
+
+    cargo_years = calc_tiempo(i.fecha_ingreso_cargo if i else None)
     fic_row = [[
         bold("Fecha ingreso cargo/antigüedad en\nel cargo"),
         p(fic_fecha),
         bold("tiempo"),
-        p(f"{cargo_years}    años" if cargo_years else ""),
+        p(cargo_years),
     ]]
     fic_t = Table(fic_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
     fic_t.setStyle(TableStyle([
@@ -560,12 +589,12 @@ def generar_pdf_prueba_trabajo_to(
 
     # Fecha ingreso empresa/antigüedad
     fie_fecha = format_date(i.fecha_ingreso_empresa if i else None)
-    empresa_years = calc_years(i.fecha_ingreso_empresa if i else None)
+    empresa_years = calc_tiempo(i.fecha_ingreso_empresa if i else None)
     fie_row = [[
         bold("Fecha ingreso a la\nempresa/antigüedad en la empresa"),
         p(fie_fecha),
         bold("tiempo"),
-        p(f"{empresa_years}    años" if empresa_years else ""),
+        p(empresa_years),
     ]]
     fie_t = Table(fie_row, colWidths=[page_width * 0.30, page_width * 0.30, page_width * 0.10, page_width * 0.30])
     fie_t.setStyle(TableStyle([
@@ -739,7 +768,7 @@ def generar_pdf_prueba_trabajo_to(
         if valid_img_paths:
             from reportlab.lib.utils import ImageReader
             img_max_w = page_width * 0.30
-            img_max_h = 5 * cm
+            img_max_h = 3 * cm
             for img_p in valid_img_paths:
                 try:
                     ir = ImageReader(img_p)

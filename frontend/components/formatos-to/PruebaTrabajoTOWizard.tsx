@@ -47,6 +47,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
 
     const [formData, setFormData] = useState({
         fecha_valoracion: new Date().toISOString().split('T')[0],
+        ultimo_dia_incapacidad: '',
         nombre_trabajador: '',
         tipo_documento: '',
         numero_documento: '',
@@ -109,7 +110,18 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
     });
 
     const updateField = (field: string, value: any) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => {
+            const next = { ...prev, [field]: value };
+            if (field === 'fecha_nacimiento' && value) {
+                const today = new Date();
+                const birth = new Date(value);
+                let age = today.getFullYear() - birth.getFullYear();
+                const m = today.getMonth() - birth.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+                next.edad = age.toString();
+            }
+            return next;
+        });
     };
 
     const [tareas, setTareas] = useState<any[]>([{ id: 1, actividad: '', frecuencia: '', tiempo: '', observacion: '' }]);
@@ -127,6 +139,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
         return {
             identificacion: {
                 fecha_valoracion: formData.fecha_valoracion || null,
+                ultimo_dia_incapacidad: formData.ultimo_dia_incapacidad || null,
                 nombre_trabajador: formData.nombre_trabajador,
                 tipo_documento: formData.tipo_documento,
                 numero_documento: formData.numero_documento,
@@ -215,6 +228,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                         ...data, // Keep top-level fields like estado, id
                         // Identificacion
                         fecha_valoracion: data.identificacion?.fecha_valoracion?.split('T')[0] || prev.fecha_valoracion,
+                        ultimo_dia_incapacidad: data.identificacion?.ultimo_dia_incapacidad?.split('T')[0] || prev.ultimo_dia_incapacidad,
                         nombre_trabajador: data.identificacion?.nombre_trabajador || prev.nombre_trabajador,
                         tipo_documento: data.identificacion?.tipo_documento || prev.tipo_documento,
                         numero_documento: data.identificacion?.numero_documento || prev.numero_documento,
