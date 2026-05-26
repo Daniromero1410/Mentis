@@ -102,7 +102,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 </FormField>
                                 <FormField label="Edad Calculada">
                                     <div className="h-10 flex items-center px-3 bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
-                                        {calculateTiempo(formData.fecha_nacimiento)} años
+                                        {calculateTiempo(formData.fecha_nacimiento)}
                                     </div>
                                 </FormField>
                             </div>
