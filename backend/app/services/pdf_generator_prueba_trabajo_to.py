@@ -327,6 +327,51 @@ def generar_pdf_prueba_trabajo_to(
     ]))
     elements.append(id_table_basic)
 
+    def calc_edad(fecha_nac):
+        """Calcula edad en años desde fecha de nacimiento."""
+        if not fecha_nac:
+            return ""
+        try:
+            if isinstance(fecha_nac, str):
+                dt = datetime.strptime(fecha_nac, "%Y-%m-%d")
+            else:
+                dt = datetime(*fecha_nac.timetuple()[:6]) if hasattr(fecha_nac, 'timetuple') else fecha_nac
+            today = datetime.today()
+            age = today.year - dt.year
+            if (today.month, today.day) < (dt.month, dt.day):
+                age -= 1
+            return str(age)
+        except Exception:
+            return ""
+
+    def calc_tiempo(date_val):
+        """Retorna '2 años 3 meses', '8 meses', etc. según la antigüedad."""
+        if not date_val:
+            return ""
+        try:
+            if isinstance(date_val, str):
+                dt = datetime.strptime(date_val, "%Y-%m-%d")
+            else:
+                dt = datetime(*date_val.timetuple()[:6]) if hasattr(date_val, 'timetuple') else date_val
+            today = datetime.today()
+            years = today.year - dt.year
+            months = today.month - dt.month
+            if today.day < dt.day:
+                months -= 1
+            if months < 0:
+                years -= 1
+                months += 12
+            if years > 0 and months > 0:
+                return f"{years} año{'s' if years != 1 else ''} {months} mes{'es' if months != 1 else ''}"
+            elif years > 0:
+                return f"{years} año{'s' if years != 1 else ''}"
+            elif months > 0:
+                return f"{months} mes{'es' if months != 1 else ''}"
+            else:
+                return "Menos de 1 mes"
+        except Exception:
+            return ""
+
     # Fecha de nacimiento/edad row
     nac_fecha = format_date(i.fecha_nacimiento if i else None)
     _edad_stored = str(i.edad) if i and i.edad else ""
@@ -523,51 +568,6 @@ def generar_pdf_prueba_trabajo_to(
 
     # Fecha ingreso cargo/antigüedad
     fic_fecha = format_date(i.fecha_ingreso_cargo if i else None)
-    def calc_tiempo(date_val):
-        """Retorna '2 años 3 meses', '8 meses', etc. según la antigüedad."""
-        if not date_val:
-            return ""
-        try:
-            if isinstance(date_val, str):
-                dt = datetime.strptime(date_val, "%Y-%m-%d")
-            else:
-                dt = datetime(*date_val.timetuple()[:6]) if hasattr(date_val, 'timetuple') else date_val
-            today = datetime.today()
-            years = today.year - dt.year
-            months = today.month - dt.month
-            if today.day < dt.day:
-                months -= 1
-            if months < 0:
-                years -= 1
-                months += 12
-            if years > 0 and months > 0:
-                return f"{years} año{'s' if years != 1 else ''} {months} mes{'es' if months != 1 else ''}"
-            elif years > 0:
-                return f"{years} año{'s' if years != 1 else ''}"
-            elif months > 0:
-                return f"{months} mes{'es' if months != 1 else ''}"
-            else:
-                return "Menos de 1 mes"
-        except Exception:
-            return ""
-
-    def calc_edad(fecha_nac):
-        """Calcula edad en años desde fecha de nacimiento."""
-        if not fecha_nac:
-            return ""
-        try:
-            if isinstance(fecha_nac, str):
-                dt = datetime.strptime(fecha_nac, "%Y-%m-%d")
-            else:
-                dt = datetime(*fecha_nac.timetuple()[:6]) if hasattr(fecha_nac, 'timetuple') else fecha_nac
-            today = datetime.today()
-            age = today.year - dt.year
-            if (today.month, today.day) < (dt.month, dt.day):
-                age -= 1
-            return str(age)
-        except Exception:
-            return ""
-
     cargo_years = calc_tiempo(i.fecha_ingreso_cargo if i else None)
     fic_row = [[
         bold("Fecha ingreso cargo/antigüedad en\nel cargo"),
