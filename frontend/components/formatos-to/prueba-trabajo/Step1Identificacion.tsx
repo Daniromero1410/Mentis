@@ -11,17 +11,18 @@ interface Step1Props {
 
 export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Props) => {
 
-    // Helper for date calculations
-    const calculateAge = (dateString: string) => {
+    const calculateTiempo = (dateString: string) => {
         if (!dateString) return '';
         const today = new Date();
-        const birthDate = new Date(dateString);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age.toString();
+        const start = new Date(dateString);
+        let years = today.getFullYear() - start.getFullYear();
+        let months = today.getMonth() - start.getMonth();
+        if (today.getDate() < start.getDate()) months--;
+        if (months < 0) { years--; months += 12; }
+        if (years > 0 && months > 0) return `${years} año${years !== 1 ? 's' : ''} ${months} mes${months !== 1 ? 'es' : ''}`;
+        if (years > 0) return `${years} año${years !== 1 ? 's' : ''}`;
+        if (months > 0) return `${months} mes${months !== 1 ? 'es' : ''}`;
+        return 'Menos de 1 mes';
     };
 
     return (
@@ -101,7 +102,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 </FormField>
                                 <FormField label="Edad Calculada">
                                     <div className="h-10 flex items-center px-3 bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
-                                        {calculateAge(formData.fecha_nacimiento)} años
+                                        {calculateTiempo(formData.fecha_nacimiento)} años
                                     </div>
                                 </FormField>
                             </div>
@@ -311,7 +312,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 </FormField>
                                 <FormField label="Tiempo Cargo">
                                     <div className="h-10 flex items-center px-3 bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
-                                        {calculateAge(formData.fecha_ingreso_cargo)} años
+                                        {calculateTiempo(formData.fecha_ingreso_cargo)}
                                     </div>
                                 </FormField>
                             </div>
@@ -327,7 +328,7 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                                 </FormField>
                                 <FormField label="Tiempo Empresa">
                                     <div className="h-10 flex items-center px-3 bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
-                                        {calculateAge(formData.fecha_ingreso_empresa)} años
+                                        {calculateTiempo(formData.fecha_ingreso_empresa)}
                                     </div>
                                 </FormField>
                             </div>
