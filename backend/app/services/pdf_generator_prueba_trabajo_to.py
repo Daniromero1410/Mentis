@@ -19,6 +19,32 @@ from reportlab.platypus import (
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
 from reportlab.graphics.shapes import Drawing, Rect, Line
 from reportlab.graphics import renderPDF
+from reportlab.pdfgen import canvas as pdfgen_canvas
+
+
+class NumberedCanvas(pdfgen_canvas.Canvas):
+    """Dibuja 'Página X de Y' centrado en el pie de cada página."""
+    def __init__(self, *args, **kwargs):
+        pdfgen_canvas.Canvas.__init__(self, *args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        total = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self._draw_page_number(total)
+            pdfgen_canvas.Canvas.showPage(self)
+        pdfgen_canvas.Canvas.save(self)
+
+    def _draw_page_number(self, total):
+        self.saveState()
+        self.setFont("Helvetica", 8)
+        self.drawCentredString(letter[0] / 2, 12, f"Página {self._pageNumber} de {total}")
+        self.restoreState()
 
 
 def generar_pdf_prueba_trabajo_to(
@@ -196,7 +222,7 @@ def generar_pdf_prueba_trabajo_to(
 
     # Row 2: Código + Fecha | (merged with title) | Página
     r2_left = Paragraph("<b>Código</b><br/><b>Fecha</b>&nbsp;&nbsp;&nbsp;&nbsp;2022/07", styles["HeaderSubLeft"])
-    r2_right = Paragraph("Página 1 de ___", styles["HeaderSub"])
+    r2_right = Paragraph("", styles["HeaderSub"])
 
     # Row 3: Aprobado por | Proceso | Revisado por
     r3_c1 = Paragraph("Aprobado por:<br/><b>Gerencia Médica</b>", styles["HeaderSub"])
@@ -1015,5 +1041,5 @@ def generar_pdf_prueba_trabajo_to(
     elements.append(KeepTogether(sec8_9_elements))
 
     # ── BUILD ────────────────────────────────────────────────────────
-    doc.build(elements)
+    doc.build(elements, canvasmaker=NumberedCanvas)
     return filepath
