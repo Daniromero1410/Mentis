@@ -4,6 +4,7 @@ Formato basado en Positiva S.A. - Valoración Prueba de Trabajo
 Diseño alineado al formato institucional 2022/07
 """
 import os
+import json
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
@@ -312,8 +313,17 @@ def generar_pdf_prueba_trabajo_to(
     # Número de documento
     id_rows.append(id_row_2col("Número de documento", i.numero_documento if i else ""))
 
-    # Identificación del siniestro
-    id_rows.append(id_row_2col("Identificación del siniestro", i.id_siniestro if i else ""))
+    # Identificación del siniestro (puede ser JSON array de múltiples siniestros)
+    _sin_raw = i.id_siniestro if i else ""
+    try:
+        _sin_list = json.loads(_sin_raw) if _sin_raw and _sin_raw.strip().startswith('[') else [_sin_raw]
+        if not isinstance(_sin_list, list):
+            _sin_list = [_sin_raw]
+    except Exception:
+        _sin_list = [_sin_raw]
+    _sin_list = [s for s in _sin_list if s and str(s).strip()]
+    _sin_text = "\n".join(f"{idx + 1}. {s}" for idx, s in enumerate(_sin_list)) if len(_sin_list) > 1 else (_sin_list[0] if _sin_list else "")
+    id_rows.append(id_row_2col("Identificación del siniestro", _sin_text))
 
     id_table_basic = Table(id_rows, colWidths=[lw, vw])
     id_table_basic.setStyle(TableStyle([

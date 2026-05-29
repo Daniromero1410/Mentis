@@ -331,7 +331,8 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 if (!formData.nombre_trabajador) errors.push('Nombre del Trabajador');
                 if (!formData.tipo_documento) errors.push('Tipo de Documento');
                 if (!formData.numero_documento) errors.push('Número de Documento');
-                if (!formData.id_siniestro) errors.push('ID Siniestro');
+                const _sins = (() => { try { const a = JSON.parse(formData.id_siniestro); return Array.isArray(a) ? a : [formData.id_siniestro]; } catch { return [formData.id_siniestro]; } })();
+                if (!_sins.some((s: string) => s && s.trim())) errors.push('ID Siniestro');
                 break;
             case 2:
                 if (!formData.metodologia) errors.push('Metodología');

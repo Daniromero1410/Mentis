@@ -2,6 +2,7 @@ import React from 'react';
 import { FormSection, FormRow, FormField, FormInput, FormTextarea, DateInputs } from './FormComponents';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Plus, Trash2 } from 'lucide-react';
 
 interface Step1Props {
     formData: any;
@@ -10,6 +11,30 @@ interface Step1Props {
 }
 
 export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Props) => {
+
+    // Siniestros: el campo id_siniestro almacena un JSON array o un string simple
+    const parseSiniestros = (val: string): string[] => {
+        if (!val) return [''];
+        try {
+            const arr = JSON.parse(val);
+            if (Array.isArray(arr)) return arr.length > 0 ? arr : [''];
+        } catch {}
+        return [val];
+    };
+    const siniestros = parseSiniestros(formData.id_siniestro);
+
+    const updateSiniestro = (index: number, value: string) => {
+        const next = [...siniestros];
+        next[index] = value;
+        updateField('id_siniestro', JSON.stringify(next));
+    };
+    const addSiniestro = () => {
+        updateField('id_siniestro', JSON.stringify([...siniestros, '']));
+    };
+    const removeSiniestro = (index: number) => {
+        const next = siniestros.filter((_, i) => i !== index);
+        updateField('id_siniestro', JSON.stringify(next.length > 0 ? next : ['']));
+    };
 
     const calculateTiempo = (dateString: string) => {
         if (!dateString) return '';
@@ -187,12 +212,39 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                         </CardHeader>
                         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                            <FormField label="Identificación del Siniestro">
-                                <FormInput
-                                    value={formData.id_siniestro}
-                                    onChange={(e) => updateField('id_siniestro', e.target.value)}
-                                    disabled={readOnly}
-                                />
+                            <FormField label="Identificación del Siniestro" className="col-span-full">
+                                <div className="space-y-2">
+                                    {siniestros.map((sin, idx) => (
+                                        <div key={idx} className="flex gap-2 items-center">
+                                            <span className="text-xs text-slate-400 w-5 shrink-0">{idx + 1}.</span>
+                                            <FormInput
+                                                value={sin}
+                                                onChange={(e) => updateSiniestro(idx, e.target.value)}
+                                                disabled={readOnly}
+                                                placeholder={`Siniestro ${idx + 1}`}
+                                                className="flex-1"
+                                            />
+                                            {!readOnly && siniestros.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeSiniestro(idx)}
+                                                    className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {!readOnly && (
+                                        <button
+                                            type="button"
+                                            onClick={addSiniestro}
+                                            className="flex items-center gap-1.5 text-xs text-brand-500 hover:text-brand-700 font-medium mt-1 transition-colors"
+                                        >
+                                            <Plus size={13} /> Agregar siniestro
+                                        </button>
+                                    )}
+                                </div>
                             </FormField>
 
                             <FormField label="Fecha(s) del Evento ATEL">
