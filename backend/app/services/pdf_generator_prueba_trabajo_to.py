@@ -427,34 +427,22 @@ def generar_pdf_prueba_trabajo_to(
     # Nivel educativo - Grid of checkboxes (3 columns x N rows)
     ne = i.nivel_educativo.lower().strip() if i and i.nivel_educativo else ""
 
+    # 8 opciones en 2 filas x 4 columnas (igual que el formulario)
     ne_options = [
         ("formacion_empirica", "Formación empírica"),
         ("basica_primaria", "Básica primaria"),
-        ("bachillerato_vocacional", "Bachillerato:\nvocacional 9°"),
-        ("bachillerato_modalidad", "Bachillerato: modalidad"),
+        ("bachillerato_vocacional", "Bachillerato"),
         ("tecnico", "Técnico/\nTecnológico"),
         ("profesional", "Profesional"),
-        ("postgrado", "Especialización/\npostgrado/ maestría"),
-        ("formacion_informal", "Formación\ninformal oficios"),
+        ("postgrado", "Especialización/\nMaestría"),
+        ("formacion_informal", "Formación\ninformal"),
         ("analfabeta", "Analfabeta"),
-        ("otros", "Otros"),
     ]
 
-    # Build 2 rows x 5 columns for education checkboxes
-    ne_cells_r1 = []
-    ne_cells_r2 = []
-    for idx, (key, lbl) in enumerate(ne_options):
-        cb = checkbox(ne == key or key in ne or ne in key, lbl)
-        if idx < 5:
-            ne_cells_r1.append(cb)
-        else:
-            ne_cells_r2.append(cb)
+    ne_cells_r1 = [checkbox(ne == key or key in ne or ne in key, lbl) for key, lbl in ne_options[:4]]
+    ne_cells_r2 = [checkbox(ne == key or key in ne or ne in key, lbl) for key, lbl in ne_options[4:]]
 
-    # Pad second row if needed
-    while len(ne_cells_r2) < 5:
-        ne_cells_r2.append("")
-
-    ne_inner = Table([ne_cells_r1, ne_cells_r2], colWidths=[page_width * 0.14] * 5)
+    ne_inner = Table([ne_cells_r1, ne_cells_r2], colWidths=[page_width * 0.175] * 4)
     ne_inner.setStyle(TableStyle([
         ('GRID', (0, 0), (-1, -1), 0.3, colors.HexColor("#BDBDBD")),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
