@@ -339,18 +339,6 @@ def generar_pdf_prueba_trabajo_to(
     # Número de documento
     id_rows.append(id_row_2col("Número de documento", i.numero_documento if i else ""))
 
-    # Identificación del siniestro (puede ser JSON array de múltiples siniestros)
-    _sin_raw = i.id_siniestro if i else ""
-    try:
-        _sin_list = json.loads(_sin_raw) if _sin_raw and _sin_raw.strip().startswith('[') else [_sin_raw]
-        if not isinstance(_sin_list, list):
-            _sin_list = [_sin_raw]
-    except Exception:
-        _sin_list = [_sin_raw]
-    _sin_list = [s for s in _sin_list if s and str(s).strip()]
-    _sin_text = "\n".join(f"{idx + 1}. {s}" for idx, s in enumerate(_sin_list)) if len(_sin_list) > 1 else (_sin_list[0] if _sin_list else "")
-    id_rows.append(id_row_2col("Identificación del siniestro", _sin_text))
-
     id_table_basic = Table(id_rows, colWidths=[lw, vw])
     id_table_basic.setStyle(TableStyle([
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
@@ -362,6 +350,49 @@ def generar_pdf_prueba_trabajo_to(
         ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
     ]))
     elements.append(id_table_basic)
+
+    # ── Tabla de siniestros (ID | Fecha | Diagnóstico) ──────────────────
+    _sin_raw = i.id_siniestro if i else ""
+    _siniestros = []
+    try:
+        parsed = json.loads(_sin_raw) if _sin_raw and _sin_raw.strip().startswith('[') else None
+        if isinstance(parsed, list):
+            for item in parsed:
+                if isinstance(item, dict):
+                    _siniestros.append({
+                        'id': item.get('id', ''),
+                        'fecha': item.get('fecha', ''),
+                        'diagnosticos': item.get('diagnosticos', ''),
+                    })
+                elif item:
+                    _siniestros.append({'id': str(item), 'fecha': '', 'diagnosticos': ''})
+        elif _sin_raw:
+            _siniestros.append({'id': _sin_raw, 'fecha': '', 'diagnosticos': ''})
+    except Exception:
+        if _sin_raw:
+            _siniestros.append({'id': _sin_raw, 'fecha': '', 'diagnosticos': ''})
+
+    _siniestros = [s for s in _siniestros if s['id'] or s['diagnosticos']]
+    if _siniestros:
+        sin_header = [bold("Siniestro N°"), bold("ID Siniestro"), bold("Fecha del Evento"), bold("Diagnóstico(s) clínico(s)")]
+        sin_rows = [sin_header]
+        for idx_s, s in enumerate(_siniestros):
+            sin_rows.append([
+                p(str(idx_s + 1)),
+                p(s['id']),
+                p(s['fecha']),
+                p(s['diagnosticos']),
+            ])
+        sin_t = Table(sin_rows, colWidths=[page_width * 0.08, page_width * 0.18, page_width * 0.16, page_width * 0.58])
+        sin_t.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('BACKGROUND', (0, 0), (-1, 0), LIGHT_GRAY),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ]))
+        elements.append(sin_t)
 
     def calc_edad(fecha_nac):
         """Calcula edad en años desde fecha de nacimiento."""

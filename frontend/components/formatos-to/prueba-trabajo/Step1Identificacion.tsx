@@ -12,28 +12,39 @@ interface Step1Props {
 
 export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Props) => {
 
-    // Siniestros: el campo id_siniestro almacena un JSON array o un string simple
-    const parseSiniestros = (val: string): string[] => {
-        if (!val) return [''];
+    // ── Siniestros: array de objetos {id, fecha, diagnosticos} ──────────
+    type Siniestro = { id: string; fecha: string; diagnosticos: string };
+    const EMPTY_SIN: Siniestro = { id: '', fecha: '', diagnosticos: '' };
+
+    const parseSiniestros = (val: string): Siniestro[] => {
+        if (!val) return [{ ...EMPTY_SIN }];
         try {
             const arr = JSON.parse(val);
-            if (Array.isArray(arr)) return arr.length > 0 ? arr : [''];
+            if (Array.isArray(arr) && arr.length > 0) {
+                // Si son objetos nuevos los usamos directo; si son strings (formato viejo) los convertimos
+                return arr.map((item: any) =>
+                    typeof item === 'object' && item !== null
+                        ? { id: item.id || '', fecha: item.fecha || '', diagnosticos: item.diagnosticos || '' }
+                        : { id: String(item), fecha: '', diagnosticos: '' }
+                );
+            }
         } catch {}
-        return [val];
+        // String simple (dato viejo)
+        return [{ id: val, fecha: '', diagnosticos: '' }];
     };
+
     const siniestros = parseSiniestros(formData.id_siniestro);
 
-    const updateSiniestro = (index: number, value: string) => {
-        const next = [...siniestros];
-        next[index] = value;
+    const updateSiniestro = (index: number, field: keyof Siniestro, value: string) => {
+        const next = siniestros.map((s, i) => i === index ? { ...s, [field]: value } : s);
         updateField('id_siniestro', JSON.stringify(next));
     };
     const addSiniestro = () => {
-        updateField('id_siniestro', JSON.stringify([...siniestros, '']));
+        updateField('id_siniestro', JSON.stringify([...siniestros, { ...EMPTY_SIN }]));
     };
     const removeSiniestro = (index: number) => {
         const next = siniestros.filter((_, i) => i !== index);
-        updateField('id_siniestro', JSON.stringify(next.length > 0 ? next : ['']));
+        updateField('id_siniestro', JSON.stringify(next.length > 0 ? next : [{ ...EMPTY_SIN }]));
     };
 
     const calculateTiempo = (dateString: string) => {
@@ -212,58 +223,55 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                         </CardHeader>
                         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                            <FormField label="Identificación del Siniestro" className="col-span-full">
-                                <div className="space-y-2">
+                            <FormField label="Siniestros" className="col-span-full">
+                                <div className="space-y-3">
                                     {siniestros.map((sin, idx) => (
-                                        <div key={idx} className="flex gap-2 items-center">
-                                            <span className="text-xs text-slate-400 w-5 shrink-0">{idx + 1}.</span>
-                                            <FormInput
-                                                value={sin}
-                                                onChange={(e) => updateSiniestro(idx, e.target.value)}
-                                                disabled={readOnly}
-                                                placeholder={`Siniestro ${idx + 1}`}
-                                                className="flex-1"
-                                            />
-                                            {!readOnly && siniestros.length > 1 && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeSiniestro(idx)}
-                                                    className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
-                                            )}
+                                        <div key={idx} className="border border-slate-200 rounded-lg p-3 bg-slate-50/50 space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Siniestro {idx + 1}</span>
+                                                {!readOnly && siniestros.length > 1 && (
+                                                    <button type="button" onClick={() => removeSiniestro(idx)}
+                                                        className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
+                                                        <Trash2 size={13} />
+                                                    </button>
+                                                )}
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                <FormField label="ID del Siniestro">
+                                                    <FormInput
+                                                        value={sin.id}
+                                                        onChange={(e) => updateSiniestro(idx, 'id', e.target.value)}
+                                                        disabled={readOnly}
+                                                        placeholder="Ej: 443059968"
+                                                    />
+                                                </FormField>
+                                                <FormField label="Fecha del Evento ATEL">
+                                                    <FormInput
+                                                        type="date"
+                                                        value={sin.fecha}
+                                                        onChange={(e) => updateSiniestro(idx, 'fecha', e.target.value)}
+                                                        disabled={readOnly}
+                                                    />
+                                                </FormField>
+                                            </div>
+                                            <FormField label="Diagnóstico(s) clínico(s)">
+                                                <FormTextarea
+                                                    className="min-h-[80px] resize-y"
+                                                    value={sin.diagnosticos}
+                                                    onChange={(e) => updateSiniestro(idx, 'diagnosticos', e.target.value)}
+                                                    disabled={readOnly}
+                                                    placeholder="Diagnóstico clínico del evento ATEL..."
+                                                />
+                                            </FormField>
                                         </div>
                                     ))}
                                     {!readOnly && (
-                                        <button
-                                            type="button"
-                                            onClick={addSiniestro}
-                                            className="flex items-center gap-1.5 text-xs text-brand-500 hover:text-brand-700 font-medium mt-1 transition-colors"
-                                        >
+                                        <button type="button" onClick={addSiniestro}
+                                            className="flex items-center gap-1.5 text-xs text-brand-500 hover:text-brand-700 font-medium transition-colors">
                                             <Plus size={13} /> Agregar siniestro
                                         </button>
                                     )}
                                 </div>
-                            </FormField>
-
-                            <FormField label="Fecha(s) del Evento ATEL">
-                                <FormInput
-                                    type="date"
-                                    value={formData.fechas_eventos_atel}
-                                    onChange={(e) => updateField('fechas_eventos_atel', e.target.value)}
-                                    disabled={readOnly}
-                                />
-                            </FormField>
-
-                            <FormField label="DIAGNÓSTICO CLÍNICO POR EVENTO ATEL" className="col-span-full">
-                                <FormTextarea
-                                    className="min-h-[120px] resize-y"
-                                    value={formData.diagnosticos_atel}
-                                    onChange={(e) => updateField('diagnosticos_atel', e.target.value)}
-                                    disabled={readOnly}
-                                    placeholder="Ingrese el diagnóstico clínico detallado aquí..."
-                                />
                             </FormField>
 
                             <FormField label="EPS - IPS">
