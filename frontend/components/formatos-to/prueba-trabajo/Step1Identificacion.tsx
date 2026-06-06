@@ -187,15 +187,16 @@ export const Step1Identificacion = ({ formData, updateField, readOnly }: Step1Pr
                             </FormField>
 
                             <FormField label="Nivel Educativo" className="col-span-full">
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-2">
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
                                     {[
                                         { val: 'formacion_empirica', label: 'Formación empírica' },
                                         { val: 'basica_primaria', label: 'Básica primaria' },
-                                        { val: 'bachillerato_vocacional', label: 'Bachillerato' },
+                                        { val: 'bachillerato_vocacional', label: 'Bachillerato: vocacional 9°' },
+                                        { val: 'bachillerato_modalidad', label: 'Bachillerato: modalidad' },
                                         { val: 'tecnico', label: 'Técnico/Tecnológico' },
                                         { val: 'profesional', label: 'Profesional' },
-                                        { val: 'postgrado', label: 'Especialización/Maestría' },
-                                        { val: 'formacion_informal', label: 'Formación informal' },
+                                        { val: 'postgrado', label: 'Especialización/postgrado/maestría' },
+                                        { val: 'formacion_informal', label: 'Formación informal oficios' },
                                         { val: 'analfabeta', label: 'Analfabeta' },
                                     ].map((item) => (
                                         <label key={item.val} className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer p-2 border rounded-md hover:bg-slate-50 transition-colors">

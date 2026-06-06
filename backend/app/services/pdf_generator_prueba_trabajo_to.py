@@ -491,36 +491,52 @@ def generar_pdf_prueba_trabajo_to(
     ]))
     elements.append(ec_t)
 
-    # Nivel educativo - Grid of checkboxes (3 columns x N rows)
+    # Nivel educativo — 3 columnas × 3 filas + fila "Especificar"
     ne = i.nivel_educativo.lower().strip() if i and i.nivel_educativo else ""
 
-    # 8 opciones en 2 filas x 4 columnas (igual que el formulario)
     ne_options = [
         ("formacion_empirica", "Formación empírica"),
         ("basica_primaria", "Básica primaria"),
-        ("bachillerato_vocacional", "Bachillerato"),
+        ("bachillerato_vocacional", "Bachillerato:\nvocacional 9°"),
+        ("bachillerato_modalidad", "Bachillerato:\nmodalidad"),
         ("tecnico", "Técnico/\nTecnológico"),
         ("profesional", "Profesional"),
-        ("postgrado", "Especialización/\nMaestría"),
-        ("formacion_informal", "Formación\ninformal"),
+        ("postgrado", "Especialización/\npostgrado/ maestría"),
+        ("formacion_informal", "Formación informal\noficios"),
         ("analfabeta", "Analfabeta"),
     ]
 
-    ne_cells_r1 = [checkbox(ne == key or key in ne or ne in key, lbl) for key, lbl in ne_options[:4]]
-    ne_cells_r2 = [checkbox(ne == key or key in ne or ne in key, lbl) for key, lbl in ne_options[4:]]
+    def _ne_cb(key, lbl):
+        checked = (ne == key) or (key in ne) or (
+            key == "bachillerato_vocacional" and "bachillerato" in ne and "modalidad" not in ne
+        )
+        return checkbox(checked, lbl)
 
-    ne_inner = Table([ne_cells_r1, ne_cells_r2], colWidths=[page_width * 0.175] * 4)
+    ne_col_w = page_width * 0.70 / 3
+    ne_rows = [
+        [_ne_cb(k, l) for k, l in ne_options[0:3]],
+        [_ne_cb(k, l) for k, l in ne_options[3:6]],
+        [_ne_cb(k, l) for k, l in ne_options[6:9]],
+    ]
+    # Fila extra: Especificar formacion
+    _especificar = getattr(i, 'especificar_formacion', '') or ''
+    ne_rows.append([
+        Paragraph(f"<b>Especificar formacion y oficios que conoce</b>  {_especificar}", styles["CellText"]),
+        "", ""
+    ])
+
+    ne_inner = Table(ne_rows, colWidths=[ne_col_w] * 3)
     ne_inner.setStyle(TableStyle([
         ('GRID', (0, 0), (-1, -1), 0.3, colors.HexColor("#BDBDBD")),
+        ('SPAN', (0, 3), (2, 3)),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 2),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 2),
+        ('LEFTPADDING', (0, 0), (-1, -1), 3),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 3),
         ('TOPPADDING', (0, 0), (-1, -1), 2),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
     ]))
 
-    ne_row_data = [[bold("Nivel educativo"), ne_inner]]
+    ne_row_data = [[bold("Nivel educativo*"), ne_inner]]
     ne_t = Table(ne_row_data, colWidths=[page_width * 0.30, page_width * 0.70])
     ne_t.setStyle(TableStyle([
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
@@ -529,8 +545,8 @@ def generar_pdf_prueba_trabajo_to(
         ('LEFTPADDING', (0, 0), (0, -1), 4),
         ('LEFTPADDING', (1, 0), (1, -1), 0),
         ('RIGHTPADDING', (1, 0), (1, -1), 0),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ('TOPPADDING', (1, 0), (1, -1), 0),
+        ('BOTTOMPADDING', (1, 0), (1, -1), 0),
     ]))
     elements.append(ne_t)
 
