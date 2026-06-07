@@ -47,6 +47,7 @@ interface Usuario {
     acceso_formatos_to: boolean;
     acceso_analisis_exigencias_mental: boolean;
     acceso_valoracion_ocupacional: boolean;
+    acceso_cuentas: boolean;
     created_at: string;
 }
 
@@ -60,6 +61,7 @@ interface UsuarioForm {
     acceso_pruebas_trabajo: boolean;
     acceso_formatos_to: boolean;
     acceso_analisis_exigencias_mental: boolean;
+    acceso_cuentas: boolean;
     activo: boolean;
 }
 
@@ -73,6 +75,7 @@ const initialFormState: UsuarioForm = {
     acceso_pruebas_trabajo: true,
     acceso_formatos_to: false,
     acceso_analisis_exigencias_mental: false,
+    acceso_cuentas: false,
     activo: true,
 };
 
@@ -120,6 +123,7 @@ export default function UsuariosPage() {
             acceso_pruebas_trabajo: usuario.acceso_pruebas_trabajo ?? false,
             acceso_formatos_to: usuario.acceso_formatos_to ?? false,
             acceso_analisis_exigencias_mental: usuario.acceso_analisis_exigencias_mental ?? false,
+            acceso_cuentas: usuario.acceso_cuentas ?? false,
             activo: usuario.activo ?? true,
         });
         setModalOpen(true);
@@ -156,6 +160,7 @@ export default function UsuariosPage() {
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
                     acceso_formatos_to: formData.acceso_formatos_to,
                     acceso_analisis_exigencias_mental: formData.acceso_analisis_exigencias_mental,
+                    acceso_cuentas: formData.acceso_cuentas,
                     ...(formData.password.trim() && { password: formData.password }),
                 });
                 toast.success('Usuario actualizado correctamente');
@@ -170,6 +175,7 @@ export default function UsuariosPage() {
                     acceso_pruebas_trabajo: formData.acceso_pruebas_trabajo,
                     acceso_formatos_to: formData.acceso_formatos_to,
                     acceso_analisis_exigencias_mental: formData.acceso_analisis_exigencias_mental,
+                    acceso_cuentas: formData.acceso_cuentas,
                 });
                 toast.success('Usuario creado correctamente');
             }
@@ -545,6 +551,7 @@ export default function UsuariosPage() {
                                     { id: 'acceso_pruebas_trabajo', key: 'acceso_pruebas_trabajo', label: 'Pruebas de Trabajo', icon: Briefcase, color: 'text-brand-600 bg-brand-50' },
                                     { id: 'acceso_formatos_to', key: 'acceso_formatos_to', label: 'Formatos TO', icon: FileText, color: 'text-teal-600 bg-teal-50' },
                                     { id: 'acceso_analisis_exigencias_mental', key: 'acceso_analisis_exigencias_mental', label: 'Análisis Exigencias Mental', icon: Activity, color: 'text-yellow-600 bg-yellow-50' },
+                                    { id: 'acceso_cuentas', key: 'acceso_cuentas', label: 'Cuentas', icon: FileText, color: 'text-indigo-600 bg-indigo-50' },
                                 ] as const).map((mod) => {
                                     const MIcon = mod.icon;
                                     const checked = formData[mod.key as keyof UsuarioForm] as boolean;

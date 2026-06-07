@@ -33,28 +33,50 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
+  const [notificaciones, setNotificaciones] = useState<any[]>([]);
   const [loadingResolve, setLoadingResolve] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Solo fetching si el usuario es admin
-    if (user?.rol === 'admin') {
-      const fetchPendingRequests = async () => {
+    if (!user) return;
+
+    const fetchAll = async () => {
+      // Solicitudes de reset (solo admin)
+      if (user.rol === 'admin') {
         try {
           const response = await api.get('/auth/password-reset-requests?pending_only=true') as any[];
           setPendingRequests(response);
         } catch (error) {
           console.error("Error fetching requests", error);
         }
-      };
+      }
+      // Notificaciones del sistema (cierres de cuentas, etc.)
+      try {
+        const notis = await api.get('/notificaciones/') as any[];
+        setNotificaciones(notis);
+      } catch (error) {
+        console.error("Error fetching notifications", error);
+      }
+    };
 
-      fetchPendingRequests();
-      // Polling cada 30 segundos
-      const interval = setInterval(fetchPendingRequests, 30000);
-      return () => clearInterval(interval);
-    }
+    fetchAll();
+    const interval = setInterval(fetchAll, 30000);
+    return () => clearInterval(interval);
   }, [user]);
+
+  const noLeidas = notificaciones.filter((n) => !n.leida).length;
+  const totalBadge = pendingRequests.length + noLeidas;
+
+  const marcarNotisLeidas = async () => {
+    if (noLeidas === 0) return;
+    try {
+      await api.put('/notificaciones/leer-todas', {});
+      setNotificaciones((prev) => prev.map((n) => ({ ...n, leida: true })));
+    } catch (error) {
+      console.error("Error marking notifications", error);
+    }
+  };
 
   const handleResolveRequest = async (id: number) => {
     setLoadingResolve(id);
@@ -107,13 +129,13 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         {/* Right Side */}
         <div className="flex items-center gap-3">
           {/* Notifications */}
-          <Popover>
+          <Popover onOpenChange={(open) => { if (open) marcarNotisLeidas(); }}>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="icon" className="relative hover:bg-gray-100 rounded-lg">
                 <Bell className="h-5 w-5 text-gray-600" />
-                {pendingRequests.length > 0 && (
+                {totalBadge > 0 && (
                   <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm ring-1 ring-white">
-                    {pendingRequests.length}
+                    {totalBadge}
                   </span>
                 )}
               </Button>
@@ -121,27 +143,24 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <PopoverContent className="w-80 p-0 bg-white shadow-xl border border-gray-200" align="end">
               <div className="p-4 border-b border-gray-100">
                 <h4 className="font-semibold text-sm">Notificaciones</h4>
-                <p className="text-xs text-gray-500">Solicitudes de acceso pendientes</p>
+                <p className="text-xs text-gray-500">Avisos y solicitudes</p>
               </div>
-              <div className="max-h-[300px] overflow-y-auto">
-                {pendingRequests.length === 0 ? (
+              <div className="max-h-[340px] overflow-y-auto">
+                {pendingRequests.length === 0 && notificaciones.length === 0 ? (
                   <div className="p-4 text-center text-sm text-gray-500">
                     No hay notificaciones nuevas
                   </div>
                 ) : (
                   <div className="divide-y divide-gray-100">
+                    {/* Solicitudes de reset (admin) */}
                     {pendingRequests.map((req) => (
-                      <div key={req.id} className="p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors">
+                      <div key={`req-${req.id}`} className="p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors">
                         <div className="bg-brand-100 p-2 rounded-full">
                           <UserCircle className="h-4 w-4 text-brand-600" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            Restablecer Contraseña
-                          </p>
-                          <p className="text-xs text-gray-500 truncate">
-                            {req.email}
-                          </p>
+                          <p className="text-sm font-medium text-gray-900 truncate">Restablecer Contraseña</p>
+                          <p className="text-xs text-gray-500 truncate">{req.email}</p>
                           <p className="text-[10px] text-gray-400 mt-1">
                             {formatDistanceToNow(new Date(req.created_at), { addSuffix: true, locale: es })}
                           </p>
@@ -153,14 +172,30 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                           onClick={() => handleResolveRequest(req.id)}
                           disabled={loadingResolve === req.id}
                         >
-                          {loadingResolve === req.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Check className="h-4 w-4" />
-                          )}
+                          {loadingResolve === req.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                         </Button>
                       </div>
                     ))}
+                    {/* Notificaciones del sistema */}
+                    {notificaciones.map((noti) => {
+                      const inner = (
+                        <div className={`p-4 flex items-start gap-3 transition-colors ${noti.leida ? 'hover:bg-gray-50' : 'bg-brand-50/50 hover:bg-brand-50'}`}>
+                          <div className="bg-amber-100 p-2 rounded-full">
+                            <Bell className="h-4 w-4 text-amber-600" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">{noti.titulo || 'Notificación'}</p>
+                            <p className="text-xs text-gray-500">{noti.mensaje}</p>
+                            <p className="text-[10px] text-gray-400 mt-1">
+                              {formatDistanceToNow(new Date(noti.created_at), { addSuffix: true, locale: es })}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                      return noti.link
+                        ? <Link key={`noti-${noti.id}`} href={noti.link}>{inner}</Link>
+                        : <div key={`noti-${noti.id}`}>{inner}</div>;
+                    })}
                   </div>
                 )}
               </div>

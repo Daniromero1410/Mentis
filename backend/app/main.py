@@ -9,6 +9,8 @@ from app.routers import pruebas_trabajo_to
 from app.routers import analisis_exigencia
 from app.routers import analisis_exigencias_mental
 from app.routers import valoracion_ocupacional
+from app.routers import cuentas
+from app.routers import notificaciones
 
 # Crear la aplicación FastAPI
 app = FastAPI(
@@ -53,6 +55,8 @@ app.include_router(pruebas_trabajo_to.router)
 app.include_router(analisis_exigencia.router)
 app.include_router(analisis_exigencias_mental.router)
 app.include_router(valoracion_ocupacional.router)
+app.include_router(cuentas.router)
+app.include_router(notificaciones.router)
 
 # Montar directorio de uploads como archivos estáticos
 UPLOAD_DIR = Path("uploads")
@@ -133,6 +137,16 @@ def _run_migrations():
         """,
         """
         ALTER TABLE actividad_actual_vo ADD COLUMN IF NOT EXISTS relato_atel TEXT;
+        """,
+        # Módulo de Cuentas: permiso de acceso
+        """
+        ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS acceso_cuentas BOOLEAN DEFAULT FALSE;
+        """,
+        """
+        UPDATE usuarios SET acceso_cuentas = FALSE WHERE acceso_cuentas IS NULL;
+        """,
+        """
+        UPDATE usuarios SET acceso_cuentas = TRUE WHERE email = 'danielromero.software@gmail.com' AND (acceso_cuentas IS NULL OR acceso_cuentas = FALSE);
         """,
     ]
 

@@ -59,3 +59,11 @@ from app.models.valoracion_ocupacional import (
     RegistroVO,
     EstadoValoracion
 )
+
+from app.models.cuenta import (
+    ServicioCuenta,
+    CierreMensual,
+    TarifaCuenta,
+    Notificacion,
+    EstadoCierre,
+)

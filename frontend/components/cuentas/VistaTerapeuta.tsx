@@ -1,0 +1,298 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { api } from '@/app/services/api';
+import { toast } from '@/components/ui/sileo-toast';
+import { Plus, Trash2, Save, Lock, Loader2, CheckCircle2, Pencil, X } from 'lucide-react';
+import { ARLS, SERVICIOS, TIPOS_DOCUMENTO, MESES } from './constants';
+
+interface Servicio {
+    id?: number;
+    nombre_usuario: string;
+    tipo_documento: string;
+    numero_documento: string;
+    arl: string;
+    servicio: string;
+    numero_autorizacion: string;
+    fecha_realizacion: string;
+    fecha_autorizacion: string;
+    carpeta_cargue: string;
+    cantidad: number;
+    recomendaciones: string;
+    en_pleno: string;
+    pcl: string;
+}
+
+const emptyServicio = (): Servicio => ({
+    nombre_usuario: '', tipo_documento: '', numero_documento: '', arl: '',
+    servicio: '', numero_autorizacion: '', fecha_realizacion: '', fecha_autorizacion: '',
+    carpeta_cargue: '', cantidad: 1, recomendaciones: '', en_pleno: '', pcl: '',
+});
+
+const hoy = new Date();
+
+export function VistaTerapeuta() {
+    const [mes, setMes] = useState(hoy.getMonth() + 1);
+    const [anio, setAnio] = useState(hoy.getFullYear());
+    const [servicios, setServicios] = useState<Servicio[]>([]);
+    const [estadoCierre, setEstadoCierre] = useState<string>('abierto');
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const [editId, setEditId] = useState<number | null>(null);
+    const [form, setForm] = useState<Servicio>(emptyServicio());
+
+    const cerrado = estadoCierre === 'cerrado' || estadoCierre === 'revisado';
+
+    const cargar = useCallback(async () => {
+        setLoading(true);
+        try {
+            const [serviciosData, cierreData] = await Promise.all([
+                api.get<Servicio[]>(`/cuentas/mis-servicios?mes=${mes}&anio=${anio}`),
+                api.get<any>(`/cuentas/mi-cierre?mes=${mes}&anio=${anio}`),
+            ]);
+            setServicios(serviciosData);
+            setEstadoCierre(cierreData.estado);
+        } catch (e: any) {
+            toast.error(e.message || 'Error al cargar');
+        } finally {
+            setLoading(false);
+        }
+    }, [mes, anio]);
+
+    useEffect(() => { cargar(); }, [cargar]);
+
+    const abrirNuevo = () => {
+        setForm(emptyServicio());
+        setEditId(null);
+        setShowForm(true);
+    };
+
+    const abrirEditar = (s: Servicio) => {
+        setForm({ ...s });
+        setEditId(s.id ?? null);
+        setShowForm(true);
+    };
+
+    const guardar = async () => {
+        if (!form.nombre_usuario.trim()) { toast.error('Ingrese el nombre del usuario'); return; }
+        if (!form.servicio) { toast.error('Seleccione el servicio'); return; }
+        setSaving(true);
+        try {
+            const payload = { ...form, cantidad: Number(form.cantidad) || 1 };
+            if (editId) {
+                await api.put(`/cuentas/mis-servicios/${editId}`, payload);
+                toast.success('Servicio actualizado');
+            } else {
+                await api.post(`/cuentas/mis-servicios?mes=${mes}&anio=${anio}`, payload);
+                toast.success('Servicio agregado');
+            }
+            setShowForm(false);
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error al guardar');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const eliminar = async (id?: number) => {
+        if (!id) return;
+        if (!confirm('¿Eliminar este servicio?')) return;
+        try {
+            await api.delete(`/cuentas/mis-servicios/${id}`);
+            toast.success('Servicio eliminado');
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error al eliminar');
+        }
+    };
+
+    const cerrarMes = async () => {
+        if (!confirm(`¿Cerrar el mes de ${MESES[mes]} ${anio}? No podrás editar después y se notificará al administrador.`)) return;
+        try {
+            await api.post(`/cuentas/cerrar-mes?mes=${mes}&anio=${anio}`, {});
+            toast.success('Mes cerrado y enviado al administrador');
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error al cerrar el mes');
+        }
+    };
+
+    const anios = [hoy.getFullYear() - 1, hoy.getFullYear(), hoy.getFullYear() + 1];
+
+    return (
+        <div className="space-y-6">
+            {/* Header */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-slate-800">Mis Servicios</h1>
+                    <p className="text-sm text-slate-500">Registra los servicios prestados durante el mes</p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <select value={mes} onChange={(e) => setMes(Number(e.target.value))}
+                        className="h-10 rounded-lg border border-slate-200 px-3 text-sm bg-white">
+                        {MESES.slice(1).map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
+                    </select>
+                    <select value={anio} onChange={(e) => setAnio(Number(e.target.value))}
+                        className="h-10 rounded-lg border border-slate-200 px-3 text-sm bg-white">
+                        {anios.map((a) => <option key={a} value={a}>{a}</option>)}
+                    </select>
+                </div>
+            </div>
+
+            {/* Estado del mes */}
+            <div className={`flex items-center justify-between rounded-xl border p-4 ${cerrado ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`}>
+                <div className="flex items-center gap-2 text-sm">
+                    {cerrado ? <Lock className="h-4 w-4 text-green-600" /> : <Pencil className="h-4 w-4 text-amber-600" />}
+                    <span className={cerrado ? 'text-green-700 font-medium' : 'text-amber-700 font-medium'}>
+                        {cerrado
+                            ? `Mes cerrado (${estadoCierre === 'revisado' ? 'revisado por admin' : 'pendiente de revisión'})`
+                            : 'Mes abierto — puedes agregar y editar servicios'}
+                    </span>
+                </div>
+                <span className="text-sm text-slate-500">{servicios.length} servicio(s)</span>
+            </div>
+
+            {/* Acciones */}
+            {!cerrado && (
+                <div className="flex gap-2">
+                    <button onClick={abrirNuevo}
+                        className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition-colors">
+                        <Plus size={16} /> Agregar servicio
+                    </button>
+                    {servicios.length > 0 && (
+                        <button onClick={cerrarMes}
+                            className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors">
+                            <CheckCircle2 size={16} /> Cerrar mes
+                        </button>
+                    )}
+                </div>
+            )}
+
+            {/* Tabla */}
+            {loading ? (
+                <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-brand-500" /></div>
+            ) : servicios.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-300 py-12 text-center text-slate-400 text-sm">
+                    No hay servicios registrados en {MESES[mes]} {anio}.
+                </div>
+            ) : (
+                <div className="overflow-x-auto rounded-xl border border-slate-200">
+                    <table className="min-w-full text-sm">
+                        <thead className="bg-slate-50 text-slate-600">
+                            <tr>
+                                <th className="px-3 py-2 text-left font-semibold">Usuario</th>
+                                <th className="px-3 py-2 text-left font-semibold">Documento</th>
+                                <th className="px-3 py-2 text-left font-semibold">ARL</th>
+                                <th className="px-3 py-2 text-left font-semibold">Servicio</th>
+                                <th className="px-3 py-2 text-left font-semibold">Autorización</th>
+                                <th className="px-3 py-2 text-left font-semibold">F. Realización</th>
+                                <th className="px-3 py-2 text-left font-semibold">Carpeta</th>
+                                <th className="px-3 py-2 text-center font-semibold">Cant.</th>
+                                {!cerrado && <th className="px-3 py-2 text-center font-semibold">Acciones</th>}
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {servicios.map((s) => (
+                                <tr key={s.id} className="hover:bg-slate-50">
+                                    <td className="px-3 py-2">{s.nombre_usuario}</td>
+                                    <td className="px-3 py-2">{s.tipo_documento} {s.numero_documento}</td>
+                                    <td className="px-3 py-2">{s.arl}</td>
+                                    <td className="px-3 py-2">{s.servicio}</td>
+                                    <td className="px-3 py-2">{s.numero_autorizacion}</td>
+                                    <td className="px-3 py-2">{s.fecha_realizacion}</td>
+                                    <td className="px-3 py-2">{s.carpeta_cargue}</td>
+                                    <td className="px-3 py-2 text-center">{s.cantidad}</td>
+                                    {!cerrado && (
+                                        <td className="px-3 py-2">
+                                            <div className="flex items-center justify-center gap-1">
+                                                <button onClick={() => abrirEditar(s)} className="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded">
+                                                    <Pencil size={14} />
+                                                </button>
+                                                <button onClick={() => eliminar(s.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded">
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {/* Modal form */}
+            {showForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setShowForm(false)}>
+                    <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-bold text-slate-800">{editId ? 'Editar servicio' : 'Nuevo servicio'}</h2>
+                            <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Field label="Nombre del usuario" className="md:col-span-2">
+                                <input value={form.nombre_usuario} onChange={(e) => setForm({ ...form, nombre_usuario: e.target.value })} className={inputCls} />
+                            </Field>
+                            <Field label="Tipo de documento">
+                                <select value={form.tipo_documento} onChange={(e) => setForm({ ...form, tipo_documento: e.target.value })} className={inputCls}>
+                                    <option value="">Seleccione...</option>
+                                    {TIPOS_DOCUMENTO.map((t) => <option key={t} value={t}>{t}</option>)}
+                                </select>
+                            </Field>
+                            <Field label="N° de documento">
+                                <input value={form.numero_documento} onChange={(e) => setForm({ ...form, numero_documento: e.target.value })} className={inputCls} />
+                            </Field>
+                            <Field label="ARL">
+                                <select value={form.arl} onChange={(e) => setForm({ ...form, arl: e.target.value })} className={inputCls}>
+                                    <option value="">Seleccione...</option>
+                                    {ARLS.map((a) => <option key={a} value={a}>{a}</option>)}
+                                </select>
+                            </Field>
+                            <Field label="Servicio">
+                                <select value={form.servicio} onChange={(e) => setForm({ ...form, servicio: e.target.value })} className={inputCls}>
+                                    <option value="">Seleccione...</option>
+                                    {SERVICIOS.map((s) => <option key={s} value={s}>{s}</option>)}
+                                </select>
+                            </Field>
+                            <Field label="N° de autorización">
+                                <input value={form.numero_autorizacion} onChange={(e) => setForm({ ...form, numero_autorizacion: e.target.value })} className={inputCls} />
+                            </Field>
+                            <Field label="Cantidad">
+                                <input type="number" min={1} value={form.cantidad} onChange={(e) => setForm({ ...form, cantidad: Number(e.target.value) })} className={inputCls} />
+                            </Field>
+                            <Field label="Fecha de realización">
+                                <input type="date" value={form.fecha_realizacion} onChange={(e) => setForm({ ...form, fecha_realizacion: e.target.value })} className={inputCls} />
+                            </Field>
+                            <Field label="Fecha de autorización">
+                                <input type="date" value={form.fecha_autorizacion} onChange={(e) => setForm({ ...form, fecha_autorizacion: e.target.value })} className={inputCls} />
+                            </Field>
+                            <Field label="Carpeta de cargue" className="md:col-span-2">
+                                <input value={form.carpeta_cargue} onChange={(e) => setForm({ ...form, carpeta_cargue: e.target.value })} placeholder="Ej: CI - 49306697 ó RHB" className={inputCls} />
+                            </Field>
+                        </div>
+                        <div className="flex justify-end gap-2 mt-6">
+                            <button onClick={() => setShowForm(false)} className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">Cancelar</button>
+                            <button onClick={guardar} disabled={saving}
+                                className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50">
+                                {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+const inputCls = "h-10 w-full rounded-lg border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400";
+
+function Field({ label, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {
+    return (
+        <div className={className}>
+            <label className="block text-xs font-medium text-slate-500 mb-1">{label}</label>
+            {children}
+        </div>
+    );
+}

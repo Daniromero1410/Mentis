@@ -7,7 +7,7 @@ import { toast } from '@/components/ui/sileo-toast';
 
 interface ModuleGuardProps {
     children: React.ReactNode;
-    requiredModule: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental';
+    requiredModule: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental' | 'cuentas';
 }
 
 export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
@@ -32,7 +32,9 @@ export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
                 ? user.acceso_pruebas_trabajo
                 : requiredModule === 'formatos_to'
                     ? user.acceso_formatos_to
-                    : user.acceso_analisis_exigencias_mental;
+                    : requiredModule === 'cuentas'
+                        ? user.acceso_cuentas
+                        : user.acceso_analisis_exigencias_mental;
 
         if (!hasAccess) {
             toast.error('No tienes acceso a este módulo');
@@ -59,7 +61,9 @@ export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
                 ? user.acceso_pruebas_trabajo
                 : requiredModule === 'formatos_to'
                     ? user.acceso_formatos_to
-                    : user.acceso_analisis_exigencias_mental;
+                    : requiredModule === 'cuentas'
+                        ? user.acceso_cuentas
+                        : user.acceso_analisis_exigencias_mental;
 
         if (!hasAccess) return null;
     }

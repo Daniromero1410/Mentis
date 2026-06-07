@@ -99,6 +99,17 @@ const menuItems = [
     ],
   },
   {
+    title: 'CUENTAS',
+    items: [
+      {
+        title: 'Cuentas',
+        icon: ClipboardList,
+        href: '/dashboard/cuentas',
+        requiresAccess: 'cuentas' as const,
+      },
+    ],
+  },
+  {
     title: 'REPORTES',
     items: [
       { title: 'Descargas', icon: Download, href: '/dashboard/reportes' },
@@ -113,7 +124,7 @@ const menuItems = [
   },
 ];
 
-const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental' | 'valoracion_ocupacional') => {
+const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_trabajo' | 'formatos_to' | 'analisis_exigencias_mental' | 'valoracion_ocupacional' | 'cuentas') => {
   if (!accessType) return true;
   if (!user) return false;
   if (user.rol === 'admin') return true;
@@ -122,6 +133,7 @@ const hasModuleAccess = (user: any, accessType?: 'valoraciones' | 'pruebas_traba
   if (accessType === 'formatos_to') return user.acceso_formatos_to !== false;
   if (accessType === 'analisis_exigencias_mental') return user.acceso_analisis_exigencias_mental !== false;
   if (accessType === 'valoracion_ocupacional') return user.acceso_formatos_to !== false;
+  if (accessType === 'cuentas') return user.acceso_cuentas === true;
   return true;
 };
 

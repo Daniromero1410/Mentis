@@ -14,6 +14,8 @@ interface User {
   acceso_pruebas_trabajo: boolean;
   acceso_formatos_to: boolean;
   acceso_analisis_exigencias_mental: boolean;
+  acceso_valoracion_ocupacional?: boolean;
+  acceso_cuentas?: boolean;
 }
 
 interface AuthContextType {
