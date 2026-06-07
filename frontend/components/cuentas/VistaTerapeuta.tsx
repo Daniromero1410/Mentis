@@ -81,7 +81,13 @@ export function VistaTerapeuta() {
         if (!form.servicio) { toast.error('Seleccione el servicio'); return; }
         setSaving(true);
         try {
-            const payload = { ...form, cantidad: Number(form.cantidad) || 1 };
+            const payload = {
+                ...form,
+                cantidad: Number(form.cantidad) || 1,
+                // Las fechas vacías deben ir como null (no como string vacío)
+                fecha_realizacion: form.fecha_realizacion || null,
+                fecha_autorizacion: form.fecha_autorizacion || null,
+            };
             if (editId) {
                 await api.put(`/cuentas/mis-servicios/${editId}`, payload);
                 toast.success('Servicio actualizado');
