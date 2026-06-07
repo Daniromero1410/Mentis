@@ -35,21 +35,12 @@ allowed_origins = list(set(origins))
 
 print(f"✅ CORS CONFIGURADO CON ORIGENES ACTUALIZADOS: {allowed_origins}")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 # ── Protección de archivos sensibles (PDFs médicos, firmas, evidencias) ──
 # Los directorios /pdfs y /uploads contienen información clínica. Antes se
 # servían públicamente; ahora exigen un token JWT válido, aceptado por header
 # Authorization (descargas con fetch) o por query ?token= (para <img>/window.open).
-@app.middleware("http")
-async def proteger_archivos(request, call_next):
+async def _proteger_archivos(request, call_next):
     from fastapi.responses import JSONResponse
     from app.services.auth import decode_token
 
@@ -67,6 +58,21 @@ async def proteger_archivos(request, call_next):
                 content={"detail": "No autorizado para acceder a este archivo"},
             )
     return await call_next(request)
+
+
+# IMPORTANTE: el orden importa. El último middleware agregado es el MÁS EXTERNO.
+# CORS debe quedar de último para que TODAS las respuestas (incluidas las 401
+# del middleware de archivos) lleven los headers CORS y el navegador no reporte
+# "Load Failed".
+from starlette.middleware.base import BaseHTTPMiddleware
+app.add_middleware(BaseHTTPMiddleware, dispatch=_proteger_archivos)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Incluir routers

@@ -10,10 +10,8 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Mentis - Sistema Integral de Gestión de Reintegro Laboral Efectivo',
   description: 'Sistema Integral de Gestión de Reintegro Laboral Efectivo',
-  icons: {
-    icon: '/images/mentis-mini.svg',
-    shortcut: '/images/mentis-mini.svg',
-  },
+  // El favicon lo provee automáticamente app/icon.svg (Next.js App Router),
+  // que es más compatible entre navegadores que servirlo desde /public.
 };
 
 import { Toaster } from 'sileo';
