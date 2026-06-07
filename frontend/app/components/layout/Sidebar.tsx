@@ -105,7 +105,6 @@ const menuItems = [
         title: 'Cuentas',
         icon: ClipboardList,
         href: '/dashboard/cuentas',
-        requiresAccess: 'cuentas' as const,
       },
     ],
   },

@@ -108,7 +108,7 @@ def listar_valoraciones(
     count_query = select(Valoracion)
 
     # Si no es admin o supervisor, solo ve las suyas
-    if current_user.rol == "psicologo":
+    if current_user.rol not in ("admin", "supervisor"):
         count_query = count_query.where(Valoracion.creado_por == current_user.id)
 
     # Filtro por estado
@@ -122,7 +122,7 @@ def listar_valoraciones(
     query = select(Valoracion).order_by(Valoracion.created_at.desc())
 
     # Si no es admin o supervisor, solo ve las suyas
-    if current_user.rol == "psicologo":
+    if current_user.rol not in ("admin", "supervisor"):
         query = query.where(Valoracion.creado_por == current_user.id)
 
     # Filtro por estado
@@ -185,7 +185,7 @@ def obtener_valoracion(
         )
     
     # Verificar permisos
-    if current_user.rol == "psicologo" and valoracion.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and valoracion.creado_por != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permiso para ver esta valoración"
@@ -212,7 +212,7 @@ def finalizar_valoracion(
         )
 
     # Verificar permisos
-    if current_user.rol == "psicologo" and valoracion.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and valoracion.creado_por != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permiso para finalizar esta valoración"
@@ -337,7 +337,7 @@ def actualizar_valoracion(
         )
     
     # Verificar permisos
-    if current_user.rol == "psicologo" and valoracion.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and valoracion.creado_por != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permiso para editar esta valoración"
@@ -515,7 +515,7 @@ def descargar_excel(
         )
 
     # Verificar permisos
-    if current_user.rol == "psicologo" and valoracion.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and valoracion.creado_por != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permiso para descargar esta valoración"
@@ -613,7 +613,7 @@ def descargar_pdf(
         )
 
     # Verificar permisos
-    if current_user.rol == "psicologo" and valoracion.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and valoracion.creado_por != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permiso para descargar esta valoración"

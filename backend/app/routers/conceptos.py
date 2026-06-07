@@ -72,7 +72,7 @@ def generar_concepto_endpoint(
             )
 
         # Verificar permisos
-        if current_user.rol == "psicologo" and valoracion.creado_por != current_user.id:
+        if current_user.rol not in ("admin", "supervisor") and valoracion.creado_por != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="No tiene permiso para esta valoración"

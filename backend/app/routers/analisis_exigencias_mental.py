@@ -69,7 +69,7 @@ def generar_concepto_AE(
         if not AE:
             raise HTTPException(status_code=404, detail="AE no encontrada")
 
-        if current_user.rol == "psicologo" and AE.creado_por != current_user.id:
+        if current_user.rol not in ("admin", "supervisor") and AE.creado_por != current_user.id:
             raise HTTPException(status_code=403, detail="Sin permiso")
             
         # Obtener datos de DB
@@ -310,7 +310,7 @@ def obtener_AE(
     if not AE:
         raise HTTPException(status_code=404, detail="AE no encontrada")
     
-    if current_user.rol == "psicologo" and AE.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and AE.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso para ver esta AE")
     
     # Cargar datos relacionados
@@ -372,7 +372,7 @@ def eliminar_AE(
     if not AE:
         raise HTTPException(status_code=404, detail="AE no encontrada")
     
-    if current_user.rol == "psicologo" and AE.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and AE.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso para eliminar esta AE")
     
     # Eliminar datos relacionados en cascada
@@ -529,7 +529,7 @@ def actualizar_AE(
         )
         
     # Verificar permisos
-    if current_user.rol == "psicologo" and AE.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and AE.creado_por != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permiso para editar esta AE"
@@ -695,7 +695,7 @@ def finalizar_AE(
     if not AE:
         raise HTTPException(status_code=404, detail="AE no encontrada")
 
-    if current_user.rol == "psicologo" and AE.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and AE.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso")
 
     # If already completed, just regenerate the PDF
@@ -933,7 +933,7 @@ def descargar_pdf(
     if not AE:
         raise HTTPException(status_code=404, detail="AE no encontrada")
 
-    if current_user.rol == "psicologo" and AE.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and AE.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso")
 
     if AE.estado != EstadoAE.COMPLETADA:
@@ -1056,7 +1056,7 @@ def generar_concepto_AE(
         if not AE:
             raise HTTPException(status_code=404, detail="AE no encontrada")
 
-        if current_user.rol == "psicologo" and AE.creado_por != current_user.id:
+        if current_user.rol not in ("admin", "supervisor") and AE.creado_por != current_user.id:
             raise HTTPException(status_code=403, detail="Sin permiso")
             
         # Obtener datos de DB

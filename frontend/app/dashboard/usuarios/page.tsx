@@ -551,7 +551,6 @@ export default function UsuariosPage() {
                                     { id: 'acceso_pruebas_trabajo', key: 'acceso_pruebas_trabajo', label: 'Pruebas de Trabajo', icon: Briefcase, color: 'text-brand-600 bg-brand-50' },
                                     { id: 'acceso_formatos_to', key: 'acceso_formatos_to', label: 'Formatos TO', icon: FileText, color: 'text-teal-600 bg-teal-50' },
                                     { id: 'acceso_analisis_exigencias_mental', key: 'acceso_analisis_exigencias_mental', label: 'Análisis Exigencias Mental', icon: Activity, color: 'text-yellow-600 bg-yellow-50' },
-                                    { id: 'acceso_cuentas', key: 'acceso_cuentas', label: 'Cuentas', icon: FileText, color: 'text-indigo-600 bg-indigo-50' },
                                 ] as const).map((mod) => {
                                     const MIcon = mod.icon;
                                     const checked = formData[mod.key as keyof UsuarioForm] as boolean;

@@ -33,7 +33,7 @@ export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
                 : requiredModule === 'formatos_to'
                     ? user.acceso_formatos_to
                     : requiredModule === 'cuentas'
-                        ? user.acceso_cuentas
+                        ? true // Cuentas está disponible para todos los usuarios
                         : user.acceso_analisis_exigencias_mental;
 
         if (!hasAccess) {
@@ -62,7 +62,7 @@ export function ModuleGuard({ children, requiredModule }: ModuleGuardProps) {
                 : requiredModule === 'formatos_to'
                     ? user.acceso_formatos_to
                     : requiredModule === 'cuentas'
-                        ? user.acceso_cuentas
+                        ? true // Cuentas está disponible para todos los usuarios
                         : user.acceso_analisis_exigencias_mental;
 
         if (!hasAccess) return null;

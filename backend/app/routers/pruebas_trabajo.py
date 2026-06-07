@@ -68,7 +68,7 @@ def generar_concepto_prueba(
         if not prueba:
             raise HTTPException(status_code=404, detail="Prueba no encontrada")
 
-        if current_user.rol == "psicologo" and prueba.creado_por != current_user.id:
+        if current_user.rol not in ("admin", "supervisor") and prueba.creado_por != current_user.id:
             raise HTTPException(status_code=403, detail="Sin permiso")
             
         # Obtener datos de DB
@@ -309,7 +309,7 @@ def obtener_prueba(
     if not prueba:
         raise HTTPException(status_code=404, detail="Prueba no encontrada")
     
-    if current_user.rol == "psicologo" and prueba.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and prueba.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso para ver esta prueba")
     
     # Cargar datos relacionados
@@ -371,7 +371,7 @@ def eliminar_prueba(
     if not prueba:
         raise HTTPException(status_code=404, detail="Prueba no encontrada")
     
-    if current_user.rol == "psicologo" and prueba.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and prueba.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso para eliminar esta prueba")
     
     # Eliminar datos relacionados en cascada
@@ -528,7 +528,7 @@ def actualizar_prueba(
         )
         
     # Verificar permisos
-    if current_user.rol == "psicologo" and prueba.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and prueba.creado_por != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No tiene permiso para editar esta prueba"
@@ -694,7 +694,7 @@ def finalizar_prueba(
     if not prueba:
         raise HTTPException(status_code=404, detail="Prueba no encontrada")
 
-    if current_user.rol == "psicologo" and prueba.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and prueba.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso")
 
     # If already completed, just regenerate the PDF
@@ -786,7 +786,7 @@ def descargar_pdf(
     if not prueba:
         raise HTTPException(status_code=404, detail="Prueba no encontrada")
 
-    if current_user.rol == "psicologo" and prueba.creado_por != current_user.id:
+    if current_user.rol not in ("admin", "supervisor") and prueba.creado_por != current_user.id:
         raise HTTPException(status_code=403, detail="Sin permiso")
 
     if prueba.estado != EstadoPrueba.COMPLETADA:
@@ -909,7 +909,7 @@ def generar_concepto_prueba(
         if not prueba:
             raise HTTPException(status_code=404, detail="Prueba no encontrada")
 
-        if current_user.rol == "psicologo" and prueba.creado_por != current_user.id:
+        if current_user.rol not in ("admin", "supervisor") and prueba.creado_por != current_user.id:
             raise HTTPException(status_code=403, detail="Sin permiso")
             
         # Obtener datos de DB
