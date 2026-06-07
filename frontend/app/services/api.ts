@@ -1,5 +1,19 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app';
 
+/**
+ * Construye la URL de un archivo protegido (/pdfs, /uploads) añadiendo el token
+ * de sesión como query param, para que <img> y window.open puedan acceder a los
+ * archivos que ahora requieren autenticación.
+ */
+export function fileUrl(path: string | null | undefined): string {
+  if (!path) return '';
+  if (path.startsWith('http') || path.startsWith('data:') || path.startsWith('blob:')) return path;
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+  const full = path.startsWith('/') ? `${API_URL}${path}` : `${API_URL}/${path}`;
+  const sep = full.includes('?') ? '&' : '?';
+  return `${full}${sep}token=${token ?? ''}`;
+}
+
 class ApiService {
   private getToken(): string | null {
     if (typeof window !== 'undefined') {

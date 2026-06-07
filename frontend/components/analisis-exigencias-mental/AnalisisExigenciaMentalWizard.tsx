@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { api } from '@/app/services/api';
+import { api, fileUrl } from '@/app/services/api';
 import { toast } from '../ui/sileo-toast';
 import { cn } from '@/lib/utils';
 import {
@@ -1802,7 +1802,7 @@ export function AnalisisExigenciaMentalWizard({ id, mode = 'create', readOnly = 
             <div className="flex flex-col sm:flex-row justify-center gap-3">
               {downloadUrls?.pdf_url && (
                 <a
-                  href={downloadUrls.pdf_url.startsWith('http') ? downloadUrls.pdf_url : `${process.env.NEXT_PUBLIC_API_URL || 'https://mentis-production.up.railway.app'}${downloadUrls.pdf_url}`}
+                  href={fileUrl(downloadUrls.pdf_url)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

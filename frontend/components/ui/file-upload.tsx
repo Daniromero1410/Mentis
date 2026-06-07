@@ -4,7 +4,7 @@ import { useState, useRef, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload, X, FileCheck, Loader2, Eye } from 'lucide-react';
 import { toast } from './sileo-toast';
-import { api } from '@/app/services/api';
+import { api, fileUrl } from '@/app/services/api';
 import Image from 'next/image';
 
 interface FileUploadProps {
@@ -77,22 +77,22 @@ export function FileUpload({
     }
   };
 
-  const handleView = () => {
-    if (previewUrl) {
-      window.open(previewUrl, '_blank');
-    }
-  };
-
   const isImage = previewUrl && (
     previewUrl.startsWith('data:image') ||
     /\.(jpg|jpeg|png|gif|webp)$/i.test(previewUrl) ||
     previewUrl.includes('/uploads/') // Assume uploads are images for now unless pdf specified
   );
 
-  // Resolve full URL for display if it's a relative path from backend
+  // Resolve full URL for display (añade token para archivos protegidos del backend)
   const displayUrl = previewUrl?.startsWith('/')
-    ? `${process.env.NEXT_PUBLIC_API_URL}${previewUrl}`
+    ? fileUrl(previewUrl)
     : previewUrl;
+
+  const handleView = () => {
+    if (displayUrl) {
+      window.open(displayUrl, '_blank');
+    }
+  };
 
   return (
     <div className={`space-y-3 ${className}`}>

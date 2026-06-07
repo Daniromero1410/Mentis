@@ -110,30 +110,45 @@ def get_me(current_user: Usuario = Depends(get_current_user)):
 
 @router.post("/crear-admin-inicial", response_model=MessageResponse)
 def crear_admin_inicial(session: Session = Depends(get_session)):
-    """Crea el usuario administrador inicial (solo funciona si no hay usuarios)"""
+    """Crea el usuario administrador inicial (solo funciona si no hay usuarios).
+    La contraseña se toma de INITIAL_ADMIN_PASSWORD o se genera aleatoria y se
+    muestra SOLO en los logs del servidor (nunca en la respuesta HTTP)."""
+    import os
+    import secrets
+
     # Verificar si ya hay usuarios
     statement = select(Usuario)
     users = session.exec(statement).first()
-    
+
     if users:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Ya existen usuarios en el sistema"
         )
-    
-    # Crear admin inicial
+
+    email = os.environ.get("INITIAL_ADMIN_EMAIL", "danielromero.software@gmail.com")
+    env_password = os.environ.get("INITIAL_ADMIN_PASSWORD")
+    password = env_password or secrets.token_urlsafe(12)
+
     admin = Usuario(
-        email="danielromero.software@gmail.com",
+        email=email,
         nombre="Administrador",
         apellido="Sistema",
         rol=RolUsuario.ADMIN,
-        hashed_password=get_password_hash("admin123")
+        hashed_password=get_password_hash(password)
     )
-    
+
     session.add(admin)
     session.commit()
-    
-    return MessageResponse(message="Administrador creado. Email: danielromero.software@gmail.com, Password: admin123")
+
+    # Credenciales solo por log del servidor, no en la respuesta HTTP
+    print(f"[ADMIN INICIAL] Administrador creado. Email: {email}")
+    if not env_password:
+        print(f"[ADMIN INICIAL] Contraseña temporal: {password}  (cámbiela tras iniciar sesión)")
+
+    return MessageResponse(
+        message="Administrador creado. Revise los logs del servidor para la contraseña temporal y cámbiela de inmediato."
+    )
 
 # Password Reset Endpoints
 

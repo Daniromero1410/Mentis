@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
+import { fileUrl } from '@/app/services/api';
 import { toast } from '../ui/sileo-toast';
 import {
     Save, ChevronLeft, ChevronRight, Download, Loader2,
@@ -637,7 +638,7 @@ export function PruebaTrabajoTOWizard({ mode, id, readOnly = false }: PruebaTrab
                 <div className="flex items-center gap-3">
                     {downloadUrl && (
                         <a
-                            href={`${API_URL}${downloadUrl}`}
+                            href={fileUrl(downloadUrl)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100 transition-colors"

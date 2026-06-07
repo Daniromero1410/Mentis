@@ -43,6 +43,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# ── Protección de archivos sensibles (PDFs médicos, firmas, evidencias) ──
+# Los directorios /pdfs y /uploads contienen información clínica. Antes se
+# servían públicamente; ahora exigen un token JWT válido, aceptado por header
+# Authorization (descargas con fetch) o por query ?token= (para <img>/window.open).
+@app.middleware("http")
+async def proteger_archivos(request, call_next):
+    from fastapi.responses import JSONResponse
+    from app.services.auth import decode_token
+
+    path = request.url.path
+    if request.method == "GET" and (path.startswith("/pdfs/") or path.startswith("/uploads/")):
+        token = request.query_params.get("token")
+        if not token:
+            auth_header = request.headers.get("authorization", "")
+            if auth_header.lower().startswith("bearer "):
+                token = auth_header[7:]
+        payload = decode_token(token) if token else None
+        if not payload or not payload.get("sub"):
+            return JSONResponse(
+                status_code=401,
+                content={"detail": "No autorizado para acceder a este archivo"},
+            )
+    return await call_next(request)
+
+
 # Incluir routers
 app.include_router(auth.router)
 app.include_router(valoraciones.router)

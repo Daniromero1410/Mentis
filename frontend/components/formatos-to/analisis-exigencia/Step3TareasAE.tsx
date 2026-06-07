@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/sileo-toast';
 import { useAuth } from '@/app/context/AuthContext';
+import { fileUrl } from '@/app/services/api';
 
 interface Step3AEProps {
     tareas: any[];
@@ -166,7 +167,7 @@ export const Step3TareasAE = ({ tareas, setTareas, readOnly }: Step3AEProps) => 
                                         tarea.registro_fotografico.split(';').filter((url: string) => url.trim() !== '').map((url: string, imgIdx: number) => (
                                             <div key={imgIdx} className="relative w-full aspect-[4/3] rounded-md overflow-hidden bg-slate-100 border border-slate-200 group">
                                                 <img
-                                                    src={`${API_URL || ''}${url}`}
+                                                    src={fileUrl(url)}
                                                     alt={`Evidencia ${imgIdx + 1}`}
                                                     className="w-full h-full object-contain"
                                                     onError={(e) => {
