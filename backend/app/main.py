@@ -74,7 +74,40 @@ def on_startup():
     # Ejecutar migraciones automáticas antes de crear tablas nuevas
     _run_migrations()
     create_db_and_tables()
+    _seed_catalogo_servicios()
     print("Base de datos inicializada correctamente")
+
+
+def _seed_catalogo_servicios():
+    """Inserta los servicios por defecto si el catálogo está vacío."""
+    from sqlmodel import Session, select
+    from app.database.connection import engine
+    from app.models.cuenta import CatalogoServicio
+
+    servicios_default = [
+        "CONSULTA 1ER VEZ TERAPIA OCUPACIONAL",
+        "VALORACIÓN OCUPACIONAL",
+        "PRUEBA DE TRABAJO",
+        "ANÁLISIS DE EXIGENCIA",
+        "RECOMENDACIONES",
+        "SEGUIMIENTO A RECOMENDACIONES",
+        "NOTIFICACIÓN REINTEGRO EN PLENO",
+        "PERFIL OCUPACIONAL",
+        "COMITÉ",
+        "INTERCONSULTA POR TO",
+        "TERAPIA OCUPACIONAL",
+    ]
+    try:
+        with Session(engine) as session:
+            existe = session.exec(select(CatalogoServicio).limit(1)).first()
+            if existe:
+                return
+            for i, nombre in enumerate(servicios_default):
+                session.add(CatalogoServicio(nombre=nombre, activo=True, orden=i))
+            session.commit()
+            print("[SEED] Catálogo de servicios inicializado")
+    except Exception as e:
+        print(f"[SEED] Aviso: {e}")
 
 
 def _run_migrations():

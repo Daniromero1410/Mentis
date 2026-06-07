@@ -64,6 +64,7 @@ from app.models.cuenta import (
     ServicioCuenta,
     CierreMensual,
     TarifaCuenta,
+    CatalogoServicio,
     Notificacion,
     EstadoCierre,
 )

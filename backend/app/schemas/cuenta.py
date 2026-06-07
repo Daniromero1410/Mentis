@@ -94,6 +94,29 @@ class TarifaRead(TarifaCreate):
         from_attributes = True
 
 
+# ── Catálogo de servicios ────────────────────────────────────────────
+class CatalogoServicioCreate(BaseModel):
+    nombre: str
+    activo: bool = True
+    orden: int = 0
+
+
+class CatalogoServicioUpdate(BaseModel):
+    nombre: Optional[str] = None
+    activo: Optional[bool] = None
+    orden: Optional[int] = None
+
+
+class CatalogoServicioRead(BaseModel):
+    id: int
+    nombre: str
+    activo: bool
+    orden: int
+
+    class Config:
+        from_attributes = True
+
+
 # ── Notificaciones ───────────────────────────────────────────────────
 class NotificacionRead(BaseModel):
     id: int

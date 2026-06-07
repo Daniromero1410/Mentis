@@ -84,6 +84,19 @@ class TarifaCuenta(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+# ── Catálogo de servicios (editable por el admin) ────────────────────
+class CatalogoServicio(SQLModel, table=True):
+    __tablename__ = "catalogo_servicios"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    nombre: str = Field(index=True)
+    activo: bool = Field(default=True)
+    orden: int = Field(default=0)
+
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
 # ── Notificaciones (genérico, reutilizable) ──────────────────────────
 class Notificacion(SQLModel, table=True):
     __tablename__ = "notificaciones"

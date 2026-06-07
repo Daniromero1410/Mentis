@@ -47,8 +47,15 @@ export function VistaTerapeuta() {
     const [confirmCerrar, setConfirmCerrar] = useState(false);
     const [confirmEliminar, setConfirmEliminar] = useState<{ open: boolean; id: number | null }>({ open: false, id: null });
     const [procesando, setProcesando] = useState(false);
+    const [serviciosCatalogo, setServiciosCatalogo] = useState<string[]>(SERVICIOS);
 
     const cerrado = estadoCierre === 'cerrado' || estadoCierre === 'revisado';
+
+    useEffect(() => {
+        api.get<{ id: number; nombre: string }[]>('/cuentas/servicios-catalogo')
+            .then((items) => { if (items.length) setServiciosCatalogo(items.map((s) => s.nombre)); })
+            .catch(() => {});
+    }, []);
 
     const cargar = useCallback(async () => {
         setLoading(true);
@@ -291,7 +298,7 @@ export function VistaTerapeuta() {
                                 <Select value={form.servicio} onValueChange={(v) => setForm({ ...form, servicio: v })}>
                                     <SelectTrigger className={modalTriggerCls}><SelectValue placeholder="Seleccione..." /></SelectTrigger>
                                     <SelectContent>
-                                        {SERVICIOS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                                        {serviciosCatalogo.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
                             </Field>

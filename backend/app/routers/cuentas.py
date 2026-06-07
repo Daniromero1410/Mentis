@@ -16,13 +16,14 @@ import tempfile
 from app.database.connection import get_session
 from app.models.usuario import Usuario
 from app.models.cuenta import (
-    ServicioCuenta, CierreMensual, TarifaCuenta, Notificacion, EstadoCierre
+    ServicioCuenta, CierreMensual, TarifaCuenta, CatalogoServicio, Notificacion, EstadoCierre
 )
 from app.schemas.cuenta import (
     ServicioCuentaCreate, ServicioCuentaUpdate,
     ServicioCuentaTerapeutaRead, ServicioCuentaAdminRead,
     PrecioUpdate, CierreRead, TarifaCreate, TarifaRead,
     ConsolidadoAdminResponse, TotalesPorArl,
+    CatalogoServicioCreate, CatalogoServicioUpdate, CatalogoServicioRead,
 )
 from app.services.auth import get_current_user, get_current_admin
 
@@ -644,5 +645,91 @@ def eliminar_tarifa(
     if not tarifa:
         raise HTTPException(404, "Tarifa no encontrada")
     session.delete(tarifa)
+    session.commit()
+    return None
+
+
+# ═════════════════════════════════════════════════════════════════════
+# CATÁLOGO DE SERVICIOS (lectura para todos, edición solo admin)
+# ═════════════════════════════════════════════════════════════════════
+@router.get("/servicios-catalogo", response_model=List[CatalogoServicioRead])
+def listar_servicios_catalogo(
+    session: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user),
+):
+    """Servicios activos — disponibles para todos los usuarios."""
+    items = session.exec(
+        select(CatalogoServicio).where(CatalogoServicio.activo == True)  # noqa: E712
+        .order_by(CatalogoServicio.orden, CatalogoServicio.nombre)
+    ).all()
+    return list(items)
+
+
+@router.get("/admin/servicios-catalogo", response_model=List[CatalogoServicioRead])
+def listar_servicios_catalogo_admin(
+    session: Session = Depends(get_session),
+    admin: Usuario = Depends(get_current_admin),
+):
+    """Todos los servicios (activos e inactivos) para gestión del admin."""
+    items = session.exec(
+        select(CatalogoServicio).order_by(CatalogoServicio.orden, CatalogoServicio.nombre)
+    ).all()
+    return list(items)
+
+
+@router.post("/admin/servicios-catalogo", response_model=CatalogoServicioRead, status_code=201)
+def crear_servicio_catalogo(
+    data: CatalogoServicioCreate,
+    session: Session = Depends(get_session),
+    admin: Usuario = Depends(get_current_admin),
+):
+    nombre = data.nombre.strip()
+    if not nombre:
+        raise HTTPException(400, "El nombre es obligatorio")
+    existente = session.exec(
+        select(CatalogoServicio).where(func.lower(CatalogoServicio.nombre) == nombre.lower())
+    ).first()
+    if existente:
+        raise HTTPException(400, "Ya existe un servicio con ese nombre")
+    servicio = CatalogoServicio(nombre=nombre, activo=data.activo, orden=data.orden)
+    session.add(servicio)
+    session.commit()
+    session.refresh(servicio)
+    return servicio
+
+
+@router.put("/admin/servicios-catalogo/{servicio_id}", response_model=CatalogoServicioRead)
+def actualizar_servicio_catalogo(
+    servicio_id: int,
+    data: CatalogoServicioUpdate,
+    session: Session = Depends(get_session),
+    admin: Usuario = Depends(get_current_admin),
+):
+    servicio = session.get(CatalogoServicio, servicio_id)
+    if not servicio:
+        raise HTTPException(404, "Servicio no encontrado")
+    if data.nombre is not None:
+        servicio.nombre = data.nombre.strip()
+    if data.activo is not None:
+        servicio.activo = data.activo
+    if data.orden is not None:
+        servicio.orden = data.orden
+    servicio.updated_at = datetime.utcnow()
+    session.add(servicio)
+    session.commit()
+    session.refresh(servicio)
+    return servicio
+
+
+@router.delete("/admin/servicios-catalogo/{servicio_id}", status_code=204)
+def eliminar_servicio_catalogo(
+    servicio_id: int,
+    session: Session = Depends(get_session),
+    admin: Usuario = Depends(get_current_admin),
+):
+    servicio = session.get(CatalogoServicio, servicio_id)
+    if not servicio:
+        raise HTTPException(404, "Servicio no encontrado")
+    session.delete(servicio)
     session.commit()
     return None

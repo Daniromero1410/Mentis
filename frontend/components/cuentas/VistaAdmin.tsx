@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/app/services/api';
 import { toast } from '@/components/ui/sileo-toast';
-import { Loader2, Wand2, Settings2, Check, X, Plus, Trash2, Users, Download } from 'lucide-react';
+import { Loader2, Wand2, Settings2, Check, X, Plus, Trash2, Users, Download, ListChecks, Pencil } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ARLS, SERVICIOS, MESES, formatCOP } from './constants';
 
@@ -65,6 +65,15 @@ export function VistaAdmin() {
     const [loading, setLoading] = useState(true);
     const [precioEdit, setPrecioEdit] = useState<{ [id: number]: string }>({});
     const [showTarifas, setShowTarifas] = useState(false);
+    const [showServicios, setShowServicios] = useState(false);
+    const [serviciosCatalogo, setServiciosCatalogo] = useState<string[]>(SERVICIOS);
+
+    const cargarCatalogo = useCallback(() => {
+        api.get<{ id: number; nombre: string }[]>('/cuentas/servicios-catalogo')
+            .then((items) => { if (items.length) setServiciosCatalogo(items.map((s) => s.nombre)); })
+            .catch(() => {});
+    }, []);
+    useEffect(() => { cargarCatalogo(); }, [cargarCatalogo]);
 
     const cargar = useCallback(async () => {
         setLoading(true);
@@ -163,6 +172,9 @@ export function VistaAdmin() {
                             {anios.map((a) => <SelectItem key={a} value={String(a)}>{a}</SelectItem>)}
                         </SelectContent>
                     </Select>
+                    <button onClick={() => setShowServicios(true)} className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 h-10 text-sm text-slate-600 hover:bg-slate-50 transition-colors">
+                        <ListChecks size={15} /> Servicios
+                    </button>
                     <button onClick={() => setShowTarifas(true)} className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 h-10 text-sm text-slate-600 hover:bg-slate-50 transition-colors">
                         <Settings2 size={15} /> Tarifas
                     </button>
@@ -174,27 +186,25 @@ export function VistaAdmin() {
 
             {/* Cierres por terapeuta */}
             {cierres.length > 0 && (
-                <div className="rounded-xl border border-slate-200 p-4">
-                    <div className="flex items-center gap-2 mb-3 text-sm font-semibold text-slate-700">
+                <div className="overflow-hidden rounded-2xl shadow-sm anim-fade-in-up" style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}>
+                    <div className="flex items-center gap-2 px-5 py-3 text-sm font-semibold text-[#ffc600]">
                         <Users size={16} /> Estado de cierres del mes
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 px-5 pb-5">
                         {cierres.map((c) => (
-                            <div key={c.id} className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs ${
-                                c.estado === 'cerrado' ? 'border-amber-200 bg-amber-50' :
-                                c.estado === 'revisado' ? 'border-green-200 bg-green-50' : 'border-slate-200 bg-slate-50'}`}>
-                                <span className="font-medium text-slate-700">{c.terapeuta_nombre}</span>
-                                <span className="text-slate-400">({c.total_servicios})</span>
-                                <span className={`rounded px-1.5 py-0.5 font-medium ${
-                                    c.estado === 'cerrado' ? 'bg-amber-100 text-amber-700' :
-                                    c.estado === 'revisado' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                            <div key={c.id} className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-xs backdrop-blur-sm ring-1 ring-white/15">
+                                <span className="font-semibold text-white">{c.terapeuta_nombre}</span>
+                                <span className="text-white/50">({c.total_servicios})</span>
+                                <span className={`rounded-full px-2 py-0.5 font-medium ${
+                                    c.estado === 'cerrado' ? 'bg-amber-400/90 text-amber-950' :
+                                    c.estado === 'revisado' ? 'bg-green-400/90 text-green-950' : 'bg-white/20 text-white'}`}>
                                     {c.estado}
                                 </span>
                                 {c.estado === 'cerrado' && (
-                                    <button onClick={() => cambiarEstadoCierre(c.id, 'revisado')} title="Marcar revisado" className="text-green-600 hover:text-green-800"><Check size={14} /></button>
+                                    <button onClick={() => cambiarEstadoCierre(c.id, 'revisado')} title="Marcar revisado" className="text-green-300 hover:text-white transition-colors"><Check size={14} /></button>
                                 )}
                                 {c.estado !== 'abierto' && (
-                                    <button onClick={() => cambiarEstadoCierre(c.id, 'abierto')} title="Reabrir" className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
+                                    <button onClick={() => cambiarEstadoCierre(c.id, 'abierto')} title="Reabrir" className="text-white/50 hover:text-white transition-colors"><X size={14} /></button>
                                 )}
                             </div>
                         ))}
@@ -322,7 +332,8 @@ export function VistaAdmin() {
                 </>
             )}
 
-            {showTarifas && <ModalTarifas onClose={() => { setShowTarifas(false); cargar(); }} />}
+            {showTarifas && <ModalTarifas servicios={serviciosCatalogo} onClose={() => { setShowTarifas(false); cargar(); }} />}
+            {showServicios && <ModalServicios onClose={() => { setShowServicios(false); cargarCatalogo(); cargar(); }} />}
         </div>
     );
 }
@@ -339,7 +350,7 @@ function Stat({ label, value, accent = false }: { label: string; value: string; 
 }
 
 // ── Modal de catálogo de tarifas ─────────────────────────────────────
-function ModalTarifas({ onClose }: { onClose: () => void }) {
+function ModalTarifas({ servicios, onClose }: { servicios: string[]; onClose: () => void }) {
     const [tarifas, setTarifas] = useState<Tarifa[]>([]);
     const [loading, setLoading] = useState(true);
     const [nueva, setNueva] = useState({ arl: '', servicio: '', precio_unitario: '' });
@@ -398,7 +409,7 @@ function ModalTarifas({ onClose }: { onClose: () => void }) {
                         <Select value={nueva.servicio} onValueChange={(v) => setNueva({ ...nueva, servicio: v })}>
                             <SelectTrigger className="h-9 w-full rounded-full border-slate-200 text-sm"><SelectValue placeholder="Servicio..." /></SelectTrigger>
                             <SelectContent>
-                                {SERVICIOS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                                {servicios.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
@@ -434,6 +445,120 @@ function ModalTarifas({ onClose }: { onClose: () => void }) {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+// ── Modal de gestión del catálogo de servicios ───────────────────────
+interface ServicioCat { id: number; nombre: string; activo: boolean; orden: number; }
+
+function ModalServicios({ onClose }: { onClose: () => void }) {
+    const [items, setItems] = useState<ServicioCat[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [nuevo, setNuevo] = useState('');
+    const [editId, setEditId] = useState<number | null>(null);
+    const [editNombre, setEditNombre] = useState('');
+
+    const cargar = async () => {
+        setLoading(true);
+        try {
+            setItems(await api.get<ServicioCat[]>('/cuentas/admin/servicios-catalogo'));
+        } catch (e: any) {
+            toast.error(e.message || 'Error');
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => { cargar(); }, []);
+
+    const agregar = async () => {
+        if (!nuevo.trim()) { toast.error('Escriba el nombre del servicio'); return; }
+        try {
+            await api.post('/cuentas/admin/servicios-catalogo', { nombre: nuevo.trim(), activo: true, orden: items.length });
+            setNuevo('');
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error');
+        }
+    };
+
+    const guardarEdit = async (id: number) => {
+        if (!editNombre.trim()) return;
+        try {
+            await api.put(`/cuentas/admin/servicios-catalogo/${id}`, { nombre: editNombre.trim() });
+            setEditId(null);
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error');
+        }
+    };
+
+    const toggleActivo = async (s: ServicioCat) => {
+        try {
+            await api.put(`/cuentas/admin/servicios-catalogo/${s.id}`, { activo: !s.activo });
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error');
+        }
+    };
+
+    const eliminar = async (id: number) => {
+        try { await api.delete(`/cuentas/admin/servicios-catalogo/${id}`); cargar(); }
+        catch (e: any) { toast.error(e.message || 'Error'); }
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 anim-backdrop-in" onClick={onClose}>
+            <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl anim-modal-in" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-slate-800">Catálogo de servicios</h2>
+                    <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
+                </div>
+                <p className="text-xs text-slate-500 mb-4">Los servicios activos aparecen disponibles para todos los terapeutas al registrar.</p>
+
+                {/* Nuevo servicio */}
+                <div className="flex gap-2 mb-4">
+                    <input value={nuevo} onChange={(e) => setNuevo(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') agregar(); }}
+                        placeholder="Nombre del nuevo servicio"
+                        className="flex-1 h-10 rounded-full border border-slate-200 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
+                    <button onClick={agregar} className="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-4 h-10 text-sm font-medium text-white hover:bg-brand-600 transition-colors">
+                        <Plus size={16} /> Agregar
+                    </button>
+                </div>
+
+                {loading ? (
+                    <div className="flex justify-center py-6"><Loader2 className="h-6 w-6 animate-spin text-brand-500" /></div>
+                ) : items.length === 0 ? (
+                    <p className="text-center text-sm text-slate-400 py-6">Sin servicios en el catálogo.</p>
+                ) : (
+                    <div className="divide-y divide-slate-100 rounded-xl border border-slate-200">
+                        {items.map((s) => (
+                            <div key={s.id} className="flex items-center gap-2 px-3 py-2.5">
+                                {editId === s.id ? (
+                                    <>
+                                        <input value={editNombre} onChange={(e) => setEditNombre(e.target.value)}
+                                            onKeyDown={(e) => { if (e.key === 'Enter') guardarEdit(s.id); }}
+                                            className="flex-1 h-9 rounded-lg border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" autoFocus />
+                                        <button onClick={() => guardarEdit(s.id)} className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg"><Check size={15} /></button>
+                                        <button onClick={() => setEditId(null)} className="p-1.5 text-slate-400 hover:bg-slate-50 rounded-lg"><X size={15} /></button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className={`flex-1 text-sm ${s.activo ? 'text-slate-700' : 'text-slate-400 line-through'}`}>{s.nombre}</span>
+                                        <button onClick={() => toggleActivo(s)}
+                                            className={`rounded-full px-2 py-0.5 text-xs font-medium transition-colors ${s.activo ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
+                                            {s.activo ? 'Activo' : 'Inactivo'}
+                                        </button>
+                                        <button onClick={() => { setEditId(s.id); setEditNombre(s.nombre); }} className="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg"><Pencil size={14} /></button>
+                                        <button onClick={() => eliminar(s.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
+                                    </>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>
