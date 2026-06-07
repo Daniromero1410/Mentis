@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/app/services/api';
 import { toast } from '@/components/ui/sileo-toast';
 import { Plus, Trash2, Save, Lock, Loader2, CheckCircle2, Pencil, X } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ARLS, SERVICIOS, TIPOS_DOCUMENTO, MESES } from './constants';
 
 interface Servicio {
@@ -130,14 +131,18 @@ export function VistaTerapeuta() {
                     <p className="text-sm text-slate-500">Registra los servicios prestados durante el mes</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <select value={mes} onChange={(e) => setMes(Number(e.target.value))}
-                        className="h-10 rounded-lg border border-slate-200 px-3 text-sm bg-white">
-                        {MESES.slice(1).map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
-                    </select>
-                    <select value={anio} onChange={(e) => setAnio(Number(e.target.value))}
-                        className="h-10 rounded-lg border border-slate-200 px-3 text-sm bg-white">
-                        {anios.map((a) => <option key={a} value={a}>{a}</option>)}
-                    </select>
+                    <Select value={String(mes)} onValueChange={(v) => setMes(Number(v))}>
+                        <SelectTrigger className={triggerCls}><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {MESES.slice(1).map((m, i) => <SelectItem key={i + 1} value={String(i + 1)}>{m}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                    <Select value={String(anio)} onValueChange={(v) => setAnio(Number(v))}>
+                        <SelectTrigger className={triggerCls}><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {anios.map((a) => <SelectItem key={a} value={String(a)}>{a}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
 
@@ -236,25 +241,31 @@ export function VistaTerapeuta() {
                                 <input value={form.nombre_usuario} onChange={(e) => setForm({ ...form, nombre_usuario: e.target.value })} className={inputCls} />
                             </Field>
                             <Field label="Tipo de documento">
-                                <select value={form.tipo_documento} onChange={(e) => setForm({ ...form, tipo_documento: e.target.value })} className={inputCls}>
-                                    <option value="">Seleccione...</option>
-                                    {TIPOS_DOCUMENTO.map((t) => <option key={t} value={t}>{t}</option>)}
-                                </select>
+                                <Select value={form.tipo_documento} onValueChange={(v) => setForm({ ...form, tipo_documento: v })}>
+                                    <SelectTrigger className={modalTriggerCls}><SelectValue placeholder="Seleccione..." /></SelectTrigger>
+                                    <SelectContent>
+                                        {TIPOS_DOCUMENTO.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
                             </Field>
                             <Field label="N° de documento">
                                 <input value={form.numero_documento} onChange={(e) => setForm({ ...form, numero_documento: e.target.value })} className={inputCls} />
                             </Field>
                             <Field label="ARL">
-                                <select value={form.arl} onChange={(e) => setForm({ ...form, arl: e.target.value })} className={inputCls}>
-                                    <option value="">Seleccione...</option>
-                                    {ARLS.map((a) => <option key={a} value={a}>{a}</option>)}
-                                </select>
+                                <Select value={form.arl} onValueChange={(v) => setForm({ ...form, arl: v })}>
+                                    <SelectTrigger className={modalTriggerCls}><SelectValue placeholder="Seleccione..." /></SelectTrigger>
+                                    <SelectContent>
+                                        {ARLS.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
                             </Field>
                             <Field label="Servicio">
-                                <select value={form.servicio} onChange={(e) => setForm({ ...form, servicio: e.target.value })} className={inputCls}>
-                                    <option value="">Seleccione...</option>
-                                    {SERVICIOS.map((s) => <option key={s} value={s}>{s}</option>)}
-                                </select>
+                                <Select value={form.servicio} onValueChange={(v) => setForm({ ...form, servicio: v })}>
+                                    <SelectTrigger className={modalTriggerCls}><SelectValue placeholder="Seleccione..." /></SelectTrigger>
+                                    <SelectContent>
+                                        {SERVICIOS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
                             </Field>
                             <Field label="N° de autorización">
                                 <input value={form.numero_autorizacion} onChange={(e) => setForm({ ...form, numero_autorizacion: e.target.value })} className={inputCls} />
@@ -286,7 +297,9 @@ export function VistaTerapeuta() {
     );
 }
 
-const inputCls = "h-10 w-full rounded-lg border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400";
+const inputCls = "h-10 w-full rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400";
+const triggerCls = "h-10 rounded-full border-slate-200 bg-white px-4 text-sm shadow-sm";
+const modalTriggerCls = "h-10 w-full rounded-xl border-slate-200 text-sm";
 
 function Field({ label, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {
     return (

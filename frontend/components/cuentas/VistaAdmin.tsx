@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/app/services/api';
 import { toast } from '@/components/ui/sileo-toast';
 import { Loader2, Wand2, Settings2, Check, X, Plus, Trash2, Users } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ARLS, SERVICIOS, MESES, formatCOP } from './constants';
 
 interface ServicioAdmin {
@@ -131,13 +132,19 @@ export function VistaAdmin() {
                     <p className="text-sm text-slate-500">Servicios de todos los terapeutas, precios y totales</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                    <select value={mes} onChange={(e) => setMes(Number(e.target.value))} className={selCls}>
-                        {MESES.slice(1).map((m, i) => <option key={i + 1} value={i + 1}>{m}</option>)}
-                    </select>
-                    <select value={anio} onChange={(e) => setAnio(Number(e.target.value))} className={selCls}>
-                        {anios.map((a) => <option key={a} value={a}>{a}</option>)}
-                    </select>
-                    <button onClick={() => setShowTarifas(true)} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 h-10 text-sm text-slate-600 hover:bg-slate-50">
+                    <Select value={String(mes)} onValueChange={(v) => setMes(Number(v))}>
+                        <SelectTrigger className={triggerCls}><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {MESES.slice(1).map((m, i) => <SelectItem key={i + 1} value={String(i + 1)}>{m}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                    <Select value={String(anio)} onValueChange={(v) => setAnio(Number(v))}>
+                        <SelectTrigger className={triggerCls}><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {anios.map((a) => <SelectItem key={a} value={String(a)}>{a}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                    <button onClick={() => setShowTarifas(true)} className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 h-10 text-sm text-slate-600 hover:bg-slate-50 transition-colors">
                         <Settings2 size={15} /> Tarifas
                     </button>
                 </div>
@@ -175,15 +182,21 @@ export function VistaAdmin() {
 
             {/* Filtros + acción tarifas */}
             <div className="flex flex-wrap items-center gap-2">
-                <select value={filtroArl} onChange={(e) => setFiltroArl(e.target.value)} className={selCls}>
-                    <option value="">Todas las ARL</option>
-                    {ARLS.map((a) => <option key={a} value={a}>{a}</option>)}
-                </select>
-                <select value={filtroTerapeuta} onChange={(e) => setFiltroTerapeuta(e.target.value ? Number(e.target.value) : '')} className={selCls}>
-                    <option value="">Todos los terapeutas</option>
-                    {terapeutasUnicos.map(([id, nombre]) => <option key={id} value={id}>{nombre}</option>)}
-                </select>
-                <button onClick={aplicarTarifas} className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-3 h-10 text-sm font-medium text-white hover:bg-brand-600">
+                <Select value={filtroArl || 'todas'} onValueChange={(v) => setFiltroArl(v === 'todas' ? '' : v)}>
+                    <SelectTrigger className={triggerCls}><SelectValue placeholder="Todas las ARL" /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="todas">Todas las ARL</SelectItem>
+                        {ARLS.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+                <Select value={filtroTerapeuta ? String(filtroTerapeuta) : 'todos'} onValueChange={(v) => setFiltroTerapeuta(v === 'todos' ? '' : Number(v))}>
+                    <SelectTrigger className={triggerCls}><SelectValue placeholder="Todos los terapeutas" /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="todos">Todos los terapeutas</SelectItem>
+                        {terapeutasUnicos.map(([id, nombre]) => <SelectItem key={id} value={String(id)}>{nombre}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+                <button onClick={aplicarTarifas} className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-4 h-10 text-sm font-medium text-white hover:bg-brand-600 transition-colors">
                     <Wand2 size={15} /> Aplicar catálogo de precios
                 </button>
             </div>
@@ -278,7 +291,7 @@ export function VistaAdmin() {
     );
 }
 
-const selCls = "h-10 rounded-lg border border-slate-200 px-3 text-sm bg-white";
+const triggerCls = "h-10 rounded-full border-slate-200 bg-white px-4 text-sm shadow-sm";
 
 function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
     return (
@@ -337,16 +350,24 @@ function ModalTarifas({ onClose }: { onClose: () => void }) {
 
                 {/* Nueva tarifa */}
                 <div className="grid grid-cols-12 gap-2 mb-4">
-                    <select value={nueva.arl} onChange={(e) => setNueva({ ...nueva, arl: e.target.value })} className="col-span-4 h-9 rounded border border-slate-200 px-2 text-sm">
-                        <option value="">ARL...</option>
-                        {ARLS.map((a) => <option key={a} value={a}>{a}</option>)}
-                    </select>
-                    <select value={nueva.servicio} onChange={(e) => setNueva({ ...nueva, servicio: e.target.value })} className="col-span-4 h-9 rounded border border-slate-200 px-2 text-sm">
-                        <option value="">Servicio...</option>
-                        {SERVICIOS.map((s) => <option key={s} value={s}>{s}</option>)}
-                    </select>
-                    <input value={nueva.precio_unitario} onChange={(e) => setNueva({ ...nueva, precio_unitario: e.target.value })} placeholder="Precio" className="col-span-3 h-9 rounded border border-slate-200 px-2 text-sm text-right" />
-                    <button onClick={agregar} className="col-span-1 flex items-center justify-center rounded bg-brand-500 text-white hover:bg-brand-600"><Plus size={16} /></button>
+                    <div className="col-span-4">
+                        <Select value={nueva.arl} onValueChange={(v) => setNueva({ ...nueva, arl: v })}>
+                            <SelectTrigger className="h-9 w-full rounded-full border-slate-200 text-sm"><SelectValue placeholder="ARL..." /></SelectTrigger>
+                            <SelectContent>
+                                {ARLS.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="col-span-4">
+                        <Select value={nueva.servicio} onValueChange={(v) => setNueva({ ...nueva, servicio: v })}>
+                            <SelectTrigger className="h-9 w-full rounded-full border-slate-200 text-sm"><SelectValue placeholder="Servicio..." /></SelectTrigger>
+                            <SelectContent>
+                                {SERVICIOS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <input value={nueva.precio_unitario} onChange={(e) => setNueva({ ...nueva, precio_unitario: e.target.value })} placeholder="Precio" className="col-span-3 h-9 rounded-full border border-slate-200 px-3 text-sm text-right" />
+                    <button onClick={agregar} className="col-span-1 flex items-center justify-center rounded-full bg-brand-500 text-white hover:bg-brand-600"><Plus size={16} /></button>
                 </div>
 
                 {loading ? (
