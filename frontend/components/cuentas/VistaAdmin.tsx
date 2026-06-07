@@ -204,8 +204,11 @@ export function VistaAdmin() {
             {loading ? (
                 <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-brand-500" /></div>
             ) : !data || data.servicios.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-300 py-12 text-center text-slate-400 text-sm">
-                    No hay servicios registrados en {MESES[mes]} {anio}.
+                <div className="rounded-2xl border border-dashed border-slate-300 py-16 text-center anim-fade-in">
+                    <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
+                        <Users className="h-6 w-6 text-slate-400" />
+                    </div>
+                    <p className="text-sm text-slate-500">No hay servicios registrados en {MESES[mes]} {anio}.</p>
                 </div>
             ) : (
                 <>
@@ -217,66 +220,74 @@ export function VistaAdmin() {
                     </div>
 
                     {/* Tabla servicios */}
-                    <div className="overflow-x-auto rounded-xl border border-slate-200">
-                        <table className="min-w-full text-sm">
-                            <thead className="bg-slate-50 text-slate-600">
-                                <tr>
-                                    <th className="px-3 py-2 text-left font-semibold">Terapeuta</th>
-                                    <th className="px-3 py-2 text-left font-semibold">Usuario</th>
-                                    <th className="px-3 py-2 text-left font-semibold">ARL</th>
-                                    <th className="px-3 py-2 text-left font-semibold">Servicio</th>
-                                    <th className="px-3 py-2 text-center font-semibold">Cant.</th>
-                                    <th className="px-3 py-2 text-right font-semibold">Precio unit.</th>
-                                    <th className="px-3 py-2 text-right font-semibold">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100">
-                                {data.servicios.map((s) => (
-                                    <tr key={s.id} className="hover:bg-slate-50">
-                                        <td className="px-3 py-2 text-slate-500">{s.terapeuta_nombre}</td>
-                                        <td className="px-3 py-2">{s.nombre_usuario}</td>
-                                        <td className="px-3 py-2">{s.arl}</td>
-                                        <td className="px-3 py-2">{s.servicio}</td>
-                                        <td className="px-3 py-2 text-center">{s.cantidad}</td>
-                                        <td className="px-3 py-2 text-right">
-                                            <input
-                                                value={precioEdit[s.id] !== undefined ? precioEdit[s.id] : (s.precio_unitario ?? '')}
-                                                onChange={(e) => setPrecioEdit((p) => ({ ...p, [s.id]: e.target.value }))}
-                                                onBlur={() => precioEdit[s.id] !== undefined && guardarPrecio(s.id)}
-                                                onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
-                                                placeholder="0"
-                                                className="w-28 h-8 rounded border border-slate-200 px-2 text-right text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
-                                            />
-                                        </td>
-                                        <td className="px-3 py-2 text-right font-medium">{formatCOP(s.total)}</td>
+                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm anim-fade-in-up">
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full text-sm">
+                                <thead>
+                                    <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] uppercase tracking-wide text-slate-500">
+                                        <th className="px-4 py-3 text-left font-semibold">Terapeuta</th>
+                                        <th className="px-4 py-3 text-left font-semibold">Usuario</th>
+                                        <th className="px-4 py-3 text-left font-semibold">ARL</th>
+                                        <th className="px-4 py-3 text-left font-semibold">Servicio</th>
+                                        <th className="px-4 py-3 text-center font-semibold">Cant.</th>
+                                        <th className="px-4 py-3 text-right font-semibold">Precio unit.</th>
+                                        <th className="px-4 py-3 text-right font-semibold">Total</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {data.servicios.map((s) => (
+                                        <tr key={s.id} className="group transition-colors hover:bg-brand-50/40">
+                                            <td className="px-4 py-3 text-slate-500">{s.terapeuta_nombre}</td>
+                                            <td className="px-4 py-3 font-medium text-slate-800">{s.nombre_usuario}</td>
+                                            <td className="px-4 py-3">
+                                                <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-700">{s.arl}</span>
+                                            </td>
+                                            <td className="px-4 py-3 text-slate-600">{s.servicio}</td>
+                                            <td className="px-4 py-3 text-center">
+                                                <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-slate-100 px-2 text-xs font-semibold text-slate-600">{s.cantidad}</span>
+                                            </td>
+                                            <td className="px-4 py-3 text-right">
+                                                <input
+                                                    value={precioEdit[s.id] !== undefined ? precioEdit[s.id] : (s.precio_unitario ?? '')}
+                                                    onChange={(e) => setPrecioEdit((p) => ({ ...p, [s.id]: e.target.value }))}
+                                                    onBlur={() => precioEdit[s.id] !== undefined && guardarPrecio(s.id)}
+                                                    onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
+                                                    placeholder="0"
+                                                    className="w-28 h-8 rounded-lg border border-slate-200 px-2 text-right text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
+                                                />
+                                            </td>
+                                            <td className="px-4 py-3 text-right font-semibold text-slate-800">{formatCOP(s.total)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     {/* Totales por ARL */}
-                    <div className="rounded-xl border border-slate-200 p-4">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm anim-fade-in-up">
                         <h3 className="text-sm font-semibold text-slate-700 mb-3">Totales por ARL</h3>
                         <div className="overflow-x-auto">
                             <table className="min-w-full text-sm">
-                                <thead className="text-slate-500">
-                                    <tr>
-                                        <th className="px-3 py-1.5 text-left font-medium">ARL</th>
-                                        <th className="px-3 py-1.5 text-center font-medium">Servicios</th>
-                                        <th className="px-3 py-1.5 text-right font-medium">Valor bruto</th>
-                                        <th className="px-3 py-1.5 text-right font-medium">Retefuente</th>
-                                        <th className="px-3 py-1.5 text-right font-medium">Pago 70%</th>
+                                <thead>
+                                    <tr className="border-b border-slate-100 text-[11px] uppercase tracking-wide text-slate-400">
+                                        <th className="px-3 py-2 text-left font-medium">ARL</th>
+                                        <th className="px-3 py-2 text-center font-medium">Servicios</th>
+                                        <th className="px-3 py-2 text-right font-medium">Valor bruto</th>
+                                        <th className="px-3 py-2 text-right font-medium">Retefuente</th>
+                                        <th className="px-3 py-2 text-right font-medium">Pago 70%</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
                                     {data.totales_por_arl.map((t) => (
-                                        <tr key={t.arl}>
-                                            <td className="px-3 py-1.5 font-medium text-slate-700">{t.arl}</td>
-                                            <td className="px-3 py-1.5 text-center">{t.total_servicios}</td>
-                                            <td className="px-3 py-1.5 text-right">{formatCOP(t.valor_bruto)}</td>
-                                            <td className="px-3 py-1.5 text-right">{formatCOP(t.retefuente)}</td>
-                                            <td className="px-3 py-1.5 text-right">{formatCOP(t.pago_70)}</td>
+                                        <tr key={t.arl} className="transition-colors hover:bg-slate-50">
+                                            <td className="px-3 py-2 font-medium text-slate-700">
+                                                <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-700">{t.arl}</span>
+                                            </td>
+                                            <td className="px-3 py-2 text-center text-slate-600">{t.total_servicios}</td>
+                                            <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.valor_bruto)}</td>
+                                            <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.retefuente)}</td>
+                                            <td className="px-3 py-2 text-right font-semibold text-slate-800">{formatCOP(t.pago_70)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -295,7 +306,7 @@ const triggerCls = "h-10 rounded-full border-slate-200 bg-white px-4 text-sm sha
 
 function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
     return (
-        <div className={`rounded-xl border p-4 ${accent ? 'border-brand-200 bg-brand-50' : 'border-slate-200 bg-white'}`}>
+        <div className={`rounded-2xl border p-4 shadow-sm transition-shadow hover:shadow-md anim-fade-in-scale ${accent ? 'border-brand-200 bg-brand-50' : 'border-slate-200 bg-white'}`}>
             <p className="text-xs text-slate-500">{label}</p>
             <p className={`text-xl font-bold ${accent ? 'text-brand-700' : 'text-slate-800'}`}>{value}</p>
         </div>
@@ -340,8 +351,8 @@ function ModalTarifas({ onClose }: { onClose: () => void }) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-            <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 anim-backdrop-in" onClick={onClose}>
+            <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl anim-modal-in" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-slate-800">Catálogo de tarifas</h2>
                     <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>

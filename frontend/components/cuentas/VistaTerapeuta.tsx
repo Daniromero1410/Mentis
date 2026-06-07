@@ -6,6 +6,7 @@ import { toast } from '@/components/ui/sileo-toast';
 import { Plus, Trash2, Save, Lock, Loader2, CheckCircle2, Pencil, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DatePicker } from '@/components/ui/date-picker';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { ARLS, SERVICIOS, TIPOS_DOCUMENTO, MESES } from './constants';
 
 interface Servicio {
@@ -43,6 +44,9 @@ export function VistaTerapeuta() {
     const [showForm, setShowForm] = useState(false);
     const [editId, setEditId] = useState<number | null>(null);
     const [form, setForm] = useState<Servicio>(emptyServicio());
+    const [confirmCerrar, setConfirmCerrar] = useState(false);
+    const [confirmEliminar, setConfirmEliminar] = useState<{ open: boolean; id: number | null }>({ open: false, id: null });
+    const [procesando, setProcesando] = useState(false);
 
     const cerrado = estadoCierre === 'cerrado' || estadoCierre === 'revisado';
 
@@ -104,26 +108,33 @@ export function VistaTerapeuta() {
         }
     };
 
-    const eliminar = async (id?: number) => {
+    const ejecutarEliminar = async () => {
+        const id = confirmEliminar.id;
         if (!id) return;
-        if (!confirm('¿Eliminar este servicio?')) return;
+        setProcesando(true);
         try {
             await api.delete(`/cuentas/mis-servicios/${id}`);
             toast.success('Servicio eliminado');
             cargar();
         } catch (e: any) {
             toast.error(e.message || 'Error al eliminar');
+        } finally {
+            setProcesando(false);
+            setConfirmEliminar({ open: false, id: null });
         }
     };
 
-    const cerrarMes = async () => {
-        if (!confirm(`¿Cerrar el mes de ${MESES[mes]} ${anio}? No podrás editar después y se notificará al administrador.`)) return;
+    const ejecutarCerrarMes = async () => {
+        setProcesando(true);
         try {
             await api.post(`/cuentas/cerrar-mes?mes=${mes}&anio=${anio}`, {});
             toast.success('Mes cerrado y enviado al administrador');
             cargar();
         } catch (e: any) {
             toast.error(e.message || 'Error al cerrar el mes');
+        } finally {
+            setProcesando(false);
+            setConfirmCerrar(false);
         }
     };
 
@@ -174,7 +185,7 @@ export function VistaTerapeuta() {
                         <Plus size={16} /> Agregar servicio
                     </button>
                     {servicios.length > 0 && (
-                        <button onClick={cerrarMes}
+                        <button onClick={() => setConfirmCerrar(true)}
                             className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors">
                             <CheckCircle2 size={16} /> Cerrar mes
                         </button>
@@ -186,59 +197,69 @@ export function VistaTerapeuta() {
             {loading ? (
                 <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-brand-500" /></div>
             ) : servicios.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-300 py-12 text-center text-slate-400 text-sm">
-                    No hay servicios registrados en {MESES[mes]} {anio}.
+                <div className="rounded-2xl border border-dashed border-slate-300 py-16 text-center anim-fade-in">
+                    <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
+                        <Plus className="h-6 w-6 text-slate-400" />
+                    </div>
+                    <p className="text-sm text-slate-500">No hay servicios registrados en {MESES[mes]} {anio}.</p>
+                    {!cerrado && <p className="text-xs text-slate-400 mt-1">Usa &quot;Agregar servicio&quot; para empezar.</p>}
                 </div>
             ) : (
-                <div className="overflow-x-auto rounded-xl border border-slate-200">
-                    <table className="min-w-full text-sm">
-                        <thead className="bg-slate-50 text-slate-600">
-                            <tr>
-                                <th className="px-3 py-2 text-left font-semibold">Usuario</th>
-                                <th className="px-3 py-2 text-left font-semibold">Documento</th>
-                                <th className="px-3 py-2 text-left font-semibold">ARL</th>
-                                <th className="px-3 py-2 text-left font-semibold">Servicio</th>
-                                <th className="px-3 py-2 text-left font-semibold">Autorización</th>
-                                <th className="px-3 py-2 text-left font-semibold">F. Realización</th>
-                                <th className="px-3 py-2 text-left font-semibold">Carpeta</th>
-                                <th className="px-3 py-2 text-center font-semibold">Cant.</th>
-                                {!cerrado && <th className="px-3 py-2 text-center font-semibold">Acciones</th>}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                            {servicios.map((s) => (
-                                <tr key={s.id} className="hover:bg-slate-50">
-                                    <td className="px-3 py-2">{s.nombre_usuario}</td>
-                                    <td className="px-3 py-2">{s.tipo_documento} {s.numero_documento}</td>
-                                    <td className="px-3 py-2">{s.arl}</td>
-                                    <td className="px-3 py-2">{s.servicio}</td>
-                                    <td className="px-3 py-2">{s.numero_autorizacion}</td>
-                                    <td className="px-3 py-2">{s.fecha_realizacion}</td>
-                                    <td className="px-3 py-2">{s.carpeta_cargue}</td>
-                                    <td className="px-3 py-2 text-center">{s.cantidad}</td>
-                                    {!cerrado && (
-                                        <td className="px-3 py-2">
-                                            <div className="flex items-center justify-center gap-1">
-                                                <button onClick={() => abrirEditar(s)} className="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded">
-                                                    <Pencil size={14} />
-                                                </button>
-                                                <button onClick={() => eliminar(s.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded">
-                                                    <Trash2 size={14} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    )}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm anim-fade-in-up">
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full text-sm">
+                            <thead>
+                                <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] uppercase tracking-wide text-slate-500">
+                                    <th className="px-4 py-3 text-left font-semibold">Usuario</th>
+                                    <th className="px-4 py-3 text-left font-semibold">Documento</th>
+                                    <th className="px-4 py-3 text-left font-semibold">ARL</th>
+                                    <th className="px-4 py-3 text-left font-semibold">Servicio</th>
+                                    <th className="px-4 py-3 text-left font-semibold">Autorización</th>
+                                    <th className="px-4 py-3 text-left font-semibold">F. Realización</th>
+                                    <th className="px-4 py-3 text-left font-semibold">Carpeta</th>
+                                    <th className="px-4 py-3 text-center font-semibold">Cant.</th>
+                                    {!cerrado && <th className="px-4 py-3 text-center font-semibold">Acciones</th>}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {servicios.map((s) => (
+                                    <tr key={s.id} className="group transition-colors hover:bg-brand-50/40">
+                                        <td className="px-4 py-3 font-medium text-slate-800">{s.nombre_usuario}</td>
+                                        <td className="px-4 py-3 text-slate-600">{s.tipo_documento} {s.numero_documento}</td>
+                                        <td className="px-4 py-3">
+                                            <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-700">{s.arl}</span>
+                                        </td>
+                                        <td className="px-4 py-3 text-slate-600">{s.servicio}</td>
+                                        <td className="px-4 py-3 text-slate-600">{s.numero_autorizacion}</td>
+                                        <td className="px-4 py-3 text-slate-600">{s.fecha_realizacion}</td>
+                                        <td className="px-4 py-3 text-slate-600">{s.carpeta_cargue}</td>
+                                        <td className="px-4 py-3 text-center">
+                                            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-slate-100 px-2 text-xs font-semibold text-slate-600">{s.cantidad}</span>
+                                        </td>
+                                        {!cerrado && (
+                                            <td className="px-4 py-3">
+                                                <div className="flex items-center justify-center gap-1 opacity-60 transition-opacity group-hover:opacity-100">
+                                                    <button onClick={() => abrirEditar(s)} className="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors">
+                                                        <Pencil size={14} />
+                                                    </button>
+                                                    <button onClick={() => setConfirmEliminar({ open: true, id: s.id ?? null })} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        )}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
 
             {/* Modal form */}
             {showForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setShowForm(false)}>
-                    <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 anim-backdrop-in" onClick={() => setShowForm(false)}>
+                    <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl anim-modal-in" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-lg font-bold text-slate-800">{editId ? 'Editar servicio' : 'Nuevo servicio'}</h2>
                             <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
@@ -300,6 +321,30 @@ export function VistaTerapeuta() {
                     </div>
                 </div>
             )}
+
+            {/* Confirmar cerrar mes */}
+            <ConfirmModal
+                open={confirmCerrar}
+                variant="warning"
+                title={`¿Cerrar el mes de ${MESES[mes]} ${anio}?`}
+                message="No podrás editar los servicios después y se notificará al administrador."
+                confirmText="Sí, cerrar mes"
+                loading={procesando}
+                onConfirm={ejecutarCerrarMes}
+                onCancel={() => setConfirmCerrar(false)}
+            />
+
+            {/* Confirmar eliminar servicio */}
+            <ConfirmModal
+                open={confirmEliminar.open}
+                variant="danger"
+                title="¿Eliminar este servicio?"
+                message="Esta acción no se puede deshacer."
+                confirmText="Eliminar"
+                loading={procesando}
+                onConfirm={ejecutarEliminar}
+                onCancel={() => setConfirmEliminar({ open: false, id: null })}
+            />
         </div>
     );
 }
