@@ -6,9 +6,12 @@ Router del módulo de Cuentas (relación de servicios mensuales).
   tarifas) y consulta totales con retefuente (12%) y pago del 70%.
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import FileResponse
 from sqlmodel import Session, select, func
 from typing import Optional, List
 from datetime import datetime
+import os
+import tempfile
 
 from app.database.connection import get_session
 from app.models.usuario import Usuario
@@ -25,8 +28,8 @@ from app.services.auth import get_current_user, get_current_admin
 
 router = APIRouter(prefix="/cuentas", tags=["Cuentas"])
 
-RETEFUENTE_FACTOR = 0.88   # se descuenta el 12%
-PAGO_PARCIAL_FACTOR = 0.70  # 70% del valor con retefuente
+RETEFUENTE_FACTOR = 0.12    # retefuente = lo que se descuenta (12%)
+PAGO_PARCIAL_FACTOR = 0.70  # 70% del valor posterior a retefuente
 
 
 # ═════════════════════════════════════════════════════════════════════
@@ -275,23 +278,176 @@ def consolidado_admin(
     totales_por_arl = []
     bruto_total = 0.0
     for arl_name, (cnt, bruto) in sorted(totales.items()):
-        rete = round(bruto * RETEFUENTE_FACTOR)
-        pago = round(rete * PAGO_PARCIAL_FACTOR)
+        rete = round(bruto * RETEFUENTE_FACTOR)       # lo que se descuenta (12%)
+        posterior = bruto - rete                       # lo que queda (88%)
+        pago = round(posterior * PAGO_PARCIAL_FACTOR)  # 70% del valor posterior
         totales_por_arl.append(TotalesPorArl(
             arl=arl_name, total_servicios=cnt, valor_bruto=bruto,
-            retefuente=rete, pago_70=pago,
+            retefuente=rete, valor_posterior_retefuente=posterior, pago_70=pago,
         ))
         bruto_total += bruto
 
     rete_total = round(bruto_total * RETEFUENTE_FACTOR)
-    pago_total = round(rete_total * PAGO_PARCIAL_FACTOR)
+    posterior_total = bruto_total - rete_total
+    pago_total = round(posterior_total * PAGO_PARCIAL_FACTOR)
 
     return ConsolidadoAdminResponse(
         servicios=items,
         totales_por_arl=totales_por_arl,
         valor_bruto_total=bruto_total,
         retefuente_total=rete_total,
+        valor_posterior_retefuente_total=posterior_total,
         pago_70_total=pago_total,
+    )
+
+
+# ── Admin: exportar consolidado a Excel ──────────────────────────────
+@router.get("/admin/exportar", response_class=FileResponse)
+def exportar_excel(
+    mes: int = Query(...),
+    anio: int = Query(...),
+    arl: Optional[str] = None,
+    terapeuta_id: Optional[int] = None,
+    session: Session = Depends(get_session),
+    admin: Usuario = Depends(get_current_admin),
+):
+    import openpyxl
+    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+
+    MESES = ["", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+             "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"]
+
+    q = select(ServicioCuenta).where(
+        ServicioCuenta.periodo_mes == mes,
+        ServicioCuenta.periodo_anio == anio,
+    )
+    if arl:
+        q = q.where(ServicioCuenta.arl == arl)
+    if terapeuta_id:
+        q = q.where(ServicioCuenta.terapeuta_id == terapeuta_id)
+    servicios = session.exec(q.order_by(ServicioCuenta.arl, ServicioCuenta.terapeuta_id, ServicioCuenta.id)).all()
+
+    nombres: dict = {u.id: f"{u.nombre} {u.apellido}" for u in session.exec(select(Usuario)).all()}
+
+    # ── Estilos ──
+    naranja = PatternFill(start_color="F07820", end_color="F07820", fill_type="solid")
+    gris = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+    blanco_bold = Font(bold=True, color="FFFFFF")
+    bold = Font(bold=True)
+    centro = Alignment(horizontal="center", vertical="center")
+    borde = Border(*[Side(style="thin", color="BDBDBD")] * 4)
+
+    def fmt_fecha(f):
+        if not f:
+            return ""
+        return f.strftime("%d/%m/%Y") if hasattr(f, "strftime") else str(f)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = f"Cuentas {MESES[mes][:3]} {anio}"
+
+    # Título
+    ws.merge_cells("A1:M1")
+    c = ws["A1"]
+    c.value = f"CONSOLIDADO DE CUENTAS — {MESES[mes]} {anio}"
+    c.font = Font(bold=True, size=14)
+    c.alignment = centro
+    ws.row_dimensions[1].height = 24
+
+    # Encabezados
+    headers = ["Terapeuta", "Usuario", "Tipo Doc", "Documento", "ARL", "Servicio",
+               "Autorización", "F. Realización", "F. Autorización", "Carpeta",
+               "Cant.", "Precio Unit.", "Total"]
+    hrow = 3
+    for col, h in enumerate(headers, start=1):
+        cell = ws.cell(row=hrow, column=col, value=h)
+        cell.fill = naranja
+        cell.font = blanco_bold
+        cell.alignment = centro
+        cell.border = borde
+
+    # Filas de servicios
+    r = hrow + 1
+    totales: dict = {}  # arl -> [count, bruto]
+    for s in servicios:
+        precio = s.precio_unitario or 0
+        cant = s.cantidad or 0
+        total = precio * cant
+        valores = [
+            nombres.get(s.terapeuta_id, ""), s.nombre_usuario or "", s.tipo_documento or "",
+            s.numero_documento or "", s.arl or "", s.servicio or "", s.numero_autorizacion or "",
+            fmt_fecha(s.fecha_realizacion), fmt_fecha(s.fecha_autorizacion), s.carpeta_cargue or "",
+            cant, precio, total,
+        ]
+        for col, val in enumerate(valores, start=1):
+            cell = ws.cell(row=r, column=col, value=val)
+            cell.border = borde
+            if col in (12, 13):  # precio y total
+                cell.number_format = '"$"#,##0'
+            if col == 11:
+                cell.alignment = centro
+        key = s.arl or "SIN ARL"
+        if key not in totales:
+            totales[key] = [0, 0.0]
+        totales[key][0] += 1
+        totales[key][1] += total
+        r += 1
+
+    # Totales por ARL
+    r += 1
+    ws.cell(row=r, column=1, value="TOTALES POR ARL").font = bold
+    r += 1
+    th = ["ARL", "Servicios", "Valor bruto", "Retefuente (12%)", "Valor posterior retefuente", "Pago 70%"]
+    for col, h in enumerate(th, start=1):
+        cell = ws.cell(row=r, column=col, value=h)
+        cell.fill = gris
+        cell.font = bold
+        cell.alignment = centro
+        cell.border = borde
+    r += 1
+    bruto_total = 0.0
+    for arl_name, (cnt, bruto) in sorted(totales.items()):
+        rete = round(bruto * 0.12)
+        posterior = bruto - rete
+        pago = round(posterior * 0.70)
+        fila = [arl_name, cnt, bruto, rete, posterior, pago]
+        for col, val in enumerate(fila, start=1):
+            cell = ws.cell(row=r, column=col, value=val)
+            cell.border = borde
+            if col in (3, 4, 5, 6):
+                cell.number_format = '"$"#,##0'
+            if col == 2:
+                cell.alignment = centro
+        bruto_total += bruto
+        r += 1
+
+    # Gran total
+    rete_t = round(bruto_total * 0.12)
+    posterior_t = bruto_total - rete_t
+    pago_t = round(posterior_t * 0.70)
+    fila = ["TOTAL GENERAL", "", bruto_total, rete_t, posterior_t, pago_t]
+    for col, val in enumerate(fila, start=1):
+        cell = ws.cell(row=r, column=col, value=val)
+        cell.font = bold
+        cell.fill = gris
+        cell.border = borde
+        if col in (3, 4, 5, 6):
+            cell.number_format = '"$"#,##0'
+
+    # Ancho de columnas
+    anchos = [22, 26, 10, 14, 16, 30, 14, 14, 14, 16, 7, 14, 14]
+    for i, w in enumerate(anchos, start=1):
+        ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = w
+
+    # Guardar a archivo temporal
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
+    tmp.close()
+    wb.save(tmp.name)
+    filename = f"Cuentas_{MESES[mes]}_{anio}.xlsx"
+    return FileResponse(
+        path=tmp.name,
+        filename=filename,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
 
 

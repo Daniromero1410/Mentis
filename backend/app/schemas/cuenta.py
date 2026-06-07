@@ -112,9 +112,10 @@ class NotificacionRead(BaseModel):
 class TotalesPorArl(BaseModel):
     arl: str
     total_servicios: int
-    valor_bruto: float          # suma de cantidad*precio
-    retefuente: float           # valor_bruto * 0.88
-    pago_70: float              # retefuente * 0.70
+    valor_bruto: float                   # suma de cantidad*precio
+    retefuente: float                    # lo que se descuenta = valor_bruto * 0.12
+    valor_posterior_retefuente: float    # lo que queda = valor_bruto - retefuente
+    pago_70: float                       # valor_posterior_retefuente * 0.70
 
 
 class ConsolidadoAdminResponse(BaseModel):
@@ -122,4 +123,5 @@ class ConsolidadoAdminResponse(BaseModel):
     totales_por_arl: List[TotalesPorArl]
     valor_bruto_total: float
     retefuente_total: float
+    valor_posterior_retefuente_total: float
     pago_70_total: float

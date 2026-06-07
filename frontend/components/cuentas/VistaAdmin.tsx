@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/app/services/api';
 import { toast } from '@/components/ui/sileo-toast';
-import { Loader2, Wand2, Settings2, Check, X, Plus, Trash2, Users } from 'lucide-react';
+import { Loader2, Wand2, Settings2, Check, X, Plus, Trash2, Users, Download } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ARLS, SERVICIOS, MESES, formatCOP } from './constants';
 
@@ -29,6 +29,7 @@ interface TotalArl {
     total_servicios: number;
     valor_bruto: number;
     retefuente: number;
+    valor_posterior_retefuente: number;
     pago_70: number;
 }
 
@@ -37,6 +38,7 @@ interface Consolidado {
     totales_por_arl: TotalArl[];
     valor_bruto_total: number;
     retefuente_total: number;
+    valor_posterior_retefuente_total: number;
     pago_70_total: number;
 }
 
@@ -118,6 +120,23 @@ export function VistaAdmin() {
         }
     };
 
+    const [exportando, setExportando] = useState(false);
+    const exportarExcel = async () => {
+        if (!data || data.servicios.length === 0) { toast.error('No hay datos para exportar'); return; }
+        setExportando(true);
+        try {
+            const params = new URLSearchParams({ mes: String(mes), anio: String(anio) });
+            if (filtroArl) params.append('arl', filtroArl);
+            if (filtroTerapeuta) params.append('terapeuta_id', String(filtroTerapeuta));
+            await api.downloadFile(`/cuentas/admin/exportar?${params.toString()}`, `Cuentas_${MESES[mes]}_${anio}.xlsx`);
+            toast.success('Excel generado');
+        } catch (e: any) {
+            toast.error(e.message || 'Error al exportar');
+        } finally {
+            setExportando(false);
+        }
+    };
+
     const anios = [hoy.getFullYear() - 1, hoy.getFullYear(), hoy.getFullYear() + 1];
     const terapeutasUnicos = data
         ? Array.from(new Map(data.servicios.map((s) => [s.terapeuta_id, s.terapeuta_nombre])).entries())
@@ -146,6 +165,9 @@ export function VistaAdmin() {
                     </Select>
                     <button onClick={() => setShowTarifas(true)} className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 h-10 text-sm text-slate-600 hover:bg-slate-50 transition-colors">
                         <Settings2 size={15} /> Tarifas
+                    </button>
+                    <button onClick={exportarExcel} disabled={exportando} className="inline-flex items-center gap-2 rounded-full bg-green-600 px-4 h-10 text-sm font-medium text-white hover:bg-green-700 transition-colors disabled:opacity-50">
+                        {exportando ? <Loader2 size={15} className="animate-spin" /> : <Download size={15} />} Exportar Excel
                     </button>
                 </div>
             </div>
@@ -213,9 +235,10 @@ export function VistaAdmin() {
             ) : (
                 <>
                     {/* Totales */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         <Stat label="Valor bruto" value={formatCOP(data.valor_bruto_total)} />
-                        <Stat label="Con retefuente (88%)" value={formatCOP(data.retefuente_total)} />
+                        <Stat label="Retefuente (12%)" value={formatCOP(data.retefuente_total)} />
+                        <Stat label="Valor posterior retefuente" value={formatCOP(data.valor_posterior_retefuente_total)} />
                         <Stat label="Pago 70%" value={formatCOP(data.pago_70_total)} accent />
                     </div>
 
@@ -274,7 +297,8 @@ export function VistaAdmin() {
                                         <th className="px-3 py-2 text-left font-medium">ARL</th>
                                         <th className="px-3 py-2 text-center font-medium">Servicios</th>
                                         <th className="px-3 py-2 text-right font-medium">Valor bruto</th>
-                                        <th className="px-3 py-2 text-right font-medium">Retefuente</th>
+                                        <th className="px-3 py-2 text-right font-medium">Retefuente (12%)</th>
+                                        <th className="px-3 py-2 text-right font-medium">Valor posterior retefuente</th>
                                         <th className="px-3 py-2 text-right font-medium">Pago 70%</th>
                                     </tr>
                                 </thead>
@@ -287,6 +311,7 @@ export function VistaAdmin() {
                                             <td className="px-3 py-2 text-center text-slate-600">{t.total_servicios}</td>
                                             <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.valor_bruto)}</td>
                                             <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.retefuente)}</td>
+                                            <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.valor_posterior_retefuente)}</td>
                                             <td className="px-3 py-2 text-right font-semibold text-slate-800">{formatCOP(t.pago_70)}</td>
                                         </tr>
                                     ))}
