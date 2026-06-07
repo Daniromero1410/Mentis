@@ -35,6 +35,18 @@ def validate_file(file: UploadFile) -> None:
 
     # Nota: La validación de tamaño se hace al leer el archivo
 
+
+def safe_filename(filename: str) -> str:
+    """Evita path traversal: rechaza nombres con separadores de ruta o '..'."""
+    import os
+    base = os.path.basename(filename)
+    if not base or base != filename or ".." in filename or "/" in filename or "\\" in filename:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Nombre de archivo inválido"
+        )
+    return base
+
 @router.post("/firma")
 async def subir_firma(
     file: UploadFile = File(...),
@@ -94,6 +106,7 @@ async def descargar_firma(
     filename: str
 ):
     """Descarga/muestra un archivo de firma"""
+    filename = safe_filename(filename)
     file_path = FIRMAS_DIR / filename
 
     if not file_path.exists():
@@ -116,6 +129,7 @@ async def eliminar_firma(
 ):
     """Elimina un archivo de firma"""
     try:
+        filename = safe_filename(filename)
         file_path = FIRMAS_DIR / filename
 
         if not file_path.exists():
@@ -197,6 +211,7 @@ async def descargar_evidencia(
     filename: str
 ):
     """Descarga/muestra una evidencia fotográfica"""
+    filename = safe_filename(filename)
     file_path = EVIDENCIAS_DIR / filename
 
     if not file_path.exists():
@@ -219,6 +234,7 @@ async def eliminar_evidencia(
 ):
     """Elimina una evidencia"""
     try:
+        filename = safe_filename(filename)
         file_path = EVIDENCIAS_DIR / filename
 
         if not file_path.exists():

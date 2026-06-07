@@ -27,9 +27,11 @@ class MessageResponse(BaseModel):
 @router.post("/registro", response_model=Token)
 def registrar_usuario(
     usuario: UsuarioCreate,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_admin: Usuario = Depends(get_current_admin)
 ):
-    """Registra un nuevo usuario"""
+    """Registra un nuevo usuario. Solo un administrador puede crear cuentas
+    (evita que cualquiera se autorregistre, incluso como admin)."""
     # Verificar si el email ya existe
     statement = select(Usuario).where(Usuario.email == usuario.email)
     existing_user = session.exec(statement).first()

@@ -1,4 +1,5 @@
 import os
+import secrets
 
 class Settings:
     def __init__(self):
@@ -8,11 +9,18 @@ class Settings:
             "postgresql://william_admin:william_secure_2024@localhost:5432/william_romero"
         )
 
-        # JWT
-        self.SECRET_KEY = os.environ.get(
-            "SECRET_KEY",
-            "william-romero-secret-key-2024-muy-segura"
-        )
+        # JWT — la clave NUNCA debe tener un default predecible en el código.
+        # Si no está configurada como variable de entorno, se genera una temporal
+        # (segura pero efímera: invalida sesiones al reiniciar). Configure SECRET_KEY
+        # en producción (Railway) para mantener las sesiones estables.
+        self.SECRET_KEY = os.environ.get("SECRET_KEY")
+        if not self.SECRET_KEY:
+            self.SECRET_KEY = secrets.token_urlsafe(48)
+            print(
+                "[CONFIG][SEGURIDAD] ⚠️  SECRET_KEY no está configurada como variable "
+                "de entorno. Se generó una clave temporal. Configure SECRET_KEY en "
+                "producción para evitar que las sesiones se invaliden en cada reinicio."
+            )
         self.ALGORITHM = "HS256"
 
         # Manejar ACCESS_TOKEN_EXPIRE_MINUTES con valor vacio
