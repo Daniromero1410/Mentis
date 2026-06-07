@@ -105,9 +105,35 @@ app.mount("/pdfs", StaticFiles(directory="pdfs"), name="pdfs")
 def on_startup():
     # Ejecutar migraciones automáticas antes de crear tablas nuevas
     _run_migrations()
+    _migrar_columna_rol()
     create_db_and_tables()
     _seed_catalogo_servicios()
     print("Base de datos inicializada correctamente")
+
+
+def _migrar_columna_rol():
+    """Convierte la columna usuarios.rol de tipo ENUM de PostgreSQL a VARCHAR.
+
+    El tipo ENUM 'rolusuario' fue creado con los valores en MAYÚSCULAS (nombres
+    de los miembros del Enum). El modelo actual usa minúsculas ('admin', etc.),
+    por lo que escribir fallaba: 'invalid input value for enum rolusuario: admin'.
+    Cada sentencia corre en su propia transacción para ser robusta e idempotente.
+    """
+    from sqlalchemy import text
+    from app.database.connection import engine
+
+    sentencias = [
+        "ALTER TABLE usuarios ALTER COLUMN rol DROP DEFAULT",
+        "ALTER TABLE usuarios ALTER COLUMN rol TYPE VARCHAR(50) USING rol::text",
+        "UPDATE usuarios SET rol = LOWER(rol)",
+    ]
+    for s in sentencias:
+        try:
+            with engine.connect() as conn:
+                conn.execute(text(s))
+                conn.commit()
+        except Exception as e:
+            print(f"[MIGRATION rol] Aviso en '{s[:45]}...': {e}")
 
 
 def _seed_catalogo_servicios():
