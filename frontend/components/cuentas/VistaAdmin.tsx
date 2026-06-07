@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/app/services/api';
 import { toast } from '@/components/ui/sileo-toast';
-import { Loader2, Wand2, Settings2, Check, X, Plus, Trash2, Users, Download, ListChecks, Pencil } from 'lucide-react';
+import { Loader2, Settings2, Check, X, Plus, Trash2, Users, Download, ListChecks, Pencil } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ARLS, SERVICIOS, MESES, formatCOP } from './constants';
 
@@ -229,7 +229,7 @@ export function VistaAdmin() {
                     </SelectContent>
                 </Select>
                 <button onClick={aplicarTarifas} className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-4 h-10 text-sm font-medium text-white hover:bg-brand-600 transition-colors">
-                    <Wand2 size={15} /> Aplicar catálogo de precios
+                    Aplicar catálogo de precios
                 </button>
             </div>
 
