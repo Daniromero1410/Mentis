@@ -5,6 +5,7 @@ import { api } from '@/app/services/api';
 import { toast } from '@/components/ui/sileo-toast';
 import { Plus, Trash2, Save, Lock, Loader2, CheckCircle2, Pencil, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DatePicker } from '@/components/ui/date-picker';
 import { ARLS, SERVICIOS, TIPOS_DOCUMENTO, MESES } from './constants';
 
 interface Servicio {
@@ -274,10 +275,10 @@ export function VistaTerapeuta() {
                                 <input type="number" min={1} value={form.cantidad} onChange={(e) => setForm({ ...form, cantidad: Number(e.target.value) })} className={inputCls} />
                             </Field>
                             <Field label="Fecha de realización">
-                                <input type="date" value={form.fecha_realizacion} onChange={(e) => setForm({ ...form, fecha_realizacion: e.target.value })} className={inputCls} />
+                                <DatePicker value={form.fecha_realizacion} onChange={(v) => setForm({ ...form, fecha_realizacion: v })} />
                             </Field>
                             <Field label="Fecha de autorización">
-                                <input type="date" value={form.fecha_autorizacion} onChange={(e) => setForm({ ...form, fecha_autorizacion: e.target.value })} className={inputCls} />
+                                <DatePicker value={form.fecha_autorizacion} onChange={(v) => setForm({ ...form, fecha_autorizacion: v })} />
                             </Field>
                             <Field label="Carpeta de cargue" className="md:col-span-2">
                                 <input value={form.carpeta_cargue} onChange={(e) => setForm({ ...form, carpeta_cargue: e.target.value })} placeholder="Ej: CI - 49306697 ó RHB" className={inputCls} />
