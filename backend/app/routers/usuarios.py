@@ -144,10 +144,20 @@ def eliminar_usuario(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="No puede eliminarse a sí mismo"
         )
-    
-    session.delete(usuario)
-    session.commit()
-    
+
+    from sqlalchemy.exc import IntegrityError
+    try:
+        session.delete(usuario)
+        session.commit()
+    except IntegrityError:
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=("No se puede eliminar este usuario porque tiene registros "
+                    "asociados (valoraciones, pruebas, servicios, etc.). "
+                    "Para conservar el historial, desactívelo en lugar de eliminarlo.")
+        )
+
     return {"message": "Usuario eliminado correctamente"}
 
 @router.put("/me", response_model=UsuarioRead)

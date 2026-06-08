@@ -75,6 +75,21 @@ app.add_middleware(
 )
 
 
+# Manejador global de excepciones: garantiza que los errores 500 se devuelvan
+# como JSON (pasando por CORS) en vez de propagarse al nivel más externo sin
+# headers CORS, lo que el navegador reporta como "Load Failed".
+from fastapi import Request
+from fastapi.responses import JSONResponse as _JSONResponse
+
+@app.exception_handler(Exception)
+async def _global_exception_handler(request: Request, exc: Exception):
+    print(f"[ERROR no controlado] {request.method} {request.url.path}: {exc}")
+    return _JSONResponse(
+        status_code=500,
+        content={"detail": "Ocurrió un error en el servidor. Intente nuevamente."},
+    )
+
+
 # Incluir routers
 app.include_router(auth.router)
 app.include_router(valoraciones.router)
