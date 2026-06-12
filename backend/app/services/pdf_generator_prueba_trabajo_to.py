@@ -330,28 +330,7 @@ def generar_pdf_prueba_trabajo_to(
     def id_row_4col(l1, v1, l2, v2):
         return [bold(l1), p(v1), bold(l2), p(v2)]
 
-    # Build identification rows
-    id_rows = []
-
-    # Nombre del trabajador
-    id_rows.append(id_row_2col("Nombre del trabajador", i.nombre_trabajador if i else ""))
-
-    # Número de documento
-    id_rows.append(id_row_2col("Número de documento", i.numero_documento if i else ""))
-
-    id_table_basic = Table(id_rows, colWidths=[lw, vw])
-    id_table_basic.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
-        ('LEFTPADDING', (0, 0), (-1, -1), 4),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-    ]))
-    elements.append(id_table_basic)
-
-    # ── Tabla de siniestros (ID | Fecha | Diagnóstico) ──────────────────
+    # ── Parsear siniestros (puede ser JSON con varios) y agregar en línea ──
     _sin_raw = i.id_siniestro if i else ""
     _siniestros = []
     try:
@@ -371,28 +350,43 @@ def generar_pdf_prueba_trabajo_to(
     except Exception:
         if _sin_raw:
             _siniestros.append({'id': _sin_raw, 'fecha': '', 'diagnosticos': ''})
+    _siniestros = [s for s in _siniestros if s['id'] or s['diagnosticos'] or s['fecha']]
 
-    _siniestros = [s for s in _siniestros if s['id'] or s['diagnosticos']]
-    if _siniestros:
-        sin_header = [bold("Siniestro N°"), bold("ID Siniestro"), bold("Fecha del Evento"), bold("Diagnóstico(s) clínico(s)")]
-        sin_rows = [sin_header]
-        for idx_s, s in enumerate(_siniestros):
-            sin_rows.append([
-                p(str(idx_s + 1)),
-                p(s['id']),
-                p(s['fecha']),
-                p(s['diagnosticos']),
-            ])
-        sin_t = Table(sin_rows, colWidths=[page_width * 0.08, page_width * 0.18, page_width * 0.16, page_width * 0.58])
-        sin_t.setStyle(TableStyle([
-            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('BACKGROUND', (0, 0), (-1, 0), LIGHT_GRAY),
-            ('LEFTPADDING', (0, 0), (-1, -1), 4),
-            ('TOPPADDING', (0, 0), (-1, -1), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-        ]))
-        elements.append(sin_t)
+    # Valores agregados, separados por " - " (igual que el formato real)
+    _ids_str = " - ".join(s['id'] for s in _siniestros if s['id'])
+    _fechas_str = " - ".join(format_date(s['fecha']).replace(" ", "") for s in _siniestros if s['fecha'])
+    _diag_str = " - ".join(s['diagnosticos'] for s in _siniestros if s['diagnosticos'])
+    # Compatibilidad: si no hay datos de siniestros, usar los campos clásicos
+    if not _ids_str and _sin_raw and not _sin_raw.strip().startswith('['):
+        _ids_str = _sin_raw
+    if not _diag_str:
+        _diag_str = i.diagnosticos_atel if i and i.diagnosticos_atel else ""
+    if not _fechas_str:
+        _fechas_str = i.fechas_eventos_atel if i and i.fechas_eventos_atel else ""
+
+    # Build identification rows
+    id_rows = []
+
+    # Nombre del trabajador
+    id_rows.append(id_row_2col("Nombre del trabajador", i.nombre_trabajador if i else ""))
+
+    # Número de documento
+    id_rows.append(id_row_2col("Número de documento", i.numero_documento if i else ""))
+
+    # Identificación del siniestro (IDs en línea, separados por " - ")
+    id_rows.append(id_row_2col("Identificación del siniestro", _ids_str))
+
+    id_table_basic = Table(id_rows, colWidths=[lw, vw])
+    id_table_basic.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BACKGROUND', (0, 0), (0, -1), LIGHT_GRAY),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(id_table_basic)
 
     def calc_edad(fecha_nac):
         """Calcula edad en años desde fecha de nacimiento."""
@@ -554,8 +548,8 @@ def generar_pdf_prueba_trabajo_to(
     simple_rows_data = [
         ("Teléfonos trabajador", i.telefonos_trabajador if i else ""),
         ("Dirección residencia/ciudad", i.direccion_residencia if i else ""),
-        ("Diagnóstico(s) clínico(s) por evento ATEL", i.diagnosticos_atel if i else ""),
-        ("Fecha(s) del evento(s) ATEL", i.fechas_eventos_atel if i else ""),
+        ("Diagnóstico(s) clínico(s) por evento ATEL", _diag_str),
+        ("Fecha(s) del evento(s) ATEL", _fechas_str),
         ("EPS - IPS", i.eps_ips if i else ""),
         ("AFP", i.afp if i else ""),
     ]
