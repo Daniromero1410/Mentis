@@ -3,10 +3,11 @@ import secrets
 
 class Settings:
     def __init__(self):
-        # Base de datos - Lee directamente de variable de entorno
+        # Base de datos - SIEMPRE desde variable de entorno. El default es solo
+        # un placeholder local sin credenciales reales (nunca usar en producción).
         self.DATABASE_URL = os.environ.get(
             "DATABASE_URL",
-            "postgresql://william_admin:william_secure_2024@localhost:5432/william_romero"
+            "postgresql://postgres:postgres@localhost:5432/mentis_local"
         )
 
         # JWT — la clave NUNCA debe tener un default predecible en el código.
