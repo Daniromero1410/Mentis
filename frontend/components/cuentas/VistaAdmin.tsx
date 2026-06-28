@@ -326,7 +326,7 @@ export function VistaAdmin() {
                                                     <span className="text-slate-300">—</span>
                                                 )}
                                             </td>
-                                            <td className="px-4 py-3 text-right font-semibold text-slate-800">{formatCOP(s.total)}</td>
+                                            <td className="px-4 py-3 text-right font-semibold text-slate-800">{formatCOP((s.total ?? 0) + (s.permite_viaticos ? (s.viaticos ?? 0) : 0))}</td>
                                         </tr>
                                     ))}
                                 </tbody>
