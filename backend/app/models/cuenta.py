@@ -49,6 +49,7 @@ class ServicioCuenta(SQLModel, table=True):
 
     # ── Campos SOLO visibles/editables por el administrador ──────────
     precio_unitario: Optional[float] = None   # lo asigna el admin
+    viaticos: Optional[float] = None          # solo para servicios que lo permiten
     nota_admin: Optional[str] = None
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -92,6 +93,7 @@ class CatalogoServicio(SQLModel, table=True):
     nombre: str = Field(index=True)
     activo: bool = Field(default=True)
     orden: int = Field(default=0)
+    permite_viaticos: bool = Field(default=False)  # habilita la columna de viáticos
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)

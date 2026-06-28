@@ -52,16 +52,19 @@ class ServicioCuentaAdminRead(ServicioCuentaCreate):
     periodo_mes: int
     periodo_anio: int
     precio_unitario: Optional[float] = None
+    viaticos: Optional[float] = None
     nota_admin: Optional[str] = None
-    total: Optional[float] = None  # cantidad * precio_unitario
+    total: Optional[float] = None          # cantidad * precio_unitario
+    permite_viaticos: Optional[bool] = False  # si el servicio admite viáticos
 
     class Config:
         from_attributes = True
 
 
-# ── Admin asigna precio / nota a un servicio ─────────────────────────
+# ── Admin asigna precio / viáticos / nota a un servicio ──────────────
 class PrecioUpdate(BaseModel):
     precio_unitario: Optional[float] = None
+    viaticos: Optional[float] = None
     nota_admin: Optional[str] = None
 
 
@@ -99,12 +102,14 @@ class CatalogoServicioCreate(BaseModel):
     nombre: str
     activo: bool = True
     orden: int = 0
+    permite_viaticos: bool = False
 
 
 class CatalogoServicioUpdate(BaseModel):
     nombre: Optional[str] = None
     activo: Optional[bool] = None
     orden: Optional[int] = None
+    permite_viaticos: Optional[bool] = None
 
 
 class CatalogoServicioRead(BaseModel):
@@ -112,6 +117,7 @@ class CatalogoServicioRead(BaseModel):
     nombre: str
     activo: bool
     orden: int
+    permite_viaticos: bool = False
 
     class Config:
         from_attributes = True
@@ -138,7 +144,9 @@ class TotalesPorArl(BaseModel):
     valor_bruto: float                   # suma de cantidad*precio
     retefuente: float                    # lo que se descuenta = valor_bruto * 0.12
     valor_posterior_retefuente: float    # lo que queda = valor_bruto - retefuente
+    viaticos: float = 0                  # suma de viáticos
     pago_70: float                       # valor_posterior_retefuente * 0.70
+    total_a_pagar: float = 0             # pago_70 + viáticos
 
 
 class ConsolidadoAdminResponse(BaseModel):
@@ -147,4 +155,6 @@ class ConsolidadoAdminResponse(BaseModel):
     valor_bruto_total: float
     retefuente_total: float
     valor_posterior_retefuente_total: float
+    viaticos_total: float = 0
     pago_70_total: float
+    total_a_pagar_total: float = 0

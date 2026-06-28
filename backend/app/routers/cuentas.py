@@ -251,12 +251,20 @@ def consolidado_admin(
     for u in session.exec(select(Usuario)).all():
         nombres[u.id] = f"{u.nombre} {u.apellido}"
 
+    # Servicios que permiten viáticos (según el catálogo)
+    servicios_con_viaticos = {
+        c.nombre.strip().lower()
+        for c in session.exec(select(CatalogoServicio).where(CatalogoServicio.permite_viaticos == True)).all()  # noqa: E712
+    }
+
     items: List[ServicioCuentaAdminRead] = []
-    totales: dict = {}  # arl -> [count, bruto]
+    totales: dict = {}  # arl -> [count, bruto, viaticos]
     for s in servicios:
         precio = s.precio_unitario or 0
         cant = s.cantidad or 0
         total_linea = precio * cant
+        viat = s.viaticos or 0
+        permite_v = bool(s.servicio and s.servicio.strip().lower() in servicios_con_viaticos)
         items.append(ServicioCuentaAdminRead(
             id=s.id, terapeuta_id=s.terapeuta_id,
             terapeuta_nombre=nombres.get(s.terapeuta_id, ""),
@@ -267,26 +275,30 @@ def consolidado_admin(
             fecha_realizacion=s.fecha_realizacion, fecha_autorizacion=s.fecha_autorizacion,
             carpeta_cargue=s.carpeta_cargue, cantidad=s.cantidad,
             recomendaciones=s.recomendaciones, en_pleno=s.en_pleno, pcl=s.pcl,
-            precio_unitario=s.precio_unitario, nota_admin=s.nota_admin,
-            total=total_linea,
+            precio_unitario=s.precio_unitario, viaticos=s.viaticos, nota_admin=s.nota_admin,
+            total=total_linea, permite_viaticos=permite_v,
         ))
         key = s.arl or "SIN ARL"
         if key not in totales:
-            totales[key] = [0, 0.0]
+            totales[key] = [0, 0.0, 0.0]
         totales[key][0] += 1
         totales[key][1] += total_linea
+        totales[key][2] += viat
 
     totales_por_arl = []
     bruto_total = 0.0
-    for arl_name, (cnt, bruto) in sorted(totales.items()):
+    viaticos_total = 0.0
+    for arl_name, (cnt, bruto, viat) in sorted(totales.items()):
         rete = round(bruto * RETEFUENTE_FACTOR)       # lo que se descuenta (12%)
         posterior = bruto - rete                       # lo que queda (88%)
         pago = round(posterior * PAGO_PARCIAL_FACTOR)  # 70% del valor posterior
         totales_por_arl.append(TotalesPorArl(
             arl=arl_name, total_servicios=cnt, valor_bruto=bruto,
-            retefuente=rete, valor_posterior_retefuente=posterior, pago_70=pago,
+            retefuente=rete, valor_posterior_retefuente=posterior,
+            viaticos=viat, pago_70=pago, total_a_pagar=pago + viat,
         ))
         bruto_total += bruto
+        viaticos_total += viat
 
     rete_total = round(bruto_total * RETEFUENTE_FACTOR)
     posterior_total = bruto_total - rete_total
@@ -298,7 +310,9 @@ def consolidado_admin(
         valor_bruto_total=bruto_total,
         retefuente_total=rete_total,
         valor_posterior_retefuente_total=posterior_total,
+        viaticos_total=viaticos_total,
         pago_70_total=pago_total,
+        total_a_pagar_total=pago_total + viaticos_total,
     )
 
 
@@ -347,8 +361,14 @@ def exportar_excel(
     ws = wb.active
     ws.title = f"Cuentas {MESES[mes][:3]} {anio}"
 
+    # Servicios que permiten viáticos
+    servicios_con_viaticos = {
+        c.nombre.strip().lower()
+        for c in session.exec(select(CatalogoServicio).where(CatalogoServicio.permite_viaticos == True)).all()  # noqa: E712
+    }
+
     # Título
-    ws.merge_cells("A1:M1")
+    ws.merge_cells("A1:O1")
     c = ws["A1"]
     c.value = f"CONSOLIDADO DE CUENTAS — {MESES[mes]} {anio}"
     c.font = Font(bold=True, size=14)
@@ -358,7 +378,7 @@ def exportar_excel(
     # Encabezados
     headers = ["Terapeuta", "Usuario", "Tipo Doc", "Documento", "ARL", "Servicio",
                "Autorización", "F. Realización", "F. Autorización", "Carpeta",
-               "Cant.", "Precio Unit.", "Total"]
+               "Cant.", "Precio Unit.", "Total", "Viáticos", "Total a pagar"]
     hrow = 3
     for col, h in enumerate(headers, start=1):
         cell = ws.cell(row=hrow, column=col, value=h)
@@ -369,36 +389,39 @@ def exportar_excel(
 
     # Filas de servicios
     r = hrow + 1
-    totales: dict = {}  # arl -> [count, bruto]
+    totales: dict = {}  # arl -> [count, bruto, viaticos]
     for s in servicios:
         precio = s.precio_unitario or 0
         cant = s.cantidad or 0
         total = precio * cant
+        permite_v = bool(s.servicio and s.servicio.strip().lower() in servicios_con_viaticos)
+        viat = (s.viaticos or 0) if permite_v else 0
         valores = [
             nombres.get(s.terapeuta_id, ""), s.nombre_usuario or "", s.tipo_documento or "",
             s.numero_documento or "", s.arl or "", s.servicio or "", s.numero_autorizacion or "",
             fmt_fecha(s.fecha_realizacion), fmt_fecha(s.fecha_autorizacion), s.carpeta_cargue or "",
-            cant, precio, total,
+            cant, precio, total, (viat if permite_v else ""), total + viat,
         ]
         for col, val in enumerate(valores, start=1):
             cell = ws.cell(row=r, column=col, value=val)
             cell.border = borde
-            if col in (12, 13):  # precio y total
+            if col in (12, 13, 14, 15):  # precio, total, viáticos, total a pagar
                 cell.number_format = '"$"#,##0'
             if col == 11:
                 cell.alignment = centro
         key = s.arl or "SIN ARL"
         if key not in totales:
-            totales[key] = [0, 0.0]
+            totales[key] = [0, 0.0, 0.0]
         totales[key][0] += 1
         totales[key][1] += total
+        totales[key][2] += viat
         r += 1
 
     # Totales por ARL
     r += 1
     ws.cell(row=r, column=1, value="TOTALES POR ARL").font = bold
     r += 1
-    th = ["ARL", "Servicios", "Valor bruto", "Retefuente (12%)", "Valor posterior retefuente", "Pago 70%"]
+    th = ["ARL", "Servicios", "Valor bruto", "Retefuente (12%)", "Valor posterior retefuente", "Pago 70%", "Viáticos", "Total a pagar"]
     for col, h in enumerate(th, start=1):
         cell = ws.cell(row=r, column=col, value=h)
         cell.fill = gris
@@ -407,36 +430,38 @@ def exportar_excel(
         cell.border = borde
     r += 1
     bruto_total = 0.0
-    for arl_name, (cnt, bruto) in sorted(totales.items()):
+    viaticos_total = 0.0
+    for arl_name, (cnt, bruto, viat) in sorted(totales.items()):
         rete = round(bruto * 0.12)
         posterior = bruto - rete
         pago = round(posterior * 0.70)
-        fila = [arl_name, cnt, bruto, rete, posterior, pago]
+        fila = [arl_name, cnt, bruto, rete, posterior, pago, viat, pago + viat]
         for col, val in enumerate(fila, start=1):
             cell = ws.cell(row=r, column=col, value=val)
             cell.border = borde
-            if col in (3, 4, 5, 6):
+            if col in (3, 4, 5, 6, 7, 8):
                 cell.number_format = '"$"#,##0'
             if col == 2:
                 cell.alignment = centro
         bruto_total += bruto
+        viaticos_total += viat
         r += 1
 
     # Gran total
     rete_t = round(bruto_total * 0.12)
     posterior_t = bruto_total - rete_t
     pago_t = round(posterior_t * 0.70)
-    fila = ["TOTAL GENERAL", "", bruto_total, rete_t, posterior_t, pago_t]
+    fila = ["TOTAL GENERAL", "", bruto_total, rete_t, posterior_t, pago_t, viaticos_total, pago_t + viaticos_total]
     for col, val in enumerate(fila, start=1):
         cell = ws.cell(row=r, column=col, value=val)
         cell.font = bold
         cell.fill = gris
         cell.border = borde
-        if col in (3, 4, 5, 6):
+        if col in (3, 4, 5, 6, 7, 8):
             cell.number_format = '"$"#,##0'
 
     # Ancho de columnas
-    anchos = [22, 26, 10, 14, 16, 30, 14, 14, 14, 16, 7, 14, 14]
+    anchos = [22, 26, 10, 14, 16, 30, 14, 14, 14, 16, 7, 14, 14, 14, 15]
     for i, w in enumerate(anchos, start=1):
         ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = w
 
@@ -464,6 +489,8 @@ def asignar_precio(
         raise HTTPException(404, "Servicio no encontrado")
     if data.precio_unitario is not None:
         servicio.precio_unitario = data.precio_unitario
+    if data.viaticos is not None:
+        servicio.viaticos = data.viaticos
     if data.nota_admin is not None:
         servicio.nota_admin = data.nota_admin
     servicio.updated_at = datetime.utcnow()
@@ -471,6 +498,11 @@ def asignar_precio(
     session.commit()
     session.refresh(servicio)
     u = session.get(Usuario, servicio.terapeuta_id)
+    cat = session.exec(
+        select(CatalogoServicio).where(
+            func.lower(CatalogoServicio.nombre) == (servicio.servicio or "").strip().lower()
+        )
+    ).first()
     return ServicioCuentaAdminRead(
         id=servicio.id, terapeuta_id=servicio.terapeuta_id,
         terapeuta_nombre=f"{u.nombre} {u.apellido}" if u else "",
@@ -481,8 +513,9 @@ def asignar_precio(
         fecha_realizacion=servicio.fecha_realizacion, fecha_autorizacion=servicio.fecha_autorizacion,
         carpeta_cargue=servicio.carpeta_cargue, cantidad=servicio.cantidad,
         recomendaciones=servicio.recomendaciones, en_pleno=servicio.en_pleno, pcl=servicio.pcl,
-        precio_unitario=servicio.precio_unitario, nota_admin=servicio.nota_admin,
+        precio_unitario=servicio.precio_unitario, viaticos=servicio.viaticos, nota_admin=servicio.nota_admin,
         total=(servicio.precio_unitario or 0) * (servicio.cantidad or 0),
+        permite_viaticos=bool(cat and cat.permite_viaticos),
     )
 
 
@@ -691,7 +724,7 @@ def crear_servicio_catalogo(
     ).first()
     if existente:
         raise HTTPException(400, "Ya existe un servicio con ese nombre")
-    servicio = CatalogoServicio(nombre=nombre, activo=data.activo, orden=data.orden)
+    servicio = CatalogoServicio(nombre=nombre, activo=data.activo, orden=data.orden, permite_viaticos=data.permite_viaticos)
     session.add(servicio)
     session.commit()
     session.refresh(servicio)
@@ -714,6 +747,8 @@ def actualizar_servicio_catalogo(
         servicio.activo = data.activo
     if data.orden is not None:
         servicio.orden = data.orden
+    if data.permite_viaticos is not None:
+        servicio.permite_viaticos = data.permite_viaticos
     servicio.updated_at = datetime.utcnow()
     session.add(servicio)
     session.commit()

@@ -254,6 +254,16 @@ def _run_migrations():
         """
         UPDATE usuarios SET acceso_cuentas = TRUE WHERE email = 'danielromero.software@gmail.com' AND (acceso_cuentas IS NULL OR acceso_cuentas = FALSE);
         """,
+        # Viáticos en Cuentas
+        """
+        ALTER TABLE servicios_cuenta ADD COLUMN IF NOT EXISTS viaticos DOUBLE PRECISION;
+        """,
+        """
+        ALTER TABLE catalogo_servicios ADD COLUMN IF NOT EXISTS permite_viaticos BOOLEAN DEFAULT FALSE;
+        """,
+        """
+        UPDATE catalogo_servicios SET permite_viaticos = FALSE WHERE permite_viaticos IS NULL;
+        """,
     ]
 
     try:

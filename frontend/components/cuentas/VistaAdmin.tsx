@@ -21,7 +21,9 @@ interface ServicioAdmin {
     carpeta_cargue: string;
     cantidad: number;
     precio_unitario: number | null;
+    viaticos: number | null;
     total: number | null;
+    permite_viaticos: boolean;
 }
 
 interface TotalArl {
@@ -30,7 +32,9 @@ interface TotalArl {
     valor_bruto: number;
     retefuente: number;
     valor_posterior_retefuente: number;
+    viaticos: number;
     pago_70: number;
+    total_a_pagar: number;
 }
 
 interface Consolidado {
@@ -39,7 +43,9 @@ interface Consolidado {
     valor_bruto_total: number;
     retefuente_total: number;
     valor_posterior_retefuente_total: number;
+    viaticos_total: number;
     pago_70_total: number;
+    total_a_pagar_total: number;
 }
 
 interface Cierre {
@@ -64,6 +70,7 @@ export function VistaAdmin() {
     const [cierres, setCierres] = useState<Cierre[]>([]);
     const [loading, setLoading] = useState(true);
     const [precioEdit, setPrecioEdit] = useState<{ [id: number]: string }>({});
+    const [viaticosEdit, setViaticosEdit] = useState<{ [id: number]: string }>({});
     const [showTarifas, setShowTarifas] = useState(false);
     const [showServicios, setShowServicios] = useState(false);
     const [serviciosCatalogo, setServiciosCatalogo] = useState<string[]>(SERVICIOS);
@@ -106,6 +113,19 @@ export function VistaAdmin() {
             cargar();
         } catch (e: any) {
             toast.error(e.message || 'Error al guardar precio');
+        }
+    };
+
+    const guardarViaticos = async (id: number) => {
+        const raw = viaticosEdit[id];
+        if (raw === undefined) return;
+        const v = parseFloat(raw.replace(/[^0-9.]/g, ''));
+        try {
+            await api.put(`/cuentas/admin/servicios/${id}/precio`, { viaticos: isNaN(v) ? 0 : v });
+            setViaticosEdit((p) => { const n = { ...p }; delete n[id]; return n; });
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error al guardar viáticos');
         }
     };
 
@@ -245,11 +265,13 @@ export function VistaAdmin() {
             ) : (
                 <>
                     {/* Totales */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                         <Stat label="Valor bruto" value={formatCOP(data.valor_bruto_total)} />
                         <Stat label="Retefuente (12%)" value={formatCOP(data.retefuente_total)} />
                         <Stat label="Valor posterior retefuente" value={formatCOP(data.valor_posterior_retefuente_total)} />
-                        <Stat label="Pago 70%" value={formatCOP(data.pago_70_total)} accent />
+                        <Stat label="Pago 70%" value={formatCOP(data.pago_70_total)} />
+                        <Stat label="Viáticos" value={formatCOP(data.viaticos_total)} />
+                        <Stat label="Total a pagar" value={formatCOP(data.total_a_pagar_total)} accent />
                     </div>
 
                     {/* Tabla servicios */}
@@ -264,6 +286,7 @@ export function VistaAdmin() {
                                         <th className="px-4 py-3 text-left font-semibold">Servicio</th>
                                         <th className="px-4 py-3 text-center font-semibold">Cant.</th>
                                         <th className="px-4 py-3 text-right font-semibold">Precio unit.</th>
+                                        <th className="px-4 py-3 text-right font-semibold">Viáticos</th>
                                         <th className="px-4 py-3 text-right font-semibold">Total</th>
                                     </tr>
                                 </thead>
@@ -289,6 +312,20 @@ export function VistaAdmin() {
                                                     className="w-28 h-8 rounded-lg border border-slate-200 px-2 text-right text-sm focus:outline-none focus:ring-2 focus:ring-brand-400"
                                                 />
                                             </td>
+                                            <td className="px-4 py-3 text-right">
+                                                {s.permite_viaticos ? (
+                                                    <input
+                                                        value={viaticosEdit[s.id] !== undefined ? viaticosEdit[s.id] : (s.viaticos ?? '')}
+                                                        onChange={(e) => setViaticosEdit((p) => ({ ...p, [s.id]: e.target.value }))}
+                                                        onBlur={() => viaticosEdit[s.id] !== undefined && guardarViaticos(s.id)}
+                                                        onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
+                                                        placeholder="0"
+                                                        className="w-24 h-8 rounded-lg border border-amber-200 bg-amber-50/40 px-2 text-right text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                                    />
+                                                ) : (
+                                                    <span className="text-slate-300">—</span>
+                                                )}
+                                            </td>
                                             <td className="px-4 py-3 text-right font-semibold text-slate-800">{formatCOP(s.total)}</td>
                                         </tr>
                                     ))}
@@ -310,6 +347,8 @@ export function VistaAdmin() {
                                         <th className="px-3 py-2 text-right font-medium">Retefuente (12%)</th>
                                         <th className="px-3 py-2 text-right font-medium">Valor posterior retefuente</th>
                                         <th className="px-3 py-2 text-right font-medium">Pago 70%</th>
+                                        <th className="px-3 py-2 text-right font-medium">Viáticos</th>
+                                        <th className="px-3 py-2 text-right font-medium">Total a pagar</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
@@ -322,7 +361,9 @@ export function VistaAdmin() {
                                             <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.valor_bruto)}</td>
                                             <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.retefuente)}</td>
                                             <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.valor_posterior_retefuente)}</td>
-                                            <td className="px-3 py-2 text-right font-semibold text-slate-800">{formatCOP(t.pago_70)}</td>
+                                            <td className="px-3 py-2 text-right text-slate-600">{formatCOP(t.pago_70)}</td>
+                                            <td className="px-3 py-2 text-right text-amber-700">{formatCOP(t.viaticos)}</td>
+                                            <td className="px-3 py-2 text-right font-semibold text-slate-800">{formatCOP(t.total_a_pagar)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -453,7 +494,7 @@ function ModalTarifas({ servicios, onClose }: { servicios: string[]; onClose: ()
 }
 
 // ── Modal de gestión del catálogo de servicios ───────────────────────
-interface ServicioCat { id: number; nombre: string; activo: boolean; orden: number; }
+interface ServicioCat { id: number; nombre: string; activo: boolean; orden: number; permite_viaticos: boolean; }
 
 function ModalServicios({ onClose }: { onClose: () => void }) {
     const [items, setItems] = useState<ServicioCat[]>([]);
@@ -505,6 +546,15 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
         }
     };
 
+    const toggleViaticos = async (s: ServicioCat) => {
+        try {
+            await api.put(`/cuentas/admin/servicios-catalogo/${s.id}`, { permite_viaticos: !s.permite_viaticos });
+            cargar();
+        } catch (e: any) {
+            toast.error(e.message || 'Error');
+        }
+    };
+
     const eliminar = async (id: number) => {
         try { await api.delete(`/cuentas/admin/servicios-catalogo/${id}`); cargar(); }
         catch (e: any) { toast.error(e.message || 'Error'); }
@@ -517,7 +567,7 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
                     <h2 className="text-lg font-bold text-slate-800">Catálogo de servicios</h2>
                     <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
                 </div>
-                <p className="text-xs text-slate-500 mb-4">Los servicios activos aparecen disponibles para todos los terapeutas al registrar.</p>
+                <p className="text-xs text-slate-500 mb-4">Los servicios activos aparecen disponibles para todos los terapeutas al registrar. Marca <b>&quot;Viáticos&quot;</b> en los servicios que permiten cobrar viáticos (ej. análisis de exigencia, pruebas de trabajo rurales y de esfera mental).</p>
 
                 {/* Nuevo servicio */}
                 <div className="flex gap-2 mb-4">
@@ -549,6 +599,10 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
                                 ) : (
                                     <>
                                         <span className={`flex-1 text-sm ${s.activo ? 'text-slate-700' : 'text-slate-400 line-through'}`}>{s.nombre}</span>
+                                        <button onClick={() => toggleViaticos(s)} title="Permite viáticos"
+                                            className={`rounded-full px-2 py-0.5 text-xs font-medium transition-colors ${s.permite_viaticos ? 'bg-amber-100 text-amber-700 hover:bg-amber-200' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}>
+                                            Viáticos
+                                        </button>
                                         <button onClick={() => toggleActivo(s)}
                                             className={`rounded-full px-2 py-0.5 text-xs font-medium transition-colors ${s.activo ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
                                             {s.activo ? 'Activo' : 'Inactivo'}
