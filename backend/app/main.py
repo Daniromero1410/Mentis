@@ -264,6 +264,13 @@ def _run_migrations():
         """
         UPDATE catalogo_servicios SET permite_viaticos = FALSE WHERE permite_viaticos IS NULL;
         """,
+        # CUPS por servicio
+        """
+        ALTER TABLE catalogo_servicios ADD COLUMN IF NOT EXISTS cups VARCHAR;
+        """,
+        """
+        ALTER TABLE servicios_cuenta ADD COLUMN IF NOT EXISTS cups VARCHAR;
+        """,
     ]
 
     try:

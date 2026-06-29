@@ -494,14 +494,16 @@ function ModalTarifas({ servicios, onClose }: { servicios: string[]; onClose: ()
 }
 
 // ── Modal de gestión del catálogo de servicios ───────────────────────
-interface ServicioCat { id: number; nombre: string; activo: boolean; orden: number; permite_viaticos: boolean; }
+interface ServicioCat { id: number; nombre: string; cups: string | null; activo: boolean; orden: number; permite_viaticos: boolean; }
 
 function ModalServicios({ onClose }: { onClose: () => void }) {
     const [items, setItems] = useState<ServicioCat[]>([]);
     const [loading, setLoading] = useState(true);
     const [nuevo, setNuevo] = useState('');
+    const [nuevoCups, setNuevoCups] = useState('');
     const [editId, setEditId] = useState<number | null>(null);
     const [editNombre, setEditNombre] = useState('');
+    const [editCups, setEditCups] = useState('');
 
     const cargar = async () => {
         setLoading(true);
@@ -518,8 +520,9 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
     const agregar = async () => {
         if (!nuevo.trim()) { toast.error('Escriba el nombre del servicio'); return; }
         try {
-            await api.post('/cuentas/admin/servicios-catalogo', { nombre: nuevo.trim(), activo: true, orden: items.length });
+            await api.post('/cuentas/admin/servicios-catalogo', { nombre: nuevo.trim(), cups: nuevoCups.trim() || null, activo: true, orden: items.length });
             setNuevo('');
+            setNuevoCups('');
             cargar();
         } catch (e: any) {
             toast.error(e.message || 'Error');
@@ -529,7 +532,7 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
     const guardarEdit = async (id: number) => {
         if (!editNombre.trim()) return;
         try {
-            await api.put(`/cuentas/admin/servicios-catalogo/${id}`, { nombre: editNombre.trim() });
+            await api.put(`/cuentas/admin/servicios-catalogo/${id}`, { nombre: editNombre.trim(), cups: editCups.trim() || null });
             setEditId(null);
             cargar();
         } catch (e: any) {
@@ -567,7 +570,7 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
                     <h2 className="text-lg font-bold text-slate-800">Catálogo de servicios</h2>
                     <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={20} /></button>
                 </div>
-                <p className="text-xs text-slate-500 mb-4">Los servicios activos aparecen disponibles para todos los terapeutas al registrar. Marca <b>&quot;Viáticos&quot;</b> en los servicios que permiten cobrar viáticos (ej. análisis de exigencia, pruebas de trabajo rurales y de esfera mental).</p>
+                <p className="text-xs text-slate-500 mb-4">Los servicios activos aparecen disponibles para todos los terapeutas al registrar, junto con su <b>CUPS</b>. Marca <b>&quot;Viáticos&quot;</b> en los servicios que permiten cobrar viáticos (ej. análisis de exigencia, pruebas de trabajo rurales y de esfera mental).</p>
 
                 {/* Nuevo servicio */}
                 <div className="flex gap-2 mb-4">
@@ -575,6 +578,10 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
                         onKeyDown={(e) => { if (e.key === 'Enter') agregar(); }}
                         placeholder="Nombre del nuevo servicio"
                         className="flex-1 h-10 rounded-full border border-slate-200 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
+                    <input value={nuevoCups} onChange={(e) => setNuevoCups(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') agregar(); }}
+                        placeholder="CUPS"
+                        className="w-28 h-10 rounded-full border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
                     <button onClick={agregar} className="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-4 h-10 text-sm font-medium text-white hover:bg-brand-600 transition-colors">
                         <Plus size={16} /> Agregar
                     </button>
@@ -593,12 +600,21 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
                                         <input value={editNombre} onChange={(e) => setEditNombre(e.target.value)}
                                             onKeyDown={(e) => { if (e.key === 'Enter') guardarEdit(s.id); }}
                                             className="flex-1 h-9 rounded-lg border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" autoFocus />
+                                        <input value={editCups} onChange={(e) => setEditCups(e.target.value)}
+                                            onKeyDown={(e) => { if (e.key === 'Enter') guardarEdit(s.id); }}
+                                            placeholder="CUPS"
+                                            className="w-24 h-9 rounded-lg border border-slate-200 px-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400" />
                                         <button onClick={() => guardarEdit(s.id)} className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg"><Check size={15} /></button>
                                         <button onClick={() => setEditId(null)} className="p-1.5 text-slate-400 hover:bg-slate-50 rounded-lg"><X size={15} /></button>
                                     </>
                                 ) : (
                                     <>
                                         <span className={`flex-1 text-sm ${s.activo ? 'text-slate-700' : 'text-slate-400 line-through'}`}>{s.nombre}</span>
+                                        {s.cups ? (
+                                            <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-700" title="CUPS">{s.cups}</span>
+                                        ) : (
+                                            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-400" title="Sin CUPS">sin CUPS</span>
+                                        )}
                                         <button onClick={() => toggleViaticos(s)} title="Permite viáticos"
                                             className={`rounded-full px-2 py-0.5 text-xs font-medium transition-colors ${s.permite_viaticos ? 'bg-amber-100 text-amber-700 hover:bg-amber-200' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}>
                                             Viáticos
@@ -607,7 +623,7 @@ function ModalServicios({ onClose }: { onClose: () => void }) {
                                             className={`rounded-full px-2 py-0.5 text-xs font-medium transition-colors ${s.activo ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
                                             {s.activo ? 'Activo' : 'Inactivo'}
                                         </button>
-                                        <button onClick={() => { setEditId(s.id); setEditNombre(s.nombre); }} className="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg"><Pencil size={14} /></button>
+                                        <button onClick={() => { setEditId(s.id); setEditNombre(s.nombre); setEditCups(s.cups || ''); }} className="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg"><Pencil size={14} /></button>
                                         <button onClick={() => eliminar(s.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                     </>
                                 )}

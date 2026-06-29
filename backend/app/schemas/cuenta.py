@@ -17,6 +17,7 @@ class ServicioCuentaCreate(BaseModel):
     numero_documento: Optional[str] = None
     arl: Optional[str] = None
     servicio: Optional[str] = None
+    cups: Optional[str] = None
     numero_autorizacion: Optional[str] = None
     fecha_realizacion: Optional[date] = None
     fecha_autorizacion: Optional[date] = None
@@ -100,6 +101,7 @@ class TarifaRead(TarifaCreate):
 # ── Catálogo de servicios ────────────────────────────────────────────
 class CatalogoServicioCreate(BaseModel):
     nombre: str
+    cups: Optional[str] = None
     activo: bool = True
     orden: int = 0
     permite_viaticos: bool = False
@@ -107,6 +109,7 @@ class CatalogoServicioCreate(BaseModel):
 
 class CatalogoServicioUpdate(BaseModel):
     nombre: Optional[str] = None
+    cups: Optional[str] = None
     activo: Optional[bool] = None
     orden: Optional[int] = None
     permite_viaticos: Optional[bool] = None
@@ -115,6 +118,7 @@ class CatalogoServicioUpdate(BaseModel):
 class CatalogoServicioRead(BaseModel):
     id: int
     nombre: str
+    cups: Optional[str] = None
     activo: bool
     orden: int
     permite_viaticos: bool = False

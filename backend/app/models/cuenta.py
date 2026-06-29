@@ -36,6 +36,7 @@ class ServicioCuenta(SQLModel, table=True):
     numero_documento: Optional[str] = None
     arl: Optional[str] = None
     servicio: Optional[str] = None
+    cups: Optional[str] = None              # heredado del catálogo del servicio
     numero_autorizacion: Optional[str] = None
     fecha_realizacion: Optional[date] = None
     fecha_autorizacion: Optional[date] = None
@@ -91,6 +92,7 @@ class CatalogoServicio(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     nombre: str = Field(index=True)
+    cups: Optional[str] = None                      # código CUPS del servicio
     activo: bool = Field(default=True)
     orden: int = Field(default=0)
     permite_viaticos: bool = Field(default=False)  # habilita la columna de viáticos

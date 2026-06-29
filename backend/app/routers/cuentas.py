@@ -41,6 +41,18 @@ def _is_admin(user: Usuario) -> bool:
     return rol.lower() == "admin"
 
 
+def _resolver_cups(session: Session, servicio_nombre: Optional[str]) -> Optional[str]:
+    """Devuelve el CUPS del catálogo para un nombre de servicio (o None)."""
+    if not servicio_nombre:
+        return None
+    cat = session.exec(
+        select(CatalogoServicio).where(
+            func.lower(CatalogoServicio.nombre) == servicio_nombre.strip().lower()
+        )
+    ).first()
+    return cat.cups if cat else None
+
+
 def _get_or_create_cierre(session: Session, terapeuta_id: int, mes: int, anio: int) -> CierreMensual:
     cierre = session.exec(
         select(CierreMensual).where(
@@ -105,6 +117,8 @@ def crear_mi_servicio(
         periodo_anio=anio,
         **data.model_dump(),
     )
+    # El CUPS siempre se toma del catálogo (autoritativo)
+    servicio.cups = _resolver_cups(session, servicio.servicio)
     session.add(servicio)
     # Asegurar que exista el cierre (abierto) del periodo
     _get_or_create_cierre(session, current_user.id, mes, anio)
@@ -127,6 +141,8 @@ def actualizar_mi_servicio(
         raise HTTPException(400, "El mes está cerrado. No se puede editar.")
     for k, v in data.model_dump().items():
         setattr(servicio, k, v)
+    # El CUPS siempre se resuelve del catálogo según el servicio elegido
+    servicio.cups = _resolver_cups(session, servicio.servicio)
     servicio.updated_at = datetime.utcnow()
     session.add(servicio)
     session.commit()
@@ -270,7 +286,7 @@ def consolidado_admin(
             terapeuta_nombre=nombres.get(s.terapeuta_id, ""),
             periodo_mes=s.periodo_mes, periodo_anio=s.periodo_anio,
             nombre_usuario=s.nombre_usuario, tipo_documento=s.tipo_documento,
-            numero_documento=s.numero_documento, arl=s.arl, servicio=s.servicio,
+            numero_documento=s.numero_documento, arl=s.arl, servicio=s.servicio, cups=s.cups,
             numero_autorizacion=s.numero_autorizacion,
             fecha_realizacion=s.fecha_realizacion, fecha_autorizacion=s.fecha_autorizacion,
             carpeta_cargue=s.carpeta_cargue, cantidad=s.cantidad,
@@ -372,14 +388,14 @@ def exportar_excel(
 
     def _escribir_hoja(ws, lista, titulo):
         """Escribe la tabla completa (servicios + totales) en una hoja."""
-        ws.merge_cells("A1:O1")
+        ws.merge_cells("A1:P1")
         c = ws["A1"]
         c.value = titulo
         c.font = Font(bold=True, size=14)
         c.alignment = centro
         ws.row_dimensions[1].height = 24
 
-        headers = ["Terapeuta", "Usuario", "Tipo Doc", "Documento", "ARL", "Servicio",
+        headers = ["Terapeuta", "Usuario", "Tipo Doc", "Documento", "ARL", "Servicio", "CUPS",
                    "Autorización", "F. Realización", "F. Autorización", "Carpeta",
                    "Cant.", "Precio Unit.", "Total", "Viáticos", "Total a pagar"]
         hrow = 3
@@ -400,16 +416,16 @@ def exportar_excel(
             viat = (s.viaticos or 0) if permite_v else 0
             valores = [
                 nombres.get(s.terapeuta_id, ""), s.nombre_usuario or "", s.tipo_documento or "",
-                s.numero_documento or "", s.arl or "", s.servicio or "", s.numero_autorizacion or "",
+                s.numero_documento or "", s.arl or "", s.servicio or "", s.cups or "", s.numero_autorizacion or "",
                 fmt_fecha(s.fecha_realizacion), fmt_fecha(s.fecha_autorizacion), s.carpeta_cargue or "",
                 cant, precio, total, (viat if permite_v else ""), total + viat,
             ]
             for col, val in enumerate(valores, start=1):
                 cell = ws.cell(row=r, column=col, value=val)
                 cell.border = borde
-                if col in (12, 13, 14, 15):
+                if col in (13, 14, 15, 16):  # precio, total, viáticos, total a pagar
                     cell.number_format = '"$"#,##0'
-                if col == 11:
+                if col == 12:  # cantidad
                     cell.alignment = centro
             key = s.arl or "SIN ARL"
             if key not in totales:
@@ -462,7 +478,7 @@ def exportar_excel(
             if col in (3, 4, 5, 6, 7, 8):
                 cell.number_format = '"$"#,##0'
 
-        anchos = [22, 26, 10, 14, 16, 30, 14, 14, 14, 16, 7, 14, 14, 14, 15]
+        anchos = [22, 26, 10, 14, 16, 30, 12, 14, 14, 14, 16, 7, 14, 14, 14, 15]
         for idx_a, w in enumerate(anchos, start=1):
             ws.column_dimensions[openpyxl.utils.get_column_letter(idx_a)].width = w
 
@@ -538,7 +554,7 @@ def asignar_precio(
         terapeuta_nombre=f"{u.nombre} {u.apellido}" if u else "",
         periodo_mes=servicio.periodo_mes, periodo_anio=servicio.periodo_anio,
         nombre_usuario=servicio.nombre_usuario, tipo_documento=servicio.tipo_documento,
-        numero_documento=servicio.numero_documento, arl=servicio.arl, servicio=servicio.servicio,
+        numero_documento=servicio.numero_documento, arl=servicio.arl, servicio=servicio.servicio, cups=servicio.cups,
         numero_autorizacion=servicio.numero_autorizacion,
         fecha_realizacion=servicio.fecha_realizacion, fecha_autorizacion=servicio.fecha_autorizacion,
         carpeta_cargue=servicio.carpeta_cargue, cantidad=servicio.cantidad,
@@ -754,7 +770,7 @@ def crear_servicio_catalogo(
     ).first()
     if existente:
         raise HTTPException(400, "Ya existe un servicio con ese nombre")
-    servicio = CatalogoServicio(nombre=nombre, activo=data.activo, orden=data.orden, permite_viaticos=data.permite_viaticos)
+    servicio = CatalogoServicio(nombre=nombre, cups=data.cups, activo=data.activo, orden=data.orden, permite_viaticos=data.permite_viaticos)
     session.add(servicio)
     session.commit()
     session.refresh(servicio)
@@ -773,6 +789,8 @@ def actualizar_servicio_catalogo(
         raise HTTPException(404, "Servicio no encontrado")
     if data.nombre is not None:
         servicio.nombre = data.nombre.strip()
+    if data.cups is not None:
+        servicio.cups = data.cups.strip() or None
     if data.activo is not None:
         servicio.activo = data.activo
     if data.orden is not None:

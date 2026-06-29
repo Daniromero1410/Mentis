@@ -48,12 +48,20 @@ export function VistaTerapeuta() {
     const [confirmEliminar, setConfirmEliminar] = useState<{ open: boolean; id: number | null }>({ open: false, id: null });
     const [procesando, setProcesando] = useState(false);
     const [serviciosCatalogo, setServiciosCatalogo] = useState<string[]>(SERVICIOS);
+    const [cupsPorServicio, setCupsPorServicio] = useState<{ [nombre: string]: string }>({});
 
     const cerrado = estadoCierre === 'cerrado' || estadoCierre === 'revisado';
 
     useEffect(() => {
-        api.get<{ id: number; nombre: string }[]>('/cuentas/servicios-catalogo')
-            .then((items) => { if (items.length) setServiciosCatalogo(items.map((s) => s.nombre)); })
+        api.get<{ id: number; nombre: string; cups: string | null }[]>('/cuentas/servicios-catalogo')
+            .then((items) => {
+                if (items.length) {
+                    setServiciosCatalogo(items.map((s) => s.nombre));
+                    const map: { [nombre: string]: string } = {};
+                    items.forEach((s) => { if (s.cups) map[s.nombre] = s.cups; });
+                    setCupsPorServicio(map);
+                }
+            })
             .catch(() => {});
     }, []);
 
@@ -301,6 +309,13 @@ export function VistaTerapeuta() {
                                         {serviciosCatalogo.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
+                            </Field>
+                            <Field label="CUPS (automático)">
+                                <div className="flex h-10 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-600">
+                                    {form.servicio && cupsPorServicio[form.servicio]
+                                        ? cupsPorServicio[form.servicio]
+                                        : <span className="text-slate-400">{form.servicio ? 'Sin CUPS asignado' : 'Seleccione un servicio'}</span>}
+                                </div>
                             </Field>
                             <Field label="N° de autorización">
                                 <input value={form.numero_autorizacion} onChange={(e) => setForm({ ...form, numero_autorizacion: e.target.value })} className={inputCls} />
