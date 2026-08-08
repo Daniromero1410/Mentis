@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/app/context/AuthContext';
@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   description: 'Sistema Integral de Gestión de Reintegro Laboral Efectivo',
   // El favicon lo provee automáticamente app/icon.svg (Next.js App Router),
   // que es más compatible entre navegadores que servirlo desde /public.
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 import { Toaster } from 'sileo';

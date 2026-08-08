@@ -26,21 +26,22 @@ function LogoutOverlay() {
 
   return (
     <div
-      className={`fixed inset-0 bg-red-600 z-[9999] flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-        active ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center px-6 transition-opacity duration-400 ease-out ${
+        active ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
+      style={{ background: 'linear-gradient(135deg, #8a2535, #6d1d2a)' }}
     >
       <div
-        className={`flex flex-col items-center justify-center text-white transition-all duration-500 delay-300 ${
-          active ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+        className={`flex flex-col items-center justify-center text-center text-white transition-all duration-500 delay-150 ease-out ${
+          active ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
         }`}
       >
         <div className="relative">
-          <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-          <LogOut className="h-24 w-24 mb-6 relative z-10 drop-shadow-md text-[#ffc600]" />
+          <div className="absolute inset-0 bg-white/20 rounded-full blur-xl"></div>
+          <LogOut className="h-16 w-16 sm:h-24 sm:w-24 mb-5 sm:mb-6 relative z-10 drop-shadow-md text-[#ffc600]" />
         </div>
-        <h2 className="text-4xl font-bold tracking-tight shadow-sm mb-3">¡Hasta Pronto!</h2>
-        <p className="text-red-100 text-lg flex items-center gap-2">
+        <h2 className="text-2xl sm:text-4xl font-bold tracking-tight mb-2 sm:mb-3">¡Hasta Pronto!</h2>
+        <p className="text-white/80 text-base sm:text-lg flex items-center gap-2">
           <Loader2 className="h-5 w-5 animate-spin" />
           Cerrando sesión...
         </p>

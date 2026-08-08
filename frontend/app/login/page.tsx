@@ -94,29 +94,26 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-slate-100 to-brand-50 relative overflow-hidden transition-colors duration-500">
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Animated Gradient Orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-fuchsia-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute -top-20 -right-20 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2.5s' }}></div>
+      {/* Background Effects — solo en escritorio (los blurs animados son costosos en móvil) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden sm:block">
+        {/* Gradient Orbs (2, sin animate-pulse para mejor rendimiento) */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-violet-500/15 rounded-full blur-3xl"></div>
       </div>
 
       {/* Success Overlay Animation */}
       <div
-        className={`fixed inset-0 z-50 flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${loginSuccess ? 'opacity-100 scale-100 rounded-none' : 'opacity-0 scale-0 rounded-full pointer-events-none'
+        className={`fixed inset-0 z-50 flex flex-col items-center justify-center px-6 transition-opacity duration-400 ease-out ${loginSuccess ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
         style={{ backgroundColor: '#ffc600' }}
       >
-        <div className={`flex flex-col items-center justify-center transition-all duration-500 delay-300 ${loginSuccess ? 'opacity-100 scale-110' : 'opacity-0 scale-90'}`}>
+        <div className={`flex flex-col items-center justify-center text-center transition-all duration-500 delay-150 ease-out ${loginSuccess ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           <div className="relative">
-            <div className="absolute inset-0 rounded-full blur-xl animate-pulse" style={{ backgroundColor: 'rgba(109,29,42,0.2)' }}></div>
-            <CheckCircle2 className="h-24 w-24 mb-6 relative z-10 drop-shadow-md" style={{ color: '#6d1d2a' }} />
+            <div className="absolute inset-0 rounded-full blur-xl" style={{ backgroundColor: 'rgba(109,29,42,0.2)' }}></div>
+            <CheckCircle2 className="h-16 w-16 sm:h-24 sm:w-24 mb-5 sm:mb-6 relative z-10 drop-shadow-md" style={{ color: '#6d1d2a' }} />
           </div>
-          <h2 className="text-4xl font-bold tracking-tight mb-3" style={{ color: '#6d1d2a' }}>¡Bienvenido!</h2>
-          <p className="text-lg flex items-center gap-2" style={{ color: '#6d1d2a' }}>
+          <h2 className="text-2xl sm:text-4xl font-bold tracking-tight mb-2 sm:mb-3" style={{ color: '#6d1d2a' }}>¡Bienvenido!</h2>
+          <p className="text-base sm:text-lg flex items-center gap-2" style={{ color: '#6d1d2a' }}>
             <Loader2 className="h-5 w-5 animate-spin" />
             Preparando tu entorno...
           </p>
@@ -125,7 +122,7 @@ export default function LoginPage() {
 
       {/* Login Card */}
       <div className="relative z-10 w-full max-w-md mx-4">
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+        <div className="bg-white sm:bg-white/80 sm:backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
           {/* Header */}
           <div className="px-8 pt-12 pb-8 text-center bg-white relative">
             <div className="flex justify-center mb-6">
