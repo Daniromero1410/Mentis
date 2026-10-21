@@ -412,11 +412,12 @@ def generar_pdf_prueba_trabajo(
 
     # Encabezado de la tabla
     header_eval = [
-        B("CONDICIÓN / FACTOR DE RIESGO"),
+        B("CONDICIÓN / FACTOR Y DESCRIPCIÓN"),
         B("FR", style_center),
         B("EXP", style_center),
         B("INT", style_center),
-        B("TOTAL", style_center)
+        B("TOTAL", style_center),
+        B("FUENTES", style_center)
     ]
 
 
@@ -441,7 +442,7 @@ def generar_pdf_prueba_trabajo(
             # Header de dimensión
             dim_row_idx = len(data_eval)
             dimension_rows.append(dim_row_idx)
-            data_eval.append([B(obtener_nombre_dimension(dimension).upper()), "", "", "", ""])
+            data_eval.append([B(obtener_nombre_dimension(dimension).upper()), "", "", "", "", ""])
 
             # Condiciones ordenadas
             condiciones = sorted(condiciones_por_dimension[dimension], key=lambda x: x.item_numero)
@@ -463,12 +464,20 @@ def generar_pdf_prueba_trabajo(
                 sum_int += int_val
                 sum_total += total
                 
+                from xml.sax.saxutils import escape as _esc
+                _titulo = _esc(cond.condicion_texto or "")
+                _desc = _esc(cond.descripcion_detallada or "").replace("\n", "<br/>")
+                _cond_cell = Paragraph(
+                    f"<b>{_titulo}</b>" + (f"<br/>{_desc}" if _desc else ""),
+                    style_small
+                )
                 data_eval.append([
-                    P(cond.condicion_texto, style_small),
+                    _cond_cell,
                     P(str(fr), style_center),
                     P(str(exp), style_center),
                     P(str(int_val), style_center),
-                    P(str(total), style_center)
+                    P(str(total), style_center),
+                    P(cond.fuentes_informacion or "", style_small)
                 ])
             
             # Fila de TOTAL para esta dimensión
@@ -483,20 +492,24 @@ def generar_pdf_prueba_trabajo(
                 B(str(sum_fr), style_center),
                 B(str(sum_exp), style_center),
                 B(str(sum_int), style_center),
-                B(str(total_dimension), style_center)
+                B(str(total_dimension), style_center),
+                ""
             ])
 
-    t_eval = Table(data_eval, colWidths=[4.2*inch, 0.7*inch, 0.7*inch, 0.7*inch, 0.9*inch])
+    t_eval = Table(data_eval, colWidths=[3.3*inch, 0.5*inch, 0.5*inch, 0.5*inch, 0.6*inch, 1.8*inch])
     
     # Estilos base
     eval_styles = [
         ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
         ('BACKGROUND', (0, 0), (-1, 0), COLOR_SECTION),
-        ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('ALIGN', (1, 0), (4, -1), 'CENTER'),   # FR, EXP, INT, TOTAL centrados
+        ('ALIGN', (5, 1), (5, -1), 'LEFT'),      # Fuentes a la izquierda
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('FONTSIZE', (0, 0), (-1, -1), 7),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
     ]
     
     # Colorear headers de dimensión (fondo naranja claro)
