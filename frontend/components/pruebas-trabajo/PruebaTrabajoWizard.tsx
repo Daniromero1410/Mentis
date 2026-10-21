@@ -26,7 +26,8 @@ import {
   X,
   AlertCircle,
   Sparkles,
-  Upload
+  Upload,
+  CheckCircle2
 } from 'lucide-react';
 
 // --- Steps -----------------------------------------------------------
@@ -1797,34 +1798,32 @@ export function PruebaTrabajoWizard({ id, mode = 'create', readOnly = false }: P
 
     {/* Download Modal — portal para cubrir toda la página incluido el sidebar */}
     {showDownloadModal && createPortal(
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-        <Card className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm anim-backdrop-in" />
+        <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl anim-modal-in">
+          <div className="p-6 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle2 className="h-7 w-7 text-green-600" />
             </div>
-            <h2 className="text-xl font-bold mb-2 text-gray-900">Prueba Finalizada</h2>
-            <p className="mb-6 text-gray-600">La prueba se ha guardado correctamente.</p>
-            <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <h2 className="text-lg font-bold text-gray-900">Prueba Finalizada</h2>
+            <p className="mt-2 text-sm text-gray-500">La prueba se ha guardado correctamente.</p>
+            <div className="mt-6 flex flex-col gap-3">
               {downloadUrls?.pdf_url && (
-                <a
-                  href={fileUrl(downloadUrls.pdf_url)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button className="w-full bg-brand-600 hover:bg-brand-700 text-white">
-                    <Download className="mr-2 h-4 w-4" /> Descargar PDF ReportLab
-                  </Button>
+                <a href={fileUrl(downloadUrls.pdf_url)} target="_blank" rel="noopener noreferrer" className="w-full">
+                  <button className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-600 text-sm font-medium text-white transition-colors hover:bg-brand-700">
+                    <Download className="h-4 w-4" /> Descargar PDF
+                  </button>
                 </a>
               )}
-              <Button variant="outline" onClick={() => router.push('/dashboard/pruebas-trabajo')}>
+              <button
+                onClick={() => router.push('/dashboard/pruebas-trabajo')}
+                className="inline-flex h-11 w-full items-center justify-center rounded-xl border border-gray-200 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              >
                 Volver al listado
-              </Button>
+              </button>
             </div>
           </div>
-        </Card>
+        </div>
       </div>,
       document.body
     )}

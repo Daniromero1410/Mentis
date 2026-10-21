@@ -8,7 +8,7 @@ from reportlab.lib.units import inch, cm
 from reportlab.lib import colors
 from reportlab.platypus import (
     SimpleDocTemplate, Table, TableStyle, Paragraph,
-    Spacer, PageBreak, KeepTogether, Image as ReportLabImage
+    Spacer, PageBreak, KeepTogether, Image as ReportLabImage, HRFlowable
 )
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
 from datetime import datetime, date
@@ -165,6 +165,15 @@ def generar_pdf_prueba_trabajo(
         parent=style_normal,
         fontSize=7,
         leading=9
+    )
+
+    # Estilo para la descripción (gris, más pequeño) — separa visualmente de la condición
+    style_desc = ParagraphStyle(
+        'Desc',
+        parent=style_normal,
+        fontSize=6.5,
+        leading=8,
+        textColor=colors.HexColor('#555555')
     )
 
     # Helpers
@@ -467,12 +476,15 @@ def generar_pdf_prueba_trabajo(
                 from xml.sax.saxutils import escape as _esc
                 _titulo = _esc(cond.condicion_texto or "")
                 _desc = _esc(cond.descripcion_detallada or "").replace("\n", "<br/>")
-                _cond_cell = Paragraph(
-                    f"<b>{_titulo}</b>" + (f"<br/>{_desc}" if _desc else ""),
-                    style_small
-                )
+                # Título en negrita + línea separadora + descripción en gris/cursiva
+                _cond_parts = [Paragraph(f"<b>{_titulo}</b>", style_small)]
+                if _desc:
+                    _cond_parts.append(Spacer(1, 3))
+                    _cond_parts.append(HRFlowable(width="100%", thickness=0.4,
+                                                  color=COLOR_BORDER, spaceBefore=0, spaceAfter=3))
+                    _cond_parts.append(Paragraph(f"<i>{_desc}</i>", style_desc))
                 data_eval.append([
-                    _cond_cell,
+                    _cond_parts,
                     P(str(fr), style_center),
                     P(str(exp), style_center),
                     P(str(int_val), style_center),
