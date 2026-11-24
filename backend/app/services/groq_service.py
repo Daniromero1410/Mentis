@@ -1,5 +1,8 @@
 """
-Servicio de generación con IA usando Groq (llama-3.3-70b-versatile).
+Servicio de generación con IA usando Groq.
+El modelo es configurable por la variable de entorno GROQ_MODEL
+(por defecto 'openai/gpt-oss-120b'), para poder cambiarlo sin tocar código
+cuando Groq retire o renombre modelos.
 Expone cuatro funciones de alto nivel para los formatos TO.
 """
 
@@ -7,6 +10,10 @@ import os
 from groq import Groq
 
 _client: Groq | None = None
+
+# Modelo por defecto (Groq retiró llama-3.3-70b-versatile para algunas cuentas).
+# Se puede sobreescribir con la variable de entorno GROQ_MODEL.
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
 
 def _get_client() -> Groq:
@@ -22,7 +29,7 @@ def _get_client() -> Groq:
 def _llamar_groq(prompt: str) -> str:
     client = _get_client()
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=GROQ_MODEL,
         messages=[
             {
                 "role": "system",
