@@ -890,7 +890,7 @@ def generar_pdf_valoracion_ocupacional(
 
     # --- Field values ---
     nombre_elaboro = getattr(registro, 'nombre_elaboro', '') or ''
-    licencia_so = getattr(registro, 'licencia_so_elaboro', '') or ''
+    licencia_so = "07308"  # Licencia del profesional (valor fijo institucional)
     nombre_prov = getattr(registro, 'nombre_proveedor', '') or ''
     nombre_rhb = getattr(registro, 'nombre_equipo_rhb', '') or ''
 

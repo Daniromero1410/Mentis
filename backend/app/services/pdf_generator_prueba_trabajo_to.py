@@ -1041,7 +1041,7 @@ def generar_pdf_prueba_trabajo_to(
         elaboro_cell = build_sig_cell(
             "NOMBRE", registro.nombre_elaboro,
             registro.firma_elaboro,
-            "LICENCIA S.O", registro.licencia_so_elaboro if hasattr(registro, 'licencia_so_elaboro') else ""
+            "LICENCIA S.O", "07308"
         )
         reviso_cell = build_sig_cell(
             "NOMBRE", registro.nombre_revisor,

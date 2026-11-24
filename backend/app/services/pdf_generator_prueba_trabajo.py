@@ -294,7 +294,7 @@ def generar_pdf_prueba_trabajo(
         [B("Nombre:"), P(evaluador.nombre if evaluador else ""), "", ""],
         [B("Identificación:"), P(evaluador.identificacion if evaluador else ""), "", ""],
         [B("Formación:"), P(evaluador.formacion if evaluador else ""), "", ""],
-        [B("Tarjeta Profesional:"), P(evaluador.tarjeta_profesional if evaluador else ""), B("Licencia SST:"), P(evaluador.licencia_sst if evaluador else "")],
+        [B("Tarjeta Profesional:"), P(evaluador.tarjeta_profesional if evaluador else ""), B("Licencia SST:"), P("07308")],
         [B("Fecha de Evaluación:"), P(fmt_fecha(evaluador.fecha_evaluacion if evaluador else None)), "", ""],
     ]
 
